@@ -1,0 +1,21 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "prettier/prettier": "warn",
+    "@next/next/no-img-element": "off",
+    "react/display-name": "off",
+    "react/no-unescaped-entities": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-explicit-any": "off"
+  }
+}
