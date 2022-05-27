@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "SharpSans";
+  src: url("../public/fonts/SharpSans.woff2") format("woff2");
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 92%;
@@ -40,11 +45,11 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Lato", segoe UI, sans-serif;
+  font-family: "SharpSans", segoe UI, sans-serif;
 }
 
 body {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 a,
 a:visited {
@@ -69,6 +74,9 @@ button {
   font-size: inherit;
   cursor: pointer;
   font-family: inherit;
+  border: none;
+  outline: none;
+  background-color: transparent;
   * {
     cursor: pointer;
   }
@@ -212,7 +220,7 @@ button {
 .margin-bottom {
   margin-bottom: 0.6rem;
   &.spaced {
-    margin-right: 1.2rem;
+    margin-bottom: 1.2rem;
   }
 }
 .margin-top {

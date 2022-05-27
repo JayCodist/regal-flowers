@@ -51,7 +51,7 @@ const Header: FunctionComponent = () => {
   const currencyOptions: AppCurrency[] = [
     { ...defaultCurrency },
     { name: "USD", conversionRate: 415 },
-    { name: "GBP", conversionRate: 500 }
+    { name: "GBP", conversionRate: 523 }
   ];
 
   const { currency, setCurrency } = useContext(SettingsContext);
@@ -73,7 +73,7 @@ const Header: FunctionComponent = () => {
         ))}
       </nav>
       <div className={styles["controls-area"]}>
-        <div className="flex spaced-lg">
+        <div className="flex spaced">
           <span>Currency:</span>
           {currencyOptions.map(_currency => (
             <button
@@ -87,6 +87,32 @@ const Header: FunctionComponent = () => {
               {_currency.name}
             </button>
           ))}
+        </div>
+        <div className="flex spaced-lg">
+          <button className="flex column spaced center-align">
+            <img
+              alt="user"
+              src="/icons/user.svg"
+              className={styles["control-icon"]}
+            />
+            <span>Account</span>
+          </button>
+          <button className="flex column spaced center-align">
+            <img
+              alt="cart"
+              src="/icons/cart.svg"
+              className={styles["control-icon"]}
+            />
+            <span>Cart (0)</span>
+          </button>
+          <button className="flex column spaced center-align">
+            <img
+              alt="phone"
+              src="/icons/phone.svg"
+              className={styles["control-icon"]}
+            />
+            <span>Contact</span>
+          </button>
         </div>
       </div>
     </header>
