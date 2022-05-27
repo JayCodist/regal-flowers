@@ -33,7 +33,7 @@ export const getStaticPaths = async () => {
         }
       }
     ],
-    fallback: false // false or 'blocking'
+    fallback: false // true or 'blocking'
   };
 };
 
