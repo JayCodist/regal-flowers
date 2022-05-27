@@ -9,7 +9,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   return (
     <>
       <Header />
-      {children}
+      <main className={styles.main}>{children}</main>
     </>
   );
 };
