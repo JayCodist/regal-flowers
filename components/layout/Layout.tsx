@@ -17,32 +17,32 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
 const Header: FunctionComponent = () => {
   const links: AppLink[] = [
     {
-      url: "",
+      url: "#",
       title: "Send To",
       children: []
     },
     {
-      url: "",
+      url: "#",
       title: "Occasions",
       children: []
     },
     {
-      url: "",
+      url: "#",
       title: "Shop By",
       children: []
     },
     {
-      url: "",
+      url: "#",
       title: "VIP Section",
       children: []
     },
     {
-      url: "",
+      url: "#",
       title: "Gifts",
       children: []
     },
     {
-      url: "",
+      url: "#",
       title: "FAQ",
       children: []
     }
