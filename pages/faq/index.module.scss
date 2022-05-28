@@ -1,0 +1,73 @@
+.wrapper {
+  .hero {
+    height: 60vh;
+    background-image: url("../../public/images/faq-hero.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    h1 {
+      color: #68203b;
+    }
+  }
+
+  .container {
+    padding: 0 3rem;
+  }
+
+  .content {
+    margin: 4rem 0;
+
+    p {
+      line-height: 1.5rem;
+    }
+
+    .links {
+      width: 40%;
+      border: 1px solid #f3f4f6;
+      height: fit-content;
+      padding: 1rem 0;
+      padding-left: 1rem;
+    }
+
+    .linked-content {
+      width: 60%;
+      & > div {
+        margin-bottom: 2.5rem;
+      }
+    }
+    .payment-info {
+      background-color: #f9fafb;
+      display: inline-block;
+      padding: 1rem;
+      margin: 1rem;
+
+      strong {
+        display: inline-block;
+      }
+
+      & > * {
+        margin-bottom: 0.6rem;
+      }
+    }
+  }
+  .flower-card {
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #f3f4f6;
+    border-radius: 4px;
+
+    .detail {
+      padding: 0.6rem 1rem;
+    }
+
+    .buy-btn {
+      background-color: #9b0000;
+      color: white;
+      padding: 0.4rem 0.6rem;
+      border-radius: 4px;
+    }
+  }
+}
