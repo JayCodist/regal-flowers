@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { FunctionComponent } from "react";
 import styles from "./index.module.scss";
 
@@ -34,20 +35,24 @@ const Index: FunctionComponent = () => {
         <div className={`${styles.content} flex between spaced-xl`}>
           <ol className={`flex column ${styles.links}`}>
             <p className="title small bold">Table of content</p>
-            <a className="vertical-margin" href="#works">
-              <span className="margin-right">1</span> How it works
-            </a>
-
-            <a className="margin-bottom" href="#payment-methods">
-              <span className="margin-right">2</span> Payment Method
-            </a>
-
-            <a href="#delivery">
-              <span className="margin-right">3</span> Delivery
-            </a>
+            <Link href="#how-it-works">
+              <a className="vertical-margin">
+                <span className="margin-right">1</span> How it works
+              </a>
+            </Link>
+            <Link href="#payment-methods">
+              <a className="margin-bottom">
+                <span className="margin-right">2</span> Payment Method
+              </a>
+            </Link>
+            <Link href="#delivery">
+              <a>
+                <span className="margin-right">3</span> Delivery
+              </a>
+            </Link>
           </ol>
           <div className={styles["linked-content"]}>
-            <div id="works">
+            <div id="how-it-works">
               <p className="title bold margin-bottom spaced">How it works</p>
               <p className="title small bold margin-bottom">
                 How to order flowers and gifts for delivery?
@@ -58,10 +63,10 @@ const Index: FunctionComponent = () => {
               </p>
               <p>
                 Browse, and add your desired flowers and gifts to your cart
-                (don’t forget to change the currency to USD if you are using a
+                (don't forget to change the currency to USD if you are using a
                 Non-Naira card or Paypal). Proceed to checkout where you fill in
                 the delivery details (include the preferred delivery date,
-                recipient’s phone number and your optional message), and pay
+                recipient's phone number and your optional message), and pay
                 using any of the methods below this page. We can also work to
                 suit your budget, desired colours, flower types etc.. Reach us
                 at <span>info@regalflowers.com.ng</span> or +234 (0) 7010006665,
