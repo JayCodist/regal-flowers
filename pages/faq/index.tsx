@@ -84,11 +84,19 @@ const Index: FunctionComponent = () => {
                 Online Payment Methods (Delivery fees included during checkout)
               </p>
               <p className="margin-buttton flex align-center spaced">
-                <img className="" src="./icons/bank-card.svg" alt="card" />
+                <img
+                  className="generic-icon medium"
+                  src="./icons/bank-card.svg"
+                  alt="card"
+                />
                 <span>Naira Mastercard/Visa/Verve Cards</span>
               </p>
               <p className="margin-buttton flex align-center spaced">
-                <img src="./icons/paypal.svg" alt="paypal" />{" "}
+                <img
+                  className="generic-icon medium"
+                  src="./icons/paypal.svg"
+                  alt="paypal"
+                />{" "}
                 <span>
                   {" "}
                   Paypal/Other Credit Cards online (change currency to $ in
@@ -105,7 +113,11 @@ const Index: FunctionComponent = () => {
                 </p>
               </div>
               <p className="margin-buttton flex align-center spaced">
-                <img src="./icons/building.svg" alt="paypal" />{" "}
+                <img
+                  className="generic-icon medium"
+                  src="./icons/building.svg"
+                  alt="paypal"
+                />{" "}
                 <span>
                   Transfer Methods (if applicable don't forget to include
                   delivery fees)
@@ -136,7 +148,11 @@ const Index: FunctionComponent = () => {
                 </p>
               </div>
               <p className="margin-buttton flex align-center spaced">
-                <img src="./icons/bitcoin.svg" alt="paypal" />{" "}
+                <img
+                  className="generic-icon medium"
+                  src="./icons/bitcoin.svg"
+                  alt="paypal"
+                />{" "}
                 <span>
                   Bitcoins, Wallet Address{" "}
                   <strong>12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1</strong>{" "}
@@ -248,13 +264,21 @@ const Index: FunctionComponent = () => {
           <span className="title bold">Featured Flowers</span>
           <button className="primary-color bold flex center-align spaced">
             <span>See All</span>{" "}
-            <img src="./icons/arrow-right.svg" alt="arrow right" />
+            <img
+              className="generic-icon medium"
+              src="./icons/arrow-right.svg"
+              alt="arrow right"
+            />
           </button>
         </div>
         <div className="flex between vertical-margin spaced">
           {featuredFlowers.map((item, index) => (
             <div key={index} className={`${styles["flower-card"]} center`}>
-              <img src={item.image} alt="featured flower" />
+              <img
+                className="generic-icon medium"
+                src={item.image}
+                alt="featured flower"
+              />
               <div className={styles.detail}>
                 <p className="bold">{item.name}</p>
                 <p className="smaller text-secondary">{item.name}</p>
