@@ -2,11 +2,34 @@ import { FunctionComponent } from "react";
 import { GetStaticProps } from "next";
 import { getProduct } from "../../utils/helpers/data/products";
 import Product from "../../utils/types/Product";
+import styles from "./products.module.scss";
 
 const LandingPage: FunctionComponent<{ product: Product }> = props => {
   console.log({ props });
 
-  return <h1>Product: {JSON.stringify(props.product)}</h1>;
+  return (
+    <section className={`${styles.product}`}>
+      <div className={styles["page-tab"]}>
+        <span className="margin-right align-icon">
+          Home{" "}
+          <img
+            src="/icons/chevron-right.svg"
+            alt="right"
+            className="generic-icon small margin-left"
+          />
+        </span>
+        <span className="margin-right align-icon">
+          Love, Birthdays & Anniversary{" "}
+          <img
+            src="/icons/chevron-right.svg"
+            alt="right"
+            className="generic-icon small margin-left"
+          />
+        </span>
+        <span className="generic-icon small margin-left">A Kiss of Rose </span>
+      </div>
+    </section>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
