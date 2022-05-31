@@ -5,15 +5,27 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap"
-            rel="stylesheet"
+          <link rel="shortcut icon" href="/icons/favicon.png" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
           />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&display=swap"
-            rel="stylesheet"
+          <meta
+            name="description"
+            content="Fresh flowers vendors. Delivery throughout Nigeria"
           />
+          <meta
+            name="keywords"
+            content="regal flowers, regal, flowers, online flowers, fresh flowers, flowers delivery"
+          />
+          <meta name="author" content="jaycodist@gmail.com" />
+          <meta name="og:title" content="Afriland Properties" />
+          <meta
+            name="og:description"
+            content="Get fresh flowers, delivered today"
+          />
+          <meta name="og:url" content="https://regalflowers.com.ng" />
+          <meta property="og:image" content="/icons.logo.png" />
         </Head>
         <body>
           <Main />
