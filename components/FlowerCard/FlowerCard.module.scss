@@ -1,0 +1,17 @@
+.flower-card {
+  display: inline-block;
+  text-align: center;
+  border: 1px solid #f3f4f6;
+  border-radius: 4px;
+
+  .detail {
+    padding: 0.6rem 1rem;
+  }
+
+  .buy-btn {
+    padding: 0.4rem 0.6rem;
+    min-width: 6rem;
+    font-weight: normal;
+    font-size: 0.9rem;
+  }
+}

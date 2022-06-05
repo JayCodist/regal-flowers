@@ -1,27 +1,28 @@
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
+import FlowerCard from "../../components/FlowerCard/FlowerCard";
 import styles from "./index.module.scss";
 
-const featuredFlowers = [
+export const featuredFlowers = [
   {
     name: "5 Peas in a pod",
-    price: "₦36000",
-    image: "./images/flower.png"
+    price: 6000,
+    image: "/images/flower.png"
   },
   {
     name: "5 Peas in a pod",
-    price: "₦36000",
-    image: "./images/flower.png"
+    price: 36000,
+    image: "/images/flower.png"
   },
   {
     name: "5 Peas in a pod",
-    price: "₦36000",
-    image: "./images/flower.png"
+    price: 36000,
+    image: "/images/flower.png"
   },
   {
     name: "5 Peas in a pod",
-    price: "₦36000",
-    image: "./images/flower.png"
+    price: 36000,
+    image: "/images/flower.png"
   }
 ];
 
@@ -265,7 +266,7 @@ const Index: FunctionComponent = () => {
           <button className="primary-color bold flex center-align spaced">
             <span>See All</span>{" "}
             <img
-              className="generic-icon medium"
+              className="generic-icon"
               src="./icons/arrow-right.svg"
               alt="arrow right"
             />
@@ -273,24 +274,7 @@ const Index: FunctionComponent = () => {
         </div>
         <div className="flex between vertical-margin spaced">
           {featuredFlowers.map((item, index) => (
-            <div key={index} className={`${styles["flower-card"]} center`}>
-              <img
-                className="generic-icon medium"
-                src={item.image}
-                alt="featured flower"
-              />
-              <div className={styles.detail}>
-                <p className="bold">{item.name}</p>
-                <p className="smaller text-secondary">{item.name}</p>
-                <div className="flex between margin-top">
-                  <div>
-                    <p className="smaller text-secondary">From</p>
-                    <p className="bold">{item.price}</p>
-                  </div>
-                  <button className={styles["buy-btn"]}>Buy Now</button>
-                </div>
-              </div>
-            </div>
+            <FlowerCard key={index} flower={item} />
           ))}
         </div>
       </div>
