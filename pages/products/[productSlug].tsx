@@ -1,4 +1,4 @@
-import { CSSProperties, FunctionComponent, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { GetStaticProps } from "next";
 import { getProduct } from "../../utils/helpers/data/products";
 import Product from "../../utils/types/Product";
@@ -7,14 +7,7 @@ import Button from "../../components/Button/Button";
 import FlowerCard from "../../components/FlowerCard/FlowerCard";
 import { featuredFlowers } from "../faq";
 
-// const cssStyles: CSSProperties = {
-//   // transform: ""
-//   transla
-// }
-
-const LandingPage: FunctionComponent<{ product: Product }> = props => {
-  console.log({ props });
-
+const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const productSampleData: Product = {
     id: 1,
     name: "A Kiss of Rose",
