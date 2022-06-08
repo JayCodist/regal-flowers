@@ -42,7 +42,7 @@ const Header: FunctionComponent = () => {
       children: []
     },
     {
-      url: "#",
+      url: "/faq",
       title: "FAQ",
       children: []
     }

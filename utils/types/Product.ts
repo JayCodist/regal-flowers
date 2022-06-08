@@ -3,6 +3,7 @@ import AddonGroup from "./AddonGroup";
 export interface ProductImage {
   alt: string;
   src: string;
+  id: number;
 }
 
 export interface ProductVariant {
@@ -23,6 +24,9 @@ interface Product {
   images: ProductImage[];
   variants: ProductVariant[];
   addonsGroups: AddonGroup[];
+  description: string;
+  title: string;
+  sizes?: string[];
 }
 
 export default Product;

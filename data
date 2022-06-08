@@ -1,0 +1,703 @@
+https://service-default-dot-regal-operations-defy.appspot.com/v1/config/wordpress-proxy/products?business=regalFlowers&slug=belleza-regal-two-colors-rose-red-yellow-white-pink-orange
+{
+  "product": {
+      "id": 2080,
+      "name": "BELLEZA BY REGAL – Mixed Roses & Million Stars",
+      "slug": "belleza-regal-two-colors-rose-red-yellow-white-pink-orange",
+      "permalink": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/",
+      "date_created": "2017-04-20T10:42:31",
+      "date_created_gmt": "2017-04-20T10:42:31",
+      "date_modified": "2022-05-05T12:06:03",
+      "date_modified_gmt": "2022-05-05T12:06:03",
+      "type": "variable",
+      "status": "publish",
+      "featured": false,
+      "catalog_visibility": "visible",
+      "description": "<p>Belleza By Regal - The concentric arrangement of 2 or 3 colors of roses and million stars, <a href=\"https://www.flower.style/flowers-we-love/hypericum\" target=\"_blank\" rel=\"noopener\">hypericum berries</a>, or wax.</p>\n<p><em>Standard Premium, Large &amp; VIP Sizes come in a complimentary black luxury box worth 20k</em></p>\n<p>BELLEZA BY REGAL<br />\nSmall (15 roses 75000)<br />\nMedium (20roses 90000),<br />\nStandard (24cm box 109900)<br />\nStandard Plus(27cm box 150900)<br />\nStandard Premium (30cm 204900)</p>\n<ul>\n<li>Order online now, or call/whatsapp +2347010006664, +2347010006664, +2347011992888 to order..</li>\n<li>We reserve the right to interchange comparable products based on availability</li>\n<li class=\"flexslider-caption\">Optional flower <a href=\"https://www.regalflowers.com.ng/product/fresh-flower-shop-flower-vases-transparent-cylindrical-fish-bowl-hour-glass-vases/\">vases</a> are available</li>\n</ul>\n<p>Regal flowers is the most trusted online fresh flower shop in Nigeria. Looking for where to buy flowers in Nigeria? You can choose from an assortment of flowers in Lagos and Abuja. Order from us today to enjoy same-day delivery on your items.</p>\n",
+      "short_description": "<p>Any 2 or 3 colours of Roses &amp; White Million stars or Hypericum Berries. Colours may vary.</p>\n<p>&#8211; Free Flower food included with all arrangements</p>\n<hr />\n<p><em>Note: Standard Sizes and above come in complimentary black luxury velvet box worth 20k (we fill up the box). </em><br />\n<em>Smaller sizes are wrapped as a bouquet or with <a href=\"https://www.regalflowers.com.ng/product/fresh-flower-shop-flower-vases-transparent-cylindrical-fish-bowl-hour-glass-vases/\">optional add-on vase</a></em></p>\n<hr />\n<p>Select size below or go all out with <strong><a href=\"https://www.regalflowers.com.ng/product/vip-belleza-regal-two-colors-roses-red-yellow-orange-select-size/\" target=\"_blank\" rel=\"noopener noreferrer\">VIP Sizes</a></strong></p>\n",
+      "sku": "",
+      "price": "75000",
+      "regular_price": "",
+      "sale_price": "",
+      "date_on_sale_from": null,
+      "date_on_sale_from_gmt": null,
+      "date_on_sale_to": null,
+      "date_on_sale_to_gmt": null,
+      "on_sale": false,
+      "purchasable": true,
+      "total_sales": 118,
+      "virtual": false,
+      "downloadable": false,
+      "downloads": [],
+      "download_limit": -1,
+      "download_expiry": -1,
+      "external_url": "",
+      "button_text": "",
+      "tax_status": "taxable",
+      "tax_class": "",
+      "manage_stock": false,
+      "stock_quantity": null,
+      "backorders": "no",
+      "backorders_allowed": false,
+      "backordered": false,
+      "low_stock_amount": null,
+      "sold_individually": false,
+      "weight": "",
+      "dimensions": {
+          "length": "",
+          "width": "",
+          "height": ""
+      },
+      "shipping_required": true,
+      "shipping_taxable": true,
+      "shipping_class": "",
+      "shipping_class_id": 0,
+      "reviews_allowed": false,
+      "average_rating": "0.00",
+      "rating_count": 0,
+      "upsell_ids": [
+          1225,
+          1139,
+          992,
+          3848,
+          15184
+      ],
+      "cross_sell_ids": [
+          1053,
+          3093,
+          995,
+          3848
+      ],
+      "parent_id": 0,
+      "purchase_note": "",
+      "categories": [
+          {
+              "id": 598,
+              "name": "Million Stars",
+              "slug": "million-stars"
+          },
+          {
+              "id": 595,
+              "name": "Roses",
+              "slug": "roses"
+          },
+          {
+              "id": 39,
+              "name": "Birthday Flowers, Anniversary Flowers, Love &amp; Romance flowers, Valentine Flowers, Mother's Day Flowers",
+              "slug": "love-romance-birthday-anniversary-just-to-say-flowers"
+          },
+          {
+              "id": 28,
+              "name": "Happy Birthday Flowers",
+              "slug": "birthday-flowers"
+          },
+          {
+              "id": 29,
+              "name": "Anniversary Flowers",
+              "slug": "anniversary-flowers"
+          },
+          {
+              "id": 30,
+              "name": "Just to Say Bouquets",
+              "slug": "just-because-flowers"
+          },
+          {
+              "id": 31,
+              "name": "Get Well Soon",
+              "slug": "get-well-soon"
+          },
+          {
+              "id": 36,
+              "name": "Fathers' Day Flowers",
+              "slug": "fathers-day-flowers"
+          },
+          {
+              "id": 35,
+              "name": "Mothers' Day Flowers",
+              "slug": "mothers-day-flowers"
+          }
+      ],
+      "tags": [
+          {
+              "id": 565,
+              "name": "Abuja Wuse 2",
+              "slug": "abuja-wuse-2"
+          },
+          {
+              "id": 217,
+              "name": "Gypsophila",
+              "slug": "gypsophila"
+          },
+          {
+              "id": 267,
+              "name": "lagos ikoyi",
+              "slug": "lagos-ikoyi"
+          },
+          {
+              "id": 202,
+              "name": "million star",
+              "slug": "million-star"
+          },
+          {
+              "id": 289,
+              "name": "red rose",
+              "slug": "red-rose"
+          },
+          {
+              "id": 272,
+              "name": "regalflowersng",
+              "slug": "regalflowersng"
+          },
+          {
+              "id": 236,
+              "name": "roses",
+              "slug": "roses"
+          },
+          {
+              "id": 290,
+              "name": "white rose",
+              "slug": "white-rose"
+          }
+      ],
+      "images": [
+          {
+              "id": 17008,
+              "date_created": "2022-04-22T12:49:04",
+              "date_created_gmt": "2022-04-22T12:49:04",
+              "date_modified": "2022-04-29T20:00:41",
+              "date_modified_gmt": "2022-04-29T20:00:41",
+              "src": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-RosesWhite-RosesPink-Roses-with-Million-Stars-rose-flower-for-her-a-bouquet-of-flower-for-her-flower-in-Lagos-fresh-flower-in-Lagos.jpg?fit=2100%2C2100&ssl=1",
+              "name": "Belleza By Regal &#8211; Red Roses,White Roses,Pink Roses with Million Stars, rose flower for her a bouquet of flower for her, flower in Lagos, fresh flower in Lagos",
+              "alt": "Belleza By Regal"
+          },
+          {
+              "id": 17006,
+              "date_created": "2022-04-22T12:48:19",
+              "date_created_gmt": "2022-04-22T12:48:19",
+              "date_modified": "2022-04-22T12:48:19",
+              "date_modified_gmt": "2022-04-22T12:48:19",
+              "src": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-Roses-Pink-Roses-and-White-Roses-with-millions-stars-and-Sandara-wine-cupcakes-and-Guylian-Chocolate-Fresh-Flowers-for-her-Birthday-Flowers-Same-day-flowers-delivery-in-Lagos.jpg?fit=2100%2C2100&ssl=1",
+              "name": "Red Roses, Pink Roses and White Roses with millions stars and Sandara wine, cupcakes and Guylian Chocolate, Fresh Flowers for her, Birthday Flowers, Same day flowers delivery in Lagos",
+              "alt": ""
+          },
+          {
+              "id": 17002,
+              "date_created": "2022-04-22T12:46:53",
+              "date_created_gmt": "2022-04-22T12:46:53",
+              "date_modified": "2022-04-22T12:46:53",
+              "date_modified_gmt": "2022-04-22T12:46:53",
+              "src": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-Roses-Pink-Roses-and-White-Roses-with-Gypso-and-Guylian-Chocolate-bouquet-of-Flowers-for-her-Birthday-Flowers-Same-day-flowers-delivery-in-Lagos.jpg?fit=2100%2C2100&ssl=1",
+              "name": "Red Roses, Pink Roses and White Roses with Gypso and Guylian Chocolate, bouquet of Flowers for her, Birthday Flowers, Same day flowers delivery in Lagos",
+              "alt": ""
+          },
+          {
+              "id": 17007,
+              "date_created": "2022-04-22T12:48:35",
+              "date_created_gmt": "2022-04-22T12:48:35",
+              "date_modified": "2022-04-22T12:48:35",
+              "date_modified_gmt": "2022-04-22T12:48:35",
+              "src": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-RosesWhite-RosesPink-Roses-with-Million-Stars-with-moet-Champaign-a-bouquet-of-flower-for-her-flower-in-Abuja-fresh-flower-in-Lagos-Flower-Store.jpg?fit=2100%2C2100&ssl=1",
+              "name": "Red Roses,White Roses,Pink Roses with Million Stars with moet Champaign, a bouquet of flower for her, flower in Abuja, fresh flower in Lagos, Flower Store",
+              "alt": ""
+          },
+          {
+              "id": 17003,
+              "date_created": "2022-04-22T12:47:21",
+              "date_created_gmt": "2022-04-22T12:47:21",
+              "date_modified": "2022-04-22T12:47:21",
+              "date_modified_gmt": "2022-04-22T12:47:21",
+              "src": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-Roses-Pink-Roses-and-White-Roses-with-Gypso-and-Guylian-Chocolate-Flower-store-bouquet-of-Flowers-for-her-Birthday-Flowers-Same-day-flowers-delivery-company-in-Lagos.jpg?fit=2100%2C2100&ssl=1",
+              "name": "Red Roses, Pink Roses and White Roses with Gypso and Guylian Chocolate, Flower store, bouquet of Flowers for her, Birthday Flowers, Same day flowers delivery company in Lagos",
+              "alt": ""
+          },
+          {
+              "id": 17010,
+              "date_created": "2022-04-22T12:50:07",
+              "date_created_gmt": "2022-04-22T12:50:07",
+              "date_modified": "2022-04-22T12:50:07",
+              "date_modified_gmt": "2022-04-22T12:50:07",
+              "src": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/White-Roses-Pink-Roses-and-Red-Roses-with-Gypso-and-Guylian-Chocolate-bouquet-of-Flowers-for-her-Birthday-Flowers-Same-day-flowers-delivery-in-Lagos.jpg?fit=2100%2C2100&ssl=1",
+              "name": "White Roses, Pink Roses and Red Roses with Gypso and Guylian Chocolate, bouquet of Flowers for her, Birthday Flowers, Same day flowers delivery in Lagos",
+              "alt": ""
+          },
+          {
+              "id": 17004,
+              "date_created": "2022-04-22T12:47:37",
+              "date_created_gmt": "2022-04-22T12:47:37",
+              "date_modified": "2022-04-22T12:47:37",
+              "date_modified_gmt": "2022-04-22T12:47:37",
+              "src": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-Roses-Pink-Roses-and-White-Roses-with-Gypso-in-a-vase-and-Guylian-Chocolate-bouquet-of-Flowers-for-her-Anniversary-Flowers-Same-day-flowers-delivery-in-Abuja.jpg?fit=2100%2C2100&ssl=1",
+              "name": "Red Roses, Pink Roses and White Roses with Gypso in a vase and Guylian Chocolate, bouquet of Flowers for her, Anniversary Flowers, Same day flowers delivery in Abuja",
+              "alt": ""
+          },
+          {
+              "id": 17000,
+              "date_created": "2022-04-22T12:46:30",
+              "date_created_gmt": "2022-04-22T12:46:30",
+              "date_modified": "2022-04-22T12:46:30",
+              "date_modified_gmt": "2022-04-22T12:46:30",
+              "src": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Pink-RosesWhite-Roses-Red-Roses-with-Million-Stars-and-Ferrero-Chocolate-with-moet-wine-a-bouquet-of-flower-for-her-flower-in-Lagos-fresh-flower-in-Lagos-flower-delivery-in-Abuja.jpg?fit=2100%2C2100&ssl=1",
+              "name": "Pink Roses,White Roses, Red Roses with Million Stars and Ferrero Chocolate with moet wine a bouquet of flower for her, flower in Lagos, fresh flower in Lagos, flower delivery in Abuja",
+              "alt": ""
+          }
+      ],
+      "attributes": [
+          {
+              "id": 7,
+              "name": "Select Size",
+              "position": 0,
+              "visible": true,
+              "variation": true,
+              "options": [
+                  "a) Entry (5 roses)",
+                  "b) Extra Small (10 roses)",
+                  "c) Small (15 roses)",
+                  "d) Medium (20 roses)",
+                  "e) Standard (24cm box)",
+                  "f) Standard Plus (27cm box)",
+                  "g) Standard Premium (30cm box)",
+                  "H) VIP Entry",
+                  "I) VIP Medium",
+                  "J) VIP Standard",
+                  "L) VIP Standard Premium",
+                  "M) VIP Large"
+              ]
+          }
+      ],
+      "default_attributes": [],
+      "variations": [
+          2764,
+          2760,
+          2761,
+          2762,
+          4878
+      ],
+      "grouped_products": [],
+      "menu_order": 0,
+      "price_html": "From <span class=\"woocommerce-Price-amount amount\"><bdi><span class=\"woocommerce-Price-currencySymbol\">&#8358;</span>75000</bdi></span>",
+      "related_ids": [
+          889,
+          1689,
+          775,
+          3327,
+          524
+      ],
+      "meta_data": [
+          {
+              "id": 29969,
+              "key": "_jetpack_related_posts_cache",
+              "value": {
+                  "32b0bf150bb6bd30c74ed5fafdacd61f": {
+                      "expires": 1651268517,
+                      "payload": []
+                  }
+              }
+          },
+          {
+              "id": 30013,
+              "key": "_min_variation_price",
+              "value": "35000"
+          },
+          {
+              "id": 30014,
+              "key": "_max_variation_price",
+              "value": "50000"
+          },
+          {
+              "id": 30015,
+              "key": "_min_price_variation_id",
+              "value": "2081"
+          },
+          {
+              "id": 30016,
+              "key": "_max_price_variation_id",
+              "value": "2082"
+          },
+          {
+              "id": 30017,
+              "key": "_min_variation_regular_price",
+              "value": "35000"
+          },
+          {
+              "id": 30018,
+              "key": "_max_variation_regular_price",
+              "value": "50000"
+          },
+          {
+              "id": 30019,
+              "key": "_min_regular_price_variation_id",
+              "value": "2081"
+          },
+          {
+              "id": 30020,
+              "key": "_max_regular_price_variation_id",
+              "value": "2082"
+          },
+          {
+              "id": 30057,
+              "key": "_yoast_wpseo_primary_product_cat",
+              "value": "28"
+          },
+          {
+              "id": 30058,
+              "key": "_yoast_wpseo_content_score",
+              "value": "60"
+          },
+          {
+              "id": 30060,
+              "key": "_wpas_done_all",
+              "value": "1"
+          },
+          {
+              "id": 72508,
+              "key": "_wpas_skip_17767013",
+              "value": "1"
+          },
+          {
+              "id": 72524,
+              "key": "_yoast_wpseo_metadesc",
+              "value": "Belleza By Regal is a Concentric arrangement of two or three colors of roses and million stars. Order online now to enjoy fast delivery"
+          },
+          {
+              "id": 72807,
+              "key": "_psad_onsale_order",
+              "value": "10000000000000"
+          },
+          {
+              "id": 72808,
+              "key": "_psad_featured_order",
+              "value": "10000000000000"
+          },
+          {
+              "id": 72890,
+              "key": "atcr_single_page_views",
+              "value": "338"
+          },
+          {
+              "id": 72891,
+              "key": "atcr_sort",
+              "value": "0.89"
+          },
+          {
+              "id": 77084,
+              "key": "_fbtw_input_ids",
+              "value": "a:8:{i:0;s:5:\"14143\";i:1;s:4:\"1231\";i:2;s:4:\"3093\";i:3;s:5:\"13301\";i:4;s:3:\"992\";i:5;s:4:\"3848\";i:6;s:3:\"189\";i:7;s:5:\"13348\";}"
+          },
+          {
+              "id": 77085,
+              "key": "_fbtw_select_default",
+              "value": "2760"
+          },
+          {
+              "id": 77086,
+              "key": "_fbtw_pro_num",
+              "value": "10"
+          },
+          {
+              "id": 77087,
+              "key": "_wapo_disable_global",
+              "value": "no"
+          },
+          {
+              "id": 80874,
+              "key": "atcr_single_page_add_to_carts",
+              "value": "3"
+          },
+          {
+              "id": 132722,
+              "key": "fb_image",
+              "value": ""
+          },
+          {
+              "id": 132723,
+              "key": "fb_visibility",
+              "value": "1"
+          },
+          {
+              "id": 132724,
+              "key": "fb_product_group_id",
+              "value": "1761516257273992"
+          },
+          {
+              "id": 134568,
+              "key": "fb_product_description",
+              "value": ""
+          },
+          {
+              "id": 201504,
+              "key": "slide_template",
+              "value": "default"
+          },
+          {
+              "id": 201505,
+              "key": "_yoast_wpseo_primary_product_brand",
+              "value": ""
+          },
+          {
+              "id": 201506,
+              "key": "_vc_post_settings",
+              "value": {
+                  "vc_grid_id": []
+              }
+          },
+          {
+              "id": 203576,
+              "key": "_product_meta_id",
+              "value": ""
+          },
+          {
+              "id": 253409,
+              "key": "fb_sync_status",
+              "value": ""
+          },
+          {
+              "id": 285806,
+              "key": "fb_product_item_id",
+              "value": "2245899738769972"
+          },
+          {
+              "id": 313173,
+              "key": "_last_editor_used_jetpack",
+              "value": "classic-editor"
+          },
+          {
+              "id": 313174,
+              "key": "_wc_facebook_commerce_enabled",
+              "value": "no"
+          },
+          {
+              "id": 313175,
+              "key": "_yoast_wpseo_estimated-reading-time-minutes",
+              "value": "1"
+          },
+          {
+              "id": 361029,
+              "key": "_wapf_fieldgroup",
+              "value": {
+                  "id": "p_2080",
+                  "type": "wapf_product",
+                  "layout": {
+                      "labels_position": "above",
+                      "instructions_position": "field",
+                      "mark_required": true,
+                      "enable_gallery_images": false,
+                      "gallery_images": [],
+                      "swap_type": "rules"
+                  },
+                  "variables": [],
+                  "fields": [],
+                  "rule_groups": [
+                      {
+                          "rules": [
+                              {
+                                  "value": [
+                                      {
+                                          "id": "2080",
+                                          "text": ""
+                                      }
+                                  ],
+                                  "condition": "product",
+                                  "subject": "product"
+                              }
+                          ]
+                      }
+                  ]
+              }
+          },
+          {
+              "id": 369537,
+              "key": "_woocs_price_geo_countries",
+              "value": ""
+          },
+          {
+              "id": 369538,
+              "key": "_woocs_regular_price_geo",
+              "value": ""
+          },
+          {
+              "id": 369539,
+              "key": "_woocs_sale_price_geo",
+              "value": ""
+          },
+          {
+              "id": 371158,
+              "key": "sseo_meta_description",
+              "value": "Concentric arrangement of two or three colors of roses and million star/gypsophila. Order online now, or call 07011992888 or 07010006665 to order."
+          },
+          {
+              "id": 372801,
+              "key": "_yoast_wpseo_focuskw",
+              "value": "Belleza By Regal"
+          },
+          {
+              "id": 372802,
+              "key": "_yoast_wpseo_linkdex",
+              "value": "66"
+          }
+      ],
+      "stock_status": "instock",
+      "has_options": true,
+      "yoast_head": "<!-- This site is optimized with the Yoast SEO plugin v18.6 - https://yoast.com/wordpress/plugins/seo/ -->\n<title>BELLEZA BY REGAL – Mixed Roses &amp; Million Stars - RegalFlowers.com.ng</title>\n<meta name=\"description\" content=\"Belleza By Regal is a Concentric arrangement of two or three colors of roses and million stars. Order online now to enjoy fast delivery\" />\n<meta name=\"robots\" content=\"index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1\" />\n<link rel=\"canonical\" href=\"https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/\" />\n<meta property=\"og:locale\" content=\"en_US\" />\n<meta property=\"og:type\" content=\"article\" />\n<meta property=\"og:title\" content=\"BELLEZA BY REGAL – Mixed Roses &amp; Million Stars - RegalFlowers.com.ng\" />\n<meta property=\"og:description\" content=\"Belleza By Regal is a Concentric arrangement of two or three colors of roses and million stars. Order online now to enjoy fast delivery\" />\n<meta property=\"og:url\" content=\"https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/\" />\n<meta property=\"og:site_name\" content=\"RegalFlowers.com.ng\" />\n<meta property=\"article:publisher\" content=\"http://www.facebook.com/regalflowersng\" />\n<meta property=\"article:modified_time\" content=\"2022-05-05T12:06:03+00:00\" />\n<meta property=\"og:image\" content=\"https://www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-RosesWhite-RosesPink-Roses-with-Million-Stars-rose-flower-for-her-a-bouquet-of-flower-for-her-flower-in-Lagos-fresh-flower-in-Lagos.jpg\" />\n\t<meta property=\"og:image:width\" content=\"2100\" />\n\t<meta property=\"og:image:height\" content=\"2100\" />\n\t<meta property=\"og:image:type\" content=\"image/jpeg\" />\n<meta name=\"twitter:card\" content=\"summary\" />\n<meta name=\"twitter:site\" content=\"@regalflowersng\" />\n<meta name=\"twitter:label1\" content=\"Est. reading time\" />\n\t<meta name=\"twitter:data1\" content=\"1 minute\" />\n<!-- / Yoast SEO plugin. -->",
+      "yoast_head_json": {
+          "title": "BELLEZA BY REGAL – Mixed Roses & Million Stars - RegalFlowers.com.ng",
+          "description": "Belleza By Regal is a Concentric arrangement of two or three colors of roses and million stars. Order online now to enjoy fast delivery",
+          "robots": {
+              "index": "index",
+              "follow": "follow",
+              "max-snippet": "max-snippet:-1",
+              "max-image-preview": "max-image-preview:large",
+              "max-video-preview": "max-video-preview:-1"
+          },
+          "canonical": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/",
+          "og_locale": "en_US",
+          "og_type": "article",
+          "og_title": "BELLEZA BY REGAL – Mixed Roses & Million Stars - RegalFlowers.com.ng",
+          "og_description": "Belleza By Regal is a Concentric arrangement of two or three colors of roses and million stars. Order online now to enjoy fast delivery",
+          "og_url": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/",
+          "og_site_name": "RegalFlowers.com.ng",
+          "article_publisher": "http://www.facebook.com/regalflowersng",
+          "article_modified_time": "2022-05-05T12:06:03+00:00",
+          "og_image": [
+              {
+                  "width": 2100,
+                  "height": 2100,
+                  "url": "https://www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-RosesWhite-RosesPink-Roses-with-Million-Stars-rose-flower-for-her-a-bouquet-of-flower-for-her-flower-in-Lagos-fresh-flower-in-Lagos.jpg",
+                  "type": "image/jpeg"
+              }
+          ],
+          "twitter_card": "summary",
+          "twitter_site": "@regalflowersng",
+          "twitter_misc": {
+              "Est. reading time": "1 minute"
+          },
+          "schema": {
+              "@context": "https://schema.org",
+              "@graph": [
+                  {
+                      "@type": "Organization",
+                      "@id": "https://www.regalflowers.com.ng/#organization",
+                      "name": "Regalflowers.com.ng",
+                      "url": "https://www.regalflowers.com.ng/",
+                      "sameAs": [
+                          "http://www.facebook.com/regalflowersng",
+                          "http://www.instagram.com/regalflowersng",
+                          "https://twitter.com/regalflowersng"
+                      ],
+                      "logo": {
+                          "@type": "ImageObject",
+                          "@id": "https://www.regalflowers.com.ng/#logo",
+                          "inLanguage": "en-US",
+                          "url": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2016/07/logo.jpg?fit=1400%2C1400&ssl=1",
+                          "contentUrl": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2016/07/logo.jpg?fit=1400%2C1400&ssl=1",
+                          "width": 1400,
+                          "height": 1400,
+                          "caption": "Regalflowers.com.ng"
+                      },
+                      "image": {
+                          "@id": "https://www.regalflowers.com.ng/#logo"
+                      }
+                  },
+                  {
+                      "@type": "WebSite",
+                      "@id": "https://www.regalflowers.com.ng/#website",
+                      "url": "https://www.regalflowers.com.ng/",
+                      "name": "RegalFlowers.com.ng",
+                      "description": "Buy flowers in Lagos and Abuja",
+                      "publisher": {
+                          "@id": "https://www.regalflowers.com.ng/#organization"
+                      },
+                      "potentialAction": [
+                          {
+                              "@type": "SearchAction",
+                              "target": {
+                                  "@type": "EntryPoint",
+                                  "urlTemplate": "https://www.regalflowers.com.ng/?s={search_term_string}"
+                              },
+                              "query-input": "required name=search_term_string"
+                          }
+                      ],
+                      "inLanguage": "en-US"
+                  },
+                  {
+                      "@type": "ImageObject",
+                      "@id": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/#primaryimage",
+                      "inLanguage": "en-US",
+                      "url": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-RosesWhite-RosesPink-Roses-with-Million-Stars-rose-flower-for-her-a-bouquet-of-flower-for-her-flower-in-Lagos-fresh-flower-in-Lagos.jpg?fit=2100%2C2100&ssl=1",
+                      "contentUrl": "https://i0.wp.com/www.regalflowers.com.ng/wp-content/uploads/2017/10/Red-RosesWhite-RosesPink-Roses-with-Million-Stars-rose-flower-for-her-a-bouquet-of-flower-for-her-flower-in-Lagos-fresh-flower-in-Lagos.jpg?fit=2100%2C2100&ssl=1",
+                      "width": 2100,
+                      "height": 2100,
+                      "caption": "Belleza By Regal - Red Roses,White Roses,Pink Roses with Million Stars"
+                  },
+                  {
+                      "@type": [
+                          "WebPage",
+                          "ItemPage"
+                      ],
+                      "@id": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/#webpage",
+                      "url": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/",
+                      "name": "BELLEZA BY REGAL – Mixed Roses & Million Stars - RegalFlowers.com.ng",
+                      "isPartOf": {
+                          "@id": "https://www.regalflowers.com.ng/#website"
+                      },
+                      "primaryImageOfPage": {
+                          "@id": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/#primaryimage"
+                      },
+                      "datePublished": "2017-04-20T10:42:31+00:00",
+                      "dateModified": "2022-05-05T12:06:03+00:00",
+                      "description": "Belleza By Regal is a Concentric arrangement of two or three colors of roses and million stars. Order online now to enjoy fast delivery",
+                      "breadcrumb": {
+                          "@id": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/#breadcrumb"
+                      },
+                      "inLanguage": "en-US",
+                      "potentialAction": [
+                          {
+                              "@type": "ReadAction",
+                              "target": [
+                                  "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/"
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "@type": "BreadcrumbList",
+                      "@id": "https://www.regalflowers.com.ng/product/belleza-regal-two-colors-rose-red-yellow-white-pink-orange/#breadcrumb",
+                      "itemListElement": [
+                          {
+                              "@type": "ListItem",
+                              "position": 1,
+                              "name": "Home",
+                              "item": "https://www.regalflowers.com.ng/"
+                          },
+                          {
+                              "@type": "ListItem",
+                              "position": 2,
+                              "name": "Shop",
+                              "item": "https://www.regalflowers.com.ng/shop/"
+                          },
+                          {
+                              "@type": "ListItem",
+                              "position": 3,
+                              "name": "BELLEZA BY REGAL – Mixed Roses &#038; Million Stars"
+                          }
+                      ]
+                  }
+              ]
+          }
+      },
+      "jetpack_publicize_connections": [],
+      "jetpack_sharing_enabled": true,
+      "jetpack-related-posts": [],
+      "_links": {
+          "self": [
+              {
+                  "href": "https://www.regalflowers.com.ng/wp-json/wc/v3/products/2080"
+              }
+          ],
+          "collection": [
+              {
+                  "href": "https://www.regalflowers.com.ng/wp-json/wc/v3/products"
+              }
+          ]
+      }
+  }
+}
