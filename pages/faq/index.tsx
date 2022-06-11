@@ -272,7 +272,7 @@ const Index: FunctionComponent = () => {
             />
           </button>
         </div>
-        <div className="flex between vertical-margin spaced">
+        <div className="flex between vertical-margin spaced wrap">
           {featuredFlowers.map((item, index) => (
             <FlowerCard key={index} flower={item} />
           ))}

@@ -6,6 +6,7 @@ import styles from "./products.module.scss";
 import Button from "../../components/Button/Button";
 import FlowerCard from "../../components/FlowerCard/FlowerCard";
 import { featuredFlowers } from "../faq";
+import { useRouter } from "next/router";
 
 const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const productSampleData: Product = {
@@ -85,6 +86,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const [descriptionTab, setDescriptionTab] = useState("product description");
   const [size, setsize] = useState("regular");
   const [addonGroup, setAddonGroup] = useState("");
+  // useRouter()
 
   const handleNextCLick = () => {
     setActiveSlide(activeSlide + 1);
@@ -355,7 +357,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         </div>
       </div>
       <p className="title bold margin-top spaced">Related Products</p>
-      <div className="flex between vertical-margin spaced">
+      <div className="flex between vertical-margin spaced wrap">
         {featuredFlowers.map((item, index) => (
           <FlowerCard key={index} flower={item} />
         ))}
