@@ -12,6 +12,8 @@ export interface ProductVariant {
   class: "regular" | "vip";
 }
 
+export type DesignOption = "wrappedBouquet" | "invase" | "inLargeVase" | "box";
+
 interface Product {
   id: number;
   name: string;
@@ -24,9 +26,12 @@ interface Product {
   images: ProductImage[];
   variants: ProductVariant[];
   addonsGroups: AddonGroup[];
-  description: string;
+  productDescription: string;
   title: string;
   sizes?: string[];
+  designOptions?: DesignOption[];
+  note?: string;
+  description?: string;
 }
 
 export default Product;

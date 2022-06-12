@@ -139,7 +139,14 @@
 
       &:hover {
         border-color: rgba(209, 213, 219, 0.8);
-        color: rgba(0, 0, 0, 0.8);
+        color: white;
+        background-color: #9b0000;
+      }
+
+      &.selected-size {
+        // border-color: #9b0000;
+        color: white;
+        background-color: #9b0000;
       }
     }
   }
@@ -191,6 +198,26 @@
       img {
         height: 10rem;
       }
+    }
+  }
+  .design {
+    border: 0.1rem solid #e5e7eb;
+    padding-top: 1.5rem;
+    width: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s ease-out;
+
+    &.selected-design {
+      border-color: #9b0000;
+    }
+
+    &:hover {
+      border-color: #9b0000;
     }
   }
 }
