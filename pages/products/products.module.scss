@@ -8,11 +8,6 @@
     }
   }
 
-  // .slider-content {
-  //   display: flex;
-  //   height: 100%;
-  // }
-
   .slider {
     overflow: hidden;
     width: 100%;
@@ -35,6 +30,7 @@
       img {
         width: 100%;
         height: 28rem;
+        object-fit: cover;
       }
     }
   }
@@ -43,8 +39,8 @@
     position: absolute;
     top: 50%;
     background: rgba(255, 255, 255, 1);
-    width: 30px;
-    height: 30px;
+    width: 2.2rem;
+    height: 2.2rem;
     border-radius: 50%;
     z-index: 100;
     &.left {
@@ -60,6 +56,8 @@
     opacity: 0.8;
     transition: 0.3s ease-out;
     width: 7rem;
+    height: 8rem;
+    object-fit: cover;
     &:hover {
       opacity: 1;
     }
@@ -71,20 +69,33 @@
 
   .tab {
     margin: 1.5rem 0;
-    border-bottom: 1px solid #f1f1f1;
+    // border-bottom: 0.15rem solid #f1f1f1;
     display: inline-block;
     transition: 0.3s ease-out;
+    position: relative;
 
     .active {
-      border-bottom: 1.5px solid #9b0000;
+      border-bottom: 0.15rem solid #9b0000;
       font-weight: 700;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0.1rem;
+      background-color: #f1f1f1;
+      transition: 0.3s ease-out;
+      z-index: -1;
     }
   }
   .delivery {
     background-color: #f9fafb;
     padding: 1.2rem;
     margin: 1.5rem 0;
-    border-radius: 8px;
+    border-radius: 0.6rem;
 
     .icon {
       width: 2rem;
@@ -119,7 +130,7 @@
     margin-bottom: 1rem;
     .size {
       padding: 0.5rem;
-      border: 1px solid #d1d5db;
+      border: 0.1rem solid #d1d5db;
       display: inline-block;
 
       margin: 0.3rem;
@@ -128,7 +139,14 @@
 
       &:hover {
         border-color: rgba(209, 213, 219, 0.8);
-        color: rgba(0, 0, 0, 0.8);
+        color: white;
+        background-color: #9b0000;
+      }
+
+      &.selected-size {
+        // border-color: #9b0000;
+        color: white;
+        background-color: #9b0000;
       }
     }
   }
@@ -137,7 +155,7 @@
     .menu-btn {
       background-color: #f9fafb;
       cursor: pointer;
-      border-radius: 0px 4px 4px 0px;
+      border-radius: 0 0.4rem 0.4rem 0;
       margin-bottom: 1rem;
 
       .arrow {
@@ -180,6 +198,26 @@
       img {
         height: 10rem;
       }
+    }
+  }
+  .design {
+    border: 0.1rem solid #e5e7eb;
+    padding-top: 1.5rem;
+    width: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s ease-out;
+
+    &.selected-design {
+      border-color: #9b0000;
+    }
+
+    &:hover {
+      border-color: #9b0000;
     }
   }
 }

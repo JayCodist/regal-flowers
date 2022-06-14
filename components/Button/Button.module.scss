@@ -3,7 +3,7 @@
   color: white;
   font-weight: 700;
   padding: 1rem 3rem;
-  border-radius: 8px;
+  border-radius: 0.6rem;
   min-width: 12rem;
   font-size: 1.1rem;
   transition: 0.3s ease-out;
@@ -15,7 +15,7 @@
   &.transparent {
     background-color: white;
     color: #9b0000;
-    border: 1px solid #9b0000;
+    border: 0.1rem solid #9b0000;
 
     &:hover {
       background-color: #9b0000;
