@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from "react";
+import Product from "../../utils/types/Product";
 import Button from "../Button/Button";
 import styles from "./FlowerCard.module.scss";
 
 interface IFlowerCardProps {
-  flower: { name: string; price: number; image: string };
+  flower: Product;
 }
 
 const FlowerCard: FunctionComponent<IFlowerCardProps> = props => {
@@ -12,7 +13,7 @@ const FlowerCard: FunctionComponent<IFlowerCardProps> = props => {
     <div className={`${styles["flower-card"]} center`}>
       <img
         className={styles["flower-image"]}
-        src={flower.image}
+        src={flower.images[0].src}
         alt="featured flower"
       />
       <div className={styles.detail}>
