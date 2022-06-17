@@ -3,6 +3,8 @@
   text-align: center;
   border: 0.1rem solid #f3f4f6;
   border-radius: 0.4rem;
+  width: 16rem;
+  background-color: white;
 
   .detail {
     padding: 0.6rem 1rem;
@@ -16,7 +18,7 @@
   }
   .flower-image {
     height: 15rem;
-    width: 16rem;
+    width: 100%;
     object-fit: cover;
     border-radius: 0.4rem 0.4rem 0 0;
   }
