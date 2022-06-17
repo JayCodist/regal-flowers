@@ -252,7 +252,13 @@ const Index: FunctionComponent = () => {
         </div>
         <div className="flex between vertical-margin spaced wrap">
           {flowers.map((item, index) => (
-            <FlowerCard key={index} flower={item} />
+            <FlowerCard
+              key={index}
+              name={item.name}
+              image={item.images[0].src}
+              price={item.price}
+              details={item.details}
+            />
           ))}
         </div>
       </div>
