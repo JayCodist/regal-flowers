@@ -32,6 +32,7 @@ interface Product {
   designOptions?: DesignOption[];
   note?: string;
   description?: string;
+  details: string;
 }
 
 export default Product;

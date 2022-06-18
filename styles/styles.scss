@@ -206,6 +206,12 @@ button {
     margin-left: 0.6rem;
   }
 }
+
+.horizontal-padding {
+  &.xl {
+    padding: 0 3rem;
+  }
+}
 .margin-left {
   margin-left: 0.6rem;
   &.spaced {

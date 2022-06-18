@@ -5,7 +5,7 @@ import Product, { DesignOption } from "../../utils/types/Product";
 import styles from "./products.module.scss";
 import Button from "../../components/Button/Button";
 import FlowerCard from "../../components/FlowerCard/FlowerCard";
-import { featuredFlowers } from "../faq";
+import { flowers } from "../filters/[filter]";
 
 const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const productSampleData: Product = {
@@ -82,7 +82,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     note:
       "Single stem rose only available for pickup, except as part of larger order.",
     description:
-      "A kiss from a rose is daintily presented single full stemmed rose, available in various colors."
+      "A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
+    details: "5 Peas in a pod"
   };
 
   const [product] = useState<Product>(productSampleData);
@@ -459,8 +460,14 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       </div>
       <p className="title bold margin-top spaced">Related Products</p>
       <div className="flex between vertical-margin spaced wrap">
-        {featuredFlowers.map((item, index) => (
-          <FlowerCard key={index} flower={item} />
+        {flowers.map((item, index) => (
+          <FlowerCard
+            key={index}
+            name={item.name}
+            image={item.images[0].src}
+            price={item.price}
+            details={item.details}
+          />
         ))}
       </div>
     </section>
