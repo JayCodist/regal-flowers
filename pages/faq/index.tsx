@@ -1,30 +1,8 @@
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
 import FlowerCard from "../../components/FlowerCard/FlowerCard";
+import { flowers } from "../filters/[filter]";
 import styles from "./index.module.scss";
-
-export const featuredFlowers = [
-  {
-    name: "5 Peas in a pod",
-    price: 6000,
-    image: "/images/flower.png"
-  },
-  {
-    name: "5 Peas in a pod",
-    price: 36000,
-    image: "/images/flower.png"
-  },
-  {
-    name: "5 Peas in a pod",
-    price: 36000,
-    image: "/images/flower.png"
-  },
-  {
-    name: "5 Peas in a pod",
-    price: 36000,
-    image: "/images/flower.png"
-  }
-];
 
 const Index: FunctionComponent = () => {
   return (
@@ -273,8 +251,14 @@ const Index: FunctionComponent = () => {
           </button>
         </div>
         <div className="flex between vertical-margin spaced wrap">
-          {featuredFlowers.map((item, index) => (
-            <FlowerCard key={index} flower={item} />
+          {flowers.map((item, index) => (
+            <FlowerCard
+              key={index}
+              name={item.name}
+              image={item.images[0].src}
+              price={item.price}
+              details={item.details}
+            />
           ))}
         </div>
       </div>

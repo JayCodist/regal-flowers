@@ -1,0 +1,88 @@
+.filters {
+  padding-bottom: 3rem;
+  .hero {
+    background-image: url("/icons/filters-bg.svg");
+    min-height: 50vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .occassion-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 3rem;
+
+      .occassion {
+        background-color: #fdf0f0;
+        position: relative;
+        height: 9rem;
+        width: 9rem;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 1rem;
+        color: #9b0000;
+        cursor: pointer;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 8.8rem;
+          height: 8.8rem;
+          border-radius: 50%;
+        }
+        &:hover::after {
+          border: 0.2rem solid #9b0000;
+        }
+
+        &.selected-occassion::after {
+          border: 0.2rem solid #9b0000;
+        }
+      }
+    }
+  }
+
+  .content {
+    padding: 0 3rem;
+    margin-top: 6rem;
+    margin-bottom: 5rem;
+
+    .left-side {
+      margin-top: 2rem;
+    }
+
+    .filters {
+      border: 0.1rem solid #d1d5db;
+      padding: 0.8rem;
+    }
+    .date {
+      border: 0.1rem solid #d1d5db;
+      padding: 0.4rem;
+      display: inline-flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-left: 0.5rem;
+      width: 7rem;
+    }
+
+    .products {
+      row-gap: 2rem;
+    }
+
+    .arrow {
+      transform: rotate(90deg);
+    }
+  }
+  .gifts {
+    padding: 0 3rem;
+    background-image: url("/icons/flower-bg.svg");
+
+    padding-bottom: 3rem;
+  }
+}
