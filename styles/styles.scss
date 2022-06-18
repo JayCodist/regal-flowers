@@ -88,16 +88,6 @@ button {
     font-size: 1.3rem;
   }
 }
-.page-content {
-  min-height: 90vh;
-  padding: 2rem;
-  &.auth {
-    padding: 0 12rem 0 6rem;
-  }
-}
-.content-layout {
-  padding-right: 3rem;
-}
 .flex {
   display: flex;
   &.column {
@@ -426,73 +416,6 @@ button {
 .half-width {
   width: 50%;
 }
-.sub-content {
-  background-color: #6b778c;
-  color: white;
-}
-.sub-flex {
-  display: flex;
-  align-items: flex-end;
-  padding: 1.5rem 3rem;
-  .sub-table {
-    margin-right: 4rem;
-    th {
-      padding: 0.5rem 1rem;
-      text-align: left;
-      font-weight: 800;
-    }
-    td {
-      padding: 0.25rem 1rem;
-      font-weight: 300;
-    }
-    .edit-icon {
-      height: 1rem;
-      margin-left: 0.5rem;
-      cursor: pointer;
-    }
-  }
-}
-
-.new-flex {
-  display: flex;
-  font-size: 1rem;
-  justify-content: space-between;
-  margin: 0.5rem 0;
-  .left {
-    width: 72%;
-    background-color: white;
-    border-radius: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-  }
-  .right {
-    width: 25%;
-    background-color: white;
-    border-radius: 0.8rem;
-    align-self: flex-start;
-    padding: 1.2rem;
-    .new-summary {
-      display: flex;
-      flex-direction: column;
-      min-height: 14rem;
-      .title {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-      }
-      .detail {
-        margin: 0.4rem 0;
-        display: flex;
-        .value {
-          color: rgb(167, 166, 166);
-          margin-left: 0.5rem;
-          text-transform: capitalize;
-        }
-      }
-    }
-  }
-}
 
 .new-hr {
   border: none;
@@ -527,6 +450,9 @@ button {
 }
 .blue {
   color: #2684ff;
+}
+.red {
+  color: #68203b;
 }
 .transparent-input {
   outline: none;
@@ -599,4 +525,17 @@ button {
 .align-icon {
   display: inline-flex;
   align-items: center;
+}
+
+.hero-bg {
+  height: 30rem;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
 }
