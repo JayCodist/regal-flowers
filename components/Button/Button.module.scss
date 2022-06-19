@@ -2,20 +2,43 @@
   background-color: #9b0000;
   color: white;
   font-weight: 700;
-  padding: 1rem 3rem;
+  padding: 0.8rem 1.6rem;
   border-radius: 0.4rem;
   min-width: 12rem;
   font-size: 1.1rem;
   transition: 0.3s ease-out;
+  outline: none;
 
-  &:hover {
-    opacity: 0.85;
+  &.loading {
+    cursor: default;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    &.primary {
+      background-color: #b7bcc2;
+      border-color: #b7bcc2;
+      opacity: 1;
+    }
+  }
+  &.min-width {
+    min-width: 8rem;
+  }
+  &.primary {
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+  &.accent {
+    background-color: white;
+    color: #9b0000;
+    border: 0.1rem solid #9b0000;
   }
 
   &.transparent {
     background-color: white;
     color: #9b0000;
-    border: 0.1rem solid #9b0000;
+    border: none;
 
     &:hover {
       background-color: #9b0000;
@@ -25,5 +48,35 @@
 
   &.responsive {
     width: 100%;
+  }
+  &.large {
+    padding: 0.8rem 2rem;
+  }
+  &.small {
+    font-size: smaller;
+    padding: 0.3rem 0.8rem;
+  }
+
+  &.icon-only {
+    padding: 0;
+    &:hover {
+      background-color: transparent;
+    }
+  }
+  .loader {
+    height: auto;
+    width: 0;
+    margin-left: 0;
+    transition: 0.3s ease-out;
+    &.active {
+      width: 1.1rem;
+      margin-left: 0.6rem;
+    }
+  }
+  .start-icon {
+    height: 1rem;
+    width: auto;
+    margin-right: 0.6rem;
+    align-self: center;
   }
 }

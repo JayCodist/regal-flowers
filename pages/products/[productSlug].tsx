@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { Fragment, FunctionComponent, useState } from "react";
 import { GetStaticProps } from "next";
 import { getProduct } from "../../utils/helpers/data/products";
 import Product, { DesignOption } from "../../utils/types/Product";
@@ -140,7 +140,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               <img
                 src="/icons/chevron-left.svg"
                 alt="left"
-                className={"genric-icon"}
+                className={"generic-icon"}
               />
             </button>
             {product.images.map((image, index) => (
@@ -163,7 +163,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               <img
                 src="/icons/chevron-right.svg"
                 alt="right"
-                className="genric-icon"
+                className="generic-icon"
               />
             </button>
           </div>
@@ -242,7 +242,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             </div>
           </div>
           <p
-            className={`${styles["product-info"]} flex spaced vertical-margin`}
+            className={`${styles["product-info"]} center-align flex spaced vertical-margin`}
           >
             <img
               src="/icons/info.svg"
@@ -251,12 +251,12 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             />
             <span>{product.note}</span>
           </p>
-          <p className="bold margin-bottom">Description</p>
+          <h3 className="bold margin-bottom">Description</h3>
           <p>{product.description}</p>
           {product.type === "variable" && (
             <div>
               <p className="align-icon margin-top">
-                <span className="bold margin-right">Select Budget</span>
+                <h3 className="bold margin-right">Select Budget</h3>
                 <img
                   src="/icons/info.svg"
                   alt="information"
@@ -301,7 +301,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
 
               {product.designOptions?.length && (
                 <p className="align-icon vertical-margin">
-                  <span className="bold margin-right">Select Design</span>
+                  <h3 className="bold margin-right">Select Design</h3>
                   <img
                     src="/icons/info.svg"
                     alt="information"
@@ -311,10 +311,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               )}
               <div className="flex spaced">
                 {product.designOptions?.map((designOption, index) => (
-                  <>
+                  <Fragment key={index}>
                     {designOption === "wrappedBouquet" && (
                       <div
-                        key={index}
                         className={[
                           styles.design,
                           selectedDesign === "wrappedBouquet" &&
@@ -387,16 +386,16 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                         <p>Complimentary</p>
                       </div>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </div>
             </div>
           )}
 
           <div className={styles["menu-wrapper"]}>
-            <p className="bold vertical-margin spaced">
+            <h3 className="bold vertical-margin spaced">
               Awesome Gifts to Include
-            </p>
+            </h3>
             {product.addonsGroups.map((group, index) => (
               <div key={index}>
                 {" "}
@@ -452,9 +451,13 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               </div>
             ))}
           </div>
-          <div className="flex spaced vertical-margin spaced">
-            <Button type="transparent">Buy Now</Button>
-            <Button responsive>Add to Cart (₦36,000)</Button>
+          <div className="flex spaced vertical-margin block">
+            <Button className={styles["buy-now"]} type="accent">
+              <strong>Buy Now</strong>
+            </Button>
+            <Button className={styles["add-to-cart"]}>
+              <strong>Add to Cart (₦36,000)</strong>
+            </Button>
           </div>
         </div>
       </div>

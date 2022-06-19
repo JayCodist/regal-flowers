@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FunctionComponent } from "react";
+import Button from "../components/Button/Button";
 import styles from "./index.module.scss";
 
 const LandingPage: FunctionComponent = () => {
@@ -18,16 +19,19 @@ const LandingPage: FunctionComponent = () => {
           <h1 className="featured-title">
             Best Selling Flowers In Lagos, Nigeria
           </h1>
-          <Link href="/filters/occassions" passHref>
-            <span className="flex spaced center-align">
-              <h3 className="red">See All</h3>
-              <img
-                alt="arrow"
-                className="generic-icon xsmall"
-                src="/icons/arrow-right.svg"
-              />
-            </span>
-          </Link>
+          <Button
+            url="/filters/occassions"
+            className="flex spaced center-align"
+            type="transparent"
+            size="small"
+          >
+            <h3 className="red">See All</h3>
+            <img
+              alt="arrow"
+              className="generic-icon xsmall"
+              src="/icons/arrow-right.svg"
+            />
+          </Button>
         </div>
       </section>
     </section>
