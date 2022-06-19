@@ -31,7 +31,7 @@ const FlowerCard: FunctionComponent<IFlowerCardProps> = props => {
               <p className="bold">{price}</p>
             </div>
           )}
-          <Button clasName={`${styles["buy-btn"]}`}>
+          <Button className={`${styles["buy-btn"]}`}>
             {buttonText ? buttonText : "Buy Now"}
           </Button>
         </div>

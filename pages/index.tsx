@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FunctionComponent } from "react";
 import styles from "./index.module.scss";
 
@@ -12,6 +13,23 @@ const LandingPage: FunctionComponent = () => {
           </h1>
         </div>
       </div>
+      <section className="featured-section">
+        <div className="flex between">
+          <h1 className="featured-title">
+            Best Selling Flowers In Lagos, Nigeria
+          </h1>
+          <Link href="/filters/occassions" passHref>
+            <span className="flex spaced center-align">
+              <h3 className="red">See All</h3>
+              <img
+                alt="arrow"
+                className="generic-icon xsmall"
+                src="/icons/arrow-right.svg"
+              />
+            </span>
+          </Link>
+        </div>
+      </section>
     </section>
   );
 };

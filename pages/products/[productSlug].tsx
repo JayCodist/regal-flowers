@@ -453,8 +453,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             ))}
           </div>
           <div className="flex spaced vertical-margin spaced">
-            <Button transparent>Buy Now</Button>
-            <Button full>Add to Cart (₦36,000)</Button>
+            <Button type="transparent">Buy Now</Button>
+            <Button responsive>Add to Cart (₦36,000)</Button>
           </div>
         </div>
       </div>
