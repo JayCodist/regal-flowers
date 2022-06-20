@@ -3,8 +3,8 @@ import { GetStaticProps } from "next";
 import { getProduct } from "../../utils/helpers/data/products";
 import Product, { DesignOption } from "../../utils/types/Product";
 import styles from "./products.module.scss";
-import Button from "../../components/Button/Button";
-import FlowerCard from "../../components/FlowerCard/FlowerCard";
+import Button from "../../components/button/Button";
+import FlowerCard from "../../components/flower-card/FlowerCard";
 import { flowers } from "../filters/[filter]";
 
 const LandingPage: FunctionComponent<{ product: Product }> = () => {
@@ -469,7 +469,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             name={item.name}
             image={item.images[0].src}
             price={item.price}
-            details={item.details}
+            subTitle={item.details}
+            url={`/products/${item.slug}`}
           />
         ))}
       </div>

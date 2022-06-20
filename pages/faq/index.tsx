@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
-import FlowerCard from "../../components/FlowerCard/FlowerCard";
+import FlowerCard from "../../components/flower-card/FlowerCard";
 import { flowers } from "../filters/[filter]";
 import styles from "./index.module.scss";
 
@@ -257,7 +257,8 @@ const Index: FunctionComponent = () => {
               name={item.name}
               image={item.images[0].src}
               price={item.price}
-              details={item.details}
+              subTitle={item.details}
+              url={`/products/${item.slug}`}
             />
           ))}
         </div>

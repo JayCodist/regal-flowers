@@ -1,0 +1,47 @@
+.flower-card {
+  display: inline-block;
+  text-align: center;
+  border: 0.1rem solid #f3f4f6;
+  border-radius: 0.4rem;
+  width: 23%;
+  background-color: white;
+  transition: 0.3s ease-out;
+  &:hover {
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+  }
+
+  .detail {
+    padding: 0.6rem 1rem;
+  }
+
+  .buy-btn {
+    padding: 0.4rem 0.6rem;
+    min-width: 6rem;
+    font-weight: normal;
+    font-size: 0.9rem;
+  }
+  .img-wrapper {
+    overflow: hidden;
+    height: 17rem;
+    border-radius: 0.4rem 0.4rem 0 0;
+    @media (max-width: 1250px) {
+      height: 16rem;
+    }
+    @media (max-width: 1150px) {
+      height: 15rem;
+    }
+    @media (max-width: 1050px) {
+      height: 14rem;
+    }
+    .flower-image {
+      height: 18rem;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 0.4rem 0.4rem 0 0;
+      transition: 0.3s ease-out;
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { AppCurrency } from "./types/Core";
+import Service from "./types/Service";
 
 export const defaultCurrency: AppCurrency = {
   name: "NGN",
@@ -35,3 +36,21 @@ export const occassionsPageContent: {
       "We stock flowers for various occasions such as Birthday Flowers, Romantic Flowers, Anniversary Flowers, Mothers’ Day Flowers, Get Well Soon Flowers, Funeral Wreaths, Condolence Flowers, Bridal Bouquets, and of course, Valentine’s Day flowers available And finally, there are suitable options for all budgets, so when you see a design you like, you can simply pick the size that suits your budget. Want to go all out too? We got you, with our VIP Category of roses. "
   }
 };
+
+export const regalFeatures: Service[] = [
+  {
+    image: "/images/truck.png",
+    title: "Same Day Delivery",
+    subtitle: "In Lagos & Abuja, Nigeria"
+  },
+  {
+    image: "/images/headset.png",
+    title: "Order Online or Walk-in 24/7",
+    subtitle: "Weekends and public holidays too"
+  },
+  {
+    image: "/images/shield.png",
+    title: "Various Payment Options",
+    subtitle: "Change site to USD for PayPal/Bitcoin"
+  }
+];

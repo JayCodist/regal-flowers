@@ -6,7 +6,7 @@ import styles from "./filters.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Checkbox from "../../components/checkbox/Checkbox";
-import FlowerCard from "../../components/FlowerCard/FlowerCard";
+import FlowerCard from "../../components/flower-card/FlowerCard";
 import { occassionsPageContent } from "../../utils/constants";
 
 export const otherSampleProducts = {
@@ -56,7 +56,7 @@ export const otherSampleProducts = {
   price: 70000,
   salePrice: 80000,
   sku: "u2i2093092",
-  slug: "ejodei-iejeo-ooeoei",
+  slug: "belleza-regal-two-colors-rose-red-yellow-white-pink-orange",
   type: "variable",
   variants: [
     { name: "Small (15 Roses)", price: 75000, class: "regular" },
@@ -342,7 +342,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                   image={product.images[0].src}
                   price={product.price}
                   buttonText="Add to Cart"
-                  details={product.details}
+                  subTitle={product.details}
+                  url={`/products/${product.slug}`}
                 />
               ))}
             </div>
@@ -367,8 +368,10 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               key={index}
               name={flower.name}
               image={flower.images[0].src}
-              details={"Cakes and cupcakes are a great choice"}
+              subTitle={"Cakes and cupcakes are a great choice"}
               buttonText="See More"
+              url={`/products/${flower.slug}`}
+              price={flower.price}
             />
           ))}
         </div>

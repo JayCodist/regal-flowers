@@ -549,7 +549,26 @@ button {
   height: 100%;
 }
 .page-content {
-  .featured-section {
-    padding: 3rem 4rem;
+  .featured-section-wrapper {
+    background-image: url(/images/pattern-bg.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-attachment: fixed;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    .featured-content {
+      padding: 4rem 6rem;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
+      background-color: rgba(255, 255, 255, 0.8);
+      width: 100%;
+      height: 100%;
+      .featured-title {
+        font-size: 2rem;
+      }
+    }
   }
 }
