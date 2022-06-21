@@ -113,11 +113,11 @@ export default function Button(props: ButtonProps) {
         />
       )}
       {children}
-      <img
+      {/* <img
         src="/images/loading-icon-white.svg"
         alt="loading"
         className={[styles.loader, loading && styles.active].join(" ")}
-      />
+      /> */}
     </button>
   );
 }
