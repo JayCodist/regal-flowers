@@ -12,7 +12,7 @@ export interface ProductVariant {
   class: "regular" | "vip";
 }
 
-export type DesignOption = "wrappedBouquet" | "invase" | "inLargeVase" | "box";
+export type DesignOption = "wrappedBouquet" | "inVase" | "inLargeVase" | "box";
 
 interface Product {
   id: number;

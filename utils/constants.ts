@@ -1,5 +1,5 @@
 import { AppCurrency } from "./types/Core";
-import Service from "./types/Service";
+import { Service, Occasion } from "./types/Regal";
 
 export const defaultCurrency: AppCurrency = {
   name: "NGN",
@@ -52,5 +52,24 @@ export const regalFeatures: Service[] = [
     image: "/images/shield.png",
     title: "Various Payment Options",
     subtitle: "Change site to USD for PayPal/Bitcoin"
+  }
+];
+
+// TODO: use dynamic urls
+export const regalOccasions: Occasion[] = [
+  {
+    title: "Love, Birthdays & Anniversary",
+    url: "/filters/occasions",
+    image: "/images/occasions-love-bday.png"
+  },
+  {
+    title: "Just to say Hi, Sorry, Thank You",
+    url: "/filters/occasions",
+    image: "/images/occasions-sorry-thanks.png"
+  },
+  {
+    title: "Bridal Flowers",
+    url: "/filters/occasions",
+    image: "/images/occasions-bridal.png"
   }
 ];

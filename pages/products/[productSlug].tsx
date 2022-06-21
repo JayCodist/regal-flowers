@@ -78,7 +78,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       "VIP Standard Premium",
       "VIP Large"
     ],
-    designOptions: ["wrappedBouquet", "invase", "inLargeVase", "box"],
+    designOptions: ["wrappedBouquet", "inVase", "inLargeVase", "box"],
     note:
       "Single stem rose only available for pickup, except as part of larger order.",
     description:
@@ -330,15 +330,15 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                         <p>+₦0</p>
                       </div>
                     )}
-                    {designOption === "invase" && (
+                    {designOption === "inVase" && (
                       <div
                         key={index}
                         className={[
                           styles.design,
-                          selectedDesign === "invase" &&
+                          selectedDesign === "inVase" &&
                             styles["selected-design"]
                         ].join(" ")}
-                        onClick={() => setSelectedDesign("invase")}
+                        onClick={() => setSelectedDesign("inVase")}
                       >
                         <img
                           src="/icons/invase.svg"

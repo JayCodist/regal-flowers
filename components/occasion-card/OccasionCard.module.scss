@@ -1,0 +1,54 @@
+.occasion-card {
+  width: 27vw;
+  height: 27vw;
+  position: relative;
+  overflow: hidden;
+  .img {
+    position: absolute;
+    height: 27vw;
+    width: 27vw;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transition: 0.3s ease-out;
+  }
+  .content {
+    position: absolute;
+    height: 27vw;
+    width: 27vw;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    text-align: right;
+    color: white;
+    padding: 1.5rem;
+    transition: 0.3s ease-out;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.6);
+      & ~ .img {
+        transform: scale(1.3);
+      }
+      .title {
+        transform: scale(1.03);
+      }
+      .explore {
+        margin-right: 0;
+      }
+    }
+    .title {
+      font-weight: bold;
+      font-size: 1.9rem;
+      margin-bottom: 0.6rem;
+      transition: 0.3s ease-out;
+    }
+    .explore {
+      margin-right: 0.3rem;
+      transition: 0.3s ease-out;
+    }
+  }
+}

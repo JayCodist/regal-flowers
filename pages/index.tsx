@@ -4,8 +4,9 @@ import Product from "../utils/types/Product";
 import FlowerCard from "../components/flower-card/FlowerCard";
 import { otherSampleProducts } from "./filters/[filter]";
 import styles from "./index.module.scss";
-import { regalFeatures } from "../utils/constants";
+import { regalFeatures, regalOccasions } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
+import OccasionCard from "../components/occasion-card/OccasionCard";
 
 const flowers: Product[] = [
   {
@@ -95,8 +96,7 @@ const LandingPage: FunctionComponent = () => {
               />
             </Button>
           </div>
-
-          <div className="flex between vertical-margin wide">
+          <div className={styles.section}>
             {featuredFlowers.map(flower => (
               <FlowerCard
                 key={flower.id}
@@ -108,10 +108,7 @@ const LandingPage: FunctionComponent = () => {
               />
             ))}
           </div>
-
-          <br />
-          <br />
-          <div className="flex between vertical-margin wide">
+          <div className={styles.section}>
             {regalFeatures.map(feature => (
               <ServiceCard
                 title={feature.title}
@@ -122,7 +119,31 @@ const LandingPage: FunctionComponent = () => {
               />
             ))}
           </div>
-          <br />
+          <div className="flex between">
+            <h2 className="featured-title">Featured Occasions</h2>
+            <Button
+              url="/filters/occassions"
+              className="flex spaced center center-align"
+              type="transparent"
+            >
+              <h3 className="red margin-right">See All</h3>
+              <img
+                alt="arrow"
+                className="generic-icon xsmall"
+                src="/icons/arrow-right.svg"
+              />
+            </Button>
+          </div>
+          <div className={styles.section}>
+            {regalOccasions.map(occasion => (
+              <OccasionCard
+                key={occasion.title}
+                title={occasion.title}
+                url={occasion.url}
+                image={occasion.image}
+              />
+            ))}
+          </div>
         </div>
       </section>
     </section>
