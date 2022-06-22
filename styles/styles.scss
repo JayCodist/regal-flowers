@@ -560,8 +560,7 @@ button {
     position: relative;
     z-index: 1;
     min-height: 100vh;
-    .featured-content {
-      padding: 4rem 6rem;
+    .featured-content-wrapper {
       position: absolute;
       left: 0;
       top: 0;
@@ -569,9 +568,12 @@ button {
       background-color: rgba(255, 255, 255, 0.8);
       width: 100%;
       height: fit-content;
-      .featured-title {
-        font-size: 2rem;
-      }
+    }
+    .featured-content {
+      padding: 4rem 7rem;
+    }
+    .featured-title {
+      font-size: 2rem;
     }
   }
 }

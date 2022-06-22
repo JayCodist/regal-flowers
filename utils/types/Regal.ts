@@ -9,3 +9,13 @@ export interface Occasion {
   image: string;
   url: string;
 }
+
+export interface UserReview {
+  rating: 1 | 2 | 3 | 4 | 5;
+  text: string;
+  date: string;
+  user: {
+    avatar: string;
+    name: string;
+  };
+}

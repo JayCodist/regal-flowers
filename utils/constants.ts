@@ -1,5 +1,5 @@
 import { AppCurrency } from "./types/Core";
-import { Service, Occasion } from "./types/Regal";
+import { Service, Occasion, UserReview } from "./types/Regal";
 
 export const defaultCurrency: AppCurrency = {
   name: "NGN",
@@ -71,5 +71,45 @@ export const regalOccasions: Occasion[] = [
     title: "Bridal Flowers",
     url: "/filters/occasions",
     image: "/images/occasions-bridal.png"
+  }
+];
+
+export const sampleReviews: UserReview[] = [
+  {
+    text: "Regal flowers is the best among the best. I totally loved it!!",
+    date: "24 May, 2022",
+    rating: 5,
+    user: {
+      name: "Juliet",
+      avatar: "/images/review-user.png"
+    }
+  },
+  {
+    text: "The delivery was on time and the courier was courteous and neat",
+    date: "17 June, 2022",
+    rating: 5,
+    user: {
+      name: "Emeka",
+      avatar: "/images/review-user.png"
+    }
+  },
+  {
+    text: "I liked the 5 peas in a pod. I totally recommend their bouquets",
+    date: "20 January, 2022",
+    rating: 4,
+    user: {
+      name: "Sandra",
+      avatar: "/images/review-user.png"
+    }
+  },
+  {
+    text:
+      "Great arrangement and packaging and was punctual too. Very professional work",
+    date: "6 April, 2022",
+    rating: 5,
+    user: {
+      name: "Adebayo",
+      avatar: "/images/review-user.png"
+    }
   }
 ];

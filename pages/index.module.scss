@@ -14,3 +14,90 @@
   justify-content: space-between;
   margin: 1rem 0 4rem;
 }
+.review-section {
+  display: flex;
+  margin-bottom: 4rem;
+  height: 34rem;
+  .left {
+    width: 70%;
+    justify-content: center;
+    background-color: #53674b;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 4rem;
+    position: relative;
+    .google-review {
+      padding: 0.3rem 1rem;
+      border-radius: 0.3rem;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: black;
+      .stats {
+        white-space: nowrap;
+      }
+    }
+    .reviews {
+      display: flex;
+      height: 15rem;
+      width: 80%;
+      .review {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: 0.3s ease-out;
+        overflow: hidden;
+        position: relative;
+        width: 0;
+        opacity: 0;
+        &.active {
+          width: 100%;
+          opacity: 1;
+        }
+        .text {
+          margin: 1rem 0;
+          width: 65%;
+          font-size: 1.1rem;
+          text-align: center;
+        }
+        .review-date {
+          margin: 0.1rem 0 1.5rem;
+        }
+      }
+    }
+    .review-arrow {
+      position: absolute;
+      top: 50%;
+      right: 15%;
+      border-radius: 50%;
+      cursor: pointer;
+      &.left-arrow {
+        transform: rotate(180deg);
+        right: unset;
+        left: 15%;
+      }
+    }
+    .dot {
+      display: inline-block;
+      cursor: pointer;
+      background-color: white;
+      border-radius: 50%;
+      padding: 0.4rem;
+      border: 0.2rem solid white;
+      transition: 0.3s ease-out;
+      &.active {
+        border-color: #195401;
+        cursor: default;
+        padding: 0.4rem;
+      }
+    }
+  }
+  .right {
+    width: 30%;
+    height: auto;
+    object-fit: cover;
+  }
+}
