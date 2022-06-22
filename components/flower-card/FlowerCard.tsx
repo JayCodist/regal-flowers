@@ -6,10 +6,11 @@ import styles from "./FlowerCard.module.scss";
 interface IFlowerCardProps {
   buttonText?: string;
   image: string;
-  price: number;
+  price?: number;
   name: string;
   subTitle: string;
   url: string;
+  isAddonGroup?: boolean;
 }
 
 const FlowerCard: FunctionComponent<IFlowerCardProps> = props => {
@@ -25,15 +26,17 @@ const FlowerCard: FunctionComponent<IFlowerCardProps> = props => {
           />
         </div>
         <div className={styles.detail}>
-          <p className="bold">{name}</p>
-          <p className="smaller text-secondary">{subTitle}</p>
+          <strong>{name}</strong>
+          <span className={styles.subtitle}>{subTitle}</span>
           <div
             className={`flex margin-top spaced ${price ? "between" : "center"}`}
           >
-            <div>
-              <p className="smaller text-secondary">From</p>
-              <p className="bold">{price}</p>
-            </div>
+            {price && (
+              <div>
+                <p className="smaller text-secondary">From</p>
+                <p className="bold">{price}</p>
+              </div>
+            )}
             <Button className={`${styles["buy-btn"]}`}>
               {buttonText ? buttonText : "Buy Now"}
             </Button>

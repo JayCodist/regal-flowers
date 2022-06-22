@@ -1,4 +1,7 @@
+import { otherSampleProducts } from "../pages/filters/[filter]";
+import AddonGroup from "./types/AddonGroup";
 import { AppCurrency } from "./types/Core";
+import Product from "./types/Product";
 import { Service, Occasion, UserReview } from "./types/Regal";
 
 export const defaultCurrency: AppCurrency = {
@@ -36,6 +39,65 @@ export const occassionsPageContent: {
       "We stock flowers for various occasions such as Birthday Flowers, Romantic Flowers, Anniversary Flowers, Mothers’ Day Flowers, Get Well Soon Flowers, Funeral Wreaths, Condolence Flowers, Bridal Bouquets, and of course, Valentine’s Day flowers available And finally, there are suitable options for all budgets, so when you see a design you like, you can simply pick the size that suits your budget. Want to go all out too? We got you, with our VIP Category of roses. "
   }
 };
+
+export const featuredFlowers: Product[] = [
+  {
+    ...otherSampleProducts,
+    id: 11,
+    name: "5 Peas in a pod",
+    price: 6000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "5 peas in a pod",
+        id: 1,
+        src: "/images/sample-flowers/sample-1.png"
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    id: 12,
+    name: "5 Peas in a pod",
+    price: 36000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "5 peas in a pod",
+        id: 1,
+        src: "/images/sample-flowers/sample-2.png"
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    id: 13,
+    name: "5 Peas in a pod",
+    price: 36000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "5 peas in a pod",
+        id: 1,
+        src: "/images/sample-flowers/sample-3.png"
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    id: 16,
+    name: "5 Peas in a pod",
+    price: 36000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "5 peas in a pod",
+        id: 1,
+        src: "/images/sample-flowers/sample-4.png"
+      }
+    ]
+  }
+];
 
 export const regalFeatures: Service[] = [
   {
@@ -111,5 +173,78 @@ export const sampleReviews: UserReview[] = [
       name: "Adebayo",
       avatar: "/images/review-user.png"
     }
+  }
+];
+
+export const regalReasons: Service[] = [
+  {
+    image: "/images/mixer.png",
+    title: "Premium Fresh Flowers",
+    subtitle:
+      "We stock only the very best fresh flowers, and arrange them with care. Don't forget to add your free personalized message too."
+  },
+  {
+    image: "/images/bulb.png",
+    title: "Affordable Prices",
+    subtitle:
+      "Whether you want to go all out, or you want something affordable, we have flowers and gifts for you"
+  },
+  {
+    image: "/images/rocket.png",
+    title: "Swift Delivery",
+    subtitle:
+      "We are the most reliable flower shop in Lagos, Nigeria and provide same day delivery in Lagos,  Nigeria"
+  }
+];
+
+export const featuredAddons: AddonGroup[] = [
+  {
+    name: "Cakes and Cupcakes",
+    description: "Cakes and cupcakes are a great choice",
+    image: "/images/sample-flowers/addon-group-1.png",
+    slug: "#",
+    addons: []
+  },
+  {
+    name: "Chocolates and Biscuits",
+    description: "What are flowers without chocolate?",
+    image: "/images/sample-flowers/addon-group-2.png",
+    slug: "#",
+    addons: []
+  },
+  {
+    name: "Teddy Bears",
+    description: "Various sizes of teddies, even Life Size",
+    image: "/images/sample-flowers/addon-group-3.png",
+    slug: "#",
+    addons: []
+  },
+  {
+    name: "Giftsets",
+    description: "Caravaggio Italian Giftsets are the ultimate luxury",
+    image: "/images/sample-flowers/addon-group-4.png",
+    slug: "#",
+    addons: []
+  }
+];
+
+export const regalHowItWorks: Service[] = [
+  {
+    image: "/images/bulb.png",
+    title: "See what you like? Contact us",
+    subtitle:
+      "Visit our Website, Call, Whatsapp, or Walk into any of our stores (The Ikoyi and Abuja stores are open 24 hours every day while the Silverbird Galleria, Victoria Island is open till 7 pm every day)"
+  },
+  {
+    image: "/images/payment.png",
+    title: "Make payment",
+    subtitle:
+      "Make payment for your flowers online via card, Bank Transfer, PayPal, or even Bitcoin (yes, we accept Bitcoin)"
+  },
+  {
+    image: "/images/rocket.png",
+    title: "Wait by the phone for that call",
+    subtitle:
+      "Relax and wait for the recipient to thank you with a smile once we deliver."
   }
 ];

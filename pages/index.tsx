@@ -1,78 +1,21 @@
 import { FunctionComponent, useState } from "react";
 import Button from "../components/button/Button";
-import Product from "../utils/types/Product";
 import FlowerCard from "../components/flower-card/FlowerCard";
-import { otherSampleProducts } from "./filters/[filter]";
 import styles from "./index.module.scss";
 import {
   regalFeatures,
   regalOccasions,
-  sampleReviews
+  regalReasons,
+  sampleReviews,
+  featuredFlowers as sampleFlowers,
+  featuredAddons,
+  regalHowItWorks
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
 
-const flowers: Product[] = [
-  {
-    ...otherSampleProducts,
-    id: 11,
-    name: "5 Peas in a pod",
-    price: 6000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-1.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 12,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-2.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 13,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-3.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 16,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-4.png"
-      }
-    ]
-  }
-];
-
 const LandingPage: FunctionComponent = () => {
-  const [featuredFlowers] = useState(flowers);
+  const [featuredFlowers] = useState(sampleFlowers);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   return (
@@ -159,7 +102,7 @@ const LandingPage: FunctionComponent = () => {
                   We're the most-loved online flower shop in Lagos & Abuja,
                   Nigeria.
                 </h2>
-                <div className="flex column spaced">
+                <div className="flex column spaced center-align">
                   <span className="larger margin-bottom">Customer Reviews</span>
                   <a
                     href="https://google.com"
@@ -270,6 +213,64 @@ const LandingPage: FunctionComponent = () => {
               src="/images/reviews-1.png"
               alt="review"
             />
+          </div>
+
+          <div className="featured-content">
+            <h2 className="featured-title text-center">
+              Why Send with Regal Flowers
+            </h2>
+            <div className={styles.section}>
+              {regalReasons.map(reason => (
+                <ServiceCard
+                  title={reason.title}
+                  key={reason.title}
+                  subtitle={reason.subtitle}
+                  image={reason.image}
+                  size="default"
+                />
+              ))}
+            </div>
+
+            <div className="flex between">
+              <h2 className="featured-title">Gifts to Include with Flowers</h2>
+              <Button
+                url="/filters/occassions"
+                className="flex spaced center center-align"
+                type="transparent"
+              >
+                <h3 className="red margin-right">See All</h3>
+                <img
+                  alt="arrow"
+                  className="generic-icon xsmall"
+                  src="/icons/arrow-right.svg"
+                />
+              </Button>
+            </div>
+            <div className={styles.section}>
+              {featuredAddons.map(addonGroup => (
+                <FlowerCard
+                  key={addonGroup.name}
+                  image={addonGroup.image}
+                  name={addonGroup.name}
+                  subTitle={addonGroup.description}
+                  url={addonGroup.slug}
+                  buttonText="See more"
+                />
+              ))}
+            </div>
+
+            <h2 className="featured-title text-center">How It Works</h2>
+            <div className={styles.section}>
+              {regalHowItWorks.map(reason => (
+                <ServiceCard
+                  title={reason.title}
+                  key={reason.title}
+                  subtitle={reason.subtitle}
+                  image={reason.image}
+                  size="default"
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

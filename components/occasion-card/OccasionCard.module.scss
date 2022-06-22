@@ -1,12 +1,12 @@
 .occasion-card {
-  width: 27vw;
-  height: 27vw;
+  width: 26vw;
+  height: 26vw;
   position: relative;
   overflow: hidden;
   .img {
     position: absolute;
-    height: 27vw;
-    width: 27vw;
+    height: 26vw;
+    width: 26vw;
     top: 0;
     left: 0;
     z-index: 1;
@@ -14,8 +14,8 @@
   }
   .content {
     position: absolute;
-    height: 27vw;
-    width: 27vw;
+    height: 26vw;
+    width: 26vw;
     top: 0;
     left: 0;
     z-index: 2;

@@ -7,7 +7,9 @@ interface Addon {
 interface AddonGroup {
   name: string;
   image: string;
+  description: string;
   addons: Addon[];
+  slug: string;
 }
 
 export default AddonGroup;
