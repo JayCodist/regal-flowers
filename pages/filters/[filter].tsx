@@ -10,6 +10,7 @@ import Checkbox from "../../components/checkbox/Checkbox";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import { aboutUsContent } from "../../utils/constants";
 import DatePicker from "../../components/date-picker/DatePicker";
+import Select, { Option } from "../../components/Select/Select";
 
 export const otherSampleProducts = {
   id: 1,
@@ -382,8 +383,16 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     }
   ];
 
+  const sortOptions: Option[] = [
+    {
+      label: "name",
+      value: "John Doe"
+    }
+  ];
+
   const [todayDate, setTodayDate] = useState<Dayjs | null>(dayjs());
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
+  const [sort, setSort] = useState<string>("default");
 
   const handleChange = (name: string) => {
     setSelectedFilter(prev =>
@@ -427,7 +436,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       <div className={`${styles["content"]} flex spaced-xl`}>
         <div className={styles["left-side"]}>
           <div className="vertical-margin spaced">
-            <span className="title small bold margin-right">Filters (4)</span>
+            <span className={`bold margin-right ${styles["sub-title"]}`}>
+              Filters (4)
+            </span>
             <button className="primary-color" onClick={handleClearFIlter}>
               Clear Filters
             </button>
@@ -484,31 +495,23 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                   setTodayDate(date);
                 }}
                 value={todayDate}
-                format="D MMMM YYYY"
+                format="D MMM YYYY"
               />
             </div>
-            <p>
-              Sort:{" "}
-              <span className={[styles.date, styles.sort].join(" ")}>
-                Default
-                <svg
-                  className={styles.arrow}
-                  width="8"
-                  height="12"
-                  viewBox="0 0 8 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.00009 0L0.590088 1.41L5.17009 6L0.590088 10.59L2.00009 12L8.00009 6L2.00009 0Z"
-                    fill="#4B5563"
-                  />
-                </svg>
-              </span>
+
+            <p className="flex center-align spaced">
+              <span>Sort:</span>
+              <Select
+                options={sortOptions}
+                value={sort}
+                onSelect={value => setSort(value as string)}
+                placeholder="default"
+                responsive
+              />
             </p>
           </div>
           <div>
-            <p className="title bold vertical-margin spaced">
+            <p className={`${styles.title} bold vertical-margin spaced`}>
               {
                 occassions.filter(occassion => {
                   return selectedOccassion === occassion.url.split("=")[1];
@@ -538,8 +541,10 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       </div>
       <div className={styles.gifts}>
         <div className="flex between margin-bottom spaced">
-          <span className="title bold">Gifts to Include with Flowers</span>
-          <button className="primary-color bold flex center-align spaced">
+          <span className={styles.title}>Gifts to Include with Flowers</span>
+          <button
+            className={`primary-color flex center-align spaced ${styles["sub-title"]}`}
+          >
             <span>See All</span>{" "}
             <img
               className="generic-icon"
@@ -561,7 +566,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             />
           ))}
         </div>
-        <p className="title bold center">Flower Delivery for all Occassions</p>
+        <p className={`text-center ${styles.title}`}>
+          Flower Delivery for all Occassions
+        </p>
       </div>
       <div className="flex between spaced-xl horizontal-padding xl">
         <div className="half-width">

@@ -34,7 +34,7 @@ const Index: FunctionComponent = () => {
           </ol>
           <div className={styles["linked-content"]}>
             <div id="how-it-works">
-              <p className="title bold margin-bottom spaced">How it works</p>
+              <p className={`${styles.title}`}>How it works</p>
               <p className="title small bold margin-bottom">
                 How to order flowers and gifts for delivery?
               </p>
@@ -57,7 +57,7 @@ const Index: FunctionComponent = () => {
               </p>
             </div>
             <div id="payment-methods" className="">
-              <p className="title bold margin-bottom spaced">Payment Methods</p>
+              <p className={`${styles.title}`}>Payment Methods</p>
               <p className="title small bold margin-bottom">
                 What payment methods are available?
               </p>
@@ -145,7 +145,7 @@ const Index: FunctionComponent = () => {
               </p>
             </div>
             <div id="delivery">
-              <p className="title bold margin-bottom spaced">Delivery</p>
+              <p className={`${styles.title}`}>Delivery</p>
               <p className="title small bold margin-bottom">
                 Is same day flower delivery in Lagos, Nigeria and Abuja, Nigeria
                 possible?
@@ -242,8 +242,10 @@ const Index: FunctionComponent = () => {
           </div>
         </div>
         <div className="flex between margin-bottom spaced">
-          <span className="title bold">Featured Flowers</span>
-          <button className="primary-color bold flex center-align spaced">
+          <span className={styles.title}>Featured Flowers</span>
+          <button
+            className={`primary-color flex center-align spaced ${styles["sub-title"]}`}
+          >
             <span>See All</span>{" "}
             <img
               className="generic-icon"
