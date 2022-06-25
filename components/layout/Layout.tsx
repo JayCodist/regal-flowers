@@ -58,11 +58,15 @@ const Header: FunctionComponent = () => {
 
   return (
     <header className={styles.header}>
-      <img
-        alt="regal flowers logo"
-        src="/icons/logo.png"
-        className={styles.logo}
-      />
+      <Link href="/">
+        <a>
+          <img
+            alt="regal flowers logo"
+            src="/icons/logo.png"
+            className={styles.logo}
+          />
+        </a>
+      </Link>
       <nav className={styles.nav}>
         {links.map(link => (
           <Link href={link.url} key={link.title}>

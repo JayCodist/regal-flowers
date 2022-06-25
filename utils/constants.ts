@@ -15,7 +15,7 @@ export const defaultCurrency: AppCurrency = {
   conversionRate: 1
 };
 
-export const occassionsPageContent: {
+export const aboutUsContent: {
   [key: string]: { title: string; content: string };
 } = {
   howItBegan: {

@@ -13,7 +13,8 @@ import {
   regalAddresses,
   regalPhones,
   regalEmail,
-  blogPosts
+  blogPosts,
+  aboutUsContent
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -387,7 +388,9 @@ const LandingPage: FunctionComponent = () => {
           </div>
 
           <div className="featured-content">
-            <h2 className="featured-title text-center">Our Blog</h2>
+            <h2 className="featured-title text-center margin-bottom spaced">
+              Our Blog
+            </h2>
             <div className={styles.section}>
               {blogPosts.map(post => (
                 <BlogCard
@@ -400,6 +403,35 @@ const LandingPage: FunctionComponent = () => {
                   url="#"
                 />
               ))}
+            </div>
+            <h2 className="featured-title text-center margin-bottom spaced">
+              About Us
+            </h2>
+            <div className="flex between spaced-xl xl">
+              <div className="half-width">
+                <p className="title small bold margin-bottom">
+                  {aboutUsContent.howItBegan.title}
+                </p>
+                <p>{aboutUsContent.howItBegan.content}</p>
+                <p className="title small bold vertical-margin">
+                  {aboutUsContent.openingHour.title}
+                </p>
+                <p>{aboutUsContent.openingHour.content}</p>
+              </div>
+              <div className="half-width">
+                <p className="title small bold margin-bottom">
+                  {aboutUsContent.reputation.title}
+                </p>
+                <p>{aboutUsContent.reputation.content}</p>
+                <p className="title small bold vertical-margin">
+                  {aboutUsContent.deliveryTime.title}
+                </p>
+                <p>{aboutUsContent.deliveryTime.content}</p>
+                <p className="title small bold vertical-margin">
+                  {aboutUsContent.budget.title}
+                </p>
+                <p>{aboutUsContent.budget.content}</p>
+              </div>
             </div>
           </div>
         </div>

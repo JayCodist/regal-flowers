@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Checkbox from "../../components/checkbox/Checkbox";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { occassionsPageContent } from "../../utils/constants";
+import { aboutUsContent } from "../../utils/constants";
 
 export const otherSampleProducts = {
   id: 1,
@@ -380,27 +380,27 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       <div className="flex between spaced-xl horizontal-padding xl">
         <div className="half-width">
           <p className="title small bold margin-bottom">
-            {occassionsPageContent.howItBegan.title}
+            {aboutUsContent.howItBegan.title}
           </p>
-          <p>{occassionsPageContent.howItBegan.content}</p>
+          <p>{aboutUsContent.howItBegan.content}</p>
           <p className="title small bold vertical-margin">
-            {occassionsPageContent.openingHour.title}
+            {aboutUsContent.openingHour.title}
           </p>
-          <p>{occassionsPageContent.openingHour.content}</p>
+          <p>{aboutUsContent.openingHour.content}</p>
         </div>
         <div className="half-width">
           <p className="title small bold margin-bottom">
-            {occassionsPageContent.reputation.title}
+            {aboutUsContent.reputation.title}
           </p>
-          <p>{occassionsPageContent.reputation.content}</p>
+          <p>{aboutUsContent.reputation.content}</p>
           <p className="title small bold vertical-margin">
-            {occassionsPageContent.deliveryTime.title}
+            {aboutUsContent.deliveryTime.title}
           </p>
-          <p>{occassionsPageContent.deliveryTime.content}</p>
+          <p>{aboutUsContent.deliveryTime.content}</p>
           <p className="title small bold vertical-margin">
-            {occassionsPageContent.budget.title}
+            {aboutUsContent.budget.title}
           </p>
-          <p>{occassionsPageContent.budget.content}</p>
+          <p>{aboutUsContent.budget.content}</p>
         </div>
       </div>
     </section>
