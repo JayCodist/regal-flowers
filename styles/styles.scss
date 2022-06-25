@@ -24,14 +24,14 @@ html {
     font-size: 68%;
   }
   @media (max-width: 850px) {
-    font-size: 90%;
+    font-size: 58%;
   }
   @media (max-width: 650px) {
     font-size: 80%;
   }
 
   @media (min-width: 1500px) {
-    font-size: 100%;
+    font-size: 95%;
   }
   @media (min-width: 1700px) {
     font-size: 130%;
@@ -572,9 +572,10 @@ button {
     background-repeat: no-repeat;
     background-position: right;
     background-attachment: fixed;
+    background-size: 25 rem;
     position: relative;
     z-index: 1;
-    min-height: 100vh;
+    min-height: 400rem;
     .featured-content-wrapper {
       position: absolute;
       left: 0;
