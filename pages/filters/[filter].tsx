@@ -515,7 +515,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               Flowers
             </p>
 
-            <div className={`${styles.products} flex vertical-margin wrap`}>
+            <div
+              className={`${styles.products} flex vertical-margin wrap between`}
+            >
               {products.map((product, index) => (
                 <FlowerCard
                   key={index}
@@ -525,6 +527,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                   buttonText="Add to Cart"
                   subTitle={product.details}
                   url={`/products/${product.slug}`}
+                  mode="three-x-grid"
                 />
               ))}
             </div>

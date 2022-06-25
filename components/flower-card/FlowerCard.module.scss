@@ -3,9 +3,39 @@
   text-align: center;
   border: 0.1rem solid #f3f4f6;
   border-radius: 0.4rem;
-  width: 23%;
   background-color: white;
   transition: 0.3s ease-out;
+  &.four-x-grid {
+    width: 23%;
+  }
+  &.three-x-grid {
+    width: 30%;
+    .img-wrapper {
+      height: 19rem;
+      @media (max-width: 1250px) {
+        height: 18rem;
+      }
+      @media (max-width: 1150px) {
+        height: 17rem;
+      }
+      @media (max-width: 1050px) {
+        height: 16rem;
+      }
+      .flower-image {
+        height: 19rem;
+        width: 100%;
+        @media (max-width: 1250px) {
+          height: 18rem;
+        }
+        @media (max-width: 1150px) {
+          height: 17rem;
+        }
+        @media (max-width: 1050px) {
+          height: 16rem;
+        }
+      }
+    }
+  }
 
   .detail {
     padding: 0.6rem 1rem;

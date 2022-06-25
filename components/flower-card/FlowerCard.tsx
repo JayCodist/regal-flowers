@@ -11,13 +11,18 @@ interface IFlowerCardProps {
   subTitle: string;
   url: string;
   isAddonGroup?: boolean;
+  mode?: "four-x-grid" | "three-x-grid";
 }
 
 const FlowerCard: FunctionComponent<IFlowerCardProps> = props => {
-  const { buttonText, image, price, name, subTitle, url } = props;
+  const { buttonText, image, price, name, subTitle, url, mode } = props;
   return (
     <Link href={url || "#"}>
-      <a className={`${styles["flower-card"]} center`}>
+      <a
+        className={`${styles["flower-card"]} center ${
+          styles[mode || "four-x-grid"]
+        }`}
+      >
         <div className={styles["img-wrapper"]}>
           <img
             className={styles["flower-image"]}
