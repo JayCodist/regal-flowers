@@ -1,13 +1,15 @@
 import { FunctionComponent, useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import dayjs, { Dayjs } from "dayjs";
 import { GetStaticProps } from "next";
 import { getProduct } from "../../utils/helpers/data/products";
 import Product from "../../utils/types/Product";
 import styles from "./filters.module.scss";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import Checkbox from "../../components/checkbox/Checkbox";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import { aboutUsContent } from "../../utils/constants";
+import DatePicker from "../../components/date-picker/DatePicker";
 
 export const otherSampleProducts = {
   id: 1,
@@ -113,13 +115,149 @@ export const flowers: Product[] = [
   }
 ];
 
+const filterFlowers: Product[] = [
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 6000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/flower-1.png",
+        id: 1
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 6000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/flower-2.png",
+        id: 1
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 6000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/flower-3.png",
+        id: 1
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 6000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/flower-4.png",
+        id: 1
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 6000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/flower-5.png",
+        id: 1
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 6000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/flower-6.png",
+        id: 1
+      }
+    ]
+  }
+];
+
+export const _gifts: Product[] = [
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 6000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/gift-1.png",
+        id: 1
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 36000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/gift-2.png",
+        id: 1
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 36000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/gift-3.png",
+        id: 1
+      }
+    ]
+  },
+  {
+    ...otherSampleProducts,
+    name: "5 Peas in a pod",
+    price: 36000,
+    details: "5 Peas in a pod",
+    images: [
+      {
+        alt: "flower1",
+        src: "/images/sampleImage/filter-page/gift-4.png",
+        id: 1
+      }
+    ]
+  }
+];
+
 const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
 const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const { query } = useRouter();
   const { filter, selectedOccassion } = query;
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
-  const [products] = useState<Product[]>(flowers);
+  const [products] = useState<Product[]>(filterFlowers);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
 
@@ -162,7 +300,12 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     }
   ];
 
-  const filtersCatgories: { name: string; options: { name: string }[] }[] = [
+  const filtersCatgories: {
+    name: string;
+    options: { name: string }[];
+    limit: number;
+    viewMore?: boolean;
+  }[] = [
     {
       name: "Occasions",
       options: [
@@ -181,7 +324,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         {
           name: "Burial & Condolences"
         }
-      ]
+      ],
+      limit: 4,
+      viewMore: false
     },
     {
       name: "Budget",
@@ -192,7 +337,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         {
           name: "VIP"
         }
-      ]
+      ],
+      limit: 2,
+      viewMore: false
     },
     {
       name: "Packages",
@@ -200,7 +347,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         {
           name: "Bundled Products"
         }
-      ]
+      ],
+      limit: 3,
+      viewMore: true
     },
     {
       name: "Delivery",
@@ -208,7 +357,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         {
           name: "Same Day Delivery"
         }
-      ]
+      ],
+      limit: 3,
+      viewMore: false
     },
     {
       name: "Flower Name",
@@ -225,9 +376,14 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         {
           name: "Million Stars"
         }
-      ]
+      ],
+      limit: 3,
+      viewMore: false
     }
   ];
+
+  const [todayDate, setTodayDate] = useState<Dayjs | null>(dayjs());
+  const [filterCategories, setFilterCategories] = useState(filtersCatgories);
 
   const handleChange = (name: string) => {
     setSelectedFilter(prev =>
@@ -276,11 +432,14 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
           </div>
 
           <div className={styles["filters"]}>
-            {filtersCatgories.map((filter, index) => (
+            {filterCategories.map((filter, index) => (
               <div key={index} className="vertical-margin spaced">
                 <p className="bold vertical-margin spaced">{filter.name}</p>
                 <div>
-                  {filter.options.map((child, index) => (
+                  {(filter.viewMore
+                    ? filter.options
+                    : filter.options.slice(0, filter.limit)
+                  ).map((child, index) => (
                     <div key={index} className="margin-bottom">
                       <Checkbox
                         onChange={() => handleChange(child.name)}
@@ -290,18 +449,42 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                     </div>
                   ))}
                 </div>
+                {filter.limit < filter.options.length && (
+                  <button
+                    className={styles["btn-view"]}
+                    onClick={() => {
+                      setFilterCategories(prev =>
+                        prev.map((item, _index) => {
+                          if (index === _index) {
+                            return {
+                              ...item,
+                              viewMore: !item.viewMore
+                            };
+                          }
+                          return item;
+                        })
+                      );
+                    }}
+                  >
+                    {!filter.viewMore ? "View More" : "View Less"}
+                  </button>
+                )}
               </div>
             ))}
           </div>
         </div>
         <div className="flex-one">
           <div className="flex between">
-            <p>
+            <div>
               Delivery Date:{" "}
-              <span className={styles.date}>
-                18/12/2021 <img src="/icons/calender.svg" alt="calender" />{" "}
-              </span>
-            </p>
+              <DatePicker
+                onChange={date => {
+                  setTodayDate(date);
+                }}
+                value={todayDate}
+                format="D MMMM YYYY"
+              />
+            </div>
             <p>
               Sort:{" "}
               <span className={[styles.date, styles.sort].join(" ")}>
@@ -332,9 +515,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               Flowers
             </p>
 
-            <div
-              className={`${styles.products} flex between vertical-margin wrap`}
-            >
+            <div className={`${styles.products} flex vertical-margin wrap`}>
               {products.map((product, index) => (
                 <FlowerCard
                   key={index}
@@ -363,7 +544,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
           </button>
         </div>
         <div className="flex between vertical-margin spaced wrap">
-          {flowers.map((flower, index) => (
+          {_gifts.map((flower, index) => (
             <FlowerCard
               key={index}
               name={flower.name}
