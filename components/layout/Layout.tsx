@@ -89,7 +89,7 @@ const Header: FunctionComponent = () => {
           ))}
         </div>
         <div className="flex spaced-lg">
-          <button className="flex column spaced center-align">
+          <button className="flex column center-align">
             <img
               alt="user"
               src="/icons/user.svg"
@@ -97,7 +97,7 @@ const Header: FunctionComponent = () => {
             />
             <span>Account</span>
           </button>
-          <button className="flex column spaced center-align">
+          <button className="flex column center-align">
             <img
               alt="cart"
               src="/icons/cart.svg"
@@ -105,7 +105,7 @@ const Header: FunctionComponent = () => {
             />
             <span>Cart (0)</span>
           </button>
-          <button className="flex column spaced center-align">
+          <button className="flex column center-align">
             <img
               alt="phone"
               src="/icons/phone.svg"

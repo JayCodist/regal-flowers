@@ -125,11 +125,10 @@
     background-color: #fcfcfbe2;
     display: flex;
     align-items: center;
+    justify-content: center;
     .contact-img {
       height: 40rem;
       position: relative;
-      margin-left: 2.5rem;
-      margin-right: -3rem;
       z-index: 3;
     }
     .details {
@@ -139,9 +138,10 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      margin-left: -2.5rem;
+      margin-left: -6rem;
       z-index: 2;
       font-size: 0.95rem;
+      align-items: flex-start;
       .detail {
         margin: 0.6rem 0;
         display: flex;

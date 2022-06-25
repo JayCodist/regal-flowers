@@ -26,7 +26,8 @@ export interface OfficeAddress {
   workingTimes: string;
 }
 
-export interface BlogPosts {
+export interface BlogPost {
+  image: string;
   date: string;
   readDuration: string;
   title: string;

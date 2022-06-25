@@ -12,10 +12,12 @@ import {
   regalHowItWorks,
   regalAddresses,
   regalPhones,
-  regalEmail
+  regalEmail,
+  blogPosts
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
+import BlogCard from "../components/blog-card/BlogCard";
 
 const LandingPage: FunctionComponent = () => {
   const [featuredFlowers] = useState(sampleFlowers);
@@ -286,7 +288,9 @@ const LandingPage: FunctionComponent = () => {
                 The gradual accumulation of information about atomic and
                 small-scale behavior during the first quarter of the 20th{" "}
               </span>
-              <Button url="/filters/occasions">Send Flowers</Button>
+              <Button padded url="/filters/occasions">
+                Send Flowers
+              </Button>
             </div>
             <img
               className={styles.right}
@@ -374,13 +378,29 @@ const LandingPage: FunctionComponent = () => {
                     </span>
                   </span>
                 </div>
+
+                <Button type="accent" className="margin-top" padded>
+                  Say Hello
+                </Button>
               </div>
             </div>
           </div>
 
           <div className="featured-content">
             <h2 className="featured-title text-center">Our Blog</h2>
-            <div className={styles.section}></div>
+            <div className={styles.section}>
+              {blogPosts.map(post => (
+                <BlogCard
+                  key={post.title}
+                  title={post.title}
+                  readDuration={post.readDuration}
+                  date={post.date}
+                  image={post.image}
+                  excerpt={post.excerpt}
+                  url="#"
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>

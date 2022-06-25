@@ -7,7 +7,7 @@ import {
   Occasion,
   UserReview,
   OfficeAddress,
-  BlogPosts
+  BlogPost
 } from "./types/Regal";
 
 export const defaultCurrency: AppCurrency = {
@@ -42,7 +42,7 @@ export const occassionsPageContent: {
   budget: {
     title: "Fresh Flowers For All Occasions and Budgets",
     content:
-      "We stock flowers for various occasions such as Birthday Flowers, Romantic Flowers, Anniversary Flowers, Mothers’ Day Flowers, Get Well Soon Flowers, Funeral Wreaths, Condolence Flowers, Bridal Bouquets, and of course, Valentine’s Day flowers available And finally, there are suitable options for all budgets, so when you see a design you like, you can simply pick the size that suits your budget. Want to go all out too? We got you, with our VIP Category of roses. "
+      "We stock flowers for various occasions such as Birthday Flowers, Romantic Flowers, Anniversary Flowers, Mothers’ Day Flowers, Get Well Soon Flowers, Funeral Wreaths, Condolence Flowers, Bridal Bouquets, and of course, Valentine’s Day flowers available And finally, there are suitable options for all budgets, so when you see a design you like, you can simply pick the size that suits your budget. Want to go all out too? We got you, withe our VIP Category of roses. "
   }
 };
 
@@ -187,7 +187,7 @@ export const regalReasons: Service[] = [
     image: "/images/mixer.png",
     title: "Premium Fresh Flowers",
     subtitle:
-      "We stock only the very best fresh flowers, and arrange them with care. Don't forget to add your free personalized message too."
+      "We stock only the very best fresh flowers, and arrange them withe care. Don't forget to add your free personalized message too."
   },
   {
     image: "/images/bulb.png",
@@ -251,7 +251,7 @@ export const regalHowItWorks: Service[] = [
     image: "/images/rocket.png",
     title: "Wait by the phone for that call",
     subtitle:
-      "Relax and wait for the recipient to thank you with a smile once we deliver."
+      "Relax and wait for the recipient to thank you withe a smile once we deliver."
   }
 ];
 
@@ -282,4 +282,29 @@ export const regalPhones = [
   "(+234) 7011 992888"
 ];
 
-export const blogPosts: BlogPosts[] = [];
+export const blogPosts: BlogPost[] = [
+  {
+    title: "5 awesome methods of receiving payment in your store",
+    excerpt:
+      "Most of us wonder if there is a God and if He really is the God of the Bible. In the Bible of a there is a God  the God of the Bible. In the Bible of a there is a God, then He must like flowers, because, what's there not to like?",
+    date: "7 May, 2022",
+    readDuration: "6 mins read",
+    image: "/images/sample-flowers/blog-1.png"
+  },
+  {
+    title: "Why everyone buys lillies in November",
+    excerpt:
+      "Most of us wonder if there is a God and if He really is the God of the Bible. In the Bible of a there is a God  the God of the Bible.",
+    date: "25 Apr, 2022",
+    readDuration: "10 mins read",
+    image: "/images/sample-flowers/blog-2.png"
+  },
+  {
+    title: "So we hit the 2 million users milestone",
+    excerpt:
+      "Most of us wonder if there is a God and if He really is the God of the Bible. In the Bible of a there is a God  the God of the Bible. In the Bible of a there is a God, then He must like flowers, because, what's there not to like?",
+    date: "18 Mar, 2022",
+    readDuration: "2 mins read",
+    image: "/images/sample-flowers/blog-1.png"
+  }
+];

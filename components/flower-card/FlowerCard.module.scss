@@ -6,9 +6,6 @@
   width: 23%;
   background-color: white;
   transition: 0.3s ease-out;
-  &:hover {
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
-  }
 
   .detail {
     padding: 0.6rem 1rem;
@@ -45,8 +42,17 @@
       height: 14rem;
     }
     .flower-image {
-      height: 18rem;
+      height: 17rem;
       width: 100%;
+      @media (max-width: 1250px) {
+        height: 16rem;
+      }
+      @media (max-width: 1150px) {
+        height: 15rem;
+      }
+      @media (max-width: 1050px) {
+        height: 14rem;
+      }
       object-fit: cover;
       border-radius: 0.4rem 0.4rem 0 0;
       transition: 0.3s ease-out;

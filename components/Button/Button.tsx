@@ -31,6 +31,7 @@ interface ButtonProps {
   tooltip?: string;
   name?: string;
   responsive?: boolean;
+  padded?: boolean;
 }
 
 export default function Button(props: ButtonProps) {
@@ -51,7 +52,8 @@ export default function Button(props: ButtonProps) {
     buttonType,
     tooltip,
     urlOnNewTab,
-    name
+    name,
+    padded
   } = props;
 
   if (url) {
@@ -66,6 +68,7 @@ export default function Button(props: ButtonProps) {
             danger && styles.danger,
             iconOnly && styles["icon-only"],
             (loading || disabled) && styles.disabled,
+            padded && styles.padded,
             className
           ].join(" ")}
           style={style}
@@ -96,6 +99,7 @@ export default function Button(props: ButtonProps) {
         danger && styles.danger,
         iconOnly && styles["icon-only"],
         disabled && styles.disabled,
+        padded && styles.padded,
         className
       ].join(" ")}
       onClick={onClick}

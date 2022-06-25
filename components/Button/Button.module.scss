@@ -5,10 +5,15 @@
   padding: 0.8rem 1.6rem;
   border-radius: 0.4rem;
   min-width: 12rem;
-  font-size: 1.1rem;
+  font-size: inherit;
   transition: 0.3s ease-out;
   outline: none;
-
+  text-align: center;
+  &.padded {
+    padding: 0.8rem;
+    min-width: 9rem;
+    border-radius: 0.2rem;
+  }
   &.loading {
     cursor: default;
   }
@@ -31,6 +36,11 @@
   }
   &.accent {
     background-color: white;
+    color: #9b0000;
+    border: 0.1rem solid #9b0000;
+  }
+  &.accent {
+    background-color: transparent;
     color: #9b0000;
     border: 0.1rem solid #9b0000;
   }
