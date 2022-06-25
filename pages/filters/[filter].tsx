@@ -397,30 +397,32 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
 
   return (
     <section className={styles.filters}>
-      <div className={styles["hero"]}>
-        {filter === "occassions" && (
-          <div className={styles["occassion-wrapper"]}>
-            {occassions.map(occasion => (
-              <Link href={occasion.url} key={occasion.title}>
-                <a
-                  className={[
-                    styles["occassion"],
-                    selectedOccassion === occasion.url.split("=")[1] &&
-                      styles["selected-occassion"]
-                  ].join(" ")}
-                >
-                  <strong>
-                    {occasion.title}
-                    <br />
-                    {occasion.title === "Just to Say" && (
-                      <span>{JustToSayText}</span>
-                    )}{" "}
-                  </strong>
-                </a>
-              </Link>
-            ))}
-          </div>
-        )}
+      <div className={[styles["hero-bg"]].join(" ")}>
+        <div className="hero-content flex column center center-align">
+          {filter === "occassions" && (
+            <div className={styles["occassion-wrapper"]}>
+              {occassions.map(occasion => (
+                <Link href={occasion.url} key={occasion.title}>
+                  <a
+                    className={[
+                      styles["occassion"],
+                      selectedOccassion === occasion.url.split("=")[1] &&
+                        styles["selected-occassion"]
+                    ].join(" ")}
+                  >
+                    <strong>
+                      {occasion.title}
+                      <br />
+                      {occasion.title === "Just to Say" && (
+                        <span>{JustToSayText}</span>
+                      )}{" "}
+                    </strong>
+                  </a>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
       <div className={`${styles["content"]} flex spaced-xl`}>
         <div className={styles["left-side"]}>
