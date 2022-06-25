@@ -15,6 +15,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       {
         name: "Perfumes",
         image: "/images/addons/Rectangle133.png",
+        description: "",
+        slug: "#",
         addons: [
           {
             name: "5 Peas in a pod",
@@ -31,6 +33,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       {
         name: "Teady Bears",
         image: "/images/addons/Rectangle133.png",
+        description: "",
+        slug: "#",
         addons: [
           {
             name: "5 Peas in a pod",
