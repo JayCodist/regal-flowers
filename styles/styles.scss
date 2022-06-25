@@ -4,6 +4,13 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "SharpSans";
+  src: url("../public/fonts/sharp-sans-semibold.woff2") format("woff2");
+  font-display: swap;
+  font-weight: bold;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 92%;
