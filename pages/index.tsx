@@ -9,7 +9,10 @@ import {
   sampleReviews,
   featuredFlowers as sampleFlowers,
   featuredAddons,
-  regalHowItWorks
+  regalHowItWorks,
+  regalAddresses,
+  regalPhones,
+  regalEmail
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -95,7 +98,7 @@ const LandingPage: FunctionComponent = () => {
               ))}
             </div>
           </div>
-          <div className={styles["review-section"]}>
+          <div className={styles["full-width-section"]}>
             <div className={styles.left}>
               <div className="flex center spaced-lg center-align">
                 <h2 className="featured-title half-width">
@@ -271,6 +274,113 @@ const LandingPage: FunctionComponent = () => {
                 />
               ))}
             </div>
+          </div>
+
+          <div
+            className={[styles["full-width-section"], styles.summary].join(" ")}
+          >
+            <div className={styles.left}>
+              <strong>WORK WITH US</strong>
+              <h2 className="featured-title">Now Let’s Send Yours</h2>
+              <span>
+                The gradual accumulation of information about atomic and
+                small-scale behavior during the first quarter of the 20th{" "}
+              </span>
+              <Button url="/filters/occasions">Send Flowers</Button>
+            </div>
+            <img
+              className={styles.right}
+              src="/images/landing-summary.png"
+              alt="review"
+            />
+          </div>
+
+          <div className={styles["contact-section-wrapper"]}>
+            <div className={styles["contact-section"]}>
+              <img
+                src="/images/landing-contact.png"
+                className={styles["contact-img"]}
+                alt="welcoming flower"
+              />
+              <div className={styles.details}>
+                <strong>GET IN TOUCH</strong>
+                <h2 className="featured-title vertical-margin spaced">
+                  Contact Us Today!
+                </h2>
+                {regalAddresses.map(address => (
+                  <div key={address.name} className={styles.detail}>
+                    <strong className={styles.key}>{address.name}</strong>
+                    <span className={styles.value}>
+                      <img
+                        className="generic-icon margin-right"
+                        src="/icons/map-drop.svg"
+                        alt="location"
+                      />
+                      <span className="flex column spaced">
+                        <a
+                          href={`https://maps.google.com?q=${address.location}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {address.location}
+                        </a>
+                        <span className="grayed">{address.workingTimes}</span>
+                      </span>
+                    </span>
+                  </div>
+                ))}
+
+                <div className={styles.detail}>
+                  <strong className={styles.key}>
+                    Contact (Calls and WhatsApp)
+                  </strong>
+                  <span className={styles.value}>
+                    <span className="flex spaced">
+                      <img
+                        alt="phone"
+                        src="/icons/phone-solid.svg"
+                        className="generic-icon"
+                      />
+                      <span className="flex column spaced">
+                        {regalPhones.map(phone => (
+                          <a
+                            key={phone}
+                            href={`tel:${phone.replace(/[^\d\+]/g, "")}`}
+                          >
+                            {phone}
+                          </a>
+                        ))}
+                      </span>
+                    </span>
+                  </span>
+                </div>
+
+                <div className={styles.detail}>
+                  <strong className={styles.key}>Email</strong>
+                  <span className={styles.value}>
+                    <span className="flex spaced center-align">
+                      <img
+                        alt="phone"
+                        src="/icons/envelope.svg"
+                        className="generic-icon"
+                      />
+                      <a
+                        href={`mailto:${regalEmail}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {regalEmail}
+                      </a>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="featured-content">
+            <h2 className="featured-title text-center">Our Blog</h2>
+            <div className={styles.section}></div>
           </div>
         </div>
       </section>

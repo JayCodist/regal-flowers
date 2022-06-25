@@ -92,6 +92,13 @@ button {
   display: flex;
   &.column {
     flex-direction: column;
+    &.spaced > * {
+      margin: 0;
+      margin-top: 0.6rem;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
   &.between {
     justify-content: space-between;
@@ -112,6 +119,7 @@ button {
     align-items: center;
   }
   &.spaced > * {
+    margin: 0;
     margin-left: 0.6rem;
     &:first-child {
       margin-left: 0;
@@ -147,7 +155,7 @@ button {
   text-align: center;
 }
 .grayed {
-  color: rgba(0, 0, 0, 0.3);
+  color: rgba(0, 0, 0, 0.6);
 }
 .danger {
   color: #ff7452;

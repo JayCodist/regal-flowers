@@ -2,7 +2,13 @@ import { otherSampleProducts } from "../pages/filters/[filter]";
 import AddonGroup from "./types/AddonGroup";
 import { AppCurrency } from "./types/Core";
 import Product from "./types/Product";
-import { Service, Occasion, UserReview } from "./types/Regal";
+import {
+  Service,
+  Occasion,
+  UserReview,
+  OfficeAddress,
+  BlogPosts
+} from "./types/Regal";
 
 export const defaultCurrency: AppCurrency = {
   name: "NGN",
@@ -248,3 +254,32 @@ export const regalHowItWorks: Service[] = [
       "Relax and wait for the recipient to thank you with a smile once we deliver."
   }
 ];
+
+export const regalAddresses: OfficeAddress[] = [
+  {
+    name: "Lagos Head Office/Delivery Center",
+    location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos",
+    workingTimes: "24/7"
+  },
+  {
+    name: "Lagos VI Branch",
+    location:
+      "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos",
+    workingTimes: "8am-7pm (Everyday)"
+  },
+  {
+    name: "Abuja Office",
+    location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja",
+    workingTimes: "24/7"
+  }
+];
+
+export const regalEmail = "info@regalflowers.com.ng";
+
+export const regalPhones = [
+  "(+234) 7010 006665",
+  "(+234) 7010 006664",
+  "(+234) 7011 992888"
+];
+
+export const blogPosts: BlogPosts[] = [];

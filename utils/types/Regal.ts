@@ -19,3 +19,16 @@ export interface UserReview {
     name: string;
   };
 }
+
+export interface OfficeAddress {
+  name: string;
+  location: string;
+  workingTimes: string;
+}
+
+export interface BlogPosts {
+  date: string;
+  readDuration: string;
+  title: string;
+  excerpt: string;
+}
