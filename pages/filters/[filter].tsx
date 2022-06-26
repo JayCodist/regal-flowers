@@ -392,7 +392,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
 
   const [todayDate, setTodayDate] = useState<Dayjs | null>(dayjs());
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
-  const [sort, setSort] = useState<string>("default");
+  const [sort, setSort] = useState<string>("");
 
   const handleChange = (name: string) => {
     setSelectedFilter(prev =>
