@@ -10,7 +10,7 @@ import Checkbox from "../../components/checkbox/Checkbox";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import { aboutUsContent } from "../../utils/constants";
 import DatePicker from "../../components/date-picker/DatePicker";
-import Select, { Option } from "../../components/Select/Select";
+import Select, { Option } from "../../components/select/Select";
 
 export const otherSampleProducts = {
   id: 1,

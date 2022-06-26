@@ -96,14 +96,14 @@ const Select: FunctionComponent<SelectProps> = props => {
     startIcon,
     keepDropdownOpen,
     onSelectionView,
-    onScrollEnd,
+    // onScrollEnd,
     fitContent
   } = props;
 
   const [searchStr, setSearchStr] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedMap, setSelectedMap] = useState<any>({});
-  const [showModal, setShowModal] = useState(false);
+  const [, setShowModal] = useState(false);
   const [options, setOptions] = useState<Option[]>([]);
   const [placeholder, setPlaceholder] = useState<Option | null>(null);
   const [displayValue, setDisplayValue] = useState<
@@ -111,7 +111,7 @@ const Select: FunctionComponent<SelectProps> = props => {
   >("");
   const [selectedAll, setSelectedAll] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [scrollRef, setScrollRef] = useState<HTMLDivElement | null>(null);
+  const [, setScrollRef] = useState<HTMLDivElement | null>(null);
 
   const selectRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLElement>(null);
@@ -240,10 +240,10 @@ const Select: FunctionComponent<SelectProps> = props => {
     setShowDropdown(!showDropdown);
   };
 
-  const handleModalOptionClick: MouseEventHandler = e => {
-    setShowModal(true);
-    e.stopPropagation();
-  };
+  // const handleModalOptionClick: MouseEventHandler = e => {
+  //   setShowModal(true);
+  //   e.stopPropagation();
+  // };
 
   const handleSelectAllMultipleOptions = () => {
     if (selectedAll) {
@@ -272,11 +272,11 @@ const Select: FunctionComponent<SelectProps> = props => {
   //   </div>
   // );
 
-  const dismissModal = (payload: any) => {
-    setShowModal(false);
-    // onConclude(payload);
-    setSearchStr("");
-  };
+  // const dismissModal = (payload: any) => {
+  //   setShowModal(false);
+  //   onConclude(payload);
+  //   setSearchStr("");
+  // };
 
   // const followUpModal = FollowUpModal && (
   //   <FollowUpModal visible={showModal} cancel={dismissModal} />
