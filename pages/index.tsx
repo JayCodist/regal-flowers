@@ -40,7 +40,7 @@ const LandingPage: FunctionComponent = () => {
             <div className="flex between">
               <h2 className="featured-title">Best Selling Flowers</h2>
               <Button
-                url="/filters/occassions"
+                url="/filters/occasions"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -78,7 +78,7 @@ const LandingPage: FunctionComponent = () => {
             <div className="flex between">
               <h2 className="featured-title">Featured Occasions</h2>
               <Button
-                url="/filters/occassions"
+                url="/filters/occasions"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -240,7 +240,7 @@ const LandingPage: FunctionComponent = () => {
             <div className="flex between">
               <h2 className="featured-title">Gifts to Include with Flowers</h2>
               <Button
-                url="/filters/occassions"
+                url="/filters/occasions"
                 className="flex spaced center center-align"
                 type="transparent"
               >

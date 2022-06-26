@@ -255,7 +255,7 @@ const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
 const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const { query } = useRouter();
-  const { filter, selectedOccassion } = query;
+  const { filter, selectedOccasion } = query;
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
   const [products] = useState<Product[]>(filterFlowers);
   const [count, setCount] = useState(1);
@@ -277,26 +277,26 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
-  const occassions: { title: string; url: string }[] = [
+  const occasions: { title: string; url: string }[] = [
     {
       title: "Love, Birthdays & Anniversary",
-      url: "/filters/occassions?selectedOccassion=love-birthdays-anniversary"
+      url: "/filters/occasions?selectedOccasion=love-birthdays-anniversary"
     },
     {
       title: "Just to Say",
-      url: "/filters/occassions?selectedOccassion=just-to-say"
+      url: "/filters/occasions?selectedOccasion=just-to-say"
     },
     {
       title: "Bridal Bouquets",
-      url: "/filters/occassions?selectedOccassion=bridal-bouquets"
+      url: "/filters/occasions?selectedOccasion=bridal-bouquets"
     },
     {
       title: "Funeral & Condolence",
-      url: "/filters/occassions?selectedOccassion=funeral-condolence"
+      url: "/filters/occasions?selectedOccasion=funeral-condolence"
     },
     {
       title: "All Occasions",
-      url: "/filters/occassions?selectedOccassion=all-occasions"
+      url: "/filters/occasions?selectedOccasion=all-occasions"
     }
   ];
 
@@ -398,15 +398,15 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   return (
     <section className={styles.filters}>
       <div className={styles["hero"]}>
-        {filter === "occassions" && (
-          <div className={styles["occassion-wrapper"]}>
-            {occassions.map(occasion => (
+        {filter === "occasions" && (
+          <div className={styles["occasion-wrapper"]}>
+            {occasions.map(occasion => (
               <Link href={occasion.url} key={occasion.title}>
                 <a
                   className={[
-                    styles["occassion"],
-                    selectedOccassion === occasion.url.split("=")[1] &&
-                      styles["selected-occassion"]
+                    styles["occasion"],
+                    selectedOccasion === occasion.url.split("=")[1] &&
+                      styles["selected-occasion"]
                   ].join(" ")}
                 >
                   <strong>
@@ -508,8 +508,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
           <div>
             <p className="title bold vertical-margin spaced">
               {
-                occassions.filter(occassion => {
-                  return selectedOccassion === occassion.url.split("=")[1];
+                occasions.filter(occasion => {
+                  return selectedOccasion === occasion.url.split("=")[1];
                 })[0]?.title
               }{" "}
               Flowers
@@ -559,7 +559,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             />
           ))}
         </div>
-        <p className="title bold center">Flower Delivery for all Occassions</p>
+        <p className="title bold center">Flower Delivery for all Occasions</p>
       </div>
       <div className="flex between spaced-xl horizontal-padding xl">
         <div className="half-width">
@@ -610,7 +610,7 @@ export const getStaticPaths = async () => {
     paths: [
       {
         params: {
-          filter: "occassions"
+          filter: "occasions"
         }
       }
     ],
