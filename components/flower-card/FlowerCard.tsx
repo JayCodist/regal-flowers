@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
-import Button from "../button/Button";
+import Button from "../shared/button/Button";
 import styles from "./FlowerCard.module.scss";
 
 interface IFlowerCardProps {

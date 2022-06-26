@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import Button from "../components/button/Button";
+import Button from "../components/shared/button/Button";
 import FlowerCard from "../components/flower-card/FlowerCard";
 import styles from "./index.module.scss";
 import {

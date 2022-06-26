@@ -3,7 +3,7 @@ import { GetStaticProps } from "next";
 import { getProduct } from "../../utils/helpers/data/products";
 import Product, { DesignOption } from "../../utils/types/Product";
 import styles from "./products.module.scss";
-import Button from "../../components/button/Button";
+import Button from "../../components/shared/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import { flowers } from "../filters/[filter]";
 
