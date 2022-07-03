@@ -1,7 +1,6 @@
 .hero-bg {
   background-image: url("/images/faq-hero.png");
-  background-position: center center;
-  background-size: 100vw 84%;
+  background-size: 100vw 38rem;
   .title {
     font-size: 2.5rem;
     font-weight: 800;
@@ -22,7 +21,7 @@
   font-weight: 600;
 }
 .container {
-  padding: 0 3rem;
+  padding: 0 6rem;
 }
 
 .content {
@@ -33,7 +32,7 @@
   }
 
   .links {
-    width: 40%;
+    width: 30%;
     border: 0.1rem solid #f3f4f6;
     height: fit-content;
     padding: 1rem 0;
@@ -41,20 +40,17 @@
   }
 
   .linked-content {
-    width: 60%;
+    width: 66%;
     & > div {
       margin-bottom: 2.5rem;
     }
   }
+
   .payment-info {
     background-color: #f9fafb;
     display: inline-block;
     padding: 1rem;
     margin: 1rem;
-
-    strong {
-      display: inline-block;
-    }
 
     & > * {
       margin-bottom: 0.6rem;

@@ -7,14 +7,14 @@
     width: 100%;
     background-attachment: fixed;
 
-    .occassion-wrapper {
+    .occasion-wrapper {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 3rem;
+      padding: 0 6rem;
 
-      .occassion {
+      .occasion {
         background-color: #fdf0f0;
         position: relative;
         height: 14rem;
@@ -42,7 +42,7 @@
           border: 0.2rem solid #9b0000;
         }
 
-        &.selected-occassion::after {
+        &.selected-occasion::after {
           border: 0.2rem solid #9b0000;
         }
       }
@@ -66,10 +66,11 @@
       margin-top: 2rem;
     }
 
-    .filters {
+    .filters-sidebar {
       border: 0.1rem solid #e7eaed;
       border-radius: 0.3rem;
       padding: 0.8rem;
+      min-width: 16rem;
 
       .btn-view {
         display: block;
