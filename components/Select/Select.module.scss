@@ -18,6 +18,7 @@ $placeholder: rgba(0, 0, 0, 0.4);
   &.responsive {
     width: 100%;
   }
+
   &.fit-content {
     min-width: 6rem;
     width: fit-content;
@@ -27,6 +28,9 @@ $placeholder: rgba(0, 0, 0, 0.4);
   &.light {
     border: 0.1rem solid #e7eaed;
     background-color: white;
+  }
+  &.dimmed {
+    background-color: #f9fafb;
   }
   .main-content {
     display: flex;

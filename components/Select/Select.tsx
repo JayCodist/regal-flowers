@@ -10,9 +10,9 @@ import {
 import styles from "./Select.module.scss";
 import Checkbox from "../checkbox/Checkbox";
 import Button from "../button/Button";
-// import Input from "../input/Input";
-// import { ModalProps } from "../modal/Modal";
-// import useScrollHandler from "../../utils/hooks/useScrollHandler";
+import Input from "../input/Input";
+import { ModalProps } from "../modal/Modal";
+import useScrollHandler from "../../utils/hooks/useScrollHandler";
 
 let timerRef: ReturnType<typeof setTimeout>;
 
@@ -33,12 +33,12 @@ export interface PaginatedOptionsWrapperGeneric<T> {
 
 type ValueType = string | number | string[] | number[];
 
-// export type FollowUpType = {
-//   label?: string | JSX.Element;
-//   onConclude?: (payload?: Option) => void;
-//   FollowUpModal?: FunctionComponent<ModalProps>;
-//   position?: "top" | "bottom";
-// };
+export type FollowUpType = {
+  label?: string | JSX.Element;
+  onConclude?: (payload?: Option) => void;
+  FollowUpModal?: FunctionComponent<ModalProps>;
+  position?: "top" | "bottom";
+};
 
 interface SelectProps {
   options: Option[];
@@ -48,7 +48,7 @@ interface SelectProps {
   theme?: "light" | "dark";
   responsive?: boolean;
   multiple?: boolean;
-  // followUp?: FollowUpType;
+  followUp?: FollowUpType;
   className?: string;
   showSelectedCount?: boolean;
   dropdownOnTop?: boolean;
@@ -74,6 +74,7 @@ interface SelectProps {
    * Indicates whether the width of the component should be adjusted to fit the content
    */
   fitContent?: boolean;
+  dimmed?: boolean;
 }
 
 const Select: FunctionComponent<SelectProps> = props => {
@@ -85,7 +86,7 @@ const Select: FunctionComponent<SelectProps> = props => {
     theme,
     responsive,
     multiple,
-    // followUp = {},
+    followUp = {},
     selectAll,
     className,
     showSelectedCount,
@@ -96,14 +97,15 @@ const Select: FunctionComponent<SelectProps> = props => {
     startIcon,
     keepDropdownOpen,
     onSelectionView,
-    // onScrollEnd,
-    fitContent
+    onScrollEnd,
+    fitContent,
+    dimmed
   } = props;
 
   const [searchStr, setSearchStr] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedMap, setSelectedMap] = useState<any>({});
-  const [, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [options, setOptions] = useState<Option[]>([]);
   const [placeholder, setPlaceholder] = useState<Option | null>(null);
   const [displayValue, setDisplayValue] = useState<
@@ -111,25 +113,25 @@ const Select: FunctionComponent<SelectProps> = props => {
   >("");
   const [selectedAll, setSelectedAll] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [, setScrollRef] = useState<HTMLDivElement | null>(null);
+  const [scrollRef, setScrollRef] = useState<HTMLDivElement | null>(null);
 
   const selectRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLElement>(null);
-  // const { label, FollowUpModal, onConclude = () => {} } = followUp;
+  const { label, FollowUpModal, onConclude = () => {} } = followUp;
 
   const rootRef = useRef<HTMLDivElement>(null);
-  // const [page, setPage] = useScrollHandler({
-  //   node: onScrollEnd && showDropdown ? scrollRef : null,
-  //   root: rootRef.current
-  // });
+  const [page, setPage] = useScrollHandler({
+    node: onScrollEnd && showDropdown ? scrollRef : null,
+    root: rootRef.current
+  });
 
-  // useEffect(() => {
-  //   if (page !== 1) {
-  //     onScrollEnd?.({ page, mergeRecords: true });
-  //     setIsSearching(true);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [page]);
+  useEffect(() => {
+    if (page !== 1) {
+      onScrollEnd?.({ page, mergeRecords: true });
+      setIsSearching(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   const handleClose: EventListener = e => {
     const dropdown = selectRef.current as HTMLElement | null;
@@ -201,7 +203,7 @@ const Select: FunctionComponent<SelectProps> = props => {
   useEffect(() => {
     if (onSearch) {
       clearTimeout(timerRef);
-      // setPage(1);
+      setPage(1);
       timerRef = setTimeout(() => {
         onSearch({ searchStr });
         setIsSearching(true);
@@ -240,10 +242,10 @@ const Select: FunctionComponent<SelectProps> = props => {
     setShowDropdown(!showDropdown);
   };
 
-  // const handleModalOptionClick: MouseEventHandler = e => {
-  //   setShowModal(true);
-  //   e.stopPropagation();
-  // };
+  const handleModalOptionClick: MouseEventHandler = e => {
+    setShowModal(true);
+    e.stopPropagation();
+  };
 
   const handleSelectAllMultipleOptions = () => {
     if (selectedAll) {
@@ -262,25 +264,25 @@ const Select: FunctionComponent<SelectProps> = props => {
     setSelectedAll(prev => !prev);
   };
 
-  // const followUpOption = label && (
-  //   <div
-  //     className={[styles.option, styles["follow-up"]].join(" ")}
-  //     onClick={handleModalOptionClick}
-  //     role="button"
-  //   >
-  //     {label}
-  //   </div>
-  // );
+  const followUpOption = label && (
+    <div
+      className={[styles.option, styles["follow-up"]].join(" ")}
+      onClick={handleModalOptionClick}
+      role="button"
+    >
+      {label}
+    </div>
+  );
 
-  // const dismissModal = (payload: any) => {
-  //   setShowModal(false);
-  //   onConclude(payload);
-  //   setSearchStr("");
-  // };
+  const dismissModal = (payload: any) => {
+    setShowModal(false);
+    onConclude(payload);
+    setSearchStr("");
+  };
 
-  // const followUpModal = FollowUpModal && (
-  //   <FollowUpModal visible={showModal} cancel={dismissModal} />
-  // );
+  const followUpModal = FollowUpModal && (
+    <FollowUpModal visible={showModal} cancel={dismissModal} />
+  );
 
   const handleClear: MouseEventHandler = e => {
     onSelect(multiple ? [] : "");
@@ -318,7 +320,7 @@ const Select: FunctionComponent<SelectProps> = props => {
       >
         <img
           alt="remove"
-          src="/icons/times-solid.svg"
+          src="/icons/times-solid-gray.svg"
           className={styles.icon}
         />
       </Button>
@@ -352,6 +354,7 @@ const Select: FunctionComponent<SelectProps> = props => {
           styles[theme || "light"],
           responsive && styles.responsive,
           fitContent && styles["fit-content"],
+          dimmed && styles["dimmed"],
           className
         ].join(" ")}
         onClick={handleSelectClick}
@@ -366,7 +369,7 @@ const Select: FunctionComponent<SelectProps> = props => {
               src={startIcon}
             />
           )}
-          {/* {showSearchInput && (
+          {showSearchInput && (
             <Input
               refValue={searchInputRef}
               placeholder={placeholder?.label as string}
@@ -377,7 +380,7 @@ const Select: FunctionComponent<SelectProps> = props => {
               disabled={disabled}
               responsive
             />
-          )} */}
+          )}
           {!showSearchInput &&
             (displayValue ? (
               <span className={styles["main-text"]}>
@@ -428,11 +431,12 @@ const Select: FunctionComponent<SelectProps> = props => {
               <Checkbox
                 checked={selectedAll}
                 text="Select All"
+                responsive
                 onChange={handleSelectAllMultipleOptions}
               />
             </div>
           )}
-          {/* {followUp.position === "top" && followUpOption} */}
+          {followUp.position === "top" && followUpOption}
           {[
             !multiple && !allowClear && !onSearch && placeholder,
             ...options
@@ -463,6 +467,7 @@ const Select: FunctionComponent<SelectProps> = props => {
                     <Checkbox
                       checked={Boolean(selectedMap[option.value])}
                       text={option.label}
+                      responsive
                       onChange={checked =>
                         handleOptionClickMultiple(checked, option)
                       }
@@ -473,10 +478,10 @@ const Select: FunctionComponent<SelectProps> = props => {
                 </div>
               )
           )}
-          {/* {followUp.position !== "top" && followUpOption} */}
+          {followUp.position !== "top" && followUpOption}
         </div>
       </div>
-      {/* {followUpModal} */}
+      {followUpModal}
     </>
   );
 };
