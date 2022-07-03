@@ -413,8 +413,20 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
 
   const sortOptions: Option[] = [
     {
-      label: "name",
-      value: "John Doe"
+      label: "Alphabetically Descending",
+      value: 1
+    },
+    {
+      label: "Alphabetically Ascending",
+      value: 2
+    },
+    {
+      label: "Price Descending",
+      value: 3
+    },
+    {
+      label: "Price Ascending",
+      value: 4
     }
   ];
 
@@ -527,16 +539,15 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               />
             </div>
 
-            <p className="flex center-align spaced">
+            <div className="flex center-align spaced">
               <span>Sort:</span>
               <Select
                 options={sortOptions}
                 value={sort}
                 onSelect={value => setSort(value as string)}
-                placeholder="default"
-                responsive
+                placeholder="Default"
               />
-            </p>
+            </div>
           </div>
           <div>
             <p className={`${styles.title} bold vertical-margin spaced`}>
