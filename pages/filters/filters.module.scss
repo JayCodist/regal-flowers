@@ -12,7 +12,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 3rem;
+      padding: 0 6rem;
 
       .occasion {
         background-color: #fdf0f0;
@@ -58,10 +58,11 @@
       margin-top: 2rem;
     }
 
-    .filters {
+    .filters-sidebar {
       border: 0.1rem solid #e7eaed;
       border-radius: 0.3rem;
       padding: 0.8rem;
+      min-width: 16rem;
 
       .btn-view {
         display: block;

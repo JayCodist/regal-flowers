@@ -459,7 +459,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             </button>
           </div>
 
-          <div className={styles["filters"]}>
+          <div className={styles["filters-sidebar"]}>
             {filterCategories.map((filter, index) => (
               <div key={index} className="vertical-margin spaced">
                 <p className="bold vertical-margin spaced">{filter.name}</p>
