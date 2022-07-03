@@ -1,11 +1,11 @@
 .filters {
-  padding-bottom: 3rem;
-  .hero {
+  .hero-bg {
     background-image: url("/icons/filters-bg.svg");
-    min-height: 50vh;
+    background-position: center center;
+    background-size: cover;
+    height: 30rem;
     width: 100%;
-    display: flex;
-    align-items: center;
+    background-attachment: fixed;
 
     .occasion-wrapper {
       width: 100%;
@@ -49,10 +49,18 @@
     }
   }
 
+  .title {
+    font-size: 2.7rem;
+    font-weight: 700;
+  }
+
+  .sub-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+
   .content {
-    padding: 0 7rem;
-    margin-top: 6rem;
-    margin-bottom: 5rem;
+    padding: 4rem 7rem;
 
     .left-side {
       margin-top: 2rem;
