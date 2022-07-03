@@ -1,0 +1,75 @@
+.checkout-page {
+  padding: 4rem 7rem;
+  display: flex;
+  position: relative;
+
+  .info {
+    font-size: 1.3rem;
+    background-color: #fdf7f7;
+    font-weight: 600;
+    padding: 1rem;
+    border-radius: 0.6rem 0.6rem 0 0;
+    padding-left: 2rem;
+  }
+
+  .left {
+    width: 60%;
+  }
+  .right {
+    width: 32%;
+    margin-left: 2.2rem;
+    position: fixed;
+    right: 7rem;
+
+    .apply-btn {
+      min-width: 5rem;
+      padding: 0.72rem 0;
+      margin-left: -0.3rem;
+      z-index: 1;
+    }
+
+    .hr {
+      background-color: #e5e7eb;
+      margin: 2rem 0;
+      // border: none;
+    }
+  }
+
+  .delivey-method {
+    margin-top: 2rem;
+    .method {
+      background-color: #f9fafb;
+      padding: 1.1rem;
+      width: 48%;
+      margin: 1.5rem 0;
+      border: none;
+      transition: 0.1s ease-out;
+
+      &.active {
+        background-color: white;
+        border: 0.1rem solid #9b0000;
+      }
+    }
+  }
+
+  .border {
+    border: 0.1rem solid #f9fafb;
+    border-radius: 0.6rem;
+    .padding {
+      padding: 0 2rem;
+      padding-bottom: 1rem;
+    }
+  }
+
+  .pickup-locations {
+    background-color: #f9fafb;
+    padding: 1.5rem;
+  }
+
+  .line-through {
+    background-color: #e5e7eb;
+    height: 0.1rem;
+    width: 100%;
+    display: inline-block;
+  }
+}

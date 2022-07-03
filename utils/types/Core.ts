@@ -11,4 +11,10 @@ export interface AppCurrency {
 
 export interface Settings {
   currency: AppCurrency;
+  stage: Stage;
+}
+
+export interface Stage {
+  name: "delivery" | "payment" | "done";
+  stage: number;
 }

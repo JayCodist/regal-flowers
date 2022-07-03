@@ -1,0 +1,64 @@
+.radio {
+  display: none;
+}
+.radio:checked ~ .wrapper .radio-icon {
+  // border: 0.4rem solid #E7C91D;
+  border: 0.2rem solid #9b0000;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    background-color: #9b0000;
+  }
+}
+.radio:checked ~ .wrapper {
+  border-color: #9b0000;
+  // border-color: #E7C91D;
+}
+.wrapper {
+  cursor: pointer;
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s ease-out;
+  &.inline {
+    display: inline-flex;
+  }
+  &.responsive {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  &.bordered {
+    border: 0.15rem solid rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    border-radius: 1rem;
+    align-items: flex-start;
+  }
+  .right {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.8rem;
+    .subtitle {
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
+    }
+  }
+  .label {
+    margin-left: 0.6rem;
+  }
+  .radio-icon {
+    height: 1.3rem;
+    width: 1.3rem;
+    border-radius: 50%;
+    background-color: white;
+    border: 0.15rem solid #4b5563;
+    transition: 0.3s ease-out;
+  }
+}

@@ -6,11 +6,12 @@ import Layout from "../components/layout/Layout";
 import SettingsContext, {
   SettingsControls
 } from "../utils/context/SettingsContext";
-import { AppCurrency, Settings } from "../utils/types/Core";
+import { AppCurrency, Settings, Stage } from "../utils/types/Core";
 import { defaultCurrency } from "../utils/constants";
 
 const defaultSettings: Settings = {
-  currency: defaultCurrency
+  currency: defaultCurrency,
+  stage: { name: "delivery", stage: 1 }
 };
 
 const App: FunctionComponent<AppProps> = props => {
@@ -20,7 +21,9 @@ const App: FunctionComponent<AppProps> = props => {
   const settingsControls: SettingsControls = {
     currency: settings.currency,
     setCurrency: (currency: AppCurrency) =>
-      setSettings({ ...settings, currency })
+      setSettings({ ...settings, currency }),
+    stage: settings.stage,
+    setStage: (stage: Stage) => setSettings({ ...settings, stage })
   };
 
   const headTags = (

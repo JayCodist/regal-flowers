@@ -1,14 +1,28 @@
-import { FunctionComponent, ReactNode, useContext } from "react";
+import {
+  FunctionComponent,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { AppCurrency, AppLink } from "../../utils/types/Core";
+import { AppCurrency, AppLink, Stage } from "../../utils/types/Core";
 import { defaultCurrency } from "../../utils/constants";
 import SettingsContext from "../../utils/context/SettingsContext";
+import { useRouter } from "next/router";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
+  const [pathName, setPathName] = useState("");
+  const { pathname } = useRouter();
+
+  useEffect(() => {
+    setPathName(pathname.split("/")[1]);
+  }, [pathname]);
+
   return (
     <>
-      <Header />
+      {pathName === "checkout" ? <CheckoutHeader /> : <Header />}
       <main className={styles.main}>{children}</main>
     </>
   );
@@ -117,6 +131,83 @@ const Header: FunctionComponent = () => {
             />
             <span>Contact</span>
           </button>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export const CheckoutHeader: FunctionComponent = () => {
+  // const [stage, setStage] = useState<number>(3);
+  const { stage, setStage } = useContext(SettingsContext);
+
+  const stages: Stage[] = [
+    {
+      name: "delivery",
+      stage: 1
+    },
+    {
+      name: "payment",
+      stage: 2
+    },
+    {
+      name: "done",
+      stage: 3
+    }
+  ];
+  return (
+    <header className={styles.header}>
+      <Link href="/">
+        <a>
+          <img
+            alt="regal flowers logo"
+            src="/icons/logo.png"
+            className={styles.logo}
+          />
+        </a>
+      </Link>
+
+      <div className={styles["stage-wrapper"]}>
+        <div className="flex center margin-bottom">
+          {stages.map((_stage, index) => (
+            <div
+              key={index}
+              className={[
+                styles.progress,
+                stage.stage === _stage.stage && styles.active
+              ].join(" ")}
+            >
+              {_stage.stage > 1 && (
+                <hr
+                  className={[
+                    styles["progress-bar"],
+                    stage.stage >= _stage.stage && styles.active
+                  ].join(" ")}
+                />
+              )}
+              <span
+                className={[
+                  styles.circle,
+                  stage.stage > _stage.stage && styles.completed,
+                  stage.stage === _stage.stage && styles.active
+                ].join(" ")}
+              ></span>
+            </div>
+          ))}
+        </div>
+        <div className="flex around">
+          {stages.map((_stage, index) => (
+            <span
+              key={index}
+              className={[
+                styles["stage-name"],
+                stage.stage === _stage.stage && styles.active,
+                stage.stage > _stage.stage && styles.completed
+              ].join(" ")}
+            >
+              {_stage.name}
+            </span>
+          ))}
         </div>
       </div>
     </header>

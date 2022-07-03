@@ -40,6 +40,69 @@
       margin: 1rem 0 0.4rem;
     }
   }
+
+  .stage-wrapper {
+    width: 26rem;
+    .stage-name {
+      font-size: 1.3rem;
+      &.active {
+        font-weight: 600;
+      }
+    }
+
+    .progress {
+      display: flex;
+      align-items: center;
+      .progress-bar {
+        height: 0.3rem;
+        background: #e5e7eb;
+        border: none;
+        width: 8rem;
+
+        &.active {
+          background: #22c55e;
+        }
+      }
+      .circle {
+        width: 1.4rem;
+        height: 1.4rem;
+        display: inline-block;
+        position: relative;
+
+        &::before {
+          content: "";
+          width: 1.4rem;
+          height: 1.4rem;
+          border-radius: 50%;
+          border: 0.1rem solid #4b5563;
+          display: inline-block;
+          position: absolute;
+          left: -2px;
+          top: 0;
+        }
+        &.completed {
+          &::before {
+            background-color: #22c55e;
+            border-color: #22c55e;
+          }
+
+          &::after {
+            content: "";
+            position: absolute;
+            border: 0 solid white;
+            border-width: 0 0 0.2rem 0.2rem;
+            width: 50%;
+            height: 20%;
+            transform: rotate(-45deg) translate(-10%, 90%);
+          }
+        }
+
+        &.active::before {
+          border-width: 0.15rem;
+        }
+      }
+    }
+  }
 }
 .main {
   margin-top: 6.5rem;
