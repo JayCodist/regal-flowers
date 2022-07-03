@@ -13,25 +13,25 @@
     .img-wrapper {
       height: 19rem;
       @media (max-width: 1250px) {
-        height: 18rem;
-      }
-      @media (max-width: 1150px) {
         height: 17rem;
       }
-      @media (max-width: 1050px) {
+      @media (max-width: 1150px) {
         height: 16rem;
+      }
+      @media (max-width: 1050px) {
+        height: 15rem;
       }
       .flower-image {
         height: 19rem;
         width: 100%;
         @media (max-width: 1250px) {
-          height: 18rem;
-        }
-        @media (max-width: 1150px) {
           height: 17rem;
         }
-        @media (max-width: 1050px) {
+        @media (max-width: 1150px) {
           height: 16rem;
+        }
+        @media (max-width: 1050px) {
+          height: 15rem;
         }
       }
     }

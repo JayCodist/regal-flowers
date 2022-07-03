@@ -91,12 +91,26 @@ export const otherSampleProducts = {
 export const flowers: Product[] = [
   {
     ...otherSampleProducts,
+    images: [
+      {
+        src: "/images/sample-flowers/sample-1.png",
+        id: 12,
+        alt: "5 peas in a pod"
+      }
+    ],
     name: "5 Peas in a pod",
     price: 6000,
     details: "5 Peas in a pod"
   },
   {
     ...otherSampleProducts,
+    images: [
+      {
+        src: "/images/sample-flowers/sample-2.png",
+        id: 12,
+        alt: "5 peas in a pod"
+      }
+    ],
     name: "5 Peas in a pod",
     price: 36000,
     details: "5 Peas in a pod"
@@ -104,11 +118,25 @@ export const flowers: Product[] = [
   {
     ...otherSampleProducts,
     name: "5 Peas in a pod",
+    images: [
+      {
+        src: "/images/sample-flowers/sample-3.png",
+        id: 12,
+        alt: "5 peas in a pod"
+      }
+    ],
     price: 36000,
     details: "5 Peas in a pod"
   },
   {
     ...otherSampleProducts,
+    images: [
+      {
+        src: "/images/sample-flowers/sample-4.png",
+        id: 12,
+        alt: "5 peas in a pod"
+      }
+    ],
     name: "5 Peas in a pod",
     price: 36000,
     details: "5 Peas in a pod"

@@ -8,13 +8,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    h1 {
+    .title {
       color: #68203b;
+      font-size: 3rem;
+      text-align: center;
     }
   }
 
   .container {
-    padding: 0 3rem;
+    padding: 0 6rem;
   }
 
   .content {
@@ -25,7 +27,7 @@
     }
 
     .links {
-      width: 40%;
+      width: 30%;
       border: 0.1rem solid #f3f4f6;
       height: fit-content;
       padding: 1rem 0;
@@ -33,7 +35,7 @@
     }
 
     .linked-content {
-      width: 60%;
+      width: 66%;
       & > div {
         margin-bottom: 2.5rem;
       }

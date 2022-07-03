@@ -8,7 +8,9 @@ const Index: FunctionComponent = () => {
   return (
     <section className={styles.wrapper}>
       <div className={styles.hero}>
-        <h1>Freqently Asked Questions</h1>
+        <h1 className={styles.title}>
+          Freqently Asked <br /> Questions
+        </h1>
       </div>
       <div className={styles.container}>
         <div className={`${styles.content} flex between spaced-xl`}>
