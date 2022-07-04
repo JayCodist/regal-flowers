@@ -127,12 +127,7 @@ export const regalFeatures: Service[] = [
 // TODO: use dynamic urls
 export const regalOccasions: Occasion[] = [
   {
-    title: "Love, Birthdays & Anniversary",
-    url: "/filters/occasions",
-    image: "/images/occasions-love-bday.png"
-  },
-  {
-    title: "Just to say Hi, Sorry, Thank You",
+    title: "Just to say Hi",
     url: "/filters/occasions",
     image: "/images/occasions-sorry-thanks.png"
   },
@@ -140,6 +135,11 @@ export const regalOccasions: Occasion[] = [
     title: "Bridal Flowers",
     url: "/filters/occasions",
     image: "/images/occasions-bridal.png"
+  },
+  {
+    title: "Love, Birthdays & Anniversary",
+    url: "/filters/occasions",
+    image: "/images/occasions-love-bday.png"
   }
 ];
 

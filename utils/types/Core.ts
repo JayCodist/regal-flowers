@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 export interface AppLink {
   url: string;
   title: string;
@@ -12,6 +14,7 @@ export interface AppCurrency {
 export interface Settings {
   currency: AppCurrency;
   stage: Stage;
+  deliveryDate: Dayjs | null;
 }
 
 export interface Stage {

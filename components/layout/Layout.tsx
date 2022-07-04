@@ -139,7 +139,7 @@ const Header: FunctionComponent = () => {
 
 export const CheckoutHeader: FunctionComponent = () => {
   // const [stage, setStage] = useState<number>(3);
-  const { stage, setStage } = useContext(SettingsContext);
+  const { stage } = useContext(SettingsContext);
 
   const stages: Stage[] = [
     {

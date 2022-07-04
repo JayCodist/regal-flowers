@@ -8,7 +8,9 @@
   font-size: inherit;
   transition: 0.3s ease-out;
   outline: none;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &.padded {
     padding: 0.8rem;
     min-width: 9rem;

@@ -421,11 +421,11 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       value: 2
     },
     {
-      label: "Price Descending",
+      label: "Lowest Prices First",
       value: 3
     },
     {
-      label: "Price Ascending",
+      label: "Highest Prices First",
       value: 4
     }
   ];
@@ -605,34 +605,36 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             />
           ))}
         </div>
-        <p className={`text-center ${styles.title}`}>
-          Flower Delivery for all Occasions
-        </p>
-      </div>
-      <div className="flex between spaced-xl horizontal-padding xl">
-        <div className="half-width">
-          <p className="title small bold margin-bottom">
-            {aboutUsContent.howItBegan.title}
-          </p>
-          <p>{aboutUsContent.howItBegan.content}</p>
-          <p className="title small bold vertical-margin">
-            {aboutUsContent.openingHour.title}
-          </p>
-          <p>{aboutUsContent.openingHour.content}</p>
-        </div>
-        <div className="half-width">
-          <p className="title small bold margin-bottom">
-            {aboutUsContent.reputation.title}
-          </p>
-          <p>{aboutUsContent.reputation.content}</p>
-          <p className="title small bold vertical-margin">
-            {aboutUsContent.deliveryTime.title}
-          </p>
-          <p>{aboutUsContent.deliveryTime.content}</p>
-          <p className="title small bold vertical-margin">
-            {aboutUsContent.budget.title}
-          </p>
-          <p>{aboutUsContent.budget.content}</p>
+        <div className={styles.stories}>
+          <h1 className={`text-center ${styles.title}`}>
+            Flower Delivery for all Occasions
+          </h1>
+          <div className="flex between spaced-xl">
+            <div className="half-width">
+              <p className="title small bold margin-bottom">
+                {aboutUsContent.howItBegan.title}
+              </p>
+              <p>{aboutUsContent.howItBegan.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.openingHour.title}
+              </p>
+              <p>{aboutUsContent.openingHour.content}</p>
+            </div>
+            <div className="half-width">
+              <p className="title small bold margin-bottom">
+                {aboutUsContent.reputation.title}
+              </p>
+              <p>{aboutUsContent.reputation.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.deliveryTime.title}
+              </p>
+              <p>{aboutUsContent.deliveryTime.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.budget.title}
+              </p>
+              <p>{aboutUsContent.budget.content}</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

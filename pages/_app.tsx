@@ -8,10 +8,12 @@ import SettingsContext, {
 } from "../utils/context/SettingsContext";
 import { AppCurrency, Settings, Stage } from "../utils/types/Core";
 import { defaultCurrency } from "../utils/constants";
+import { Dayjs } from "dayjs";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
-  stage: { name: "delivery", stage: 1 }
+  stage: { name: "delivery", stage: 1 },
+  deliveryDate: null
 };
 
 const App: FunctionComponent<AppProps> = props => {
@@ -23,7 +25,10 @@ const App: FunctionComponent<AppProps> = props => {
     setCurrency: (currency: AppCurrency) =>
       setSettings({ ...settings, currency }),
     stage: settings.stage,
-    setStage: (stage: Stage) => setSettings({ ...settings, stage })
+    setStage: (stage: Stage) => setSettings({ ...settings, stage }),
+    deliveryDate: settings.deliveryDate,
+    setDeliveryDate: (deliveryDate: Dayjs | null) =>
+      setSettings({ ...settings, deliveryDate })
   };
 
   const headTags = (
