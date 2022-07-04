@@ -51,10 +51,26 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     ],
     featured: true,
     images: [
-      { alt: "flower1", src: "/images/product-image/flower1.png", id: 1 },
-      { alt: "flower2", src: "/images/addons/Rectangle131.png", id: 2 },
-      { alt: "flower3", src: "/images/flower.png", id: 3 },
-      { alt: "flower4", src: "/images/product-image/flower1.png", id: 4 }
+      {
+        alt: "flower1",
+        src: "/images/sample-flowers/single-product.png",
+        id: 1
+      },
+      {
+        alt: "flower2",
+        src: "/images/sample-flowers/single-product.png",
+        id: 2
+      },
+      {
+        alt: "flower3",
+        src: "/images/sample-flowers/single-product.png",
+        id: 3
+      },
+      {
+        alt: "flower4",
+        src: "/images/sample-flowers/single-product.png",
+        id: 4
+      }
     ],
     price: 70000,
     salePrice: 80000,
@@ -133,7 +149,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         <span className="generic-icon small margin-left">{product.title}</span>
       </div>
       <div className={`${styles["product-content"]} flex between`}>
-        <div>
+        <div className={styles["slider-wrapper"]}>
           <div className={styles.slider}>
             <button
               onClick={handlePreviousCLick}
@@ -188,7 +204,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
           <div className={`${styles["tab"]} flex spaced`}>
             <button
               onClick={() => setDescriptionTab("product description")}
-              className={`${
+              className={`${styles["tab-title"]} ${
                 descriptionTab === "product description" ? styles.active : null
               }`}
             >
@@ -196,7 +212,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             </button>
             <button
               onClick={() => setDescriptionTab("reviews")}
-              className={`${
+              className={`${styles["tab-title"]} ${
                 descriptionTab === "reviews" ? styles.active : null
               }`}
             >
@@ -259,25 +275,29 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
           <p>{product.description}</p>
           {product.type === "variable" && (
             <div>
-              <p className="align-icon margin-top">
+              <div className="align-icon margin-top">
                 <h3 className="bold margin-right">Select Budget</h3>
                 <img
                   src="/icons/info.svg"
                   alt="information"
                   className="generic-icon"
                 />{" "}
-              </p>
+              </div>
               <br />
               <div className={`${styles["tab"]} flex spaced`}>
                 <button
                   onClick={() => setsizeType("regular")}
-                  className={`${sizeType === "regular" ? styles.active : null}`}
+                  className={`${styles["tab-title"]} ${
+                    sizeType === "regular" ? styles.active : null
+                  }`}
                 >
                   Regular Sizes
                 </button>
                 <button
                   onClick={() => setsizeType("vip")}
-                  className={`${sizeType === "vip" ? styles.active : null}`}
+                  className={`${styles["tab-title"]} ${
+                    sizeType === "vip" ? styles.active : null
+                  }`}
                 >
                   VIP Sizes
                 </button>
@@ -304,14 +324,14 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               <br />
 
               {product.designOptions?.length && (
-                <p className="align-icon vertical-margin">
+                <div className="align-icon vertical-margin">
                   <h3 className="bold margin-right">Select Design</h3>
                   <img
                     src="/icons/info.svg"
                     alt="information"
                     className="generic-icon"
                   />{" "}
-                </p>
+                </div>
               )}
               <div className="flex spaced">
                 {product.designOptions?.map((designOption, index) => (
