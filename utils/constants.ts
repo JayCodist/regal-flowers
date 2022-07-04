@@ -1,3 +1,4 @@
+import { Option } from "../components/select/Select";
 import { otherSampleProducts } from "../pages/filters/[filter]";
 import AddonGroup from "./types/AddonGroup";
 import { AppCurrency } from "./types/Core";
@@ -306,5 +307,12 @@ export const blogPosts: BlogPost[] = [
     date: "18 Mar, 2022",
     readDuration: "2 mins read",
     image: "/images/sample-flowers/blog-1.png"
+  }
+];
+
+export const deliveryStates: Option[] = [
+  {
+    label: "Lagos",
+    value: 1
   }
 ];

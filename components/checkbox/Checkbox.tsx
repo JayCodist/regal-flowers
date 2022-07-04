@@ -7,6 +7,8 @@ interface CheckboxProps {
   text?: string | JSX.Element | number;
   name?: string;
   className?: string;
+  responsive?: boolean;
+  type?: "primary" | "accent-transparent";
 }
 const Checkbox = (props: CheckboxProps) => {
   const { onChange = () => {}, text, name, checked, className } = props;

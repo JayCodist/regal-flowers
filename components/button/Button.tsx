@@ -53,7 +53,8 @@ export default function Button(props: ButtonProps) {
     tooltip,
     urlOnNewTab,
     name,
-    padded
+    padded,
+    responsive
   } = props;
 
   if (url) {
@@ -100,6 +101,7 @@ export default function Button(props: ButtonProps) {
         iconOnly && styles["icon-only"],
         disabled && styles.disabled,
         padded && styles.padded,
+        responsive && styles.responsive,
         className
       ].join(" ")}
       onClick={onClick}

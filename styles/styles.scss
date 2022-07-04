@@ -593,3 +593,25 @@ button {
     }
   }
 }
+
+.sub-heading {
+  font-size: 1.4rem;
+  &.bold {
+    font-weight: 600;
+  }
+}
+
+.normal-text {
+  font-size: 1.1rem;
+}
+
+.small-text {
+  font-size: 1rem;
+  .bold {
+    font-weight: 600;
+  }
+}
+
+.underline {
+  text-decoration: underline;
+}
