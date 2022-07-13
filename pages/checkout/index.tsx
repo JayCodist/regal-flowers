@@ -94,8 +94,9 @@ const Checkout: FunctionComponent = () => {
   ];
 
   const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
-    [value: string]: any;
-  }>({ order: false, payment: false });
+    order?: boolean;
+    payment?: boolean;
+  }>({ order: true, payment: false });
 
   const [order] = useState(orderSample);
 
