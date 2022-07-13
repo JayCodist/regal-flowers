@@ -39,6 +39,15 @@
       height: 60%;
       transform: rotate(-45deg) translate(0.05rem, -0.05rem);
     }
+
+    &.transparent {
+      background-color: white;
+      border-color: #9b0000;
+
+      .check-icon {
+        border-color: #9b0000;
+      }
+    }
   }
 
   &:hover .check-wrapper {

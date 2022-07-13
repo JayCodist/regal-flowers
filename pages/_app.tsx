@@ -11,7 +11,7 @@ import { defaultCurrency } from "../utils/constants";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
-  stage: { name: "delivery", stage: 1 }
+  currentStage: 1
 };
 
 const App: FunctionComponent<AppProps> = props => {
@@ -22,8 +22,9 @@ const App: FunctionComponent<AppProps> = props => {
     currency: settings.currency,
     setCurrency: (currency: AppCurrency) =>
       setSettings({ ...settings, currency }),
-    stage: settings.stage,
-    setStage: (stage: Stage) => setSettings({ ...settings, stage })
+    currentStage: settings.currentStage,
+    setCurrentStage: (currentStage: Stage) =>
+      setSettings({ ...settings, currentStage })
   };
 
   const headTags = (

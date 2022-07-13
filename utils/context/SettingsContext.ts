@@ -3,15 +3,15 @@ import { AppCurrency, Settings, Stage } from "../types/Core";
 
 export interface SettingsControls extends Settings {
   setCurrency: (currency: AppCurrency) => void;
-  stage: Stage;
-  setStage: (stage: Stage) => void;
+  // stage: Stage;
+  setCurrentStage: (stage: Stage) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
   currency: { name: "NGN", conversionRate: 1 },
   setCurrency: () => {},
-  stage: { name: "delivery", stage: 1 },
-  setStage: () => {}
+  currentStage: 1,
+  setCurrentStage: () => {}
 });
 
 export default SettingsContext;

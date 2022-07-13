@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface AppLink {
   url: string;
   title: string;
@@ -7,14 +9,23 @@ export interface AppLink {
 export interface AppCurrency {
   name: string;
   conversionRate: number;
+  sign?: string;
 }
 
 export interface Settings {
   currency: AppCurrency;
-  stage: Stage;
+  currentStage: Stage;
 }
 
-export interface Stage {
-  name: "delivery" | "payment" | "done";
-  stage: number;
+export enum Stage {
+  "delivery" = 1,
+  "payment",
+  "done"
+}
+
+export interface PaymentMethod {
+  name: string;
+  info: string;
+  icon: ReactNode;
+  other?: { icon: ReactNode }[];
 }
