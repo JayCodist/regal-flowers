@@ -476,10 +476,10 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             ))}
           </div>
           <div className="flex spaced vertical-margin block">
-            <Button className={styles["buy-now"]} type="accent">
+            <Button url="/checkout" className={styles["buy-now"]} type="accent">
               <strong>Buy Now</strong>
             </Button>
-            <Button className={styles["add-to-cart"]}>
+            <Button url="/checkout" className={styles["add-to-cart"]}>
               <strong>Add to Cart (₦36,000)</strong>
             </Button>
           </div>
