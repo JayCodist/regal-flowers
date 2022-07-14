@@ -4,33 +4,38 @@
   .product-content {
     margin-bottom: 3rem;
     & > div {
-      flex-basis: 45%;
+      flex-basis: 51%;
+      &.slider-wrapper {
+        flex-basis: 45%;
+      }
     }
   }
+  .slider-wrapper {
+    width: 35rem;
+    .slider {
+      overflow: hidden;
+      width: 100%;
+      display: flex;
+      position: relative;
 
-  .slider {
-    overflow: hidden;
-    width: 100%;
-    display: flex;
-    position: relative;
+      .slide {
+        width: 0;
+        height: 35rem;
+        opacity: 0;
+        margin-bottom: 2rem;
+        transition: 0.3s ease-out;
 
-    .slide {
-      width: 0;
-      height: 28rem;
-      opacity: 0;
-      margin-bottom: 2rem;
-      transition: 0.3s ease-out;
+        &.active-slide {
+          opacity: 1;
+          width: 28rem;
+          height: 28rem;
+        }
 
-      &.active-slide {
-        opacity: 1;
-        width: 100%;
-        height: 28rem;
-      }
-
-      img {
-        width: 100%;
-        height: 28rem;
-        object-fit: cover;
+        img {
+          width: 35rem;
+          height: 35rem;
+          object-fit: cover;
+        }
       }
     }
   }
@@ -53,17 +58,19 @@
 
   .slide-image {
     cursor: pointer;
-    opacity: 0.8;
+    opacity: 0.5;
     transition: 0.3s ease-out;
-    width: 7rem;
-    height: 8rem;
+    width: 9vw;
+    height: 9vw;
     object-fit: cover;
+    // border: 0.1rem solid transparent;
     &:hover {
       opacity: 1;
     }
 
     &.active-image {
       opacity: 1;
+      // border: 0.1rem solid #9b0000;
     }
   }
 
@@ -74,9 +81,13 @@
     transition: 0.3s ease-out;
     position: relative;
 
-    .active {
-      border-bottom: 0.15rem solid #9b0000;
-      font-weight: 700;
+    .tab-title {
+      padding-bottom: 0.4rem;
+      transition: 0.3s ease-out;
+      &.active {
+        border-bottom: 0.15rem solid #9b0000;
+        font-weight: 700;
+      }
     }
 
     &::before {

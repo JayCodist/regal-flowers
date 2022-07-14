@@ -690,7 +690,9 @@ const Checkout: FunctionComponent = () => {
                   every correspondence with us.
                 </p>
               </div>
-              <Button className="half-width">Continue Shopping</Button>
+              <Button className={styles["shopping-btn"]}>
+                Continue Shopping
+              </Button>
               <Link href="/#">
                 <a className={styles.track}>Track Order</a>
               </Link>

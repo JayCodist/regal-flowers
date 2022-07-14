@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Dayjs } from "dayjs";
 
 export interface AppLink {
   url: string;
@@ -15,6 +16,7 @@ export interface AppCurrency {
 export interface Settings {
   currency: AppCurrency;
   currentStage: Stage;
+  deliveryDate: Dayjs | null;
 }
 
 export enum Stage {

@@ -10,12 +10,24 @@ interface DatePickerProps {
   format?: string;
   responsive?: boolean;
   disabled?: boolean;
+  className?: string;
+  iconAtLeft?: boolean;
+  placeholder?: string;
 }
 
 const DatePicker = (props: DatePickerProps) => {
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const { onChange, value, format, responsive, disabled } = props;
+  const {
+    onChange,
+    value,
+    format,
+    responsive,
+    disabled,
+    className,
+    iconAtLeft,
+    placeholder
+  } = props;
 
   const dropDownRef = useRef<HTMLDivElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -71,18 +83,40 @@ const DatePicker = (props: DatePickerProps) => {
       className={[
         styles["select-wrapper"],
         showDropdown ? styles.active : "",
-        responsive && styles.responsive
+        responsive && styles.responsive,
+        className
       ].join(" ")}
       ref={dropDownRef}
       onClick={handleSelectClick}
     >
-      <div className={styles["main-content"]} ref={selectRef}>
+      <div
+        className={[
+          styles["main-content"],
+          iconAtLeft && styles["icon-at-left"]
+        ].join(" ")}
+        ref={selectRef}
+      >
+        {iconAtLeft && (
+          <img
+            alt="calendar"
+            className={styles.icon}
+            src="/icons/calender.svg"
+          />
+        )}
         {shownValue ? (
           <span className={styles["main-text"]}>{shownValue}</span>
         ) : (
-          <span className={styles.placeholder}>Select date</span>
+          <span className={styles.placeholder}>
+            {placeholder || "Select date"}
+          </span>
         )}
-        <img alt="calendar" className={styles.icon} src="/icons/calender.svg" />
+        {!iconAtLeft && (
+          <img
+            alt="calendar"
+            className={styles.icon}
+            src="/icons/calender.svg"
+          />
+        )}
       </div>
       <div
         className={[

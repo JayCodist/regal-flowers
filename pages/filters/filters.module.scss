@@ -50,7 +50,7 @@
   }
 
   .title {
-    font-size: 2.7rem;
+    font-size: 2.3rem;
     font-weight: 700;
   }
 
@@ -99,9 +99,15 @@
     }
   }
   .gifts {
-    padding: 0 3rem;
+    padding: 0 6rem;
     background-image: url("/icons/flower-bg.svg");
 
     padding-bottom: 3rem;
+  }
+  .stories {
+    margin: 2rem 0 4rem;
+    .title {
+      margin: 4rem 0 2rem;
+    }
   }
 }

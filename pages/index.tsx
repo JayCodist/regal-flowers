@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useContext, useState } from "react";
 import Button from "../components/button/Button";
 import FlowerCard from "../components/flower-card/FlowerCard";
 import styles from "./index.module.scss";
@@ -19,6 +19,10 @@ import {
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
 import BlogCard from "../components/blog-card/BlogCard";
+import SettingsContext from "../utils/context/SettingsContext";
+import Select from "../components/select/Select";
+import { Occasion } from "../utils/types/Regal";
+import DatePicker from "../components/date-picker/DatePicker";
 
 const LandingPage: FunctionComponent = () => {
   const [featuredFlowers] = useState(sampleFlowers);
@@ -32,6 +36,7 @@ const LandingPage: FunctionComponent = () => {
             Same Day Flower Delivery <br />
             In Lagos & Abuja, Nigeria.
           </h1>
+          <FlowerDeliveryInput />
         </div>
       </div>
       <section className="featured-section-wrapper">
@@ -437,6 +442,52 @@ const LandingPage: FunctionComponent = () => {
         </div>
       </section>
     </section>
+  );
+};
+
+const occasionOptions = regalOccasions.map(occasion => ({
+  ...occasion,
+  label: occasion.title,
+  value: occasion.title
+}));
+
+const FlowerDeliveryInput: FunctionComponent = () => {
+  const [occasion, setOccasion] = useState<Occasion | null>(null);
+  const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
+
+  return (
+    <div className={styles["flower-input-wrapper"]}>
+      <Select
+        options={occasionOptions}
+        value={occasion?.title || ""}
+        onSelect={value =>
+          setOccasion(
+            occasionOptions.find(
+              _occasion => _occasion.value === value
+            ) as Occasion | null
+          )
+        }
+        className={styles["occasion-select"]}
+        placeholder="Select Occasion"
+        startIcon="/icons/bullet-points.svg"
+        hideCaret
+      />
+      <DatePicker
+        value={deliveryDate}
+        onChange={setDeliveryDate}
+        format="D MMM YYYY"
+        className={styles["occasion-date"]}
+        placeholder="Delivery Date"
+        iconAtLeft
+      />
+      <Button
+        padded
+        url={`/filters/occasions?selectedOccasion=${occasion?.title || ""}`}
+        className={styles["occasion-submit"]}
+      >
+        Send Flowers
+      </Button>
+    </div>
   );
 };
 

@@ -7,7 +7,7 @@ import {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { AppCurrency, AppLink, Stage } from "../../utils/types/Core";
+import { AppCurrency, AppLink } from "../../utils/types/Core";
 import { defaultCurrency } from "../../utils/constants";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";

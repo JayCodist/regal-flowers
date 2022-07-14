@@ -1,3 +1,4 @@
+import React from "react";
 import { Option } from "../components/select/Select";
 import { otherSampleProducts } from "../pages/filters/[filter]";
 import AddonGroup from "./types/AddonGroup";
