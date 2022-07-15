@@ -7,7 +7,7 @@ import {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { AppCurrency, AppLink, Stage } from "../../utils/types/Core";
+import { AppCurrency, AppLink } from "../../utils/types/Core";
 import { defaultCurrency } from "../../utils/constants";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";
@@ -138,10 +138,10 @@ const Header: FunctionComponent = () => {
 };
 
 export const CheckoutHeader: FunctionComponent = () => {
-  // const [stage, setStage] = useState<number>(3);
-  const { stage } = useContext(SettingsContext);
+  // const [stage, setCurrentStage] = useState<number>(3);
+  const { currentStage } = useContext(SettingsContext);
 
-  const stages: Stage[] = [
+  const stages = [
     {
       name: "delivery",
       stage: 1
@@ -155,6 +155,8 @@ export const CheckoutHeader: FunctionComponent = () => {
       stage: 3
     }
   ];
+
+  console.log(currentStage);
   return (
     <header className={styles.header}>
       <Link href="/">
@@ -174,22 +176,22 @@ export const CheckoutHeader: FunctionComponent = () => {
               key={index}
               className={[
                 styles.progress,
-                stage.stage === _stage.stage && styles.active
+                currentStage === _stage.stage && styles.active
               ].join(" ")}
             >
               {_stage.stage > 1 && (
                 <hr
                   className={[
                     styles["progress-bar"],
-                    stage.stage >= _stage.stage && styles.active
+                    currentStage >= _stage.stage && styles.active
                   ].join(" ")}
                 />
               )}
               <span
                 className={[
                   styles.circle,
-                  stage.stage > _stage.stage && styles.completed,
-                  stage.stage === _stage.stage && styles.active
+                  currentStage > _stage.stage && styles.completed,
+                  currentStage === _stage.stage && styles.active
                 ].join(" ")}
               ></span>
             </div>
@@ -201,8 +203,8 @@ export const CheckoutHeader: FunctionComponent = () => {
               key={index}
               className={[
                 styles["stage-name"],
-                stage.stage === _stage.stage && styles.active,
-                stage.stage > _stage.stage && styles.completed
+                currentStage === _stage.stage && styles.active,
+                currentStage > _stage.stage && styles.completed
               ].join(" ")}
             >
               {_stage.name}

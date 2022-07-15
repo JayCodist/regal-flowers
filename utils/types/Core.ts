@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Dayjs } from "dayjs";
 
 export interface AppLink {
@@ -9,15 +10,24 @@ export interface AppLink {
 export interface AppCurrency {
   name: string;
   conversionRate: number;
+  sign?: string;
 }
 
 export interface Settings {
   currency: AppCurrency;
-  stage: Stage;
+  currentStage: Stage;
   deliveryDate: Dayjs | null;
 }
 
-export interface Stage {
-  name: "delivery" | "payment" | "done";
-  stage: number;
+export enum Stage {
+  "delivery" = 1,
+  "payment",
+  "done"
+}
+
+export interface PaymentMethod {
+  name: string;
+  info: string;
+  icon: ReactNode;
+  other?: { icon: ReactNode }[];
 }

@@ -12,7 +12,7 @@ import { Dayjs } from "dayjs";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
-  stage: { name: "delivery", stage: 1 },
+  currentStage: 1,
   deliveryDate: null
 };
 
@@ -24,8 +24,9 @@ const App: FunctionComponent<AppProps> = props => {
     currency: settings.currency,
     setCurrency: (currency: AppCurrency) =>
       setSettings({ ...settings, currency }),
-    stage: settings.stage,
-    setStage: (stage: Stage) => setSettings({ ...settings, stage }),
+    currentStage: settings.currentStage,
+    setCurrentStage: (currentStage: Stage) =>
+      setSettings({ ...settings, currentStage }),
     deliveryDate: settings.deliveryDate,
     setDeliveryDate: (deliveryDate: Dayjs | null) =>
       setSettings({ ...settings, deliveryDate })

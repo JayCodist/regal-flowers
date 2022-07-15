@@ -1,4 +1,4 @@
-interface Addon {
+export interface Addon {
   name: string;
   price: number;
   image: string;

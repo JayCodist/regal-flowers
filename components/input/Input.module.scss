@@ -10,7 +10,7 @@
     width: 100%;
   }
   &.with-icon {
-    padding: 0 1rem;
+    padding: 0 0.5rem;
   }
   &.error {
     border-color: #f45366a6;
@@ -63,6 +63,12 @@
   .icon {
     margin-right: 0.4rem;
     height: 1.2rem;
+
+    &.right {
+      position: absolute;
+      right: 0.4rem;
+      margin: 0;
+    }
   }
   .symbol {
     position: absolute;

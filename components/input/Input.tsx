@@ -21,6 +21,7 @@ interface InputProps {
   startSymbol?: string;
   endSymbol?: ReactNode;
   icon?: string;
+  position?: "right";
   name?: string;
   allowClear?: boolean;
   number?: boolean;
@@ -60,7 +61,8 @@ const Input = (props: InputProps) => {
     autoComplete,
     showPasswordIcon,
     onBlurValidation,
-    size
+    size,
+    position
   } = props;
 
   const internalRef = useRef(null);
@@ -156,7 +158,13 @@ const Input = (props: InputProps) => {
         className
       ].join(" ")}
     >
-      {icon && <img alt="input icon" src={icon} className={styles.icon} />}
+      {icon && (
+        <img
+          alt="input icon"
+          src={icon}
+          className={[styles.icon, position && styles[position]].join(" ")}
+        />
+      )}
       {startSymbol && (
         <span className={[styles.symbol, styles.start].join(" ")}>
           <span>{startSymbol}</span>

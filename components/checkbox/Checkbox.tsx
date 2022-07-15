@@ -8,10 +8,10 @@ interface CheckboxProps {
   name?: string;
   className?: string;
   responsive?: boolean;
-  type?: "primary" | "accent-transparent";
+  type?: "primary" | "transparent";
 }
 const Checkbox = (props: CheckboxProps) => {
-  const { onChange = () => {}, text, name, checked, className } = props;
+  const { onChange = () => {}, text, name, checked, className, type } = props;
 
   const _onChange = (e: ChangeEvent<HTMLInputElement>) =>
     onChange(e.target.checked);
@@ -25,7 +25,11 @@ const Checkbox = (props: CheckboxProps) => {
         onChange={_onChange}
         type="checkbox"
       />
-      <span className={styles["check-wrapper"]}>
+      <span
+        className={[styles["check-wrapper"], styles[type || "primary"]].join(
+          " "
+        )}
+      >
         <span className={styles["check-icon"]} />
       </span>
       {text && <span className={styles.text}>{text}</span>}

@@ -520,7 +520,7 @@ button {
     background-clip: padding-box;
     border-radius: 0.7rem;
     -webkit-border-radius: 0.7rem;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: #9b0000;
     box-shadow: inset -0.1rem -0.1rem 0 rgba(0, 0, 0, 0.05),
       inset 0.1rem 0.1rem 0 rgba(0, 0, 0, 0.05);
     -webkit-box-shadow: inset -0.1rem -0.1rem 0 rgba(0, 0, 0, 0.05),
@@ -605,6 +605,9 @@ button {
 
 .normal-text {
   font-size: 1.1rem;
+  &.bold {
+    font-weight: 600;
+  }
 }
 
 .small-text {
@@ -612,6 +615,10 @@ button {
   .bold {
     font-weight: 600;
   }
+}
+
+.extra-small {
+  font-size: 0.8rem;
 }
 
 .underline {
