@@ -181,12 +181,8 @@ const Checkout: FunctionComponent = () => {
                         ].join(" ")}
                         onClick={() => setDeliveryMethod("delivery")}
                       >
-                        <p
-                          className={`small-text bold ${styles["method-title"]}`}
-                        >
-                          Delivery
-                        </p>
-                        <p className="small-text">
+                        <p className={`${styles["method-title"]}`}>Delivery</p>
+                        <p className="">
                           Get it delivered to the recipient's location
                         </p>
                       </div>
@@ -197,12 +193,8 @@ const Checkout: FunctionComponent = () => {
                         ].join(" ")}
                         onClick={() => setDeliveryMethod("pick-up")}
                       >
-                        <p
-                          className={`small-text bold ${styles["method-title"]}`}
-                        >
-                          Pick Up
-                        </p>
-                        <p className="small-text">Pick up from our store</p>
+                        <p className={`${styles["method-title"]}`}>Pick Up</p>
+                        <p className="">Pick up from our store</p>
                       </div>
                     </div>
                     <div className="input-group half-width">
@@ -441,131 +433,135 @@ const Checkout: FunctionComponent = () => {
               </>
             )}
             {currentStage === 2 && (
-              <div className={styles.border}>
-                <p className={styles["payment-info"]}>Payment Method</p>
-                <div className={styles.padding}>
-                  <div className="flex center-align spaced-lg">
-                    <p className="normal-text bold vertical-margin spaced">
-                      Select your preferred currency
+              <>
+                <div className={styles.border}>
+                  <p className={styles["payment-info"]}>Payment Method</p>
+                  <div className={styles.padding}>
+                    <div className="flex center-align spaced-lg">
+                      <p className="normal-text bold vertical-margin spaced">
+                        Select your preferred currency
+                      </p>
+                      <div className="flex spaced-lg">
+                        {currencyOptions.map(_currency => (
+                          <button
+                            key={_currency.name}
+                            onClick={() => setCurrency(_currency)}
+                            className={[
+                              styles.currency,
+                              currency.name === _currency.name && styles.active
+                            ].join(" ")}
+                            type="button"
+                          >
+                            {_currency.sign}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <p className={`${styles.info} flex center-align spaced`}>
+                      <InfoIcon fill="#1C6DD0" />{" "}
+                      <span>
+                        Kindly select $ or £ for international payment options
+                      </span>{" "}
                     </p>
-                    <div className="flex spaced-lg">
-                      {currencyOptions.map(_currency => (
-                        <button
-                          key={_currency.name}
-                          onClick={() => setCurrency(_currency)}
-                          className={[
-                            styles.currency,
-                            currency.name === _currency.name && styles.active
-                          ].join(" ")}
-                          type="button"
-                        >
-                          {_currency.sign}
-                        </button>
+                    <div className={styles["payment-methods"]}>
+                      {paymentMethod.map((method, index) => (
+                        <div key={index}>
+                          <div
+                            className={[
+                              styles.method,
+                              selectedMethod === index && styles.active
+                            ].join(" ")}
+                            onClick={() => setSelectedMethod(index)}
+                          >
+                            <div className="flex spaced-lg center-align">
+                              {method.icon}
+                              <div>
+                                <p className="normal-text bold">
+                                  {method.name}
+                                </p>
+                                <p>{method.info}</p>
+                              </div>
+                            </div>
+                            <div className="flex spaced center-align">
+                              {method.other?.map((other, index) => (
+                                <div key={index}>{other.icon}</div>
+                              ))}
+                            </div>
+                          </div>
+                          <div
+                            className={[
+                              styles["method-input"],
+                              selectedMethod === index && styles.active
+                            ].join(" ")}
+                          >
+                            <div className="flex spaced-xl">
+                              <div className="input-group flex-one">
+                                <span className="question">Name on card</span>
+                                <Input
+                                  placeholder=""
+                                  value={formData.cardName}
+                                  onChange={value =>
+                                    handleChange("cardName", value)
+                                  }
+                                  responsive
+                                />
+                              </div>
+
+                              <div className="input-group responsive">
+                                <span className="question">Expiry</span>
+                                <Input
+                                  placeholder="06 / 2024"
+                                  value={formData.cardExpiry}
+                                  onChange={value =>
+                                    handleChange("cardExpiry", value)
+                                  }
+                                  responsive
+                                />
+                              </div>
+                            </div>
+                            <div className="flex spaced-xl">
+                              <div className="input-group flex-one">
+                                <span className="question">Card number</span>
+                                <Input
+                                  placeholder=""
+                                  value={formData.cardNumber}
+                                  onChange={value =>
+                                    handleChange("cardNumber", value)
+                                  }
+                                  responsive
+                                />
+                              </div>
+
+                              <div className="input-group responsive">
+                                <span className="question">CVV</span>
+                                <Input
+                                  value={formData.cardCVV}
+                                  onChange={value =>
+                                    handleChange("cardCVV", value)
+                                  }
+                                  responsive
+                                  position="right"
+                                  icon="/icons/help.svg"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       ))}
                     </div>
+                    <p className={styles.security}>
+                      {" "}
+                      <div className={styles["lock-icon"]}>
+                        <img
+                          src="icons/lock.svg"
+                          className={`generic-icon small `}
+                          alt="lock"
+                        />
+                      </div>{" "}
+                      We protect your payment information using encryption to
+                      provide bank-level security.
+                    </p>
                   </div>
-                  <p className={`${styles.info} flex center-align spaced`}>
-                    <InfoIcon fill="#1C6DD0" />{" "}
-                    <span>
-                      Kindly select $ or £ for international payment options
-                    </span>{" "}
-                  </p>
-                  <div className={styles["payment-methods"]}>
-                    {paymentMethod.map((method, index) => (
-                      <div key={index}>
-                        <div
-                          className={[
-                            styles.method,
-                            selectedMethod === index && styles.active
-                          ].join(" ")}
-                          onClick={() => setSelectedMethod(index)}
-                        >
-                          <div className="flex spaced-lg center-align">
-                            {method.icon}
-                            <div>
-                              <p className="normal-text bold">{method.name}</p>
-                              <p className="small-text">{method.info}</p>
-                            </div>
-                          </div>
-                          <div className="flex spaced center-align">
-                            {method.other?.map((other, index) => (
-                              <div key={index}>{other.icon}</div>
-                            ))}
-                          </div>
-                        </div>
-                        <div
-                          className={[
-                            styles["method-input"],
-                            selectedMethod === index && styles.active
-                          ].join(" ")}
-                        >
-                          <div className="flex spaced-xl">
-                            <div className="input-group flex-one">
-                              <span className="question">Name on card</span>
-                              <Input
-                                placeholder=""
-                                value={formData.cardName}
-                                onChange={value =>
-                                  handleChange("cardName", value)
-                                }
-                                responsive
-                              />
-                            </div>
-
-                            <div className="input-group responsive">
-                              <span className="question">Expiry</span>
-                              <Input
-                                placeholder="06 / 2024"
-                                value={formData.cardExpiry}
-                                onChange={value =>
-                                  handleChange("cardExpiry", value)
-                                }
-                                responsive
-                              />
-                            </div>
-                          </div>
-                          <div className="flex spaced-xl">
-                            <div className="input-group flex-one">
-                              <span className="question">Card number</span>
-                              <Input
-                                placeholder=""
-                                value={formData.cardNumber}
-                                onChange={value =>
-                                  handleChange("cardNumber", value)
-                                }
-                                responsive
-                              />
-                            </div>
-
-                            <div className="input-group responsive">
-                              <span className="question">CVV</span>
-                              <Input
-                                value={formData.cardCVV}
-                                onChange={value =>
-                                  handleChange("cardCVV", value)
-                                }
-                                responsive
-                                position="right"
-                                icon="/icons/help.svg"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <p className={styles.security}>
-                    {" "}
-                    <div className={styles["lock-icon"]}>
-                      <img
-                        src="icons/lock.svg"
-                        className={`generic-icon small `}
-                        alt="lock"
-                      />
-                    </div>{" "}
-                    We protect your payment information using encryption to
-                    provide bank-level security.
-                  </p>
                 </div>
                 <Button
                   className="half-width"
@@ -573,7 +569,7 @@ const Checkout: FunctionComponent = () => {
                 >
                   Pay Now
                 </Button>
-              </div>
+              </>
             )}
           </form>
 
@@ -771,19 +767,16 @@ const Checkout: FunctionComponent = () => {
                 <p className="sub-heading bold">₦{order.price}</p>
               </div>
               <div className={styles["order-detail"]}>
-                <p className="small-text">
-                  <span className="small-text bold margin-right">Qty:</span>{" "}
-                  {order.quantity}
+                <p>
+                  <span className="margin-right">Qty:</span> {order.quantity}
                 </p>
-                <p className="small-text vertical-margin spaced">
-                  <span className="small-text bold margin-right">Size:</span>{" "}
-                  {order.size}
+                <p className="vertical-margin spaced">
+                  <span className="margin-right">Size:</span> {order.size}
                 </p>
-                <p className="small-text margin-bottom spaced">
-                  <span className="small-text bold margin-right">Design:</span>{" "}
-                  {order.design}
+                <p className="margin-bottom spaced">
+                  <span className="margin-right">Design:</span> {order.design}
                 </p>
-                <p className="small-text bold margin-bottom">Add Ons</p>
+                <p className="margin-bottom">Add Ons</p>
                 {order.addons.map((addon, index) => (
                   <div
                     className="flex between spaced margin-bottom center-align"
@@ -858,14 +851,14 @@ const Checkout: FunctionComponent = () => {
               <div className="flex between normal-text margin-bottom spaced">
                 <div>
                   <span>Delivery Charge</span>
-                  <p className={`small-text ${styles["light-gray"]}`}>Lagos</p>
+                  <p className={`${styles["light-gray"]}`}>Lagos</p>
                 </div>
                 <span className="bold">₦6,000</span>
               </div>
               <div className="flex between normal-text margin-bottom spaced">
                 <div>
                   <span>Payment Method</span>
-                  <p className={`small-text ${styles["light-gray"]}`}>
+                  <p className={`${styles["light-gray"]}`}>
                     Card ending with 3412
                   </p>
                 </div>

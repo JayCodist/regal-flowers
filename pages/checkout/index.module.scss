@@ -21,11 +21,11 @@
   }
 
   .left {
-    width: 60%;
+    width: 62%;
     padding-bottom: 2rem;
   }
   .right {
-    width: 32%;
+    width: 30%;
     margin-left: 2.2rem;
     position: fixed;
     right: 7rem;
@@ -48,7 +48,7 @@
   }
 
   .delivey-method {
-    margin-top: 2rem;
+    // margin-top: 2rem;
     cursor: pointer;
     .method-title {
       margin-bottom: 0.7rem;
@@ -60,6 +60,7 @@
       margin: 1.5rem 0;
       border: none;
       transition: 0.1s ease-out;
+      border: 0.1rem solid transparent;
 
       &.active {
         background-color: white;
@@ -69,8 +70,9 @@
   }
 
   .border {
-    border: 0.1rem solid #f9fafb;
+    border: 0.1rem solid #e5e7eb;
     border-radius: 0.6rem;
+    margin-bottom: 2rem;
     .padding {
       padding: 0 2rem;
       padding-bottom: 1rem;
@@ -117,7 +119,7 @@
       cursor: pointer;
 
       &.active {
-        border: 1px solid #9b0000;
+        border: 0.1rem solid #9b0000;
       }
     }
   }
