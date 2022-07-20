@@ -3,6 +3,7 @@ import { FunctionComponent, useContext, useState } from "react";
 import Button from "../../components/button/Button";
 import Checkbox from "../../components/checkbox/Checkbox";
 import Input, { TextArea } from "../../components/input/Input";
+import PhoneInput from "../../components/phone-input/PhoneInput";
 import Radio from "../../components/radio/Radio";
 import Select from "../../components/select/Select";
 import {
@@ -25,7 +26,7 @@ import styles from "./index.module.scss";
 const initialData = {
   name: "",
   email: "",
-  phoneNumber: "",
+  senderPhoneNumber: undefined,
   password: "",
   freeAccount: true,
   coupon: "",
@@ -44,7 +45,10 @@ const initialData = {
   cardName: "",
   cardExpiry: "",
   cardNumber: "",
-  cardCVV: ""
+  cardCVV: "",
+  recipientCountryCode: "",
+  senderCountryCode: "",
+  recipientAltCountryCode: ""
 };
 
 const orderSample = {
@@ -135,17 +139,18 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     </div>
                     <div className="flex spaced-xl">
-                      <div className="input-group">
-                        <span className="question">Phone Number</span>
-                        <Input
-                          name="phoneNumber"
-                          placeholder="Phone Number"
-                          value={formData.phoneNumber}
-                          onChange={value => handleChange("phoneNumber", value)}
-                          dimmed
-                          responsive
-                        />
-                      </div>
+                      <PhoneInput
+                        phoneNumber={
+                          (formData.senderPhoneNumber as unknown) as number
+                        }
+                        countryCode={formData.senderCountryCode || "+234"}
+                        onChangePhoneNumber={value =>
+                          handleChange("senderPhoneNumber", value)
+                        }
+                        onChangeCountryCode={value =>
+                          handleChange("senderCountryCode", value)
+                        }
+                      />
                       <div className="input-group">
                         <span className="question">Create Password</span>
                         <Input
@@ -278,7 +283,9 @@ const Checkout: FunctionComponent = () => {
                   </div>
                 </div>
                 <div className={styles.border}>
-                  <p className={styles["payment-info"]}>Sender's Information</p>
+                  <p className={styles["payment-info"]}>
+                    Receiver's Information
+                  </p>
                   <div className={styles.padding}>
                     <div className="input-group">
                       <span className="question">Select A Past Recipient</span>
@@ -324,30 +331,32 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     </div>
                     <div className="flex spaced-xl">
-                      <div className="input-group">
-                        <span className="question">Phone Number</span>
-                        <Input
-                          value={formData.recipientPhoneNumber}
-                          onChange={value =>
-                            handleChange("recipientPhoneNumber", value)
-                          }
-                          dimmed
-                          responsive
-                        />
-                      </div>
-                      <div className="input-group">
-                        <span className="question">
-                          Alternative Phone Number (Optional)
-                        </span>
-                        <Input
-                          value={formData.recipientPhoneNumberAlt}
-                          onChange={value =>
-                            handleChange("recipientPhoneNumberAlt", value)
-                          }
-                          dimmed
-                          responsive
-                        />
-                      </div>
+                      <PhoneInput
+                        phoneNumber={
+                          (formData.recipientPhoneNumber as unknown) as number
+                        }
+                        countryCode={formData.recipientCountryCode || "+234"}
+                        onChangePhoneNumber={value =>
+                          handleChange("recipientPhoneNumber", value)
+                        }
+                        onChangeCountryCode={value =>
+                          handleChange("recipientCountryCode", value)
+                        }
+                      />
+
+                      <PhoneInput
+                        phoneNumber={
+                          (formData.recipientPhoneNumberAlt as unknown) as number
+                        }
+                        countryCode={formData.recipientAltCountryCode || "+234"}
+                        onChangePhoneNumber={value =>
+                          handleChange("recipientPhoneNumberAlt", value)
+                        }
+                        onChangeCountryCode={value =>
+                          handleChange("recipientAltCountryCode", value)
+                        }
+                        question="Alternative Phone Number (Optional)"
+                      />
                     </div>
                     <div className="input-group half-width">
                       <span className="question">Residence Type</span>
