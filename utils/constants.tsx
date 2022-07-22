@@ -528,3 +528,8 @@ export const paymentMethod: PaymentMethod[] = [
     info: "Bank Transfer"
   }
 ];
+
+export const _countryCodes = [
+  { value: "+234", label: "+234" },
+  { value: "+44", label: "+44" }
+];

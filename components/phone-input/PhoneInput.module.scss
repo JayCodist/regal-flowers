@@ -1,0 +1,23 @@
+.input-wrapper {
+  display: flex;
+  &:focus {
+    outline: none;
+  }
+
+  .country-code {
+    width: 30%;
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .phone-number {
+    width: 70%;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+
+    &:focus {
+      border-color: none;
+    }
+  }
+}
