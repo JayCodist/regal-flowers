@@ -1,120 +1,22 @@
 import { Fragment, FunctionComponent, useState } from "react";
 import { GetStaticProps } from "next";
-import { getProduct } from "../../utils/helpers/data/products";
+import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
 import Product, { DesignOption } from "../../utils/types/Product";
 import styles from "./products.module.scss";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import { flowers } from "../filters/[filter]";
 
-const LandingPage: FunctionComponent<{ product: Product }> = () => {
-  const productSampleData: Product = {
-    id: 1,
-    name: "A Kiss of Rose",
-    addonsGroups: [
-      {
-        name: "Perfumes",
-        image: "/images/addons/Rectangle133.png",
-        description: "",
-        slug: "#",
-        addons: [
-          {
-            name: "5 Peas in a pod",
-            price: 32999,
-            image: "/images/addons/Rectangle131.png"
-          },
-          {
-            name: "5 Peas in a pod",
-            price: 36000,
-            image: "/images/addons/Rectangle13.png"
-          }
-        ]
-      },
-      {
-        name: "Teady Bears",
-        image: "/images/addons/Rectangle133.png",
-        description: "",
-        slug: "#",
-        addons: [
-          {
-            name: "5 Peas in a pod",
-            price: 32999,
-            image: "/images/addons/Rectangle131.png"
-          },
-          {
-            name: "5 Peas in a pod",
-            price: 36000,
-            image: "/images/addons/Rectangle13.png"
-          }
-        ]
-      }
-    ],
-    featured: true,
-    images: [
-      {
-        alt: "flower1",
-        src: "/images/sample-flowers/single-product.png",
-        id: 1
-      },
-      {
-        alt: "flower2",
-        src: "/images/sample-flowers/single-product.png",
-        id: 2
-      },
-      {
-        alt: "flower3",
-        src: "/images/sample-flowers/single-product.png",
-        id: 3
-      },
-      {
-        alt: "flower4",
-        src: "/images/sample-flowers/single-product.png",
-        id: 4
-      }
-    ],
-    price: 70000,
-    salePrice: 80000,
-    sku: "u2i2093092",
-    slug: "ejodei-iejeo-ooeoei",
-    type: "variable",
-    variants: [
-      { name: "Small (15 Roses)", price: 75000, class: "regular" },
-      { name: "Medium (20 Roses)", price: 90000, class: "vip" }
-    ],
-    productDescription:
-      "A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors.A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
-    title: "A Kiss of Rose",
-    sizes: [
-      "Entry (5 roses)",
-      "Extra Small (10 roses)",
-      "Small (15 roses)",
-      "Medium (20 roses)",
-      "Standard (24cm box)",
-      "Standard Plus (27cm box)",
-      "Standard Premium (30cm box)",
-      "VIP Entry",
-      "VIP Medium",
-      "VIP Standard",
-      "VIP Standard Premium",
-      "VIP Large"
-    ],
-    designOptions: ["wrappedBouquet", "inVase", "inLargeVase", "box"],
-    note:
-      "Single stem rose only available for pickup, except as part of larger order.",
-    description:
-      "A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
-    details: "5 Peas in a pod"
-  };
+const LandingPage: FunctionComponent<{ product: Product }> = props => {
+  const { product } = props;
 
-  const [product] = useState<Product>(productSampleData);
-  const [activeSlide, setActiveSlide] = useState<number>(1);
+  const [activeSlide, setActiveSlide] = useState<number>(0);
   const [descriptionTab, setDescriptionTab] = useState("product description");
   const [sizeType, setsizeType] = useState<string>("regular");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [addonGroup, setAddonGroup] = useState("");
-  const [selectedDesign, setSelectedDesign] = useState<DesignOption>(
-    "wrappedBouquet"
-  );
+  const [selectedDesign, setSelectedDesign] =
+    useState<DesignOption>("wrappedBouquet");
   const handleNextCLick = () => {
     setActiveSlide(activeSlide + 1);
   };
@@ -146,16 +48,16 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             className="generic-icon small margin-left"
           />
         </span>
-        <span className="generic-icon small margin-left">{product.title}</span>
+        <span className="generic-icon small margin-left">{product.name}</span>
       </div>
       <div className={`${styles["product-content"]} flex between`}>
         <div className={styles["slider-wrapper"]}>
           <div className={styles.slider}>
             <button
               onClick={handlePreviousCLick}
-              className={`${styles["btn-arrow"]}  ${
-                styles["left"]
-              } ${activeSlide <= 1 && "disabled"}`}
+              className={`${styles["btn-arrow"]}  ${styles["left"]} ${
+                activeSlide <= 1 && "disabled"
+              }`}
             >
               <img
                 src="/icons/chevron-left.svg"
@@ -168,7 +70,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                 key={index}
                 className={[
                   styles["slide"],
-                  activeSlide === image.id && styles["active-slide"]
+                  activeSlide === index && styles["active-slide"]
                 ].join(" ")}
               >
                 <img src={image.src} alt={image.alt} />
@@ -176,9 +78,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             ))}
             <button
               onClick={handleNextCLick}
-              className={`${styles["btn-arrow"]} ${
-                styles["right"]
-              } ${activeSlide >= product.images.length && "disabled"}`}
+              className={`${styles["btn-arrow"]} ${styles["right"]} ${
+                activeSlide >= product.images.length - 1 && "disabled"
+              }`}
             >
               <img
                 src="/icons/chevron-right.svg"
@@ -187,16 +89,16 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               />
             </button>
           </div>
-          <div className="flex between spaced">
+          <div className={`${styles.images}`}>
             {product.images.map((image, index) => (
               <img
-                onClick={() => handleActiveSlide(image.id)}
+                onClick={() => handleActiveSlide(index)}
                 src={image.src}
                 alt={image.alt}
                 key={index}
                 className={[
                   styles["slide-image"],
-                  activeSlide === image.id && styles["active-image"]
+                  activeSlide === index && styles["active-image"]
                 ].join(" ")}
               />
             ))}
@@ -253,12 +155,12 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         <div>
           <div className="flex center-align between">
             <div>
-              <h1 className="title">{product.title}</h1>
-              <p>Single stem rose available in red, white, pink and yellow.</p>
+              <h1 className="title">{product.name}</h1>
+              <p>{product.subtitle}</p>
             </div>
             <div className="bold primary-color center">
               <p>FROM</p>
-              <p className="larger">₦36,000</p>
+              <p className="larger">₦{product.price}</p>
             </div>
           </div>
           <p
@@ -304,16 +206,16 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               </div>
               {sizeType === "regular" && (
                 <div className={styles["size-wrapper"]}>
-                  {product.sizes?.map((size, index) => (
+                  {product.variants?.map((variant, index) => (
                     <span
                       key={index}
                       className={[
                         styles.size,
-                        selectedSize === size && styles["selected-size"]
+                        selectedSize === variant.name && styles["selected-size"]
                       ].join(" ")}
-                      onClick={() => setSelectedSize(size)}
+                      onClick={() => setSelectedSize(variant.name)}
                     >
-                      {size}
+                      {variant.name}
                     </span>
                   ))}
                 </div>
@@ -435,8 +337,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                     alt={group.name}
                   />
                   <div
-                    className={`${styles.group} ${group.name === addonGroup &&
-                      styles.active} flex between center-align`}
+                    className={`${styles.group} ${
+                      group.name === addonGroup && styles.active
+                    } flex between center-align`}
                   >
                     <p className="bold">{group.name}</p>
                     <svg
@@ -517,17 +420,22 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
-  return {
-    paths: [
-      {
-        params: {
-          productSlug:
-            "belleza-regal-two-colors-rose-red-yellow-white-pink-orange"
-        }
-      }
-    ],
-    fallback: false // true or 'blocking'
-  };
+  const { data, error } = await getAllProducts();
+  const slugs = data?.map(product => ({
+    params: { productSlug: product.slug }
+  }));
+
+  if (error) {
+    console.error(`Unable to fetch products: ${error}`);
+    return {
+      paths: []
+    };
+  } else {
+    return {
+      paths: slugs,
+      fallback: false // true or 'blocking'
+    };
+  }
 };
 
 export default LandingPage;
