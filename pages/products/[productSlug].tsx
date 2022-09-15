@@ -225,7 +225,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
 
               <br />
 
-              {product.designOptions?.length && (
+              {product.designOptions && product.designOptions?.length && (
                 <div className="align-icon vertical-margin">
                   <h3 className="bold margin-right">Select Design</h3>
                   <img

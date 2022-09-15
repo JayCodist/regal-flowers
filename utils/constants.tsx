@@ -2,7 +2,6 @@ import React from "react";
 import { Option } from "../components/select/Select";
 import AddonGroup from "./types/AddonGroup";
 import { AppCurrency, PaymentMethod } from "./types/Core";
-import Product from "./types/Product";
 import {
   Service,
   Occasion,
@@ -737,7 +736,7 @@ export const filtersCatgories: {
   }
 ];
 
-const productSampleData = {
+export const productSampleData = {
   id: 1,
   name: "A Kiss of Rose",
   addonsGroups: [
