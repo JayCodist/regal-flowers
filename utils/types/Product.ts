@@ -13,6 +13,9 @@ export interface ProductVariant {
 }
 
 export type DesignOption = "wrappedBouquet" | "inVase" | "inLargeVase" | "box";
+export type DesignOptionsMap = Partial<
+  Record<DesignOption, "default" | "option">
+>;
 
 interface Product {
   id: number;
@@ -29,8 +32,8 @@ interface Product {
   productDescription: string;
   subtitle: string;
   sizes?: string[];
-  designOptions?: DesignOption[];
-  note?: string;
+  designOptions?: DesignOptionsMap;
+  temporaryNotes?: string[];
   description?: string;
   details: string;
 }

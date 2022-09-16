@@ -1,4 +1,4 @@
-import { Fragment, FunctionComponent, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { GetStaticProps } from "next";
 import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
 import Product, { DesignOption } from "../../utils/types/Product";
@@ -163,16 +163,20 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
               <p className="larger">₦{product.price}</p>
             </div>
           </div>
-          <p
-            className={`${styles["product-info"]} center-align flex spaced vertical-margin`}
-          >
-            <img
-              src="/icons/info.svg"
-              alt="information"
-              className="generic-icon"
-            />
-            <span>{product.note}</span>
-          </p>
+          {product.temporaryNotes && product.temporaryNotes?.length > 0 && (
+            <p
+              className={`${styles["product-info"]} center-align flex spaced vertical-margin`}
+            >
+              <img
+                src="/icons/info.svg"
+                alt="information"
+                className="generic-icon"
+              />
+              {product.temporaryNotes?.map((note, index) => (
+                <span key={index}>{note}</span>
+              ))}
+            </p>
+          )}
           <h3 className="bold margin-bottom">Description</h3>
           <p>{product.description}</p>
           {product.type === "variable" && (
@@ -225,7 +229,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
 
               <br />
 
-              {product.designOptions && product.designOptions?.length && (
+              {product.designOptions && (
                 <div className="align-icon vertical-margin">
                   <h3 className="bold margin-right">Select Design</h3>
                   <img
@@ -236,90 +240,82 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
                 </div>
               )}
               <div className="flex spaced">
-                {product.designOptions &&
-                  product.designOptions?.map((designOption, index) => (
-                    <Fragment key={index}>
-                      {designOption === "wrappedBouquet" && (
-                        <div
-                          className={[
-                            styles.design,
-                            selectedDesign === "wrappedBouquet" &&
-                              styles["selected-design"]
-                          ].join(" ")}
-                          onClick={() => setSelectedDesign("wrappedBouquet")}
-                        >
-                          <img
-                            src="/icons/wrapped-bouquet.svg"
-                            alt="box"
-                            className="generic-icon xxl margin-bottom spaced"
-                          />
-                          <p className="vertical-margin bold">
-                            Wrapped Bouquet
-                          </p>
-                          <p>+₦0</p>
-                        </div>
-                      )}
-                      {designOption === "inVase" && (
-                        <div
-                          key={index}
-                          className={[
-                            styles.design,
-                            selectedDesign === "inVase" &&
-                              styles["selected-design"]
-                          ].join(" ")}
-                          onClick={() => setSelectedDesign("inVase")}
-                        >
-                          <img
-                            src="/icons/invase.svg"
-                            alt="box"
-                            className="generic-icon xxl margin-bottom spaced"
-                          />
-                          <p className="vertical-margin bold">In a Vase</p>
-                          <p>+₦15,000</p>
-                        </div>
-                      )}
-                      {designOption === "inLargeVase" && (
-                        <div
-                          key={index}
-                          className={[
-                            styles.design,
-                            selectedDesign === "inLargeVase" &&
-                              styles["selected-design"]
-                          ].join(" ")}
-                          onClick={() => setSelectedDesign("inLargeVase")}
-                        >
-                          <img
-                            src="/icons/large-vase.svg"
-                            alt="box"
-                            className="generic-icon xxl margin-bottom spaced"
-                          />
-                          <p className="vertical-margin bold">In Large Vase</p>
-                          <p>+₦30,000</p>
-                        </div>
-                      )}
-                      {designOption === "box" && (
-                        <div
-                          key={index}
-                          className={[
-                            styles.design,
-                            selectedDesign === "box" &&
-                              styles["selected-design"]
-                          ].join(" ")}
-                          onClick={() => setSelectedDesign("box")}
-                        >
-                          <img
-                            src="/icons/box.svg"
-                            alt="box"
-                            className="generic-icon xxl margin-bottom spaced"
-                          />
-                          <p className="vertical-margin bold">
-                            Box Arrangement
-                          </p>
-                          <p>Complimentary</p>
-                        </div>
-                      )}
-                    </Fragment>
-                  ))}
+                {product?.designOptions?.wrappedBouquet && (
+                  <div
+                    className={[
+                      styles.design,
+                      (selectedDesign === "wrappedBouquet" ||
+                        product?.designOptions?.wrappedBouquet === "default") &&
+                        styles["selected-design"]
+                    ].join(" ")}
+                    onClick={() => setSelectedDesign("wrappedBouquet")}
+                  >
+                    <img
+                      src="/icons/wrapped-bouquet.svg"
+                      alt="box"
+                      className="generic-icon xxl margin-bottom spaced"
+                    />
+                    <p className="vertical-margin bold">Wrapped Bouquet</p>
+                    <p>+₦0</p>
+                  </div>
+                )}
+                {product?.designOptions?.inVase && (
+                  <div
+                    className={[
+                      styles.design,
+                      (selectedDesign === "inVase" ||
+                        product?.designOptions?.inVase === "default") &&
+                        styles["selected-design"]
+                    ].join(" ")}
+                    onClick={() => setSelectedDesign("inVase")}
+                  >
+                    <img
+                      src="/icons/invase.svg"
+                      alt="box"
+                      className="generic-icon xxl margin-bottom spaced"
+                    />
+                    <p className="vertical-margin bold">In a Vase</p>
+                    <p>+₦15,000</p>
+                  </div>
+                )}
+                {product.designOptions?.inLargeVase && (
+                  <div
+                    className={[
+                      styles.design,
+                      (selectedDesign === "inLargeVase" ||
+                        product?.designOptions?.inLargeVase === "default") &&
+                        styles["selected-design"]
+                    ].join(" ")}
+                    onClick={() => setSelectedDesign("inLargeVase")}
+                  >
+                    <img
+                      src="/icons/large-vase.svg"
+                      alt="box"
+                      className="generic-icon xxl margin-bottom spaced"
+                    />
+                    <p className="vertical-margin bold">In Large Vase</p>
+                    <p>+₦30,000</p>
+                  </div>
+                )}
+                {product.designOptions?.box && (
+                  <div
+                    className={[
+                      styles.design,
+                      (selectedDesign === "box" ||
+                        product?.designOptions?.box === "default") &&
+                        styles["selected-design"]
+                    ].join(" ")}
+                    onClick={() => setSelectedDesign("box")}
+                  >
+                    <img
+                      src="/icons/box.svg"
+                      alt="box"
+                      className="generic-icon xxl margin-bottom spaced"
+                    />
+                    <p className="vertical-margin bold">Box Arrangement</p>
+                    <p>Complimentary</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
