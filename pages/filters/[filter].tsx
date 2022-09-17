@@ -145,7 +145,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<
     string[]
   >([]);
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const shuffleText = () => {
     if (count < JustToSayTexts.length - 1) {
@@ -180,10 +180,11 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
-    setFilterCategories([]);
+    setSelectedFilterCategory([]);
   };
 
   const fetchProductCategory = async () => {
+    setLoading(true);
     const filterParams = {
       category: selectedFilterCategory.length
         ? selectedFilterCategory.join(",")
@@ -199,6 +200,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     } else {
       setProducts(response.data);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -247,7 +249,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         <div className={styles["left-side"]}>
           <div className="vertical-margin spaced">
             <span className={`bold margin-right ${styles["sub-title"]}`}>
-              Filters (4)
+              Filters ({selectedFilter.length})
             </span>
             <button className="primary-color" onClick={handleClearFIlter}>
               Clear Filters
@@ -321,33 +323,37 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               />
             </div>
           </div>
-          <div>
-            <p className={`${styles.title} bold vertical-margin spaced`}>
-              {
-                occasions.filter(occasion => {
-                  return selectedOccasion === occasion.url.split("=")[1];
-                })[0]?.title
-              }{" "}
-              Flowers
-            </p>
+          {loading ? (
+            <h1>Loading</h1>
+          ) : (
+            <div>
+              <p className={`${styles.title} bold vertical-margin spaced`}>
+                {
+                  occasions.filter(occasion => {
+                    return selectedOccasion === occasion.url.split("=")[1];
+                  })[0]?.title
+                }{" "}
+                Flowers
+              </p>
 
-            <div
-              className={`${styles.products} flex vertical-margin wrap between`}
-            >
-              {products?.map((product, index) => (
-                <FlowerCard
-                  key={index}
-                  name={product.name}
-                  image={product.images[0].src}
-                  price={product.price}
-                  buttonText="Add to Cart"
-                  subTitle={product.details}
-                  url={`/products/${product.slug}`}
-                  mode="three-x-grid"
-                />
-              ))}
+              <div
+                className={`${styles.products} flex vertical-margin wrap between`}
+              >
+                {products?.map((product, index) => (
+                  <FlowerCard
+                    key={index}
+                    name={product.name}
+                    image={product.images[0].src}
+                    price={product.price}
+                    buttonText="Add to Cart"
+                    subTitle={product.details}
+                    url={`/products/${product.slug}`}
+                    mode="three-x-grid"
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       <div className={styles.gifts}>

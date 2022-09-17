@@ -1,11 +1,19 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
-import Product, { DesignOption } from "../../utils/types/Product";
+import Product, {
+  DesignOption,
+  DesignOptionsMap
+} from "../../utils/types/Product";
 import styles from "./products.module.scss";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import { flowers } from "../filters/[filter]";
+
+interface Designs {
+  name: DesignOption | string;
+  price: number;
+}
 
 const LandingPage: FunctionComponent<{ product: Product }> = props => {
   const { product } = props;
@@ -15,8 +23,32 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
   const [sizeType, setsizeType] = useState<string>("regular");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [addonGroup, setAddonGroup] = useState("");
-  const [selectedDesign, setSelectedDesign] =
-    useState<DesignOption>("wrappedBouquet");
+  const [selectedDesign, setSelectedDesign] = useState<Designs>({
+    name: "",
+    price: 0
+  });
+  const [productPrice, setProductPrice] = useState<number>(product.price);
+  const [total, setTotal] = useState<number>(product.price);
+
+  const designs: Designs[] = [
+    {
+      name: "wrappedBouquet",
+      price: 0
+    },
+    {
+      name: "inVase",
+      price: 15000
+    },
+    {
+      name: "inLargeVase",
+      price: 30000
+    },
+    {
+      name: "box",
+      price: 0
+    }
+  ];
+
   const handleNextCLick = () => {
     setActiveSlide(activeSlide + 1);
   };
@@ -28,6 +60,31 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
   const handleActiveSlide = (id: number) => {
     setActiveSlide(id);
   };
+
+  const handleTotal = () => {
+    setTotal(productPrice + selectedDesign?.price);
+  };
+
+  const defualtDesign = () => {
+    for (const key in product.designOptions) {
+      if (product?.designOptions[key as keyof DesignOptionsMap] === "default") {
+        setSelectedDesign({
+          name: key as DesignOption,
+          price: designs.find(design => design.name === key)?.price || 0
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    defualtDesign();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    handleTotal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDesign, productPrice]);
 
   return (
     <section className={`${styles.product}`}>
@@ -163,22 +220,32 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
               <p className="larger">₦{product.price}</p>
             </div>
           </div>
-          {product.temporaryNotes && product.temporaryNotes?.length > 0 && (
-            <p
-              className={`${styles["product-info"]} center-align flex spaced vertical-margin`}
-            >
-              <img
-                src="/icons/info.svg"
-                alt="information"
-                className="generic-icon"
-              />
-              {product.temporaryNotes?.map((note, index) => (
-                <span key={index}>{note}</span>
+          <div className="vertical-margin">
+            {product.temporaryNotes &&
+              product.temporaryNotes?.length > 0 &&
+              product.temporaryNotes.map((note, index) => (
+                <p
+                  className={`${styles["product-info"]} center-align flex spaced`}
+                  key={index}
+                >
+                  <img
+                    src="/icons/info.svg"
+                    alt="information"
+                    className="generic-icon"
+                  />
+
+                  <span key={index}>{note}</span>
+                </p>
               ))}
-            </p>
+          </div>
+
+          {product.description && (
+            <>
+              {" "}
+              <h3 className="bold margin-bottom">Description</h3>
+              <p>{product.description}</p>
+            </>
           )}
-          <h3 className="bold margin-bottom">Description</h3>
-          <p>{product.description}</p>
           {product.type === "variable" && (
             <div>
               <div className="align-icon margin-top">
@@ -210,22 +277,60 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
               </div>
               {sizeType === "regular" && (
                 <div className={styles["size-wrapper"]}>
-                  {product.variants?.map((variant, index) => (
-                    <span
-                      key={index}
-                      className={[
-                        styles.size,
-                        selectedSize === variant.name && styles["selected-size"]
-                      ].join(" ")}
-                      onClick={() => setSelectedSize(variant.name)}
-                    >
-                      {variant.name}
-                    </span>
-                  ))}
+                  {product.variants
+                    ?.filter(variant => variant.class === "regular")
+                    .map((variant, index) => (
+                      <span
+                        key={index}
+                        className={[
+                          styles.size,
+                          selectedSize === variant.name &&
+                            styles["selected-size"]
+                        ].join(" ")}
+                        onClick={() => {
+                          setSelectedSize(variant.name);
+                          setProductPrice(variant.price);
+                        }}
+                      >
+                        {variant.name}
+                      </span>
+                    ))}
+                  {product.variants?.filter(
+                    variant => variant.class === "regular"
+                  ).length === 0 && (
+                    <p className="center-align bold">
+                      No regular sizes available
+                    </p>
+                  )}
                 </div>
               )}
 
-              {sizeType === "vip" && <div>Coming Soon</div>}
+              {sizeType === "vip" && (
+                <div className={styles["size-wrapper"]}>
+                  {product.variants
+                    ?.filter(variant => variant.class === "vip")
+                    .map((variant, index) => (
+                      <span
+                        key={index}
+                        className={[
+                          styles.size,
+                          selectedSize === variant.name &&
+                            styles["selected-size"]
+                        ].join(" ")}
+                        onClick={() => {
+                          setSelectedSize(variant.name);
+                          setProductPrice(variant.price);
+                        }}
+                      >
+                        {variant.name}
+                      </span>
+                    ))}
+                  {product.variants?.filter(variant => variant.class === "vip")
+                    .length === 0 && (
+                    <p className="center-align bold">No VIP sizes available</p>
+                  )}
+                </div>
+              )}
 
               <br />
 
@@ -244,11 +349,12 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
                   <div
                     className={[
                       styles.design,
-                      (selectedDesign === "wrappedBouquet" ||
-                        product?.designOptions?.wrappedBouquet === "default") &&
+                      selectedDesign?.name === "wrappedBouquet" &&
                         styles["selected-design"]
                     ].join(" ")}
-                    onClick={() => setSelectedDesign("wrappedBouquet")}
+                    onClick={() =>
+                      setSelectedDesign({ name: "wrappedBouquet", price: 0 })
+                    }
                   >
                     <img
                       src="/icons/wrapped-bouquet.svg"
@@ -263,11 +369,12 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
                   <div
                     className={[
                       styles.design,
-                      (selectedDesign === "inVase" ||
-                        product?.designOptions?.inVase === "default") &&
+                      selectedDesign?.name === "inVase" &&
                         styles["selected-design"]
                     ].join(" ")}
-                    onClick={() => setSelectedDesign("inVase")}
+                    onClick={() =>
+                      setSelectedDesign({ name: "inVase", price: 15000 })
+                    }
                   >
                     <img
                       src="/icons/invase.svg"
@@ -282,11 +389,12 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
                   <div
                     className={[
                       styles.design,
-                      (selectedDesign === "inLargeVase" ||
-                        product?.designOptions?.inLargeVase === "default") &&
+                      selectedDesign?.name === "inLargeVase" &&
                         styles["selected-design"]
                     ].join(" ")}
-                    onClick={() => setSelectedDesign("inLargeVase")}
+                    onClick={() =>
+                      setSelectedDesign({ name: "inLargeVase", price: 30000 })
+                    }
                   >
                     <img
                       src="/icons/large-vase.svg"
@@ -301,11 +409,10 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
                   <div
                     className={[
                       styles.design,
-                      (selectedDesign === "box" ||
-                        product?.designOptions?.box === "default") &&
+                      selectedDesign?.name === "box" &&
                         styles["selected-design"]
                     ].join(" ")}
-                    onClick={() => setSelectedDesign("box")}
+                    onClick={() => setSelectedDesign({ name: "box", price: 0 })}
                   >
                     <img
                       src="/icons/box.svg"
@@ -385,7 +492,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
               <strong>Buy Now</strong>
             </Button>
             <Button url="/checkout" className={styles["add-to-cart"]}>
-              <strong>Add to Cart (₦36,000)</strong>
+              <strong>Add to Cart ₦{total}</strong>
             </Button>
           </div>
         </div>
