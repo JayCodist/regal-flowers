@@ -3,7 +3,7 @@ import AddonGroup from "./AddonGroup";
 export interface ProductImage {
   alt: string;
   src: string;
-  id: number;
+  _id: string;
 }
 
 export interface ProductVariant {
@@ -13,6 +13,9 @@ export interface ProductVariant {
 }
 
 export type DesignOption = "wrappedBouquet" | "inVase" | "inLargeVase" | "box";
+export type DesignOptionsMap = Partial<
+  Record<DesignOption, "default" | "option">
+>;
 
 interface Product {
   id: number;
@@ -27,10 +30,10 @@ interface Product {
   variants: ProductVariant[];
   addonsGroups: AddonGroup[];
   productDescription: string;
-  title: string;
+  subtitle: string;
   sizes?: string[];
-  designOptions?: DesignOption[];
-  note?: string;
+  designOptions?: DesignOptionsMap;
+  temporaryNotes?: string[];
   description?: string;
   details: string;
 }

@@ -1,120 +1,54 @@
-import { Fragment, FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { GetStaticProps } from "next";
-import { getProduct } from "../../utils/helpers/data/products";
-import Product, { DesignOption } from "../../utils/types/Product";
+import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
+import Product, {
+  DesignOption,
+  DesignOptionsMap
+} from "../../utils/types/Product";
 import styles from "./products.module.scss";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import { flowers } from "../filters/[filter]";
 
-const LandingPage: FunctionComponent<{ product: Product }> = () => {
-  const productSampleData: Product = {
-    id: 1,
-    name: "A Kiss of Rose",
-    addonsGroups: [
-      {
-        name: "Perfumes",
-        image: "/images/addons/Rectangle133.png",
-        description: "",
-        slug: "#",
-        addons: [
-          {
-            name: "5 Peas in a pod",
-            price: 32999,
-            image: "/images/addons/Rectangle131.png"
-          },
-          {
-            name: "5 Peas in a pod",
-            price: 36000,
-            image: "/images/addons/Rectangle13.png"
-          }
-        ]
-      },
-      {
-        name: "Teady Bears",
-        image: "/images/addons/Rectangle133.png",
-        description: "",
-        slug: "#",
-        addons: [
-          {
-            name: "5 Peas in a pod",
-            price: 32999,
-            image: "/images/addons/Rectangle131.png"
-          },
-          {
-            name: "5 Peas in a pod",
-            price: 36000,
-            image: "/images/addons/Rectangle13.png"
-          }
-        ]
-      }
-    ],
-    featured: true,
-    images: [
-      {
-        alt: "flower1",
-        src: "/images/sample-flowers/single-product.png",
-        id: 1
-      },
-      {
-        alt: "flower2",
-        src: "/images/sample-flowers/single-product.png",
-        id: 2
-      },
-      {
-        alt: "flower3",
-        src: "/images/sample-flowers/single-product.png",
-        id: 3
-      },
-      {
-        alt: "flower4",
-        src: "/images/sample-flowers/single-product.png",
-        id: 4
-      }
-    ],
-    price: 70000,
-    salePrice: 80000,
-    sku: "u2i2093092",
-    slug: "ejodei-iejeo-ooeoei",
-    type: "variable",
-    variants: [
-      { name: "Small (15 Roses)", price: 75000, class: "regular" },
-      { name: "Medium (20 Roses)", price: 90000, class: "vip" }
-    ],
-    productDescription:
-      "A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors.A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
-    title: "A Kiss of Rose",
-    sizes: [
-      "Entry (5 roses)",
-      "Extra Small (10 roses)",
-      "Small (15 roses)",
-      "Medium (20 roses)",
-      "Standard (24cm box)",
-      "Standard Plus (27cm box)",
-      "Standard Premium (30cm box)",
-      "VIP Entry",
-      "VIP Medium",
-      "VIP Standard",
-      "VIP Standard Premium",
-      "VIP Large"
-    ],
-    designOptions: ["wrappedBouquet", "inVase", "inLargeVase", "box"],
-    note:
-      "Single stem rose only available for pickup, except as part of larger order.",
-    description:
-      "A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
-    details: "5 Peas in a pod"
-  };
+interface Designs {
+  name: DesignOption | string;
+  price: number;
+}
 
-  const [product] = useState<Product>(productSampleData);
-  const [activeSlide, setActiveSlide] = useState<number>(1);
+const LandingPage: FunctionComponent<{ product: Product }> = props => {
+  const { product } = props;
+
+  const [activeSlide, setActiveSlide] = useState<number>(0);
   const [descriptionTab, setDescriptionTab] = useState("product description");
   const [sizeType, setsizeType] = useState<string>("regular");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [addonGroup, setAddonGroup] = useState("");
-  const [selectedDesign, setSelectedDesign] = useState<DesignOption>(
-    "wrappedBouquet"
-  );
+  const [selectedDesign, setSelectedDesign] = useState<Designs>({
+    name: "",
+    price: 0
+  });
+  const [productPrice, setProductPrice] = useState<number>(product.price);
+  const [total, setTotal] = useState<number>(product.price);
+
+  const designs: Designs[] = [
+    {
+      name: "wrappedBouquet",
+      price: 0
+    },
+    {
+      name: "inVase",
+      price: 15000
+    },
+    {
+      name: "inLargeVase",
+      price: 30000
+    },
+    {
+      name: "box",
+      price: 0
+    }
+  ];
+
   const handleNextCLick = () => {
     setActiveSlide(activeSlide + 1);
   };
@@ -126,6 +60,31 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const handleActiveSlide = (id: number) => {
     setActiveSlide(id);
   };
+
+  const handleTotal = () => {
+    setTotal(productPrice + selectedDesign?.price);
+  };
+
+  const defualtDesign = () => {
+    for (const key in product.designOptions) {
+      if (product?.designOptions[key as keyof DesignOptionsMap] === "default") {
+        setSelectedDesign({
+          name: key as DesignOption,
+          price: designs.find(design => design.name === key)?.price || 0
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    defualtDesign();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    handleTotal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDesign, productPrice]);
 
   return (
     <section className={`${styles.product}`}>
@@ -146,16 +105,16 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             className="generic-icon small margin-left"
           />
         </span>
-        <span className="generic-icon small margin-left">{product.title}</span>
+        <span className="generic-icon small margin-left">{product.name}</span>
       </div>
       <div className={`${styles["product-content"]} flex between`}>
         <div className={styles["slider-wrapper"]}>
           <div className={styles.slider}>
             <button
               onClick={handlePreviousCLick}
-              className={`${styles["btn-arrow"]}  ${
-                styles["left"]
-              } ${activeSlide <= 1 && "disabled"}`}
+              className={`${styles["btn-arrow"]}  ${styles["left"]} ${
+                activeSlide <= 1 && "disabled"
+              }`}
             >
               <img
                 src="/icons/chevron-left.svg"
@@ -168,7 +127,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                 key={index}
                 className={[
                   styles["slide"],
-                  activeSlide === image.id && styles["active-slide"]
+                  activeSlide === index && styles["active-slide"]
                 ].join(" ")}
               >
                 <img src={image.src} alt={image.alt} />
@@ -176,9 +135,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             ))}
             <button
               onClick={handleNextCLick}
-              className={`${styles["btn-arrow"]} ${
-                styles["right"]
-              } ${activeSlide >= product.images.length && "disabled"}`}
+              className={`${styles["btn-arrow"]} ${styles["right"]} ${
+                activeSlide >= product.images.length - 1 && "disabled"
+              }`}
             >
               <img
                 src="/icons/chevron-right.svg"
@@ -187,16 +146,16 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               />
             </button>
           </div>
-          <div className="flex between spaced">
+          <div className={`${styles.images}`}>
             {product.images.map((image, index) => (
               <img
-                onClick={() => handleActiveSlide(image.id)}
+                onClick={() => handleActiveSlide(index)}
                 src={image.src}
                 alt={image.alt}
                 key={index}
                 className={[
                   styles["slide-image"],
-                  activeSlide === image.id && styles["active-image"]
+                  activeSlide === index && styles["active-image"]
                 ].join(" ")}
               />
             ))}
@@ -253,26 +212,40 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         <div>
           <div className="flex center-align between">
             <div>
-              <h1 className="title">{product.title}</h1>
-              <p>Single stem rose available in red, white, pink and yellow.</p>
+              <h1 className="title">{product.name}</h1>
+              <p>{product.subtitle}</p>
             </div>
             <div className="bold primary-color center">
               <p>FROM</p>
-              <p className="larger">₦36,000</p>
+              <p className="larger">₦{product.price}</p>
             </div>
           </div>
-          <p
-            className={`${styles["product-info"]} center-align flex spaced vertical-margin`}
-          >
-            <img
-              src="/icons/info.svg"
-              alt="information"
-              className="generic-icon"
-            />
-            <span>{product.note}</span>
-          </p>
-          <h3 className="bold margin-bottom">Description</h3>
-          <p>{product.description}</p>
+          <div className="vertical-margin">
+            {product.temporaryNotes &&
+              product.temporaryNotes?.length > 0 &&
+              product.temporaryNotes.map((note, index) => (
+                <p
+                  className={`${styles["product-info"]} center-align flex spaced`}
+                  key={index}
+                >
+                  <img
+                    src="/icons/info.svg"
+                    alt="information"
+                    className="generic-icon"
+                  />
+
+                  <span key={index}>{note}</span>
+                </p>
+              ))}
+          </div>
+
+          {product.description && (
+            <>
+              {" "}
+              <h3 className="bold margin-bottom">Description</h3>
+              <p>{product.description}</p>
+            </>
+          )}
           {product.type === "variable" && (
             <div>
               <div className="align-icon margin-top">
@@ -304,26 +277,64 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               </div>
               {sizeType === "regular" && (
                 <div className={styles["size-wrapper"]}>
-                  {product.sizes?.map((size, index) => (
-                    <span
-                      key={index}
-                      className={[
-                        styles.size,
-                        selectedSize === size && styles["selected-size"]
-                      ].join(" ")}
-                      onClick={() => setSelectedSize(size)}
-                    >
-                      {size}
-                    </span>
-                  ))}
+                  {product.variants
+                    ?.filter(variant => variant.class === "regular")
+                    .map((variant, index) => (
+                      <span
+                        key={index}
+                        className={[
+                          styles.size,
+                          selectedSize === variant.name &&
+                            styles["selected-size"]
+                        ].join(" ")}
+                        onClick={() => {
+                          setSelectedSize(variant.name);
+                          setProductPrice(variant.price);
+                        }}
+                      >
+                        {variant.name}
+                      </span>
+                    ))}
+                  {product.variants?.filter(
+                    variant => variant.class === "regular"
+                  ).length === 0 && (
+                    <p className="center-align bold">
+                      No regular sizes available
+                    </p>
+                  )}
                 </div>
               )}
 
-              {sizeType === "vip" && <div>Coming Soon</div>}
+              {sizeType === "vip" && (
+                <div className={styles["size-wrapper"]}>
+                  {product.variants
+                    ?.filter(variant => variant.class === "vip")
+                    .map((variant, index) => (
+                      <span
+                        key={index}
+                        className={[
+                          styles.size,
+                          selectedSize === variant.name &&
+                            styles["selected-size"]
+                        ].join(" ")}
+                        onClick={() => {
+                          setSelectedSize(variant.name);
+                          setProductPrice(variant.price);
+                        }}
+                      >
+                        {variant.name}
+                      </span>
+                    ))}
+                  {product.variants?.filter(variant => variant.class === "vip")
+                    .length === 0 && (
+                    <p className="center-align bold">No VIP sizes available</p>
+                  )}
+                </div>
+              )}
 
               <br />
 
-              {product.designOptions?.length && (
+              {product.designOptions && (
                 <div className="align-icon vertical-margin">
                   <h3 className="bold margin-right">Select Design</h3>
                   <img
@@ -334,84 +345,84 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                 </div>
               )}
               <div className="flex spaced">
-                {product.designOptions?.map((designOption, index) => (
-                  <Fragment key={index}>
-                    {designOption === "wrappedBouquet" && (
-                      <div
-                        className={[
-                          styles.design,
-                          selectedDesign === "wrappedBouquet" &&
-                            styles["selected-design"]
-                        ].join(" ")}
-                        onClick={() => setSelectedDesign("wrappedBouquet")}
-                      >
-                        <img
-                          src="/icons/wrapped-bouquet.svg"
-                          alt="box"
-                          className="generic-icon xxl margin-bottom spaced"
-                        />
-                        <p className="vertical-margin bold">Wrapped Bouquet</p>
-                        <p>+₦0</p>
-                      </div>
-                    )}
-                    {designOption === "inVase" && (
-                      <div
-                        key={index}
-                        className={[
-                          styles.design,
-                          selectedDesign === "inVase" &&
-                            styles["selected-design"]
-                        ].join(" ")}
-                        onClick={() => setSelectedDesign("inVase")}
-                      >
-                        <img
-                          src="/icons/invase.svg"
-                          alt="box"
-                          className="generic-icon xxl margin-bottom spaced"
-                        />
-                        <p className="vertical-margin bold">In a Vase</p>
-                        <p>+₦15,000</p>
-                      </div>
-                    )}
-                    {designOption === "inLargeVase" && (
-                      <div
-                        key={index}
-                        className={[
-                          styles.design,
-                          selectedDesign === "inLargeVase" &&
-                            styles["selected-design"]
-                        ].join(" ")}
-                        onClick={() => setSelectedDesign("inLargeVase")}
-                      >
-                        <img
-                          src="/icons/large-vase.svg"
-                          alt="box"
-                          className="generic-icon xxl margin-bottom spaced"
-                        />
-                        <p className="vertical-margin bold">In Large Vase</p>
-                        <p>+₦30,000</p>
-                      </div>
-                    )}
-                    {designOption === "box" && (
-                      <div
-                        key={index}
-                        className={[
-                          styles.design,
-                          selectedDesign === "box" && styles["selected-design"]
-                        ].join(" ")}
-                        onClick={() => setSelectedDesign("box")}
-                      >
-                        <img
-                          src="/icons/box.svg"
-                          alt="box"
-                          className="generic-icon xxl margin-bottom spaced"
-                        />
-                        <p className="vertical-margin bold">Box Arrangement</p>
-                        <p>Complimentary</p>
-                      </div>
-                    )}
-                  </Fragment>
-                ))}
+                {product?.designOptions?.wrappedBouquet && (
+                  <div
+                    className={[
+                      styles.design,
+                      selectedDesign?.name === "wrappedBouquet" &&
+                        styles["selected-design"]
+                    ].join(" ")}
+                    onClick={() =>
+                      setSelectedDesign({ name: "wrappedBouquet", price: 0 })
+                    }
+                  >
+                    <img
+                      src="/icons/wrapped-bouquet.svg"
+                      alt="box"
+                      className="generic-icon xxl margin-bottom spaced"
+                    />
+                    <p className="vertical-margin bold">Wrapped Bouquet</p>
+                    <p>+₦0</p>
+                  </div>
+                )}
+                {product?.designOptions?.inVase && (
+                  <div
+                    className={[
+                      styles.design,
+                      selectedDesign?.name === "inVase" &&
+                        styles["selected-design"]
+                    ].join(" ")}
+                    onClick={() =>
+                      setSelectedDesign({ name: "inVase", price: 15000 })
+                    }
+                  >
+                    <img
+                      src="/icons/invase.svg"
+                      alt="box"
+                      className="generic-icon xxl margin-bottom spaced"
+                    />
+                    <p className="vertical-margin bold">In a Vase</p>
+                    <p>+₦15,000</p>
+                  </div>
+                )}
+                {product.designOptions?.inLargeVase && (
+                  <div
+                    className={[
+                      styles.design,
+                      selectedDesign?.name === "inLargeVase" &&
+                        styles["selected-design"]
+                    ].join(" ")}
+                    onClick={() =>
+                      setSelectedDesign({ name: "inLargeVase", price: 30000 })
+                    }
+                  >
+                    <img
+                      src="/icons/large-vase.svg"
+                      alt="box"
+                      className="generic-icon xxl margin-bottom spaced"
+                    />
+                    <p className="vertical-margin bold">In Large Vase</p>
+                    <p>+₦30,000</p>
+                  </div>
+                )}
+                {product.designOptions?.box && (
+                  <div
+                    className={[
+                      styles.design,
+                      selectedDesign?.name === "box" &&
+                        styles["selected-design"]
+                    ].join(" ")}
+                    onClick={() => setSelectedDesign({ name: "box", price: 0 })}
+                  >
+                    <img
+                      src="/icons/box.svg"
+                      alt="box"
+                      className="generic-icon xxl margin-bottom spaced"
+                    />
+                    <p className="vertical-margin bold">Box Arrangement</p>
+                    <p>Complimentary</p>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -435,8 +446,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                     alt={group.name}
                   />
                   <div
-                    className={`${styles.group} ${group.name === addonGroup &&
-                      styles.active} flex between center-align`}
+                    className={`${styles.group} ${
+                      group.name === addonGroup && styles.active
+                    } flex between center-align`}
                   >
                     <p className="bold">{group.name}</p>
                     <svg
@@ -480,7 +492,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               <strong>Buy Now</strong>
             </Button>
             <Button url="/checkout" className={styles["add-to-cart"]}>
-              <strong>Add to Cart (₦36,000)</strong>
+              <strong>Add to Cart ₦{total}</strong>
             </Button>
           </div>
         </div>
@@ -517,17 +529,22 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
-  return {
-    paths: [
-      {
-        params: {
-          productSlug:
-            "belleza-regal-two-colors-rose-red-yellow-white-pink-orange"
-        }
-      }
-    ],
-    fallback: false // true or 'blocking'
-  };
+  const { data, error } = await getAllProducts();
+  const slugs = data?.map(product => ({
+    params: { productSlug: product.slug }
+  }));
+
+  if (error) {
+    console.error(`Unable to fetch products: ${error}`);
+    return {
+      paths: []
+    };
+  } else {
+    return {
+      paths: slugs,
+      fallback: false // true or 'blocking'
+    };
+  }
 };
 
 export default LandingPage;

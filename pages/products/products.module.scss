@@ -1,5 +1,5 @@
 .product {
-  padding: 2rem 3rem;
+  padding: 2rem 4rem;
 
   .product-content {
     margin-bottom: 3rem;
@@ -18,24 +18,34 @@
       position: relative;
 
       .slide {
-        width: 0;
-        height: 35rem;
+        width: 100%;
+        height: 40rem;
         opacity: 0;
         margin-bottom: 2rem;
-        transition: 0.3s ease-out;
+        transition: 0.5s ease-out;
+        position: absolute;
 
         &.active-slide {
           opacity: 1;
-          width: 28rem;
-          height: 28rem;
+          width: 100%;
+          height: 40rem;
+          margin-bottom: 2rem;
+          transition: 0.3s ease-out;
+          position: relative;
         }
 
         img {
-          width: 35rem;
-          height: 35rem;
+          width: 100%;
+          height: 40rem;
           object-fit: cover;
         }
       }
+    }
+    .images {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
   }
 

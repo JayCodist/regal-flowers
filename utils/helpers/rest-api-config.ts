@@ -1,5 +1,5 @@
-const baseUrl =
-  "https://service-default-dot-regal-operations-defy.appspot.com/v1/config/wordpress-proxy";
+const baseUrl = "https://regal-operations-defy.appspot.com";
+// "https://service-default-dot-regal-operations-defy.appspot.com/v1/config/wordpress-proxy";
 
 const restAPIHeaders = {
   "Content-Type": "application/json"

@@ -1,9 +1,7 @@
 import React from "react";
 import { Option } from "../components/select/Select";
-import { otherSampleProducts } from "../pages/filters/[filter]";
 import AddonGroup from "./types/AddonGroup";
 import { AppCurrency, PaymentMethod } from "./types/Core";
-import Product from "./types/Product";
 import {
   Service,
   Occasion,
@@ -49,7 +47,83 @@ export const aboutUsContent: {
   }
 };
 
-export const featuredFlowers: Product[] = [
+export const otherSampleProducts = {
+  id: 1,
+  name: "A Kiss of Rose",
+  addonsGroups: [
+    {
+      name: "Perfumes",
+      image: "/images/addons/Rectangle133.png",
+      addons: [
+        {
+          name: "5 Peas in a pod",
+          price: 32999,
+          image: "/images/addons/Rectangle131.png"
+        },
+        {
+          name: "5 Peas in a pod",
+          price: 36000,
+          image: "/images/addons/Rectangle13.png"
+        }
+      ]
+    },
+    {
+      name: "Teady Bears",
+      image: "/images/addons/Rectangle133.png",
+      addons: [
+        {
+          name: "5 Peas in a pod",
+          price: 32999,
+          image: "/images/addons/Rectangle131.png"
+        },
+        {
+          name: "5 Peas in a pod",
+          price: 36000,
+          image: "/images/addons/Rectangle13.png"
+        }
+      ]
+    }
+  ],
+  featured: true,
+  images: [
+    { alt: "flower1", src: "/images/product-image/flower1.png", id: 1 },
+    { alt: "flower2", src: "/images/addons/Rectangle131.png", id: 2 },
+    { alt: "flower3", src: "/images/flower.png", id: 3 },
+    { alt: "flower4", src: "/images/product-image/flower1.png", id: 4 }
+  ],
+  price: 70000,
+  salePrice: 80000,
+  sku: "u2i2093092",
+  slug: "belleza-regal-two-colors-rose-red-yellow-white-pink-orange",
+  type: "variable",
+  variants: [
+    { name: "Small (15 Roses)", price: 75000, class: "regular" },
+    { name: "Medium (20 Roses)", price: 90000, class: "vip" }
+  ],
+  productDescription:
+    "A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors.A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
+  title: "A Kiss of Rose",
+  sizes: [
+    "Entry (5 roses)",
+    "Extra Small (10 roses)",
+    "Small (15 roses)",
+    "Medium (20 roses)",
+    "Standard (24cm box)",
+    "Standard Plus (27cm box)",
+    "Standard Premium (30cm box)",
+    "VIP Entry",
+    "VIP Medium",
+    "VIP Standard",
+    "VIP Standard Premium",
+    "VIP Large"
+  ],
+  designOptions: ["wrappedBouquet", "invase", "inLargeVase", "box"],
+  note: "Single stem rose only available for pickup, except as part of larger order.",
+  description:
+    "A kiss from a rose is daintily presented single full stemmed rose, available in various colors."
+};
+
+export const featuredFlowers = [
   {
     ...otherSampleProducts,
     id: 11,
@@ -174,8 +248,7 @@ export const sampleReviews: UserReview[] = [
     }
   },
   {
-    text:
-      "Great arrangement and packaging and was punctual too. Very professional work",
+    text: "Great arrangement and packaging and was punctual too. Very professional work",
     date: "6 April, 2022",
     rating: 5,
     user: {
@@ -474,13 +547,11 @@ export const paymentMethod: PaymentMethod[] = [
         />
       </svg>
     ),
-    info:
-      "You will be redirected to the PayPal website after submitting your order"
+    info: "You will be redirected to the PayPal website after submitting your order"
   },
   {
     name: "Paystack",
-    info:
-      "You will be redirected to the PayPal website after submitting your order",
+    info: "You will be redirected to the PayPal website after submitting your order",
     icon: (
       <svg
         width="13"
@@ -533,3 +604,231 @@ export const _countryCodes = [
   { value: "+234", label: "+234" },
   { value: "+44", label: "+44" }
 ];
+
+export const sortOptions: Option[] = [
+  {
+    label: "Alphabetically Descending",
+    value: 1
+  },
+  {
+    label: "Alphabetically Ascending",
+    value: 2
+  },
+  {
+    label: "Lowest Prices First",
+    value: 3
+  },
+  {
+    label: "Highest Prices First",
+    value: 4
+  }
+];
+
+export const occasions: { title: string; url: string; category?: string }[] = [
+  {
+    title: "Love, Birthdays & Anniversary",
+    url: "/filters/occasions?selectedOccasion=love-birthdays-anniversary",
+    category: "Anniversary Flowers"
+  },
+  {
+    title: "Just to Say",
+    url: "/filters/occasions?selectedOccasion=just-to-say",
+    category: "Just to Say Bouquets"
+  },
+  {
+    title: "Bridal Bouquets",
+    url: "/filters/occasions?selectedOccasion=bridal-bouquets",
+    category:
+      "Birthday Flowers, Anniversary Flowers, Love &amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
+  },
+  {
+    title: "Funeral & Condolence",
+    url: "/filters/occasions?selectedOccasion=funeral-condolence",
+    category: "Funeral &amp; Condolence"
+  },
+  {
+    title: "All Occasions",
+    url: "/filters/occasions?selectedOccasion=all-occasions"
+  }
+];
+
+export const filtersCatgories: {
+  name: string;
+  options: { name: string; category?: string }[];
+  limit: number;
+  viewMore?: boolean;
+}[] = [
+  {
+    name: "Occasions",
+    options: [
+      {
+        name: "Love, Birthdays & Anniversary",
+        category: "Anniversary Flowers"
+      },
+      {
+        name: "Just to say Hi, Sorry, Thank You.",
+        category: "Just to Say Bouquets"
+      },
+      {
+        name: "Get well soon",
+        category: "Get Well Soon Flowers"
+      },
+      {
+        name: "Bridal",
+        category:
+          "Birthday Flowers, Anniversary Flowers, Love &amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
+      }
+    ],
+    limit: 4,
+    viewMore: false
+  },
+  {
+    name: "Budget",
+    options: [
+      {
+        name: "Regular"
+      },
+      {
+        name: "VIP"
+      }
+    ],
+    limit: 2,
+    viewMore: false
+  },
+  {
+    name: "Packages",
+    options: [
+      {
+        name: "Bundled Products"
+      }
+    ],
+    limit: 3,
+    viewMore: true
+  },
+  {
+    name: "Delivery",
+    options: [
+      {
+        name: "Same Day Delivery"
+      }
+    ],
+    limit: 3,
+    viewMore: false
+  },
+  {
+    name: "Flower Name",
+    options: [
+      {
+        name: "Roses"
+      },
+      {
+        name: "Chrysanthemums"
+      },
+      {
+        name: "Lilies"
+      },
+      {
+        name: "Million Stars"
+      }
+    ],
+    limit: 3,
+    viewMore: false
+  }
+];
+
+export const productSampleData = {
+  id: 1,
+  name: "A Kiss of Rose",
+  addonsGroups: [
+    {
+      name: "Perfumes",
+      image: "/images/addons/Rectangle133.png",
+      description: "",
+      slug: "#",
+      addons: [
+        {
+          name: "5 Peas in a pod",
+          price: 32999,
+          image: "/images/addons/Rectangle131.png"
+        },
+        {
+          name: "5 Peas in a pod",
+          price: 36000,
+          image: "/images/addons/Rectangle13.png"
+        }
+      ]
+    },
+    {
+      name: "Teady Bears",
+      image: "/images/addons/Rectangle133.png",
+      description: "",
+      slug: "#",
+      addons: [
+        {
+          name: "5 Peas in a pod",
+          price: 32999,
+          image: "/images/addons/Rectangle131.png"
+        },
+        {
+          name: "5 Peas in a pod",
+          price: 36000,
+          image: "/images/addons/Rectangle13.png"
+        }
+      ]
+    }
+  ],
+  featured: true,
+  images: [
+    {
+      alt: "flower1",
+      src: "/images/sample-flowers/single-product.png",
+      id: 1
+    },
+    {
+      alt: "flower2",
+      src: "/images/sample-flowers/single-product.png",
+      id: 2
+    },
+    {
+      alt: "flower3",
+      src: "/images/sample-flowers/single-product.png",
+      id: 3
+    },
+    {
+      alt: "flower4",
+      src: "/images/sample-flowers/single-product.png",
+      id: 4
+    }
+  ],
+  price: 70000,
+  salePrice: 80000,
+  sku: "u2i2093092",
+  slug: "ejodei-iejeo-ooeoei",
+  type: "variable",
+  variants: [
+    { name: "Small (15 Roses)", price: 75000, class: "regular" },
+    { name: "Medium (20 Roses)", price: 90000, class: "vip" }
+  ],
+  productDescription:
+    "A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors.A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors. A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
+  title: "A Kiss of Rose",
+  sizes: [
+    "Entry (5 roses)",
+    "Extra Small (10 roses)",
+    "Small (15 roses)",
+    "Medium (20 roses)",
+    "Standard (24cm box)",
+    "Standard Plus (27cm box)",
+    "Standard Premium (30cm box)",
+    "VIP Entry",
+    "VIP Medium",
+    "VIP Standard",
+    "VIP Standard Premium",
+    "VIP Large"
+  ],
+  designOptions: ["wrappedBouquet", "inVase", "inLargeVase", "box"],
+  note: "Single stem rose only available for pickup, except as part of larger order.",
+  description:
+    "A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
+  details: "5 Peas in a pod"
+};
