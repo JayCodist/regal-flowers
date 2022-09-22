@@ -28,6 +28,7 @@ export const getProductsByCategory: (
     const response = await restAPIInstance.get(
       `/v1/product-wp/paginate?pageNumber=${params?.pageNumber}&tags=Same Day Delivery&categories=${params?.filter?.category}`
     );
+    console.log("response", response.data);
     return {
       error: false,
       data: response.data.data as Product[]
