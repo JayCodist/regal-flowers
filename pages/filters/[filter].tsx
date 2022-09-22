@@ -28,6 +28,7 @@ import DatePicker from "../../components/date-picker/DatePicker";
 import Select from "../../components/select/Select";
 import { FetchResourceParams } from "../../utils/types/FetchResourceParams";
 import useScrollHandler from "../../utils/hooks/useScrollHandler";
+import Loader from "../../components/loader/Loader";
 
 export const flowers = [
   {
@@ -371,7 +372,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               ))}
             </div>
           </div>
-          {loading && <h1>Loading</h1>}
+          {loading && hasMore && <Loader />}
         </div>
       </div>
       <div className={styles.gifts}>
