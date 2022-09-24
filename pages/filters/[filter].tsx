@@ -1,10 +1,4 @@
-import {
-  FunctionComponent,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dayjs, { Dayjs } from "dayjs";
@@ -28,7 +22,6 @@ import DatePicker from "../../components/date-picker/DatePicker";
 import Select from "../../components/select/Select";
 import { FetchResourceParams } from "../../utils/types/FetchResourceParams";
 import useScrollHandler from "../../utils/hooks/useScrollHandler";
-import Loader from "../../components/loader/Loader";
 
 export const flowers = [
   {
@@ -153,7 +146,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<
     string[]
   >([]);
-  const [loading, setLoading] = useState(false);
+  const [infiniteLoading, setInfiniteLoading] = useState(false);
+  const [productsLoading, setproductsLoading] = useState(false);
+
   const [hasMore, setHasMore] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -201,7 +196,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   };
 
   const fetchProductCategory = async () => {
-    setLoading(true);
+    products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
     const filterParams = {
       category: selectedFilterCategory.length
         ? selectedFilterCategory.join(",")
@@ -218,13 +213,29 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
       setHasMore((response.data as Product[]).length > 0);
       setProducts((prev: any) => [...prev, ...(response.data as Product[])]);
     }
-    setLoading(false);
+    products.length === 0
+      ? setproductsLoading(false)
+      : setInfiniteLoading(false);
   };
+
+  useEffect(() => {
+    setProducts([]);
+  }, [selectedFilterCategory]);
 
   useEffect(() => {
     fetchProductCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, selectedFilterCategory, page]);
+
+  // if (loading) {
+  //   return (
+  //     <img
+  //       src="/images/spinner.svg"
+  //       alt="spinner"
+  //       className=" spinner page-spinner"
+  //     />
+  //   );
+  // }
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -349,6 +360,13 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
             <div
               className={`${styles.products} flex vertical-margin wrap between`}
             >
+              {productsLoading && (
+                <img
+                  src="/images/spinner.svg"
+                  alt="spinner"
+                  className="generic-icon xxl spinner"
+                />
+              )}
               {products?.map((product, index, arr) => (
                 <FlowerCard
                   key={index}
@@ -372,7 +390,13 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               ))}
             </div>
           </div>
-          {loading && hasMore && <Loader />}
+          {infiniteLoading && hasMore && (
+            <img
+              src="/images/spinner.svg"
+              alt="spinner"
+              className="generic-icon xl spinner"
+            />
+          )}
         </div>
       </div>
       <div className={styles.gifts}>
