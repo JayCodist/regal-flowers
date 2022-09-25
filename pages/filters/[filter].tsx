@@ -146,6 +146,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<
     string[]
   >([]);
+  const [selectedTagCategories, setSelectedTagCategories] = useState<string[]>(
+    []
+  );
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setproductsLoading] = useState(false);
 
@@ -179,7 +182,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
 
-  const handleChange = (name: string, category: string) => {
+  const handleFilterCategoryChange = (name: string, category: string) => {
     setSelectedFilter(prev =>
       prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
     );
@@ -188,6 +191,16 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
         ? prev.filter(item => item !== category)
         : [...prev, category]
     );
+  };
+
+  const handleTagCategoryChange = (name: string, tag?: string) => {
+    setSelectedFilter(prev =>
+      prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
+    );
+    tag &&
+      setSelectedTagCategories(prev =>
+        prev.includes(tag) ? prev.filter(item => item !== tag) : [...prev, tag]
+      );
   };
 
   const handleClearFIlter = () => {
@@ -200,7 +213,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     const filterParams = {
       category: selectedFilterCategory.length
         ? selectedFilterCategory.join(",")
-        : category
+        : category,
+      tags: selectedTagCategories.length ? selectedTagCategories.join(" ,") : ""
     };
     const params: FetchResourceParams = {
       pageNumber: page,
@@ -220,22 +234,12 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
 
   useEffect(() => {
     setProducts([]);
-  }, [selectedFilterCategory]);
+  }, [selectedFilterCategory, category, selectedTagCategories]);
 
   useEffect(() => {
     fetchProductCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, selectedFilterCategory, page]);
-
-  // if (loading) {
-  //   return (
-  //     <img
-  //       src="/images/spinner.svg"
-  //       alt="spinner"
-  //       className=" spinner page-spinner"
-  //     />
-  //   );
-  // }
+  }, [category, selectedFilterCategory, page, selectedTagCategories]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -291,9 +295,14 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                   ).map((child, index) => (
                     <div key={index} className="margin-bottom">
                       <Checkbox
-                        onChange={() =>
-                          handleChange(child.name, child.category || "")
-                        }
+                        onChange={() => {
+                          child.category
+                            ? handleFilterCategoryChange(
+                                child.name,
+                                child.category || ""
+                              )
+                            : handleTagCategoryChange(child.name, child.tag);
+                        }}
                         text={child.name}
                         checked={selectedFilter.includes(child.name)}
                       />

@@ -1,5 +1,6 @@
 export interface FilterLogic {
   category?: string;
+  tags?: string;
 }
 
 export interface SortLogic {
@@ -12,6 +13,5 @@ export interface FetchResourceParams<F = FilterLogic> {
   pageNumber?: number;
   searchStr?: string;
   filter?: F;
-  tags?: string[];
   sortLogic?: SortLogic;
 }
