@@ -26,8 +26,9 @@ export const getProductsByCategory: (
 ) => Promise<RequestResponse<Product[]>> = async params => {
   try {
     const response = await restAPIInstance.get(
-      `/v1/product-wp/paginate?pageNumber=${params?.pageNumber}&tags=Same Day Delivery&categories=${params?.filter?.category}`
+      `/v1/product-wp/paginate?pageNumber=${params?.pageNumber}&tags=${params?.filter?.tags}&categories=${params?.filter?.category}`
     );
+    console.log("response", response.data);
     return {
       error: false,
       data: response.data.data as Product[]

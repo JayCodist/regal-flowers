@@ -639,12 +639,12 @@ export const occasions: { title: string; url: string; category?: string }[] = [
     title: "Bridal Bouquets",
     url: "/filters/occasions?selectedOccasion=bridal-bouquets",
     category:
-      "Birthday Flowers, Anniversary Flowers, Love &amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
+      "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
   },
   {
     title: "Funeral & Condolence",
     url: "/filters/occasions?selectedOccasion=funeral-condolence",
-    category: "Funeral &amp; Condolence"
+    category: "Funeral %26amp; Condolence"
   },
   {
     title: "All Occasions",
@@ -654,7 +654,7 @@ export const occasions: { title: string; url: string; category?: string }[] = [
 
 export const filtersCatgories: {
   name: string;
-  options: { name: string; category?: string }[];
+  options: { name: string; category?: string; tag?: string }[];
   limit: number;
   viewMore?: boolean;
 }[] = [
@@ -676,7 +676,7 @@ export const filtersCatgories: {
       {
         name: "Bridal",
         category:
-          "Birthday Flowers, Anniversary Flowers, Love &amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
+          "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
       }
     ],
     limit: 4,
@@ -709,7 +709,8 @@ export const filtersCatgories: {
     name: "Delivery",
     options: [
       {
-        name: "Same Day Delivery"
+        name: "Same Day Delivery",
+        tag: "Same Day Delivery"
       }
     ],
     limit: 3,
@@ -719,7 +720,8 @@ export const filtersCatgories: {
     name: "Flower Name",
     options: [
       {
-        name: "Roses"
+        name: "Roses",
+        tag: "Roses"
       },
       {
         name: "Chrysanthemums"
@@ -728,7 +730,8 @@ export const filtersCatgories: {
         name: "Lilies"
       },
       {
-        name: "Million Stars"
+        name: "Million Stars",
+        tag: "millionstar"
       }
     ],
     limit: 3,

@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dayjs, { Dayjs } from "dayjs";
@@ -21,6 +21,7 @@ import {
 import DatePicker from "../../components/date-picker/DatePicker";
 import Select from "../../components/select/Select";
 import { FetchResourceParams } from "../../utils/types/FetchResourceParams";
+import useScrollHandler from "../../utils/hooks/useScrollHandler";
 
 export const flowers = [
   {
@@ -138,14 +139,28 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const { query } = useRouter();
   const { filter, selectedOccasion } = query;
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
-  const [products, setProducts] = useState<Product[] | null>();
+  const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
   const [category, setCategory] = useState<string>("Anniversary Flowers");
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<
     string[]
   >([]);
-  const [loading, setLoading] = useState(false);
+  const [selectedTagCategories, setSelectedTagCategories] = useState<string[]>(
+    []
+  );
+  const [infiniteLoading, setInfiniteLoading] = useState(false);
+  const [productsLoading, setproductsLoading] = useState(false);
+
+  const [hasMore, setHasMore] = useState(false);
+
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [lastProductEleRef, setLastProductEleRef] =
+    useState<HTMLAnchorElement | null>(null);
+
+  const [page] = useScrollHandler({
+    node: lastProductEleRef
+  });
 
   const shuffleText = () => {
     if (count < JustToSayTexts.length - 1) {
@@ -167,7 +182,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
 
-  const handleChange = (name: string, category: string) => {
+  const handleFilterCategoryChange = (name: string, category: string) => {
     setSelectedFilter(prev =>
       prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
     );
@@ -178,43 +193,56 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     );
   };
 
+  const handleTagCategoryChange = (name: string, tag?: string) => {
+    setSelectedFilter(prev =>
+      prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
+    );
+    tag &&
+      setSelectedTagCategories(prev =>
+        prev.includes(tag) ? prev.filter(item => item !== tag) : [...prev, tag]
+      );
+  };
+
   const handleClearFIlter = () => {
     setSelectedFilter([]);
     setSelectedFilterCategory([]);
   };
 
   const fetchProductCategory = async () => {
-    setLoading(true);
+    products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
     const filterParams = {
       category: selectedFilterCategory.length
         ? selectedFilterCategory.join(",")
-        : category
+        : category,
+      tags: selectedTagCategories.length ? selectedTagCategories.join(" ,") : ""
     };
     const params: FetchResourceParams = {
-      pageNumber: 1,
+      pageNumber: page,
       filter: filterParams
     };
     const response = await getProductsByCategory(params);
     if (response.error) {
       console.log(response.error);
     } else {
-      setProducts(response.data);
+      setHasMore((response.data as Product[]).length > 0);
+      setProducts((prev: any) => [...prev, ...(response.data as Product[])]);
     }
-    setLoading(false);
+    products.length === 0
+      ? setproductsLoading(false)
+      : setInfiniteLoading(false);
   };
 
   useEffect(() => {
-    fetchProductCategory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setProducts([]);
+  }, [selectedFilterCategory, category, selectedTagCategories]);
 
   useEffect(() => {
     fetchProductCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, selectedFilterCategory]);
+  }, [category, selectedFilterCategory, page, selectedTagCategories]);
 
   return (
-    <section className={styles.filters}>
+    <section className={styles.filters} ref={rootRef}>
       <div className={[styles["hero-bg"]].join(" ")}>
         <div className="hero-content flex column center center-align">
           {filter === "occasions" && (
@@ -267,9 +295,14 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
                   ).map((child, index) => (
                     <div key={index} className="margin-bottom">
                       <Checkbox
-                        onChange={() =>
-                          handleChange(child.name, child.category || "")
-                        }
+                        onChange={() => {
+                          child.category
+                            ? handleFilterCategoryChange(
+                                child.name,
+                                child.category || ""
+                              )
+                            : handleTagCategoryChange(child.name, child.tag);
+                        }}
                         text={child.name}
                         checked={selectedFilter.includes(child.name)}
                       />
@@ -323,36 +356,55 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
               />
             </div>
           </div>
-          {loading ? (
-            <h1>Loading</h1>
-          ) : (
-            <div>
-              <p className={`${styles.title} bold vertical-margin spaced`}>
-                {
-                  occasions.filter(occasion => {
-                    return selectedOccasion === occasion.url.split("=")[1];
-                  })[0]?.title
-                }{" "}
-                Flowers
-              </p>
+          <div>
+            <p className={`${styles.title} bold vertical-margin spaced`}>
+              {
+                occasions.filter(occasion => {
+                  return selectedOccasion === occasion.url.split("=")[1];
+                })[0]?.title
+              }{" "}
+              Flowers
+            </p>
 
-              <div
-                className={`${styles.products} flex vertical-margin wrap between`}
-              >
-                {products?.map((product, index) => (
-                  <FlowerCard
-                    key={index}
-                    name={product.name}
-                    image={product.images[0].src}
-                    price={product.price}
-                    buttonText="Add to Cart"
-                    subTitle={product.details}
-                    url={`/products/${product.slug}`}
-                    mode="three-x-grid"
-                  />
-                ))}
-              </div>
+            <div
+              className={`${styles.products} flex vertical-margin wrap between`}
+            >
+              {productsLoading && (
+                <img
+                  src="/images/spinner.svg"
+                  alt="spinner"
+                  className="generic-icon xxl spinner"
+                />
+              )}
+              {products?.map((product, index, arr) => (
+                <FlowerCard
+                  key={index}
+                  name={product.name}
+                  image={product.images[0].src}
+                  price={product.price}
+                  buttonText="Add to Cart"
+                  subTitle={product.details}
+                  url={`/products/${product.slug}`}
+                  mode="three-x-grid"
+                  ref={
+                    index === arr.length - 1
+                      ? ele => {
+                          if (ele && hasMore) {
+                            setLastProductEleRef(ele);
+                          }
+                        }
+                      : null
+                  }
+                />
+              ))}
             </div>
+          </div>
+          {infiniteLoading && hasMore && (
+            <img
+              src="/images/spinner.svg"
+              alt="spinner"
+              className="generic-icon xl spinner"
+            />
           )}
         </div>
       </div>
