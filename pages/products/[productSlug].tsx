@@ -488,10 +488,17 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
             ))}
           </div>
           <div className="flex spaced vertical-margin block">
-            <Button url="/checkout" className={styles["buy-now"]} type="accent">
+            <Button
+              url="/checkout?orderId=008UOmFSK0aSPlZX19XK"
+              className={styles["buy-now"]}
+              type="accent"
+            >
               <strong>Buy Now</strong>
             </Button>
-            <Button url="/checkout" className={styles["add-to-cart"]}>
+            <Button
+              url="/checkout?orderId=008UOmFSK0aSPlZX19XK"
+              className={styles["add-to-cart"]}
+            >
               <strong>Add to Cart ₦{total}</strong>
             </Button>
           </div>

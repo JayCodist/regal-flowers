@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { FunctionComponent, useContext, useState } from "react";
+import { useRouter } from "next/router";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import Button from "../../components/button/Button";
 import Checkbox from "../../components/checkbox/Checkbox";
 import Input, { TextArea } from "../../components/input/Input";
@@ -12,6 +13,7 @@ import {
   paymentMethod
 } from "../../utils/constants";
 import SettingsContext from "../../utils/context/SettingsContext";
+import { getOrder } from "../../utils/helpers/data/order";
 import {
   BitcoinGoldIcon,
   BuildingRedIcon,
@@ -79,10 +81,37 @@ const Checkout: FunctionComponent = () => {
   const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
     "delivery"
   );
-  const { currentStage, setCurrentStage, currency, setCurrency } = useContext(
-    SettingsContext
-  );
+  const { currentStage, setCurrentStage, currency, setCurrency } =
+    useContext(SettingsContext);
   const [selectedMethod, setSelectedMethod] = useState<number | null>();
+  const [loading, setLoading] = useState(false);
+
+  const {
+    query: { orderId }
+  } = useRouter();
+  const router = useRouter();
+
+  const fetchOrder = async () => {
+    setLoading(true);
+    console.log(orderId);
+    const res = await getOrder(orderId as string);
+    const { error, message } = res;
+
+    if (error) {
+      console.log(message);
+      router.push("/");
+    }
+
+    console.log(res);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (orderId) {
+      fetchOrder();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]);
 
   const handleChange = (key: string, value: any) => {
     setFormData({
@@ -103,6 +132,14 @@ const Checkout: FunctionComponent = () => {
   }>({ order: true, payment: false });
 
   const [order] = useState(orderSample);
+
+  if (loading) {
+    return (
+      <div className={styles.loader}>
+        <img src="/images/spinner.svg" alt="loader" />
+      </div>
+    );
+  }
 
   return (
     <section className={styles["checkout-page"]}>
@@ -141,7 +178,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex spaced-xl">
                       <PhoneInput
                         phoneNumber={
-                          (formData.senderPhoneNumber as unknown) as number
+                          formData.senderPhoneNumber as unknown as number
                         }
                         countryCode={formData.senderCountryCode || "+234"}
                         onChangePhoneNumber={value =>
@@ -333,7 +370,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex spaced-xl">
                       <PhoneInput
                         phoneNumber={
-                          (formData.recipientPhoneNumber as unknown) as number
+                          formData.recipientPhoneNumber as unknown as number
                         }
                         countryCode={formData.recipientCountryCode || "+234"}
                         onChangePhoneNumber={value =>
@@ -346,7 +383,7 @@ const Checkout: FunctionComponent = () => {
 
                       <PhoneInput
                         phoneNumber={
-                          (formData.recipientPhoneNumberAlt as unknown) as number
+                          formData.recipientPhoneNumberAlt as unknown as number
                         }
                         countryCode={formData.recipientAltCountryCode || "+234"}
                         onChangePhoneNumber={value =>
