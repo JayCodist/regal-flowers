@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { forwardRef, FunctionComponent } from "react";
+import React, { forwardRef } from "react";
 import Button from "../button/Button";
 import styles from "./FlowerCard.module.scss";
 

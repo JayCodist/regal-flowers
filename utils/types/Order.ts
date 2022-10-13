@@ -1,13 +1,12 @@
-import { Addon } from "./AddonGroup";
-
-export interface Order {
+interface OrderItem {
   id: string;
   name: string;
-  price: number;
-  image: string;
   quantity: number;
-  details: string;
-  addons: Addon[];
-  size: string;
-  design: string;
+}
+
+export interface Order {
+  orderItems: OrderItem[];
+  paymentStatus: string;
+  orderID: number;
+  deliveryStatus: string;
 }

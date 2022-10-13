@@ -6,14 +6,15 @@ import Checkbox from "../../components/checkbox/Checkbox";
 import Input, { TextArea } from "../../components/input/Input";
 import PhoneInput from "../../components/phone-input/PhoneInput";
 import Radio from "../../components/radio/Radio";
-import Select from "../../components/select/Select";
+import Select, { Option } from "../../components/select/Select";
 import {
-  defaultCurrency,
+  currencyOptions,
   deliveryStates,
   paymentMethod
 } from "../../utils/constants";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { getOrder } from "../../utils/helpers/data/order";
+import { getZoneGroups } from "../../utils/helpers/data/zone-group";
 import {
   BitcoinGoldIcon,
   BuildingRedIcon,
@@ -21,7 +22,6 @@ import {
   InfoRedIcon,
   PaypalBlueIcon
 } from "../../utils/resources";
-import { AppCurrency } from "../../utils/types/Core";
 import { Order } from "../../utils/types/Order";
 import styles from "./index.module.scss";
 
@@ -74,7 +74,7 @@ const orderSample = {
   ],
   id: "1",
   image: "/images/sample-flowers/sample-1.png"
-} as Order;
+};
 
 const Checkout: FunctionComponent = () => {
   const [formData, setFormData] = useState(initialData);
@@ -85,25 +85,71 @@ const Checkout: FunctionComponent = () => {
     useContext(SettingsContext);
   const [selectedMethod, setSelectedMethod] = useState<number | null>();
   const [loading, setLoading] = useState(false);
+  const [order, setOrder] = useState<Order | null>(null);
+  const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
+    order?: boolean;
+    payment?: boolean;
+  }>({ order: true, payment: false });
+  const [isPaid, setIsPaid] = useState(false);
+  const [pickUpOptions, setPickUpOptions] = useState<Option[]>([]);
 
   const {
     query: { orderId }
   } = useRouter();
   const router = useRouter();
 
+  const handleChange = (key: string, value: any) => {
+    setFormData({
+      ...formData,
+      [key]: value
+    });
+  };
+
   const fetchOrder = async () => {
     setLoading(true);
-    console.log(orderId);
     const res = await getOrder(orderId as string);
-    const { error, message } = res;
+    const { error, data } = res;
+
+    if (error) {
+      router.push("/");
+    } else {
+      setOrder(data);
+      setIsPaid(
+        /go\s*ahead/i.test(data?.paymentStatus || "") ||
+          /^paid/i.test(data?.paymentStatus || "")
+      );
+    }
+
+    setLoading(false);
+  };
+
+  const fetchZoneGroups = async () => {
+    const res = await getZoneGroups();
+    const { error, message, data } = res;
 
     if (error) {
       console.log(message);
-      router.push("/");
-    }
+    } else {
+      setPickUpOptions(
+        data?.map(item => ({
+          label: item,
+          value: item
+        })) || []
+      );
 
-    console.log(res);
-    setLoading(false);
+      setPickUpOptions(
+        data
+          ?.filter(item => {
+            if (item !== "Unselected State" && item !== "Outside Nigeria") {
+              return item;
+            }
+          })
+          ?.map(item => ({
+            label: item,
+            value: item
+          })) || []
+      );
+    }
   };
 
   useEffect(() => {
@@ -113,25 +159,33 @@ const Checkout: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
-  const handleChange = (key: string, value: any) => {
-    setFormData({
-      ...formData,
-      [key]: value
-    });
+  useEffect(() => {
+    fetchZoneGroups();
+  }, []);
+
+  useEffect(() => {
+    if (isPaid) {
+      setCurrentStage(3);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPaid]);
+
+  // const isPaid = (paymentStatus: string) => {
+  //   return /go\s*ahead/i.test(paymentStatus) || /^paid/i.test(paymentStatus);
+  // };
+
+  const deliveryMap = {
+    Arranged: "Arranged",
+    Delivered: "Delivered",
+    Despatched: "Despatched",
+    "Not Arranged": "Not Arranged",
+    "Delivery Failed/Issues with Delivery": "Delivery Failed",
+    "Delivered (drivers update)": "Delivered"
   };
 
-  const currencyOptions: AppCurrency[] = [
-    { ...defaultCurrency },
-    { name: "USD", conversionRate: 415, sign: "$" },
-    { name: "GBP", conversionRate: 523, sign: "£" }
-  ];
-
-  const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
-    order?: boolean;
-    payment?: boolean;
-  }>({ order: true, payment: false });
-
-  const [order] = useState(orderSample);
+  const isDelivered = (deliveryStatus = "") => {
+    return /delivered/i.test(deliveryStatus);
+  };
 
   if (loading) {
     return (
@@ -153,7 +207,7 @@ const Checkout: FunctionComponent = () => {
                   <div className={styles.padding}>
                     <div className="flex spaced-xl">
                       <div className="input-group">
-                        <span className="question">Product name</span>
+                        <span className="question">Name</span>
                         <Input
                           name="name"
                           placeholder="Name"
@@ -198,6 +252,7 @@ const Checkout: FunctionComponent = () => {
                           onChange={value => handleChange("password", value)}
                           dimmed
                           responsive
+                          autoComplete="new-password"
                         />
                       </div>
                     </div>
@@ -240,15 +295,22 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     </div>
                     <div className="input-group half-width">
-                      <span className="question">Delivery State</span>
+                      <span className="question">
+                        {" "}
+                        {deliveryMethod === "delivery"
+                          ? "Delivery"
+                          : "Pick Up"}{" "}
+                        State
+                      </span>
 
                       <Select
                         onSelect={value => handleChange("deliveryState", value)}
                         value={formData.deliveryState}
-                        options={deliveryStates.map(state => ({
-                          value: state.value,
-                          label: state.label
-                        }))}
+                        options={
+                          deliveryMethod === "delivery"
+                            ? deliveryStates
+                            : pickUpOptions
+                        }
                         placeholder="Select a state"
                         responsive
                         dimmed
@@ -488,9 +550,9 @@ const Checkout: FunctionComponent = () => {
                         Select your preferred currency
                       </p>
                       <div className="flex spaced-lg">
-                        {currencyOptions.map(_currency => (
+                        {currencyOptions.map((_currency, index) => (
                           <button
-                            key={_currency.name}
+                            key={index}
                             onClick={() => setCurrency(_currency)}
                             className={[
                               styles.currency,
@@ -612,6 +674,7 @@ const Checkout: FunctionComponent = () => {
                 <Button
                   className="half-width"
                   onClick={() => setCurrentStage(3)}
+                  disabled={!isPaid}
                 >
                   Pay Now
                 </Button>
@@ -660,11 +723,19 @@ const Checkout: FunctionComponent = () => {
                   <span className="normal-text bold">₦196,000</span>
                 </div>
                 {currentStage === 1 ? (
-                  <Button responsive onClick={() => setCurrentStage(2)}>
+                  <Button
+                    responsive
+                    onClick={() => setCurrentStage(2)}
+                    disabled={!isPaid}
+                  >
                     Proceed to Payment
                   </Button>
                 ) : (
-                  <Button responsive onClick={() => setCurrentStage(3)}>
+                  <Button
+                    responsive
+                    onClick={() => setCurrentStage(3)}
+                    disabled={!isPaid}
+                  >
                     Pay Now
                   </Button>
                 )}
@@ -702,7 +773,7 @@ const Checkout: FunctionComponent = () => {
           )}
         </div>
       )}
-      {currentStage === 3 && (
+      {currentStage === 3 && isPaid && (
         <div className="flex between">
           <div className={styles["complete-checkout"]}>
             <div className="text-center">
@@ -712,32 +783,40 @@ const Checkout: FunctionComponent = () => {
                 className={`text-center ${styles["complete-image"]}`}
               />
               <p className={styles["order-received"]}>
-                Order Received Succesfully
+                Order{" "}
+                {order?.deliveryStatus &&
+                  deliveryMap[
+                    order?.deliveryStatus as keyof typeof deliveryMap
+                  ]}
               </p>
               <p className={styles["order-number"]}>
-                Order No: <span className={styles.bold}>#312763612652</span>{" "}
+                Order No: <span className={styles.bold}>{order?.orderID}</span>{" "}
               </p>
-              <div
-                className={`flex center-align spaced ${styles["order-info"]}`}
-              >
-                <div className={styles.icon}>
-                  <img
-                    src="icons/info.svg"
-                    alt="information"
-                    className="generic-icon"
-                  />
+              {isDelivered(order?.deliveryStatus) && (
+                <div
+                  className={`flex center-align spaced ${styles["order-info"]}`}
+                >
+                  <div className={styles.icon}>
+                    <img
+                      src="icons/info.svg"
+                      alt="information"
+                      className="generic-icon"
+                    />
+                  </div>
+                  <p>
+                    Your order was received, please note your order number in
+                    every correspondence with us.
+                  </p>
                 </div>
-                <p>
-                  Your order was received, please note your order number in
-                  every correspondence with us.
-                </p>
-              </div>
+              )}
               <Button className={styles["shopping-btn"]}>
                 Continue Shopping
               </Button>
-              <Link href="/#">
-                <a className={styles.track}>Track Order</a>
-              </Link>
+              {isDelivered(order?.deliveryStatus) && (
+                <Link href="/#">
+                  <a className={styles.track}>Track Order</a>
+                </Link>
+              )}
             </div>
 
             <div className={styles["account-wrapper"]}>
@@ -800,47 +879,53 @@ const Checkout: FunctionComponent = () => {
                 expandedOrderSummary.order && styles.active
               ].join(" ")}
             >
-              <div className="flex between spaced center-align">
-                <img
-                  className={styles["order-image"]}
-                  src={order.image}
-                  alt="order"
-                />
-                <div>
-                  <p className="margin-bottom spaced">{order.name}</p>
-                  <p>{order.details}</p>
-                </div>
-                <p className="sub-heading bold">₦{order.price}</p>
-              </div>
-              <div className={styles["order-detail"]}>
-                <p>
-                  <span className="margin-right">Qty:</span> {order.quantity}
-                </p>
-                <p className="vertical-margin spaced">
-                  <span className="margin-right">Size:</span> {order.size}
-                </p>
-                <p className="margin-bottom spaced">
-                  <span className="margin-right">Design:</span> {order.design}
-                </p>
-                <p className="margin-bottom">Add Ons</p>
-                {order.addons.map((addon, index) => (
-                  <div
-                    className="flex between spaced margin-bottom center-align"
-                    key={index}
-                  >
+              {order?.orderItems.map((item, index) => (
+                <div key={index}>
+                  <div className="flex between spaced center-align">
                     <img
-                      src={addon.image}
-                      alt="addon image"
-                      className={styles["addon-image"]}
+                      className={styles["order-image"]}
+                      src={orderSample.image}
+                      alt="order"
                     />
                     <div>
-                      <p className="margin-bottom">{addon.name}</p>
-                      <p className={styles["light-gray"]}>Tom Ford x 1</p>
+                      <p className="margin-bottom spaced">{item.name}</p>
+                      <p>{orderSample.details}</p>
                     </div>
-                    <p className="normal-text bold">₦{addon.price}</p>
+                    <p className="sub-heading bold">₦{orderSample.price}</p>
                   </div>
-                ))}
-              </div>
+                  <div className={styles["order-detail"]}>
+                    <p>
+                      <span className="margin-right">Qty:</span> {item.quantity}
+                    </p>
+                    <p className="vertical-margin spaced">
+                      <span className="margin-right">Size:</span>{" "}
+                      {orderSample.size}
+                    </p>
+                    {/* <p className="margin-bottom spaced">
+                      <span className="margin-right">Design:</span>{" "}
+                      {orderSample.design}
+                    </p> */}
+                    {/* <p className="margin-bottom">Add Ons</p> */}
+                    {/* {orderSample.addons.map((addon, index) => (
+                      <div
+                        className="flex between spaced margin-bottom center-align"
+                        key={index}
+                      >
+                        <img
+                          src={addon.image}
+                          alt="addon image"
+                          className={styles["addon-image"]}
+                        />
+                        <div>
+                          <p className="margin-bottom">{addon.name}</p>
+                          <p className={styles["light-gray"]}>Tom Ford x 1</p>
+                        </div>
+                        <p className="normal-text bold">₦{addon.price}</p>
+                      </div>
+                    ))} */}
+                  </div>
+                </div>
+              ))}
             </div>
 
             <div className="flex between vertical-margin spaced center-align">
@@ -924,3 +1009,7 @@ const Checkout: FunctionComponent = () => {
 };
 
 export default Checkout;
+
+// const isPaid = paymentStatus => {
+//   return /go\s*ahead/i.test(paymentStatus) || /^paid/i.test(paymentStatus);
+// };
