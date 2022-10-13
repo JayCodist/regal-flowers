@@ -16,6 +16,12 @@ export const defaultCurrency: AppCurrency = {
   sign: "₦"
 };
 
+export const currencyOptions: AppCurrency[] = [
+  { ...defaultCurrency },
+  { name: "USD", conversionRate: 415, sign: "$" },
+  { name: "GBP", conversionRate: 523, sign: "£" }
+];
+
 export const aboutUsContent: {
   [key: string]: { title: string; content: string };
 } = {
@@ -388,7 +394,159 @@ export const blogPosts: BlogPost[] = [
 export const deliveryStates: Option[] = [
   {
     label: "Lagos",
-    value: 1
+    value: "lagos"
+  },
+  {
+    label: "Abuja",
+    value: "abuja"
+  },
+  {
+    label: "Port Harcourt",
+    value: "port-harcourt"
+  },
+  {
+    label: "Anambra",
+    value: "anambra"
+  },
+  {
+    label: "Adamawa",
+    value: "adamawa"
+  },
+  {
+    label: "Abia",
+    value: "abia"
+  },
+  {
+    label: "Akwa Ibom",
+    value: "akwa-ibom"
+  },
+  {
+    label: "Borno",
+    value: "borno"
+  },
+  {
+    label: "Bauchi",
+    value: "bauchi"
+  },
+  {
+    label: "Benue",
+    value: "benue"
+  },
+  {
+    label: "Bayelsa",
+    value: "bayelsa"
+  },
+  {
+    label: "Cross River",
+    value: "cross-river"
+  },
+  {
+    label: "Delta",
+    value: "delta"
+  },
+  {
+    label: "Enugu",
+    value: "enugu"
+  },
+  {
+    label: "Edo",
+    value: "edo"
+  },
+  {
+    label: "Ekiti",
+    value: "ekiti"
+  },
+  {
+    label: "Ebonyi",
+    value: "ebonyi"
+  },
+  {
+    label: "Gombe",
+    value: "gombe"
+  },
+  {
+    label: "Imo",
+    value: "imo"
+  },
+  {
+    label: "Jigawa",
+    value: "jigawa"
+  },
+  {
+    label: "Kebbi",
+    value: "kebbi"
+  },
+  {
+    label: "Kano",
+    value: "kano"
+  },
+  {
+    label: "Kaduna",
+    value: "kaduna"
+  },
+  {
+    label: "Katsina",
+    value: "katsina"
+  },
+  {
+    label: "Kwara",
+    value: "kwara"
+  },
+  {
+    label: "Kogi",
+    value: "kogi"
+  },
+  {
+    label: "Niger",
+    value: "niger"
+  },
+  {
+    label: "Nasarawa",
+    value: "nasarawa"
+  },
+  {
+    label: "Oyo",
+    value: "oyo"
+  },
+
+  {
+    label: "Ogun",
+    value: "ogun"
+  },
+  {
+    label: "Osun",
+    value: "osun"
+  },
+
+  {
+    label: "Ondo",
+    value: "ondo"
+  },
+
+  {
+    label: "Plateau",
+    value: "plateau"
+  },
+  {
+    label: "Rivers",
+    value: "rivers"
+  },
+  {
+    label: "Sokoto",
+    value: "sokoto"
+  },
+  {
+    label: "Taraba",
+    value: "taraba"
+  },
+  {
+    label: "Yobe",
+    value: "yobe"
+  },
+
+  {
+    label: "Zamfara",
+    value: "zamfara"
   }
 ];
 
