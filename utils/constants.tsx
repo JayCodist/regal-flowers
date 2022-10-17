@@ -210,17 +210,17 @@ export const regalFeatures: Service[] = [
 export const regalOccasions: Occasion[] = [
   {
     title: "Love, Birthdays & Anniversary",
-    url: "/filters/occasions",
+    url: "/filters",
     image: "/images/occasions-love-bday.png"
   },
   {
     title: "Just to say Hi, Sorry, Thank You",
-    url: "/filters/occasions",
+    url: "/filters",
     image: "/images/occasions-sorry-thanks.png"
   },
   {
     title: "Bridal Flowers",
-    url: "/filters/occasions",
+    url: "/filters",
     image: "/images/occasions-bridal.png"
   }
 ];
