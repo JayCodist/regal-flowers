@@ -8,7 +8,7 @@ import Product, {
 import styles from "./products.module.scss";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { flowers } from "../filters/[filter]";
+import { flowers } from "../filters";
 
 interface Designs {
   name: DesignOption | string;

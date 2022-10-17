@@ -785,28 +785,28 @@ export const sortOptions: Option[] = [
 export const occasions: { title: string; url: string; category?: string }[] = [
   {
     title: "Love, Birthdays & Anniversary",
-    url: "/filters/occasions?selectedOccasion=love-birthdays-anniversary",
+    url: "/filters?selectedOccasion=love-birthdays-anniversary",
     category: "Anniversary Flowers"
   },
   {
     title: "Just to Say",
-    url: "/filters/occasions?selectedOccasion=just-to-say",
+    url: "/filters?selectedOccasion=just-to-say",
     category: "Just to Say Bouquets"
   },
   {
     title: "Bridal Bouquets",
-    url: "/filters/occasions?selectedOccasion=bridal-bouquets",
+    url: "/filters?selectedOccasion=bridal-bouquets",
     category:
       "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
   },
   {
     title: "Funeral & Condolence",
-    url: "/filters/occasions?selectedOccasion=funeral-condolence",
+    url: "/filters?selectedOccasion=funeral-condolence",
     category: "Funeral %26amp; Condolence"
   },
   {
     title: "All Occasions",
-    url: "/filters/occasions?selectedOccasion=all-occasions"
+    url: "/filters?selectedOccasion=all-occasions"
   }
 ];
 

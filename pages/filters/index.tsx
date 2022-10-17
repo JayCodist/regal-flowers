@@ -2,11 +2,7 @@ import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dayjs, { Dayjs } from "dayjs";
-import { GetStaticProps } from "next";
-import {
-  getProductsByCategory,
-  getProduct
-} from "../../utils/helpers/data/products";
+import { getProductsByCategory } from "../../utils/helpers/data/products";
 import Product from "../../utils/types/Product";
 import styles from "./filters.module.scss";
 import Checkbox from "../../components/checkbox/Checkbox";
@@ -135,9 +131,9 @@ export const _gifts = [
 
 const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
-const LandingPage: FunctionComponent<{ product: Product }> = () => {
+const Index: FunctionComponent<{ product: Product }> = () => {
   const { query } = useRouter();
-  const { filter, selectedOccasion } = query;
+  const { selectedOccasion } = query;
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
@@ -245,32 +241,32 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
     <section className={styles.filters} ref={rootRef}>
       <div className={[styles["hero-bg"]].join(" ")}>
         <div className="hero-content flex column center center-align">
-          {filter === "occasions" && (
-            <div className={styles["occasion-wrapper"]}>
-              {occasions.map(occasion => (
-                <Link href={occasion.url} key={occasion.title}>
-                  <a
-                    className={[
-                      styles["occasion"],
-                      selectedOccasion === occasion.url.split("=")[1] &&
-                        styles["selected-occasion"]
-                    ].join(" ")}
-                    onClick={() => {
-                      setCategory(occasion?.category || "");
-                    }}
-                  >
-                    <strong>
-                      {occasion.title}
-                      <br />
-                      {occasion.title === "Just to Say" && (
-                        <span>{JustToSayText}</span>
-                      )}{" "}
-                    </strong>
-                  </a>
-                </Link>
-              ))}
-            </div>
-          )}
+          {/* {filter === "occasions" && ( */}
+          <div className={styles["occasion-wrapper"]}>
+            {occasions.map(occasion => (
+              <Link href={occasion.url} key={occasion.title}>
+                <a
+                  className={[
+                    styles["occasion"],
+                    selectedOccasion === occasion.url.split("=")[1] &&
+                      styles["selected-occasion"]
+                  ].join(" ")}
+                  onClick={() => {
+                    setCategory(occasion?.category || "");
+                  }}
+                >
+                  <strong>
+                    {occasion.title}
+                    <br />
+                    {occasion.title === "Just to Say" && (
+                      <span>{JustToSayText}</span>
+                    )}{" "}
+                  </strong>
+                </a>
+              </Link>
+            ))}
+          </div>
+          {/* )} */}
         </div>
       </div>
       <div className={`${styles["content"]} flex spaced-xl`}>
@@ -471,31 +467,4 @@ const LandingPage: FunctionComponent<{ product: Product }> = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { productSlug } = params || {};
-  const { data, error, message } = await getProduct(String(productSlug));
-  if (error || !data) {
-    console.error(`Unable to fetch product "${productSlug}": ${message}`);
-    return {
-      props: {}
-    };
-  }
-  return {
-    props: { product: data }
-  };
-};
-
-export const getStaticPaths = async () => {
-  return {
-    paths: [
-      {
-        params: {
-          filter: "occasions"
-        }
-      }
-    ],
-    fallback: false // true or 'blocking'
-  };
-};
-
-export default LandingPage;
+export default Index;
