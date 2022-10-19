@@ -790,7 +790,8 @@ const Checkout: FunctionComponent = () => {
                   ]}
               </p>
               <p className={styles["order-number"]}>
-                Order No: <span className={styles.bold}>{order?.orderID}</span>{" "}
+                Order No:{" "}
+                <span className={styles.bold}>{order?.fullOrderId}</span>{" "}
               </p>
               {isDelivered(order?.deliveryStatus) && (
                 <div
@@ -879,7 +880,7 @@ const Checkout: FunctionComponent = () => {
                 expandedOrderSummary.order && styles.active
               ].join(" ")}
             >
-              {order?.orderItems.map((item, index) => (
+              {order?.orderProducts.map((item, index) => (
                 <div key={index}>
                   <div className="flex between spaced center-align">
                     <img

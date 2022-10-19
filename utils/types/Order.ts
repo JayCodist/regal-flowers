@@ -5,8 +5,9 @@ interface OrderItem {
 }
 
 export interface Order {
-  orderItems: OrderItem[];
+  orderProducts: OrderItem[];
   paymentStatus: string;
   orderID: number;
   deliveryStatus: string;
+  fullOrderId: string;
 }
