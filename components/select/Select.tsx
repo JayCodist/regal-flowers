@@ -69,7 +69,7 @@ interface SelectProps {
   /*
    *  Add this function prop if you want to enable infinite-scroll in a select component.
    */
-  onScrollEnd?: (params: { page: number; mergeRecords: true }) => void;
+  onScrollEnd?: (params: { pageNumber: number; mergeRecords: true }) => void;
   /**
    * Indicates whether the width of the component should be adjusted to fit the content
    */
@@ -129,7 +129,7 @@ const Select: FunctionComponent<SelectProps> = props => {
 
   useEffect(() => {
     if (page !== 1) {
-      onScrollEnd?.({ page, mergeRecords: true });
+      onScrollEnd?.({ pageNumber: page, mergeRecords: true });
       setIsSearching(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
