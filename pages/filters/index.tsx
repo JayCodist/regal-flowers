@@ -138,7 +138,7 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
-  const [category, setCategory] = useState<string>("Anniversary Flowers");
+  const [category, setCategory] = useState<string>();
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<
     string[]
   >([]);
@@ -209,7 +209,7 @@ const Index: FunctionComponent<{ product: Product }> = () => {
     const filterParams = {
       category: selectedFilterCategory.length
         ? selectedFilterCategory.join(",")
-        : category,
+        : category || (selectedOccasion as string),
       tags: selectedTagCategories.length ? selectedTagCategories.join(" ,") : ""
     };
     const params: FetchResourceParams = {
@@ -235,7 +235,13 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   useEffect(() => {
     fetchProductCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, selectedFilterCategory, page, selectedTagCategories]);
+  }, [
+    category,
+    selectedFilterCategory,
+    page,
+    selectedTagCategories,
+    selectedOccasion
+  ]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -354,11 +360,9 @@ const Index: FunctionComponent<{ product: Product }> = () => {
           </div>
           <div>
             <p className={`${styles.title} bold vertical-margin spaced`}>
-              {
-                occasions.filter(occasion => {
-                  return selectedOccasion === occasion.url.split("=")[1];
-                })[0]?.title
-              }{" "}
+              {occasions.filter(occasion => {
+                return selectedOccasion === occasion.url.split("=")[1];
+              })[0]?.title || selectedOccasion}{" "}
               Flowers
             </p>
 
