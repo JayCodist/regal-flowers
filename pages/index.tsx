@@ -505,7 +505,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
     <div className={styles["flower-input-wrapper"]}>
       <Select
         options={occassionOptions.options}
-        value={occasion.name}
+        value={occasion.id}
         onSelect={value => handleOnselect(value as string)}
         className={styles["occasion-select"]}
         placeholder="Select Occasion"
