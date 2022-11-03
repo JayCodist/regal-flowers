@@ -785,7 +785,7 @@ export const sortOptions: Option[] = [
 export const occasions: { title: string; url: string; category?: string }[] = [
   {
     title: "Love, Birthdays & Anniversary",
-    url: "/filters?selectedOccasion=love-birthdays-anniversary",
+    url: "/filters?selectedOccasion=Anniversary Flowers",
     category: "Anniversary Flowers"
   },
   {

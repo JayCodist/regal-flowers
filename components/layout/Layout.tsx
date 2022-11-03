@@ -36,7 +36,7 @@ const Header: FunctionComponent = () => {
       children: []
     },
     {
-      url: "/filters?selectedOccasion=love-birthdays-anniversary",
+      url: "/filters?selectedOccasion=Anniversary Flowers",
       title: "Occasions",
       children: []
     },
