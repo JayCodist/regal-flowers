@@ -1,10 +1,4 @@
-import {
-  FunctionComponent,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState
-} from "react";
+import { FunctionComponent, ReactNode, useContext } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
 import { AppCurrency, AppLink } from "../../utils/types/Core";
@@ -13,16 +7,12 @@ import SettingsContext from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
-  const [pathName, setPathName] = useState("");
   const { pathname } = useRouter();
-
-  useEffect(() => {
-    setPathName(pathname.split("/")[1]);
-  }, [pathname]);
+  const _pathname = pathname.split("/")[1];
 
   return (
     <>
-      {pathName === "checkout" ? <CheckoutHeader /> : <Header />}
+      {_pathname === "checkout" ? <CheckoutHeader /> : <Header />}
       <main className={styles.main}>{children}</main>
     </>
   );
