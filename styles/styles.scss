@@ -237,6 +237,10 @@ button {
 }
 .margin-top {
   margin-top: 0.6rem;
+
+  &.spaced {
+    margin-bottom: 1.2rem;
+  }
 }
 .round {
   border-radius: 50%;
