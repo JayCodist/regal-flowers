@@ -109,6 +109,8 @@
   z-index: -1;
   background-color: transparent;
   transition: 0.3s ease-in-out;
+  overflow-x: hidden;
+  overflow-y: auto;
 
   &.active {
     background-color: rgba(0, 0, 0, 0.5);
@@ -119,13 +121,16 @@
     position: absolute;
     width: 30rem;
     background-color: white;
-    top: -30rem;
+    top: -100rem;
     right: 2rem;
     padding: 2rem;
     transition: 0.3s ease-in-out;
+    opacity: 0;
+    padding-bottom: 1rem;
 
     &.active {
       top: 6rem;
+      opacity: 1;
     }
 
     .cart-header {
@@ -157,7 +162,8 @@
     .cart-item {
       display: flex;
       align-items: flex-start;
-      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 1.5rem;
 
       & > * {
         margin-right: 1rem;
