@@ -108,7 +108,7 @@
   height: 100%;
   z-index: -1;
   background-color: transparent;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
 
   &.active {
     background-color: rgba(0, 0, 0, 0.5);
