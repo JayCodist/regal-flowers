@@ -250,16 +250,18 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   return (
     <div
-      className={[styles.backdrop, visible && styles.active, "scrollable"].join(
-        " "
-      )}
+      className={[
+        styles.backdrop,
+        visible && styles.active,
+        visible && "scrollable"
+      ].join(" ")}
     >
       <div
         ref={cartRef}
         className={[
           styles["cart-context"],
           visible && styles.active,
-          "scrollable"
+          visible && "scrollable"
         ].join(" ")}
       >
         <div className={styles["cart-header"]}>
