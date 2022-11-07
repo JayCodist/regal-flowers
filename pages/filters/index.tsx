@@ -395,6 +395,8 @@ const Index: FunctionComponent<{ product: Product }> = () => {
                         }
                       : null
                   }
+                  product={product}
+                  cart
                 />
               ))}
             </div>

@@ -1,6 +1,6 @@
 import { Dayjs } from "dayjs";
 import { createContext } from "react";
-import { AppCurrency, Settings, Stage } from "../types/Core";
+import { AppCurrency, CartItem, Settings, Stage } from "../types/Core";
 
 export interface SettingsControls extends Settings {
   currency: AppCurrency;
@@ -8,6 +8,8 @@ export interface SettingsControls extends Settings {
   setCurrentStage: (stage: Stage) => void;
   deliveryDate: Dayjs | null;
   setDeliveryDate: (deliveryDate: Dayjs | null) => void;
+  setCartItems: (cartItems: CartItem[]) => void;
+  cartItems: CartItem[];
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -16,7 +18,9 @@ const SettingsContext = createContext<SettingsControls>({
   currentStage: 1,
   setCurrentStage: () => {},
   deliveryDate: null,
-  setDeliveryDate: () => {}
+  setDeliveryDate: () => {},
+  cartItems: [],
+  setCartItems: () => {}
 });
 
 export default SettingsContext;
