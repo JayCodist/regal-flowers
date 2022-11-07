@@ -1,5 +1,8 @@
 import Link from "next/link";
-import React, { forwardRef } from "react";
+import React, { forwardRef, MouseEvent, useContext } from "react";
+import SettingsContext from "../../utils/context/SettingsContext";
+import { CartItem } from "../../utils/types/Core";
+import Product from "../../utils/types/Product";
 import Button from "../button/Button";
 import styles from "./FlowerCard.module.scss";
 
@@ -12,11 +15,46 @@ interface IFlowerCardProps {
   url: string;
   isAddonGroup?: boolean;
   mode?: "four-x-grid" | "three-x-grid";
+  product?: Product;
+  cart?: boolean;
 }
 
 const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
   (props, ref) => {
-    const { buttonText, image, price, name, subTitle, url, mode } = props;
+    const {
+      buttonText,
+      image,
+      price,
+      name,
+      subTitle,
+      url,
+      mode,
+      product,
+      cart
+    } = props;
+
+    const { cartItems, setCartItems } = useContext(SettingsContext);
+
+    const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+
+      const cartItem: CartItem = product
+        ? {
+            key: product?.key,
+            name: product?.name,
+            price: product?.price,
+            quantity: 1,
+            image: product?.images[0]
+          }
+        : ({} as CartItem);
+
+      const _cartItem = cartItems.find(item => item.key === product?.key);
+
+      if (!_cartItem) {
+        setCartItems([...cartItems, cartItem]);
+      }
+      e.stopPropagation();
+    };
     return (
       <Link href={url || "#"}>
         <a
@@ -46,7 +84,10 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
                   <p className="bold">{price}</p>
                 </div>
               )}
-              <Button className={`${styles["buy-btn"]}`}>
+              <Button
+                className={`${styles["buy-btn"]}`}
+                onClick={e => cart && handleAddToCart(e)}
+              >
                 {buttonText ? buttonText : "Buy Now"}
               </Button>
             </div>

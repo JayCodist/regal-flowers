@@ -1,4 +1,4 @@
-import { FunctionComponent, useContext, useState } from "react";
+import { FunctionComponent, useContext, useState, useEffect } from "react";
 import Button from "../components/button/Button";
 import FlowerCard from "../components/flower-card/FlowerCard";
 import styles from "./index.module.scss";
@@ -20,9 +20,11 @@ import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
 import BlogCard from "../components/blog-card/BlogCard";
 import SettingsContext from "../utils/context/SettingsContext";
-import Select from "../components/select/Select";
-import { Occasion } from "../utils/types/Regal";
+import Select, { PaginatedOptionsWrapper } from "../components/select/Select";
 import DatePicker from "../components/date-picker/DatePicker";
+import { getCategory } from "../utils/helpers/data/category";
+import { FetchResourceParams } from "../utils/types/FetchResourceParams";
+import { Category } from "../utils/types/Category";
 
 const LandingPage: FunctionComponent = () => {
   const [featuredFlowers] = useState(sampleFlowers);
@@ -45,7 +47,7 @@ const LandingPage: FunctionComponent = () => {
             <div className="flex between">
               <h2 className="featured-title">Best Selling Flowers</h2>
               <Button
-                url="/filters/occasions"
+                url="/filters?selectedOccasion=all-occasions"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -83,7 +85,7 @@ const LandingPage: FunctionComponent = () => {
             <div className="flex between">
               <h2 className="featured-title">Featured Occasions</h2>
               <Button
-                url="/filters/occasions"
+                url="/filters?selectedOccasion=all-occasions"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -245,7 +247,7 @@ const LandingPage: FunctionComponent = () => {
             <div className="flex between">
               <h2 className="featured-title">Gifts to Include with Flowers</h2>
               <Button
-                url="/filters/occasions"
+                url="/filters?selectedOccasion=all-occasions"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -294,7 +296,7 @@ const LandingPage: FunctionComponent = () => {
                 The gradual accumulation of information about atomic and
                 small-scale behavior during the first quarter of the 20th{" "}
               </span>
-              <Button padded url="/filters/occasions">
+              <Button padded url="/filters">
                 Send Flowers
               </Button>
             </div>
@@ -445,32 +447,71 @@ const LandingPage: FunctionComponent = () => {
   );
 };
 
-const occasionOptions = regalOccasions.map(occasion => ({
-  ...occasion,
-  label: occasion.title,
-  value: occasion.title
-}));
+// const occasionOptions = regalOccasions.map(occasion => ({
+//   ...occasion,
+//   label: occasion.title,
+//   value: occasion.title
+// }));
 
 const FlowerDeliveryInput: FunctionComponent = () => {
-  const [occasion, setOccasion] = useState<Occasion | null>(null);
+  const [occasion, setOccasion] = useState<Category>({ name: "", id: "" });
   const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
+  const [occassionOptions, setOccassionOptions] =
+    useState<PaginatedOptionsWrapper>({
+      options: []
+    });
+
+  const fetchCategories = async (props?: FetchResourceParams) => {
+    const { pageNumber = 1, pageSize = 10, mergeRecords } = props || {};
+    const response = await getCategory({ pageNumber, pageSize });
+    const { data, error } = response;
+
+    if (error) {
+      return;
+    } else if (data) {
+      const category = data.map(category => ({
+        value: category.id,
+        label: category.name
+      }));
+
+      const options = [
+        ...(mergeRecords ? occassionOptions.options : []),
+        ...category
+      ];
+
+      setOccassionOptions({ options, hasNext: data.length > 0 });
+    }
+  };
+
+  const handleOnselect = (value: string) => {
+    const _selectedOccasion = occassionOptions.options.find(
+      _occasion => _occasion.value === value
+    )?.label as string;
+
+    setOccasion(
+      {
+        name: _selectedOccasion,
+        id: value
+      } || null
+    );
+  };
+
+  useEffect(() => {
+    fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={styles["flower-input-wrapper"]}>
       <Select
-        options={occasionOptions}
-        value={occasion?.title || ""}
-        onSelect={value =>
-          setOccasion(
-            occasionOptions.find(
-              _occasion => _occasion.value === value
-            ) as Occasion | null
-          )
-        }
+        options={occassionOptions.options}
+        value={occasion.id}
+        onSelect={value => handleOnselect(value as string)}
         className={styles["occasion-select"]}
         placeholder="Select Occasion"
         startIcon="/icons/bullet-points.svg"
         hideCaret
+        onScrollEnd={occassionOptions.hasNext ? fetchCategories : undefined}
       />
       <DatePicker
         value={deliveryDate}
@@ -482,7 +523,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
       />
       <Button
         padded
-        url={`/filters/occasions?selectedOccasion=${occasion?.title || ""}`}
+        url={`/filters?selectedOccasion=${occasion?.name || ""}`}
         className={styles["occasion-submit"]}
       >
         Send Flowers

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import Button from "../../components/button/Button";
 import Checkbox from "../../components/checkbox/Checkbox";
+import DatePicker from "../../components/date-picker/DatePicker";
 import Input, { TextArea } from "../../components/input/Input";
 import PhoneInput from "../../components/phone-input/PhoneInput";
 import Radio from "../../components/radio/Radio";
@@ -13,8 +14,9 @@ import {
   paymentMethod
 } from "../../utils/constants";
 import SettingsContext from "../../utils/context/SettingsContext";
-import { getOrder } from "../../utils/helpers/data/order";
+import { getOrder, updateOrder } from "../../utils/helpers/data/order";
 import { getZoneGroups } from "../../utils/helpers/data/zone-group";
+import { emailValidator } from "../../utils/helpers/validators";
 import {
   BitcoinGoldIcon,
   BuildingRedIcon,
@@ -22,25 +24,25 @@ import {
   InfoRedIcon,
   PaypalBlueIcon
 } from "../../utils/resources";
-import { Order } from "../../utils/types/Order";
+import { CreateOrder, Order } from "../../utils/types/Order";
 import styles from "./index.module.scss";
 
 const initialData = {
-  name: "",
-  email: "",
+  senderName: "",
+  senderEmail: "",
   senderPhoneNumber: undefined,
-  password: "",
+  senderPassword: "",
   freeAccount: true,
   coupon: "",
   deliveryMethod: "delivery",
   deliveryState: "",
-  pickupLocation: "",
-  fullName: "",
-  deliveryDate: "",
+  pickUpLocation: "",
+  recipientName: "",
+  deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
   residenceType: "",
-  homeAddress: "",
+  recipientHomeAddress: "",
   additionalInfo: "",
   message: "",
   purpose: "",
@@ -50,7 +52,9 @@ const initialData = {
   cardCVV: "",
   recipientCountryCode: "",
   senderCountryCode: "",
-  recipientAltCountryCode: ""
+  recipientAltCountryCode: "",
+  recipientEmail: "",
+  pickUpState: ""
 };
 
 const orderSample = {
@@ -84,7 +88,7 @@ const Checkout: FunctionComponent = () => {
   const { currentStage, setCurrentStage, currency, setCurrency } =
     useContext(SettingsContext);
   const [selectedMethod, setSelectedMethod] = useState<number | null>();
-  const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(false);
   const [order, setOrder] = useState<Order | null>(null);
   const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
     order?: boolean;
@@ -92,6 +96,7 @@ const Checkout: FunctionComponent = () => {
   }>({ order: true, payment: false });
   const [isPaid, setIsPaid] = useState(false);
   const [pickUpOptions, setPickUpOptions] = useState<Option[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const {
     query: { orderId }
@@ -106,7 +111,7 @@ const Checkout: FunctionComponent = () => {
   };
 
   const fetchOrder = async () => {
-    setLoading(true);
+    setPageLoading(true);
     const res = await getOrder(orderId as string);
     const { error, data } = res;
 
@@ -120,7 +125,7 @@ const Checkout: FunctionComponent = () => {
       );
     }
 
-    setLoading(false);
+    setPageLoading(false);
   };
 
   const fetchZoneGroups = async () => {
@@ -165,14 +170,50 @@ const Checkout: FunctionComponent = () => {
 
   useEffect(() => {
     if (isPaid) {
-      setCurrentStage(3);
+      // setCurrentStage(3);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPaid]);
 
-  // const isPaid = (paymentStatus: string) => {
-  //   return /go\s*ahead/i.test(paymentStatus) || /^paid/i.test(paymentStatus);
-  // };
+  const handleSubmit = async () => {
+    setLoading(true);
+    const order: CreateOrder = {
+      client: {
+        name: formData.senderName,
+        email: formData.senderEmail,
+        phone: formData.senderPhoneNumber,
+        password: formData.senderPassword
+      },
+      recipient: {
+        name: formData.recipientName,
+        phone: formData.recipientPhoneNumber,
+        phoneAlt: formData.recipientPhoneNumberAlt,
+        email: formData.recipientEmail,
+        address: formData.recipientHomeAddress
+      },
+      deliveryState: formData.deliveryState,
+      pickUpState: formData.pickUpState,
+      pickUpLocation: formData.pickUpLocation,
+      deliveryDate: formData.deliveryDate || "",
+      purpose: formData.purpose,
+      message: formData.message,
+      additionalInfo: formData.additionalInfo
+    };
+
+    console.log(order);
+
+    const response = await updateOrder(orderId as string, order);
+
+    const { error, message } = response;
+
+    if (error) {
+      console.log(message);
+    } else {
+      setCurrentStage(2);
+    }
+
+    setLoading(false);
+  };
 
   const deliveryMap = {
     Arranged: "Arranged",
@@ -187,7 +228,7 @@ const Checkout: FunctionComponent = () => {
     return /delivered/i.test(deliveryStatus);
   };
 
-  if (loading) {
+  if (pageLoading) {
     return (
       <div className={styles.loader}>
         <img src="/images/spinner.svg" alt="loader" />
@@ -211,8 +252,8 @@ const Checkout: FunctionComponent = () => {
                         <Input
                           name="name"
                           placeholder="Name"
-                          value={formData.name}
-                          onChange={value => handleChange("name", value)}
+                          value={formData.senderName}
+                          onChange={value => handleChange("senderName", value)}
                           dimmed
                           responsive
                         />
@@ -222,10 +263,13 @@ const Checkout: FunctionComponent = () => {
                         <Input
                           name="email"
                           placeholder="Email"
-                          value={formData.email}
-                          onChange={value => handleChange("email", value)}
+                          value={formData.senderEmail}
+                          onChange={value => handleChange("senderEmail", value)}
                           dimmed
                           responsive
+                          onBlurValidation={() =>
+                            emailValidator(formData.senderEmail)
+                          }
                         />
                       </div>
                     </div>
@@ -248,8 +292,10 @@ const Checkout: FunctionComponent = () => {
                           name="password"
                           type="password"
                           placeholder="Password"
-                          value={formData.password}
-                          onChange={value => handleChange("password", value)}
+                          value={formData.senderPassword}
+                          onChange={value =>
+                            handleChange("senderPassword", value)
+                          }
                           dimmed
                           responsive
                           autoComplete="new-password"
@@ -304,8 +350,19 @@ const Checkout: FunctionComponent = () => {
                       </span>
 
                       <Select
-                        onSelect={value => handleChange("deliveryState", value)}
-                        value={formData.deliveryState}
+                        onSelect={value =>
+                          handleChange(
+                            deliveryMethod === "delivery"
+                              ? "deliveryState"
+                              : "PickUpState",
+                            value
+                          )
+                        }
+                        value={
+                          deliveryMethod === "delivery"
+                            ? formData.deliveryState
+                            : formData.pickUpState
+                        }
                         options={
                           deliveryMethod === "delivery"
                             ? deliveryStates
@@ -327,9 +384,9 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Ikoyi"
                             onChange={() =>
-                              handleChange("pickupLocation", "ikoyi")
+                              handleChange("pickUpLocation", "ikoyi")
                             }
-                            checked={formData.pickupLocation === "ikoyi"}
+                            checked={formData.pickUpLocation === "ikoyi"}
                           />
                         </div>
                         <div className="vertical-margin">
@@ -337,10 +394,10 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Victoria Island"
                             onChange={() =>
-                              handleChange("pickupLocation", "victoria-island")
+                              handleChange("pickUpLocation", "victoria-island")
                             }
                             checked={
-                              formData.pickupLocation === "victoria-island"
+                              formData.pickUpLocation === "victoria-island"
                             }
                           />
                         </div>
@@ -350,9 +407,9 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Lagos Island"
                             onChange={() =>
-                              handleChange("pickupLocation", "island")
+                              handleChange("pickUpLocation", "island")
                             }
-                            checked={formData.pickupLocation === "island"}
+                            checked={formData.pickUpLocation === "island"}
                           />
                         </div>
                         <div className="vertical-margin">
@@ -360,9 +417,9 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Lekki Phase 1 only"
                             onChange={() =>
-                              handleChange("pickupLocation", "lekki")
+                              handleChange("pickUpLocation", "lekki")
                             }
-                            checked={formData.pickupLocation === "lekki"}
+                            checked={formData.pickUpLocation === "lekki"}
                           />
                         </div>
                         <div className="vertical-margin">
@@ -370,10 +427,10 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Bettween Lekki Phase 1 - Ikate/Chevron/Mega Chicken  B/Stop"
                             onChange={() =>
-                              handleChange("pickupLocation", "between-lekki")
+                              handleChange("pickUpLocation", "between-lekki")
                             }
                             checked={
-                              formData.pickupLocation === "between-lekki"
+                              formData.pickUpLocation === "between-lekki"
                             }
                           />
                         </div>
@@ -393,7 +450,7 @@ const Checkout: FunctionComponent = () => {
                         onSelect={value => handleChange("deliveryState", value)}
                         value={formData.deliveryState}
                         options={[]}
-                        placeholder="Select Recipient"
+                        placeholder="Select Past Recipient"
                         responsive
                         dimmed
                       />
@@ -409,22 +466,22 @@ const Checkout: FunctionComponent = () => {
                         <Input
                           name="name"
                           placeholder=""
-                          value={formData.fullName}
-                          onChange={value => handleChange("fullName", value)}
+                          value={formData.recipientName}
+                          onChange={value =>
+                            handleChange("recipientName", value)
+                          }
                           dimmed
                           responsive
                         />
                       </div>
                       <div className="input-group">
                         <span className="question">Delivery Date</span>
-                        <Input
-                          name="email"
-                          placeholder="Email"
+                        <DatePicker
                           value={formData.deliveryDate}
                           onChange={value =>
                             handleChange("deliveryDate", value)
                           }
-                          dimmed
+                          format="DD/MM/YYYY"
                           responsive
                         />
                       </div>
@@ -473,9 +530,11 @@ const Checkout: FunctionComponent = () => {
                       <span className="question">Detailed Home Address</span>
 
                       <TextArea
-                        value={formData.homeAddress}
+                        value={formData.recipientHomeAddress}
                         placeholder="To help us deliver better, please be detailed as possible"
-                        onChange={value => handleChange("homeAddress", value)}
+                        onChange={value =>
+                          handleChange("recipientHomeAddress", value)
+                        }
                         dimmed
                         rows={3}
                       />
@@ -534,7 +593,8 @@ const Checkout: FunctionComponent = () => {
 
                 <Button
                   className="half-width"
-                  onClick={() => setCurrentStage(2)}
+                  onClick={handleSubmit}
+                  loading={loading}
                 >
                   Proceed to Payment
                 </Button>
@@ -674,7 +734,6 @@ const Checkout: FunctionComponent = () => {
                 <Button
                   className="half-width"
                   onClick={() => setCurrentStage(3)}
-                  disabled={!isPaid}
                 >
                   Pay Now
                 </Button>
@@ -693,11 +752,11 @@ const Checkout: FunctionComponent = () => {
               <div className={`${styles.border} padded`}>
                 <div className="flex between ">
                   <span className="normal-text">Subtotal</span>
-                  <span className="normal-text bold">₦36,000</span>
+                  <span className="normal-text bold">₦{order?.cost}</span>
                 </div>
                 <div className="flex between vertical-margin">
                   <span className="normal-text">Add-Ons total</span>
-                  <span className="normal-text bold">₦136,000</span>
+                  <span className="normal-text bold">₦{order?.cost}</span>
                 </div>
                 {deliveryMethod === "pick-up" && (
                   <div className="flex between">
@@ -723,19 +782,11 @@ const Checkout: FunctionComponent = () => {
                   <span className="normal-text bold">₦196,000</span>
                 </div>
                 {currentStage === 1 ? (
-                  <Button
-                    responsive
-                    onClick={() => setCurrentStage(2)}
-                    disabled={!isPaid}
-                  >
+                  <Button responsive onClick={handleSubmit} loading={loading}>
                     Proceed to Payment
                   </Button>
                 ) : (
-                  <Button
-                    responsive
-                    onClick={() => setCurrentStage(3)}
-                    disabled={!isPaid}
-                  >
+                  <Button responsive onClick={() => setCurrentStage(3)}>
                     Pay Now
                   </Button>
                 )}
@@ -790,7 +841,8 @@ const Checkout: FunctionComponent = () => {
                   ]}
               </p>
               <p className={styles["order-number"]}>
-                Order No: <span className={styles.bold}>{order?.orderID}</span>{" "}
+                Order No:{" "}
+                <span className={styles.bold}>{order?.fullOrderId}</span>{" "}
               </p>
               {isDelivered(order?.deliveryStatus) && (
                 <div
@@ -879,7 +931,7 @@ const Checkout: FunctionComponent = () => {
                 expandedOrderSummary.order && styles.active
               ].join(" ")}
             >
-              {order?.orderItems.map((item, index) => (
+              {order?.orderProducts?.map((item, index) => (
                 <div key={index}>
                   <div className="flex between spaced center-align">
                     <img
@@ -973,11 +1025,11 @@ const Checkout: FunctionComponent = () => {
               <hr className="hr margin-bottom spaced" />
               <div className="flex between normal-text margin-bottom spaced">
                 <span>Subtotal</span>
-                <span className="bold">₦36,000</span>
+                <span className="bold">₦{order?.cost}</span>
               </div>
               <div className="flex between normal-text margin-bottom spaced">
                 <span>Add-Ons total</span>
-                <span className="bold">₦136,000</span>
+                <span className="bold">₦{order?.cost}</span>
               </div>
               <div className="flex between normal-text margin-bottom spaced">
                 <div>

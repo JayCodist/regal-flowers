@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
 import Product, {
@@ -8,7 +8,9 @@ import Product, {
 import styles from "./products.module.scss";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { flowers } from "../filters/[filter]";
+import { flowers } from "../filters";
+import SettingsContext from "../../utils/context/SettingsContext";
+import { CartItem } from "../../utils/types/Core";
 
 interface Designs {
   name: DesignOption | string;
@@ -29,6 +31,28 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
   });
   const [productPrice, setProductPrice] = useState<number>(product.price);
   const [total, setTotal] = useState<number>(product.price);
+
+  const { setCartItems, cartItems } = useContext(SettingsContext);
+
+  const handleAddToCart = () => {
+    const cartItem: CartItem = {
+      key: product.key,
+      name: product.name,
+      price: total,
+      size: selectedSize,
+      design: selectedDesign.name,
+      quantity: 1,
+      image: product.images[0]
+    };
+
+    const _cartItem = cartItems.find(item => item.key === product.key);
+
+    console.log(_cartItem);
+
+    if (!_cartItem) {
+      setCartItems([...cartItems, cartItem]);
+    }
+  };
 
   const designs: Designs[] = [
     {
@@ -496,8 +520,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
               <strong>Buy Now</strong>
             </Button>
             <Button
-              url="/checkout?orderId=008UOmFSK0aSPlZX19XK"
+              // url="/checkout?orderId=008UOmFSK0aSPlZX19XK"
               className={styles["add-to-cart"]}
+              onClick={() => handleAddToCart()}
             >
               <strong>Add to Cart ₦{total}</strong>
             </Button>

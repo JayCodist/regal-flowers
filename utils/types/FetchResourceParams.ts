@@ -14,4 +14,5 @@ export interface FetchResourceParams<F = FilterLogic> {
   searchStr?: string;
   filter?: F;
   sortLogic?: SortLogic;
+  mergeRecords?: boolean;
 }

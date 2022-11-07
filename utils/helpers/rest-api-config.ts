@@ -1,4 +1,5 @@
-const baseUrl = "https://regal-operations-defy.appspot.com";
+// const baseUrl = "https://regal-operations-defy.appspot.com";
+const baseUrl = "http://localhost:8080";
 // "https://service-default-dot-regal-operations-defy.appspot.com/v1/config/wordpress-proxy";
 
 const restAPIHeaders = {

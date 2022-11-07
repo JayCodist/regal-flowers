@@ -6,14 +6,15 @@ import Layout from "../components/layout/Layout";
 import SettingsContext, {
   SettingsControls
 } from "../utils/context/SettingsContext";
-import { AppCurrency, Settings, Stage } from "../utils/types/Core";
+import { AppCurrency, CartItem, Settings, Stage } from "../utils/types/Core";
 import { defaultCurrency } from "../utils/constants";
 import { Dayjs } from "dayjs";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
   currentStage: 1,
-  deliveryDate: null
+  deliveryDate: null,
+  cartItems: []
 };
 
 const App: FunctionComponent<AppProps> = props => {
@@ -29,7 +30,11 @@ const App: FunctionComponent<AppProps> = props => {
       setSettings({ ...settings, currentStage }),
     deliveryDate: settings.deliveryDate,
     setDeliveryDate: (deliveryDate: Dayjs | null) =>
-      setSettings({ ...settings, deliveryDate })
+      setSettings({ ...settings, deliveryDate }),
+    cartItems: settings.cartItems,
+    setCartItems: (cartItems: CartItem[]) => {
+      setSettings({ ...settings, cartItems });
+    }
   };
 
   const headTags = (

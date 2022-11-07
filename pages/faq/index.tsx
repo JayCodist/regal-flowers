@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { flowers } from "../filters/[filter]";
+import { flowers } from "../filters";
 import styles from "./index.module.scss";
 
 const Index: FunctionComponent = () => {
