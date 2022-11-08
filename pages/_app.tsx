@@ -2,8 +2,9 @@ import { FunctionComponent, useState } from "react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/styles.scss";
-import Layout from "../components/layout/Layout";
+import Layout, { Toaster } from "../components/layout/Layout";
 import SettingsContext, {
+  NotifyType,
   SettingsControls
 } from "../utils/context/SettingsContext";
 import { AppCurrency, CartItem, Settings, Stage } from "../utils/types/Core";
@@ -17,9 +18,41 @@ const defaultSettings: Settings = {
   cartItems: []
 };
 
+let toasterTimer: ReturnType<typeof setTimeout>;
+const toasterDuration = {
+  success: 2000,
+  info: 4000,
+  error: 5000
+};
+
 const App: FunctionComponent<AppProps> = props => {
   const { Component, pageProps } = props;
   const [settings, setSettings] = useState<Settings>(defaultSettings);
+  const [showToaster, setShowToaster] = useState(false);
+  const [toasterParams, setToasterParams] = useState<{
+    message?: string;
+    type?: NotifyType;
+  }>({});
+
+  const notify = (type: NotifyType, message: string, duration?: number) => {
+    setShowToaster(false);
+    clearTimeout(toasterTimer);
+
+    const displayToaster = () => {
+      setToasterParams({ message, type });
+      setShowToaster(true);
+
+      toasterTimer = setTimeout(() => {
+        setShowToaster(false);
+      }, duration || toasterDuration[type]);
+    };
+
+    setTimeout(() => displayToaster(), 300);
+  };
+
+  const dismissToaster = () => {
+    setShowToaster(false);
+  };
 
   const settingsControls: SettingsControls = {
     currency: settings.currency,
@@ -34,7 +67,8 @@ const App: FunctionComponent<AppProps> = props => {
     cartItems: settings.cartItems,
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
-    }
+    },
+    notify
   };
 
   const headTags = (
@@ -50,6 +84,11 @@ const App: FunctionComponent<AppProps> = props => {
         {headTags}
         <Layout>
           <Component {...pageProps} />
+          <Toaster
+            visible={showToaster}
+            toasterParams={toasterParams}
+            cancel={dismissToaster}
+          />
         </Layout>
       </div>
     </SettingsContext.Provider>

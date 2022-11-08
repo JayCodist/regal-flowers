@@ -10,7 +10,9 @@ import Link from "next/link";
 import styles from "./Layout.module.scss";
 import { AppCurrency, AppLink } from "../../utils/types/Core";
 import { defaultCurrency } from "../../utils/constants";
-import SettingsContext from "../../utils/context/SettingsContext";
+import SettingsContext, {
+  NotifyType
+} from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";
 import Button from "../button/Button";
 import { createOrder } from "../../utils/helpers/data/order";
@@ -437,6 +439,46 @@ export const CheckoutHeader: FunctionComponent = () => {
         </div>
       </div>
     </header>
+  );
+};
+
+interface ToasterProps {
+  cancel: () => void;
+  toasterParams: { message?: string; type?: NotifyType };
+  visible: boolean;
+}
+
+export const Toaster = (props: ToasterProps) => {
+  const { visible, toasterParams, cancel } = props;
+  const { type, message } = toasterParams;
+
+  const iconsMap = {
+    success: "/icons/check.svg",
+    error: "/icons/times-solid.svg",
+    info: "/icons/info-solid.svg"
+  };
+
+  return (
+    <div
+      className={[
+        styles.toaster,
+        styles[type ?? "success"],
+        visible && styles.active
+      ].join(" ")}
+    >
+      <div className={styles["icon-wrapper"]}>
+        <img
+          alt="notify"
+          className={styles.icon}
+          src={iconsMap[type ?? "success"]}
+        />
+      </div>
+      <span className={styles.message}>{message}</span>
+      <div onClick={cancel} className={styles["close-icon"]}>
+        <div className={styles.bar} />
+        <div className={styles.bar} />
+      </div>
+    </div>
   );
 };
 

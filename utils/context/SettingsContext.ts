@@ -2,6 +2,8 @@ import { Dayjs } from "dayjs";
 import { createContext } from "react";
 import { AppCurrency, CartItem, Settings, Stage } from "../types/Core";
 
+export type NotifyType = "success" | "error" | "info";
+
 export interface SettingsControls extends Settings {
   currency: AppCurrency;
   setCurrency: (currency: AppCurrency) => void;
@@ -10,6 +12,7 @@ export interface SettingsControls extends Settings {
   setDeliveryDate: (deliveryDate: Dayjs | null) => void;
   setCartItems: (cartItems: CartItem[]) => void;
   cartItems: CartItem[];
+  notify: (type: NotifyType, message: string, duration?: number) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -20,7 +23,8 @@ const SettingsContext = createContext<SettingsControls>({
   deliveryDate: null,
   setDeliveryDate: () => {},
   cartItems: [],
-  setCartItems: () => {}
+  setCartItems: () => {},
+  notify: () => {}
 });
 
 export default SettingsContext;

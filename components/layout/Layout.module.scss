@@ -236,3 +236,73 @@
     transform: translateY(-50%);
   }
 }
+
+.toaster {
+  position: fixed;
+  top: 7rem;
+  right: 2rem;
+  z-index: 9999999;
+  height: fit-content;
+  width: 25rem;
+  transition: 0.2s ease-out;
+  color: white;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  transform: translateX(30rem);
+  font-weight: 600;
+  &.active {
+    transform: translateX(0);
+  }
+  &.success {
+    background-color: #f0fdf4;
+    color: #15803d;
+  }
+  &.error {
+    background-color: rgb(220, 20, 20);
+  }
+  &.info {
+    background-color: #2684ff;
+  }
+  .icon-wrapper {
+    background-color: white;
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1.5rem;
+    .icon {
+      height: 1.5rem;
+      width: auto;
+    }
+  }
+  .close-icon {
+    position: absolute;
+    top: 40%;
+    right: 0.6rem;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: 0.3s ease-out;
+    padding: 0.2rem;
+    background-color: red;
+    height: 1.5rem;
+    width: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .bar {
+      background-color: white;
+      height: 0.15rem;
+      width: 0.8rem;
+      transform: rotate(45deg);
+      &:nth-child(2) {
+        transform: rotate(-40deg) translate(0.1rem, -0.1rem);
+      }
+    }
+  }
+}
