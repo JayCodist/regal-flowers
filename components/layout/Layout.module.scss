@@ -124,6 +124,7 @@
     top: -100rem;
     right: 2rem;
     padding: 2rem;
+    padding-right: 1rem;
     transition: 0.3s ease-in-out;
     opacity: 0;
     padding-bottom: 1rem;
@@ -176,6 +177,7 @@
       .product-image {
         height: 5rem;
         width: 5rem;
+        border-radius: 0.4rem;
       }
     }
   }
