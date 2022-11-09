@@ -33,7 +33,7 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       cart
     } = props;
 
-    const { cartItems, setCartItems } = useContext(SettingsContext);
+    const { cartItems, setCartItems, notify } = useContext(SettingsContext);
 
     const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -52,6 +52,9 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
 
       if (!_cartItem) {
         setCartItems([...cartItems, cartItem]);
+        notify("success", "Item Added To Cart");
+      } else {
+        notify("info", "Item Already In Cart");
       }
       e.stopPropagation();
     };

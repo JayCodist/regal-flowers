@@ -24,13 +24,13 @@ import {
   InfoRedIcon,
   PaypalBlueIcon
 } from "../../utils/resources";
-import { CreateOrder, Order } from "../../utils/types/Order";
+import { Order, UpdateOrder } from "../../utils/types/Order";
 import styles from "./index.module.scss";
 
 const initialData = {
   senderName: "",
   senderEmail: "",
-  senderPhoneNumber: undefined,
+  senderPhoneNumber: "",
   senderPassword: "",
   freeAccount: true,
   coupon: "",
@@ -81,7 +81,7 @@ const orderSample = {
 };
 
 const Checkout: FunctionComponent = () => {
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState<UpdateOrder>(initialData);
   const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
     "delivery"
   );
@@ -177,32 +177,10 @@ const Checkout: FunctionComponent = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const order: CreateOrder = {
-      client: {
-        name: formData.senderName,
-        email: formData.senderEmail,
-        phone: formData.senderPhoneNumber,
-        password: formData.senderPassword
-      },
-      recipient: {
-        name: formData.recipientName,
-        phone: formData.recipientPhoneNumber,
-        phoneAlt: formData.recipientPhoneNumberAlt,
-        email: formData.recipientEmail,
-        address: formData.recipientHomeAddress
-      },
-      deliveryState: formData.deliveryState,
-      pickUpState: formData.pickUpState,
-      pickUpLocation: formData.pickUpLocation,
-      deliveryDate: formData.deliveryDate || "",
-      purpose: formData.purpose,
-      message: formData.message,
-      additionalInfo: formData.additionalInfo
-    };
 
     console.log(order);
 
-    const response = await updateOrder(orderId as string, order);
+    const response = await updateOrder(orderId as string, formData);
 
     const { error, message } = response;
 
@@ -761,7 +739,7 @@ const Checkout: FunctionComponent = () => {
                 {deliveryMethod === "pick-up" && (
                   <div className="flex between">
                     <span className="normal-text">Delivery Charge</span>
-                    <span className="normal-text bold">₦136,000</span>
+                    <span className="normal-text bold">₦{order?.cost}</span>
                   </div>
                 )}
                 <div className="flex center-align">

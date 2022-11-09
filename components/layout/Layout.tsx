@@ -10,7 +10,9 @@ import Link from "next/link";
 import styles from "./Layout.module.scss";
 import { AppCurrency, AppLink } from "../../utils/types/Core";
 import { defaultCurrency } from "../../utils/constants";
-import SettingsContext from "../../utils/context/SettingsContext";
+import SettingsContext, {
+  NotifyType
+} from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";
 import Button from "../button/Button";
 import { createOrder } from "../../utils/helpers/data/order";
@@ -132,11 +134,23 @@ const Header: FunctionComponent = () => {
                 cartItems.length && setShowCart(!showCart);
               }}
             >
-              <img
-                alt="cart"
-                src="/icons/cart.svg"
+              <svg
+                width="29"
+                height="24"
+                viewBox="0 0 24 17"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
                 className={styles["control-icon"]}
-              />
+              >
+                <path
+                  d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+
               <span>Cart ({cartItems.length})</span>
             </button>
             <button className="flex column center-align">
@@ -250,16 +264,18 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   return (
     <div
-      className={[styles.backdrop, visible && styles.active, "scrollable"].join(
-        " "
-      )}
+      className={[
+        styles.backdrop,
+        visible && styles.active,
+        visible && "scrollable"
+      ].join(" ")}
     >
       <div
         ref={cartRef}
         className={[
           styles["cart-context"],
           visible && styles.active,
-          "scrollable"
+          visible && "scrollable"
         ].join(" ")}
       >
         <div className={styles["cart-header"]}>
@@ -423,6 +439,46 @@ export const CheckoutHeader: FunctionComponent = () => {
         </div>
       </div>
     </header>
+  );
+};
+
+interface ToasterProps {
+  cancel: () => void;
+  toasterParams: { message?: string; type?: NotifyType };
+  visible: boolean;
+}
+
+export const Toaster = (props: ToasterProps) => {
+  const { visible, toasterParams, cancel } = props;
+  const { type, message } = toasterParams;
+
+  const iconsMap = {
+    success: "/icons/check.svg",
+    error: "/icons/times-solid.svg",
+    info: "/icons/info-solid.svg"
+  };
+
+  return (
+    <div
+      className={[
+        styles.toaster,
+        styles[type ?? "success"],
+        visible && styles.active
+      ].join(" ")}
+    >
+      <div className={styles["icon-wrapper"]}>
+        <img
+          alt="notify"
+          className={styles.icon}
+          src={iconsMap[type ?? "success"]}
+        />
+      </div>
+      <span className={styles.message}>{message}</span>
+      <div onClick={cancel} className={styles["close-icon"]}>
+        <div className={styles.bar} />
+        <div className={styles.bar} />
+      </div>
+    </div>
   );
 };
 
