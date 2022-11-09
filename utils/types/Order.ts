@@ -17,27 +17,37 @@ export interface Order {
 }
 
 export interface CreateOrder {
-  orderProducts?: OrderItem[];
-  paymentStatus?: string;
-  cost?: number;
-  client?: {
-    name?: string;
-    email?: string;
-    phone?: string;
-    password?: string;
-  };
-  recipient?: {
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    phoneAlt?: string;
-  };
-  deliveryState?: string;
-  pickUpLocation?: string;
-  deliveryDate?: Dayjs | string;
-  purpose?: string;
-  message?: string;
-  additionalInfo?: string;
-  pickUpState?: string;
+  orderProducts: OrderItem[];
+  paymentStatus: string;
+  cost: number;
+}
+
+export interface UpdateOrder {
+  senderName: string;
+  senderEmail: string;
+  senderPhoneNumber: string;
+  senderPassword: string;
+  freeAccount: boolean;
+  coupon: string;
+  deliveryMethod: string;
+  deliveryState: string;
+  pickUpLocation: string;
+  recipientName: string;
+  deliveryDate: Dayjs | null;
+  recipientPhoneNumber: string;
+  recipientPhoneNumberAlt: string;
+  residenceType: string;
+  recipientHomeAddress: string;
+  additionalInfo: string;
+  message: string;
+  purpose: string;
+  cardName: string;
+  cardExpiry: string;
+  cardNumber: string;
+  cardCVV: string;
+  recipientCountryCode: string;
+  senderCountryCode: string;
+  recipientAltCountryCode: string;
+  recipientEmail: string;
+  pickUpState: string;
 }
