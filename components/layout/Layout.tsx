@@ -454,8 +454,8 @@ export const Toaster = (props: ToasterProps) => {
 
   const iconsMap = {
     success: "/icons/check.svg",
-    error: "/icons/times-solid.svg",
-    info: "/icons/info-solid.svg"
+    error: "/icons/cancel.svg",
+    info: "/icons/blue-info.svg"
   };
 
   return (

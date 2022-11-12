@@ -260,10 +260,12 @@
     color: #15803d;
   }
   &.error {
-    background-color: rgb(220, 20, 20);
+    background-color: #fef2f2;
+    color: #dc2626;
   }
   &.info {
-    background-color: #2684ff;
+    background-color: #eff6ff;
+    color: #2563eb;
   }
   .icon-wrapper {
     background-color: white;
@@ -281,7 +283,8 @@
   }
   .close-icon {
     position: absolute;
-    top: 40%;
+    top: 50%;
+    transform: translateY(-50%);
     right: 0.6rem;
     cursor: pointer;
     border-radius: 50%;
