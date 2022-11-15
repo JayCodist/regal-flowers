@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FunctionComponent, useContext, useEffect, useState } from "react";
@@ -119,6 +120,10 @@ const Checkout: FunctionComponent = () => {
       router.push("/");
     } else {
       setOrder(data);
+      setFormData({
+        ...formData,
+        deliveryDate: dayjs(data?.deliveryDate)
+      });
       setIsPaid(
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
           /^paid/i.test(data?.paymentStatus || "")

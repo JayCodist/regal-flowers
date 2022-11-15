@@ -14,12 +14,14 @@ export interface Order {
   fullOrderId?: string;
   id: string;
   cost: number;
+  deliveryDate: string;
 }
 
 export interface CreateOrder {
   orderProducts: OrderItem[];
   paymentStatus: string;
   cost: number;
+  deliveryDate?: string;
 }
 
 export interface UpdateOrder {

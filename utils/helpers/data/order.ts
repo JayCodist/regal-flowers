@@ -3,7 +3,7 @@ import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 import { getKeyMap } from "../type-helpers";
 
-const adaptOrderRecord = (record: any, fromBackend?: boolean) => {
+const adaptUpdateOrderRecord = (record: any, fromBackend?: boolean) => {
   if (!record) {
     return record;
   }
@@ -93,7 +93,7 @@ export const updateOrder: (
   id: string,
   order: UpdateOrder
 ) => Promise<RequestResponse<Order>> = async (id, order) => {
-  const data = adaptOrderRecord(order);
+  const data = adaptUpdateOrderRecord(order);
   try {
     const response = await restAPIInstance.put(
       `/v1/firebase/order/update/${id}`,
