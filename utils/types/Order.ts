@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Addon } from "./AddonGroup";
 
 export interface Order {
@@ -10,4 +11,14 @@ export interface Order {
   addons: Addon[];
   size: string;
   design: string;
+}
+
+export type PaymentName = "paystack" | "googlePay" | "payPal" | "bankTransfer";
+
+export interface PaymentMethod {
+  title: string;
+  paymentName: PaymentName;
+  info: string;
+  icon: ReactNode;
+  other?: { icon: ReactNode }[];
 }

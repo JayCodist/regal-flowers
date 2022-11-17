@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { FunctionComponent, useContext, useState } from "react";
+import { usePaystackPayment } from "react-paystack";
+import { PaystackProps } from "react-paystack/dist/types";
 import Button from "../../components/button/Button";
 import Checkbox from "../../components/checkbox/Checkbox";
 import Input, { TextArea } from "../../components/input/Input";
@@ -20,7 +22,7 @@ import {
   PaypalBlueIcon
 } from "../../utils/resources";
 import { AppCurrency } from "../../utils/types/Core";
-import { Order } from "../../utils/types/Order";
+import { Order, PaymentName } from "../../utils/types/Order";
 import styles from "./index.module.scss";
 
 const initialData = {
@@ -82,7 +84,16 @@ const Checkout: FunctionComponent = () => {
   const { currentStage, setCurrentStage, currency, setCurrency } = useContext(
     SettingsContext
   );
-  const [selectedMethod, setSelectedMethod] = useState<number | null>();
+
+  const payStackConfig: PaystackProps = {
+    reference: new Date().getTime().toString(),
+    email: "jaycodist@gmail.com",
+    amount: 200 * 100,
+    publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
+    channels: ["card", "bank", "ussd", "qr", "mobile_money"]
+  };
+
+  const initializePayment = usePaystackPayment(payStackConfig);
 
   const handleChange = (key: string, value: any) => {
     setFormData({
@@ -103,6 +114,29 @@ const Checkout: FunctionComponent = () => {
   }>({ order: true, payment: false });
 
   const [order] = useState(orderSample);
+
+  const paymentHandlerMap: Record<PaymentName, () => void> = {
+    paystack: () => {
+      interface PaystackSuccessResponse {
+        reference: string;
+        trans: string;
+        status: "success";
+        message: "Approved";
+        transaction: "2170915167";
+        trxref: string;
+        redirecturl: "?trxref=1665324172269&reference=1665324172269";
+      }
+      const successHandler: (ref?: PaystackSuccessResponse) => void = ref => {
+        console.log({ ref });
+      };
+      initializePayment(successHandler, () => {
+        console.log("Closed");
+      });
+    },
+    bankTransfer: () => {},
+    googlePay: () => {},
+    payPal: () => {}
+  };
 
   return (
     <section className={styles["checkout-page"]}>
@@ -476,17 +510,16 @@ const Checkout: FunctionComponent = () => {
                       {paymentMethod.map((method, index) => (
                         <div key={index}>
                           <div
-                            className={[
-                              styles.method,
-                              selectedMethod === index && styles.active
-                            ].join(" ")}
-                            onClick={() => setSelectedMethod(index)}
+                            className={[styles.method].join(" ")}
+                            onClick={() =>
+                              paymentHandlerMap[method.paymentName]()
+                            }
                           >
                             <div className="flex spaced-lg center-align">
                               {method.icon}
                               <div>
                                 <p className="normal-text bold">
-                                  {method.name}
+                                  {method.title}
                                 </p>
                                 <p>{method.info}</p>
                               </div>
@@ -495,64 +528,6 @@ const Checkout: FunctionComponent = () => {
                               {method.other?.map((other, index) => (
                                 <div key={index}>{other.icon}</div>
                               ))}
-                            </div>
-                          </div>
-                          <div
-                            className={[
-                              styles["method-input"],
-                              selectedMethod === index && styles.active
-                            ].join(" ")}
-                          >
-                            <div className="flex spaced-xl">
-                              <div className="input-group flex-one">
-                                <span className="question">Name on card</span>
-                                <Input
-                                  placeholder=""
-                                  value={formData.cardName}
-                                  onChange={value =>
-                                    handleChange("cardName", value)
-                                  }
-                                  responsive
-                                />
-                              </div>
-
-                              <div className="input-group responsive">
-                                <span className="question">Expiry</span>
-                                <Input
-                                  placeholder="06 / 2024"
-                                  value={formData.cardExpiry}
-                                  onChange={value =>
-                                    handleChange("cardExpiry", value)
-                                  }
-                                  responsive
-                                />
-                              </div>
-                            </div>
-                            <div className="flex spaced-xl">
-                              <div className="input-group flex-one">
-                                <span className="question">Card number</span>
-                                <Input
-                                  placeholder=""
-                                  value={formData.cardNumber}
-                                  onChange={value =>
-                                    handleChange("cardNumber", value)
-                                  }
-                                  responsive
-                                />
-                              </div>
-
-                              <div className="input-group responsive">
-                                <span className="question">CVV</span>
-                                <Input
-                                  value={formData.cardCVV}
-                                  onChange={value =>
-                                    handleChange("cardCVV", value)
-                                  }
-                                  responsive
-                                  position="right"
-                                  icon="/icons/help.svg"
-                                />
-                              </div>
                             </div>
                           </div>
                         </div>
