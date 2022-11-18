@@ -17,14 +17,14 @@ export interface Order {
   deliveryDate: string;
 }
 
-export interface CreateOrder {
+export interface OrderCreate {
   orderProducts: OrderItem[];
   paymentStatus: string;
   cost: number;
   deliveryDate?: string;
 }
 
-export interface UpdateOrder {
+export interface OrderUpdate {
   senderName: string;
   senderEmail: string;
   senderPhoneNumber: string;

@@ -1,4 +1,4 @@
-import { CreateOrder, Order, UpdateOrder } from "../../types/Order";
+import { OrderCreate, Order, OrderUpdate } from "../../types/Order";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 import { getKeyMap } from "../type-helpers";
@@ -69,7 +69,7 @@ export const getOrder: (
 };
 
 export const createOrder: (
-  order: CreateOrder
+  order: OrderCreate
 ) => Promise<RequestResponse<Order>> = async order => {
   try {
     const response = await restAPIInstance.post(
@@ -91,7 +91,7 @@ export const createOrder: (
 
 export const updateOrder: (
   id: string,
-  order: UpdateOrder
+  order: OrderUpdate
 ) => Promise<RequestResponse<Order>> = async (id, order) => {
   const data = adaptUpdateOrderRecord(order);
   try {

@@ -25,7 +25,7 @@ import {
   InfoRedIcon,
   PaypalBlueIcon
 } from "../../utils/resources";
-import { Order, UpdateOrder } from "../../utils/types/Order";
+import { Order, OrderUpdate } from "../../utils/types/Order";
 import styles from "./index.module.scss";
 
 const initialData = {
@@ -82,7 +82,7 @@ const orderSample = {
 };
 
 const Checkout: FunctionComponent = () => {
-  const [formData, setFormData] = useState<UpdateOrder>(initialData);
+  const [formData, setFormData] = useState<OrderUpdate>(initialData);
   const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
     "delivery"
   );
