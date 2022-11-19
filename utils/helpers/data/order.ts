@@ -1,9 +1,9 @@
-import { CreateOrder, Order, UpdateOrder } from "../../types/Order";
+import { OrderCreate, Order, OrderUpdate } from "../../types/Order";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 import { getKeyMap } from "../type-helpers";
 
-const adaptOrderRecord = (record: any, fromBackend?: boolean) => {
+const adaptUpdateOrderRecord = (record: any, fromBackend?: boolean) => {
   if (!record) {
     return record;
   }
@@ -12,9 +12,8 @@ const adaptOrderRecord = (record: any, fromBackend?: boolean) => {
     deliveryState: record.deliveryState,
     pickUpLocation: record.pickUpLocation,
     deliveryDate: record.deliveryDate,
-    residenceType: record.residenceType,
     additionalInfo: record.additionalInfo,
-    message: record.message,
+    deliveryMessage: record.message,
     purpose: record.purpose,
     pickUpState: record.pickUpState,
     client: {
@@ -28,7 +27,7 @@ const adaptOrderRecord = (record: any, fromBackend?: boolean) => {
       phone: record.recipientPhoneNumber,
       phoneAlt: record.recipientPhoneNumberAlt,
       email: record.recipientEmail,
-      address: record.recipientHomeAddress
+      address: [...record.recipientHomeAddress]
     }
   };
 
@@ -69,7 +68,7 @@ export const getOrder: (
 };
 
 export const createOrder: (
-  order: CreateOrder
+  order: OrderCreate
 ) => Promise<RequestResponse<Order>> = async order => {
   try {
     const response = await restAPIInstance.post(
@@ -91,9 +90,9 @@ export const createOrder: (
 
 export const updateOrder: (
   id: string,
-  order: UpdateOrder
+  order: OrderUpdate
 ) => Promise<RequestResponse<Order>> = async (id, order) => {
-  const data = adaptOrderRecord(order);
+  const data = adaptUpdateOrderRecord(order);
   try {
     const response = await restAPIInstance.put(
       `/v1/firebase/order/update/${id}`,

@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
@@ -26,7 +27,7 @@ import {
   InfoRedIcon,
   PaypalBlueIcon
 } from "../../utils/resources";
-import { Order, PaymentName, UpdateOrder } from "../../utils/types/Order";
+import { Order, OrderUpdate, PaymentName } from "../../utils/types/Order";
 import styles from "./index.module.scss";
 
 const initialData = {
@@ -83,7 +84,7 @@ const orderSample = {
 };
 
 const Checkout: FunctionComponent = () => {
-  const [formData, setFormData] = useState<UpdateOrder>(initialData);
+  const [formData, setFormData] = useState<OrderUpdate>(initialData);
   const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
     "delivery"
   );
@@ -133,6 +134,10 @@ const Checkout: FunctionComponent = () => {
       router.push("/");
     } else {
       setOrder(data);
+      setFormData({
+        ...formData,
+        deliveryDate: dayjs(data?.deliveryDate)
+      });
       setIsPaid(
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
           /^paid/i.test(data?.paymentStatus || "")
