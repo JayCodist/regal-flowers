@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FunctionComponent, useContext, useEffect, useState } from "react";
@@ -24,7 +25,7 @@ import {
   InfoRedIcon,
   PaypalBlueIcon
 } from "../../utils/resources";
-import { Order, UpdateOrder } from "../../utils/types/Order";
+import { Order, OrderUpdate } from "../../utils/types/Order";
 import styles from "./index.module.scss";
 
 const initialData = {
@@ -81,7 +82,7 @@ const orderSample = {
 };
 
 const Checkout: FunctionComponent = () => {
-  const [formData, setFormData] = useState<UpdateOrder>(initialData);
+  const [formData, setFormData] = useState<OrderUpdate>(initialData);
   const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
     "delivery"
   );
@@ -119,6 +120,10 @@ const Checkout: FunctionComponent = () => {
       router.push("/");
     } else {
       setOrder(data);
+      setFormData({
+        ...formData,
+        deliveryDate: dayjs(data?.deliveryDate)
+      });
       setIsPaid(
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
           /^paid/i.test(data?.paymentStatus || "")

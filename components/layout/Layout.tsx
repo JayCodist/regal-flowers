@@ -16,6 +16,7 @@ import SettingsContext, {
 import { useRouter } from "next/router";
 import Button from "../button/Button";
 import { createOrder } from "../../utils/helpers/data/order";
+import dayjs from "dayjs";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -131,7 +132,7 @@ const Header: FunctionComponent = () => {
                 showCart && "primary-color"
               ].join(" ")}
               onClick={() => {
-                cartItems.length && setShowCart(!showCart);
+                setShowCart(!showCart);
               }}
             >
               <svg
@@ -177,7 +178,8 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel } = props;
 
-  const { cartItems, setCartItems } = useContext(SettingsContext);
+  const { cartItems, setCartItems, deliveryDate, setDeliveryDate } =
+    useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
   const cartRef = useRef<HTMLDivElement>(null);
@@ -248,11 +250,84 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
     const response = await createOrder({
       orderProducts: order,
-      paymentStatus: "test",
-      cost: total
+      paymentStatus: "Not Paid (Website - Bank Transfer)",
+      cost: total,
+      deliveryDate: deliveryDate?.toISOString(),
+      admin: "regalflowersnigeria@gmail.com",
+      adminNotes: "test",
+      amount: 0,
+      anonymousClient: false,
+      arrangementTime: "",
+      client: {
+        address: "",
+        email: "",
+        name: "",
+        category: [],
+        firstname: "",
+        lastname: "",
+        phone: "",
+        phoneAlt: "",
+        phoneAlt2: "",
+        phones: [],
+        city: "",
+        dob: "",
+        gender: "",
+        state: ""
+      },
+      business: "Regal Flowers",
+      channel: "Regal Website",
+      contactDepsArray: [],
+      costBreakdown: "",
+      deliveryMessage: "",
+      deliveryNotePrinted: false,
+      deliveryStatus: "Not Arranged",
+      deliveryZone: "WEB",
+      despatchFrom: "Unselected",
+      driver: {},
+      editingAdminsRevised: [],
+      feedback: {},
+      isClientRecipient: false,
+      isDuplicatedOrder: false,
+      lastDeliveryNotePrintedAdmin: "",
+      lastDeliveryNotePrintedTime: "",
+      lastDeliveryStatusAdmin: "",
+      lastDeliveryStatusTime: "",
+      lastMessagePrintedAdmin: "",
+      lastMessagePrintedTime: "",
+      lastPaymentStatusAdmin: "",
+      lastPaymentStatusTime: "",
+      line: "Unselected",
+      messagePrinted: false,
+      orderDetails: "",
+      profit: "",
+      purpose: "Unknown",
+      recipient: {
+        address: "",
+        email: "",
+        name: "",
+        category: [],
+        firstname: "",
+        lastname: "",
+        phone: "",
+        phoneAlt: "",
+        phoneAlt2: "",
+        phones: []
+      },
+      recipientAddress: "",
+      receivedByName: "",
+      receivedByPhone: "",
+      sendReminders: false,
+      upsellProfit: 0,
+      websiteOrderID: "",
+      driverAlerted: false
     });
 
+    console.log(deliveryDate);
+
     if (response.data) {
+      setDeliveryDate(
+        response.data.deliveryDate ? dayjs(response.data?.deliveryDate) : null
+      );
       router.push(`/checkout?orderId=${response.data.id}`);
       setCartItems([]);
     }
@@ -287,77 +362,91 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             onClick={cancel}
           />
         </div>
-        {cartItems.length ? (
+        {
           <div className={styles["body"]}>
-            <div className={styles["delivery-status"]}>
-              <span>Delivery date</span>
-              <span>June 10, 2021</span>
-              <span className="underline primary-color">Edit</span>
-            </div>
-            {cartItems?.map(item => (
-              <>
-                <div className={styles["cart-item"]}>
-                  <img
-                    src="/icons/delete-cart.svg"
-                    alt="delete"
-                    className="generic-icon large margin-top spaced clickable"
-                    onClick={() => handleRemoveItem(item.key)}
-                  />
-                  <div className="flex spaced align-center block">
+            {cartItems.length ? (
+              <div className={styles["delivery-status"]}>
+                <span>Delivery date</span>
+                <span>June 10, 2021</span>
+                <span className="underline primary-color">Edit</span>
+              </div>
+            ) : (
+              ""
+            )}
+            {cartItems.length ? (
+              cartItems?.map(item => (
+                <>
+                  <div className={styles["cart-item"]}>
                     <img
-                      src={item.image.src}
-                      alt="product"
-                      className={styles["product-image"]}
+                      src="/icons/delete-cart.svg"
+                      alt="delete"
+                      className="generic-icon large margin-top spaced clickable"
+                      onClick={() => handleRemoveItem(item.key)}
                     />
-                    <div className="flex-one">
-                      <p>{item.name}</p>
-                      <p>{item.description}</p>
-                      <div className="flex between center-align vertical-margin">
-                        <p className="primary-color normal-text bold">
-                          ₦{item.price}
-                        </p>
-                        <div className="flex center-align spaced-lg">
-                          <div
-                            className={styles.minus}
-                            onClick={() => handleRemoveItemQuantity(item.key)}
-                          ></div>
-                          <span className="small-text">{item.quantity}</span>
-                          <div
-                            className={styles.plus}
-                            onClick={() => handleAddItemQuantity(item.key)}
-                          ></div>
+                    <div className="flex spaced align-center block">
+                      <img
+                        src={item.image.src}
+                        alt="product"
+                        className={styles["product-image"]}
+                      />
+                      <div className="flex-one">
+                        <p>{item.name}</p>
+                        <p>{item.description}</p>
+                        <div className="flex between center-align vertical-margin">
+                          <p className="primary-color normal-text bold">
+                            ₦{item.price}
+                          </p>
+                          <div className="flex center-align spaced-lg">
+                            <div
+                              className={styles.minus}
+                              onClick={() => handleRemoveItemQuantity(item.key)}
+                            ></div>
+                            <span className="small-text">{item.quantity}</span>
+                            <div
+                              className={styles.plus}
+                              onClick={() => handleAddItemQuantity(item.key)}
+                            ></div>
+                          </div>
                         </div>
+                        {item.size && <p>Size: {item.size}</p>}
+                        {item.design && (
+                          <p className="vertical-margin">
+                            Design: {item.design}
+                          </p>
+                        )}
                       </div>
-                      {item.size && <p>Size: {item.size}</p>}
-                      {item.design && (
-                        <p className="vertical-margin">Design: {item.design}</p>
-                      )}
                     </div>
                   </div>
+                </>
+              ))
+            ) : (
+              <div className={styles["empty-cart"]}>Empty Cart</div>
+            )}
+            {cartItems.length ? (
+              <>
+                <div className="flex between center-align vertical-margin spaced">
+                  <span className="small-text">Subtotal</span>
+                  <strong className="small-text">₦{total}</strong>
+                </div>
+                <div className="flex between center-align margin-bottom spaced">
+                  <span className="small-text">Total</span>
+                  <strong className="small-text">₦{total}</strong>
                 </div>
               </>
-            ))}
-
-            <div className="flex between center-align vertical-margin spaced">
-              <span className="small-text">Subtotal</span>
-              <strong className="small-text">₦{total}</strong>
-            </div>
-            <div className="flex between center-align margin-bottom spaced">
-              <span className="small-text">Total</span>
-              <strong className="small-text">₦{total}</strong>
-            </div>
+            ) : (
+              ""
+            )}
             <Button
               responsive
               className="margin-top spaced"
               onClick={handleCreateOrder}
               loading={loading}
+              disabled={!cartItems.length}
             >
               Proceed to checkout (₦{total})
             </Button>
           </div>
-        ) : (
-          <div className={styles["empty-cart"]}>Empty Cart</div>
-        )}
+        }
       </div>
     </div>
   );
@@ -454,8 +543,8 @@ export const Toaster = (props: ToasterProps) => {
 
   const iconsMap = {
     success: "/icons/check.svg",
-    error: "/icons/times-solid.svg",
-    info: "/icons/info-solid.svg"
+    error: "/icons/cancel.svg",
+    info: "/icons/blue-info.svg"
   };
 
   return (
