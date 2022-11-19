@@ -52,6 +52,7 @@ const PhoneInput = (props: PhoneInputProps) => {
           dimmed
           responsive
           className={styles["phone-number"]}
+          autoComplete="tel"
         />
       </div>
     </div>

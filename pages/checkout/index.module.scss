@@ -52,6 +52,7 @@
     cursor: pointer;
     .method-title {
       margin-bottom: 0.7rem;
+      font-weight: bold;
     }
     .method {
       background-color: #f9fafb;
@@ -63,6 +64,11 @@
       border: 0.1rem solid transparent;
 
       &.active {
+        background-color: white;
+        border: 0.1rem solid #9b0000;
+      }
+
+      &:hover {
         background-color: white;
         border: 0.1rem solid #9b0000;
       }
@@ -301,4 +307,11 @@
   .light-gray {
     color: #6b7280;
   }
+}
+
+.loader {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

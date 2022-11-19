@@ -1,19 +1,24 @@
 import Link from "next/link";
-import { FunctionComponent, useContext, useState } from "react";
 import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
+import { useRouter } from "next/router";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import Button from "../../components/button/Button";
 import Checkbox from "../../components/checkbox/Checkbox";
+import DatePicker from "../../components/date-picker/DatePicker";
 import Input, { TextArea } from "../../components/input/Input";
 import PhoneInput from "../../components/phone-input/PhoneInput";
 import Radio from "../../components/radio/Radio";
-import Select from "../../components/select/Select";
+import Select, { Option } from "../../components/select/Select";
 import {
-  defaultCurrency,
+  currencyOptions,
   deliveryStates,
   paymentMethod
 } from "../../utils/constants";
 import SettingsContext from "../../utils/context/SettingsContext";
+import { getOrder, updateOrder } from "../../utils/helpers/data/order";
+import { getZoneGroups } from "../../utils/helpers/data/zone-group";
+import { emailValidator } from "../../utils/helpers/validators";
 import {
   BitcoinGoldIcon,
   BuildingRedIcon,
@@ -21,26 +26,25 @@ import {
   InfoRedIcon,
   PaypalBlueIcon
 } from "../../utils/resources";
-import { AppCurrency } from "../../utils/types/Core";
-import { Order, PaymentName } from "../../utils/types/Order";
+import { Order, PaymentName, UpdateOrder } from "../../utils/types/Order";
 import styles from "./index.module.scss";
 
 const initialData = {
-  name: "",
-  email: "",
-  senderPhoneNumber: undefined,
-  password: "",
+  senderName: "",
+  senderEmail: "",
+  senderPhoneNumber: "",
+  senderPassword: "",
   freeAccount: true,
   coupon: "",
   deliveryMethod: "delivery",
   deliveryState: "",
-  pickupLocation: "",
-  fullName: "",
-  deliveryDate: "",
+  pickUpLocation: "",
+  recipientName: "",
+  deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
   residenceType: "",
-  homeAddress: "",
+  recipientHomeAddress: "",
   additionalInfo: "",
   message: "",
   purpose: "",
@@ -50,7 +54,9 @@ const initialData = {
   cardCVV: "",
   recipientCountryCode: "",
   senderCountryCode: "",
-  recipientAltCountryCode: ""
+  recipientAltCountryCode: "",
+  recipientEmail: "",
+  pickUpState: ""
 };
 
 const orderSample = {
@@ -74,13 +80,24 @@ const orderSample = {
   ],
   id: "1",
   image: "/images/sample-flowers/sample-1.png"
-} as Order;
+};
 
 const Checkout: FunctionComponent = () => {
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState<UpdateOrder>(initialData);
   const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
     "delivery"
   );
+  // const [selectedMethod, setSelectedMethod] = useState<number | null>();
+  const [pageLoading, setPageLoading] = useState(false);
+  const [order, setOrder] = useState<Order | null>(null);
+  const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
+    order?: boolean;
+    payment?: boolean;
+  }>({ order: true, payment: false });
+  const [isPaid, setIsPaid] = useState(false);
+  const [pickUpOptions, setPickUpOptions] = useState<Option[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const { currentStage, setCurrentStage, currency, setCurrency } = useContext(
     SettingsContext
   );
@@ -95,6 +112,11 @@ const Checkout: FunctionComponent = () => {
 
   const initializePayment = usePaystackPayment(payStackConfig);
 
+  const {
+    query: { orderId }
+  } = useRouter();
+  const router = useRouter();
+
   const handleChange = (key: string, value: any) => {
     setFormData({
       ...formData,
@@ -102,18 +124,109 @@ const Checkout: FunctionComponent = () => {
     });
   };
 
-  const currencyOptions: AppCurrency[] = [
-    { ...defaultCurrency },
-    { name: "USD", conversionRate: 415, sign: "$" },
-    { name: "GBP", conversionRate: 523, sign: "£" }
-  ];
+  const fetchOrder = async () => {
+    setPageLoading(true);
+    const res = await getOrder(orderId as string);
+    const { error, data } = res;
 
-  const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
-    order?: boolean;
-    payment?: boolean;
-  }>({ order: true, payment: false });
+    if (error) {
+      router.push("/");
+    } else {
+      setOrder(data);
+      setIsPaid(
+        /go\s*ahead/i.test(data?.paymentStatus || "") ||
+          /^paid/i.test(data?.paymentStatus || "")
+      );
+    }
 
-  const [order] = useState(orderSample);
+    setPageLoading(false);
+  };
+
+  const fetchZoneGroups = async () => {
+    const res = await getZoneGroups();
+    const { error, message, data } = res;
+
+    if (error) {
+      console.log(message);
+    } else {
+      setPickUpOptions(
+        data?.map(item => ({
+          label: item,
+          value: item
+        })) || []
+      );
+
+      setPickUpOptions(
+        data
+          ?.filter(item => {
+            if (item !== "Unselected State" && item !== "Outside Nigeria") {
+              return item;
+            }
+          })
+          ?.map(item => ({
+            label: item,
+            value: item
+          })) || []
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (orderId) {
+      fetchOrder();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]);
+
+  useEffect(() => {
+    fetchZoneGroups();
+  }, []);
+
+  useEffect(() => {
+    if (isPaid) {
+      // setCurrentStage(3);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPaid]);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+
+    console.log(order);
+
+    const response = await updateOrder(orderId as string, formData);
+
+    const { error, message } = response;
+
+    if (error) {
+      console.log(message);
+    } else {
+      setCurrentStage(2);
+    }
+
+    setLoading(false);
+  };
+
+  const deliveryMap = {
+    Arranged: "Arranged",
+    Delivered: "Delivered",
+    Despatched: "Despatched",
+    "Not Arranged": "Not Arranged",
+    "Delivery Failed/Issues with Delivery": "Delivery Failed",
+    "Delivered (drivers update)": "Delivered"
+  };
+
+  const isDelivered = (deliveryStatus = "") => {
+    return /delivered/i.test(deliveryStatus);
+  };
+
+  if (pageLoading) {
+    return (
+      <div className={styles.loader}>
+        <img src="/images/spinner.svg" alt="loader" />
+      </div>
+    );
+  }
 
   const paymentHandlerMap: Record<PaymentName, () => void> = {
     paystack: () => {
@@ -150,12 +263,12 @@ const Checkout: FunctionComponent = () => {
                   <div className={styles.padding}>
                     <div className="flex spaced-xl">
                       <div className="input-group">
-                        <span className="question">Product name</span>
+                        <span className="question">Name</span>
                         <Input
                           name="name"
                           placeholder="Name"
-                          value={formData.name}
-                          onChange={value => handleChange("name", value)}
+                          value={formData.senderName}
+                          onChange={value => handleChange("senderName", value)}
                           dimmed
                           responsive
                         />
@@ -165,10 +278,13 @@ const Checkout: FunctionComponent = () => {
                         <Input
                           name="email"
                           placeholder="Email"
-                          value={formData.email}
-                          onChange={value => handleChange("email", value)}
+                          value={formData.senderEmail}
+                          onChange={value => handleChange("senderEmail", value)}
                           dimmed
                           responsive
+                          onBlurValidation={() =>
+                            emailValidator(formData.senderEmail)
+                          }
                         />
                       </div>
                     </div>
@@ -191,10 +307,13 @@ const Checkout: FunctionComponent = () => {
                           name="password"
                           type="password"
                           placeholder="Password"
-                          value={formData.password}
-                          onChange={value => handleChange("password", value)}
+                          value={formData.senderPassword}
+                          onChange={value =>
+                            handleChange("senderPassword", value)
+                          }
                           dimmed
                           responsive
+                          autoComplete="new-password"
                         />
                       </div>
                     </div>
@@ -237,15 +356,33 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     </div>
                     <div className="input-group half-width">
-                      <span className="question">Delivery State</span>
+                      <span className="question">
+                        {" "}
+                        {deliveryMethod === "delivery"
+                          ? "Delivery"
+                          : "Pick Up"}{" "}
+                        State
+                      </span>
 
                       <Select
-                        onSelect={value => handleChange("deliveryState", value)}
-                        value={formData.deliveryState}
-                        options={deliveryStates.map(state => ({
-                          value: state.value,
-                          label: state.label
-                        }))}
+                        onSelect={value =>
+                          handleChange(
+                            deliveryMethod === "delivery"
+                              ? "deliveryState"
+                              : "PickUpState",
+                            value
+                          )
+                        }
+                        value={
+                          deliveryMethod === "delivery"
+                            ? formData.deliveryState
+                            : formData.pickUpState
+                        }
+                        options={
+                          deliveryMethod === "delivery"
+                            ? deliveryStates
+                            : pickUpOptions
+                        }
                         placeholder="Select a state"
                         responsive
                         dimmed
@@ -262,9 +399,9 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Ikoyi"
                             onChange={() =>
-                              handleChange("pickupLocation", "ikoyi")
+                              handleChange("pickUpLocation", "ikoyi")
                             }
-                            checked={formData.pickupLocation === "ikoyi"}
+                            checked={formData.pickUpLocation === "ikoyi"}
                           />
                         </div>
                         <div className="vertical-margin">
@@ -272,10 +409,10 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Victoria Island"
                             onChange={() =>
-                              handleChange("pickupLocation", "victoria-island")
+                              handleChange("pickUpLocation", "victoria-island")
                             }
                             checked={
-                              formData.pickupLocation === "victoria-island"
+                              formData.pickUpLocation === "victoria-island"
                             }
                           />
                         </div>
@@ -285,9 +422,9 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Lagos Island"
                             onChange={() =>
-                              handleChange("pickupLocation", "island")
+                              handleChange("pickUpLocation", "island")
                             }
-                            checked={formData.pickupLocation === "island"}
+                            checked={formData.pickUpLocation === "island"}
                           />
                         </div>
                         <div className="vertical-margin">
@@ -295,9 +432,9 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Lekki Phase 1 only"
                             onChange={() =>
-                              handleChange("pickupLocation", "lekki")
+                              handleChange("pickUpLocation", "lekki")
                             }
-                            checked={formData.pickupLocation === "lekki"}
+                            checked={formData.pickUpLocation === "lekki"}
                           />
                         </div>
                         <div className="vertical-margin">
@@ -305,10 +442,10 @@ const Checkout: FunctionComponent = () => {
                             defaultChecked
                             label="Lagos, Bettween Lekki Phase 1 - Ikate/Chevron/Mega Chicken  B/Stop"
                             onChange={() =>
-                              handleChange("pickupLocation", "between-lekki")
+                              handleChange("pickUpLocation", "between-lekki")
                             }
                             checked={
-                              formData.pickupLocation === "between-lekki"
+                              formData.pickUpLocation === "between-lekki"
                             }
                           />
                         </div>
@@ -328,7 +465,7 @@ const Checkout: FunctionComponent = () => {
                         onSelect={value => handleChange("deliveryState", value)}
                         value={formData.deliveryState}
                         options={[]}
-                        placeholder="Select Recipient"
+                        placeholder="Select Past Recipient"
                         responsive
                         dimmed
                       />
@@ -344,22 +481,22 @@ const Checkout: FunctionComponent = () => {
                         <Input
                           name="name"
                           placeholder=""
-                          value={formData.fullName}
-                          onChange={value => handleChange("fullName", value)}
+                          value={formData.recipientName}
+                          onChange={value =>
+                            handleChange("recipientName", value)
+                          }
                           dimmed
                           responsive
                         />
                       </div>
                       <div className="input-group">
                         <span className="question">Delivery Date</span>
-                        <Input
-                          name="email"
-                          placeholder="Email"
+                        <DatePicker
                           value={formData.deliveryDate}
                           onChange={value =>
                             handleChange("deliveryDate", value)
                           }
-                          dimmed
+                          format="DD/MM/YYYY"
                           responsive
                         />
                       </div>
@@ -408,9 +545,11 @@ const Checkout: FunctionComponent = () => {
                       <span className="question">Detailed Home Address</span>
 
                       <TextArea
-                        value={formData.homeAddress}
+                        value={formData.recipientHomeAddress}
                         placeholder="To help us deliver better, please be detailed as possible"
-                        onChange={value => handleChange("homeAddress", value)}
+                        onChange={value =>
+                          handleChange("recipientHomeAddress", value)
+                        }
                         dimmed
                         rows={3}
                       />
@@ -469,7 +608,8 @@ const Checkout: FunctionComponent = () => {
 
                 <Button
                   className="half-width"
-                  onClick={() => setCurrentStage(2)}
+                  onClick={handleSubmit}
+                  loading={loading}
                 >
                   Proceed to Payment
                 </Button>
@@ -485,9 +625,9 @@ const Checkout: FunctionComponent = () => {
                         Select your preferred currency
                       </p>
                       <div className="flex spaced-lg">
-                        {currencyOptions.map(_currency => (
+                        {currencyOptions.map((_currency, index) => (
                           <button
-                            key={_currency.name}
+                            key={index}
                             onClick={() => setCurrency(_currency)}
                             className={[
                               styles.currency,
@@ -568,16 +708,16 @@ const Checkout: FunctionComponent = () => {
               <div className={`${styles.border} padded`}>
                 <div className="flex between ">
                   <span className="normal-text">Subtotal</span>
-                  <span className="normal-text bold">₦36,000</span>
+                  <span className="normal-text bold">₦{order?.cost}</span>
                 </div>
                 <div className="flex between vertical-margin">
                   <span className="normal-text">Add-Ons total</span>
-                  <span className="normal-text bold">₦136,000</span>
+                  <span className="normal-text bold">₦{order?.cost}</span>
                 </div>
                 {deliveryMethod === "pick-up" && (
                   <div className="flex between">
                     <span className="normal-text">Delivery Charge</span>
-                    <span className="normal-text bold">₦136,000</span>
+                    <span className="normal-text bold">₦{order?.cost}</span>
                   </div>
                 )}
                 <div className="flex center-align">
@@ -598,7 +738,7 @@ const Checkout: FunctionComponent = () => {
                   <span className="normal-text bold">₦196,000</span>
                 </div>
                 {currentStage === 1 ? (
-                  <Button responsive onClick={() => setCurrentStage(2)}>
+                  <Button responsive onClick={handleSubmit} loading={loading}>
                     Proceed to Payment
                   </Button>
                 ) : (
@@ -640,7 +780,7 @@ const Checkout: FunctionComponent = () => {
           )}
         </div>
       )}
-      {currentStage === 3 && (
+      {currentStage === 3 && isPaid && (
         <div className="flex between">
           <div className={styles["complete-checkout"]}>
             <div className="text-center">
@@ -650,32 +790,41 @@ const Checkout: FunctionComponent = () => {
                 className={`text-center ${styles["complete-image"]}`}
               />
               <p className={styles["order-received"]}>
-                Order Received Succesfully
+                Order{" "}
+                {order?.deliveryStatus &&
+                  deliveryMap[
+                    order?.deliveryStatus as keyof typeof deliveryMap
+                  ]}
               </p>
               <p className={styles["order-number"]}>
-                Order No: <span className={styles.bold}>#312763612652</span>{" "}
+                Order No:{" "}
+                <span className={styles.bold}>{order?.fullOrderId}</span>{" "}
               </p>
-              <div
-                className={`flex center-align spaced ${styles["order-info"]}`}
-              >
-                <div className={styles.icon}>
-                  <img
-                    src="icons/info.svg"
-                    alt="information"
-                    className="generic-icon"
-                  />
+              {isDelivered(order?.deliveryStatus) && (
+                <div
+                  className={`flex center-align spaced ${styles["order-info"]}`}
+                >
+                  <div className={styles.icon}>
+                    <img
+                      src="icons/info.svg"
+                      alt="information"
+                      className="generic-icon"
+                    />
+                  </div>
+                  <p>
+                    Your order was received, please note your order number in
+                    every correspondence with us.
+                  </p>
                 </div>
-                <p>
-                  Your order was received, please note your order number in
-                  every correspondence with us.
-                </p>
-              </div>
+              )}
               <Button className={styles["shopping-btn"]}>
                 Continue Shopping
               </Button>
-              <Link href="/#">
-                <a className={styles.track}>Track Order</a>
-              </Link>
+              {isDelivered(order?.deliveryStatus) && (
+                <Link href="/#">
+                  <a className={styles.track}>Track Order</a>
+                </Link>
+              )}
             </div>
 
             <div className={styles["account-wrapper"]}>
@@ -738,47 +887,53 @@ const Checkout: FunctionComponent = () => {
                 expandedOrderSummary.order && styles.active
               ].join(" ")}
             >
-              <div className="flex between spaced center-align">
-                <img
-                  className={styles["order-image"]}
-                  src={order.image}
-                  alt="order"
-                />
-                <div>
-                  <p className="margin-bottom spaced">{order.name}</p>
-                  <p>{order.details}</p>
-                </div>
-                <p className="sub-heading bold">₦{order.price}</p>
-              </div>
-              <div className={styles["order-detail"]}>
-                <p>
-                  <span className="margin-right">Qty:</span> {order.quantity}
-                </p>
-                <p className="vertical-margin spaced">
-                  <span className="margin-right">Size:</span> {order.size}
-                </p>
-                <p className="margin-bottom spaced">
-                  <span className="margin-right">Design:</span> {order.design}
-                </p>
-                <p className="margin-bottom">Add Ons</p>
-                {order.addons.map((addon, index) => (
-                  <div
-                    className="flex between spaced margin-bottom center-align"
-                    key={index}
-                  >
+              {order?.orderProducts?.map((item, index) => (
+                <div key={index}>
+                  <div className="flex between spaced center-align">
                     <img
-                      src={addon.image}
-                      alt="addon image"
-                      className={styles["addon-image"]}
+                      className={styles["order-image"]}
+                      src={orderSample.image}
+                      alt="order"
                     />
                     <div>
-                      <p className="margin-bottom">{addon.name}</p>
-                      <p className={styles["light-gray"]}>Tom Ford x 1</p>
+                      <p className="margin-bottom spaced">{item.name}</p>
+                      <p>{orderSample.details}</p>
                     </div>
-                    <p className="normal-text bold">₦{addon.price}</p>
+                    <p className="sub-heading bold">₦{orderSample.price}</p>
                   </div>
-                ))}
-              </div>
+                  <div className={styles["order-detail"]}>
+                    <p>
+                      <span className="margin-right">Qty:</span> {item.quantity}
+                    </p>
+                    <p className="vertical-margin spaced">
+                      <span className="margin-right">Size:</span>{" "}
+                      {orderSample.size}
+                    </p>
+                    {/* <p className="margin-bottom spaced">
+                      <span className="margin-right">Design:</span>{" "}
+                      {orderSample.design}
+                    </p> */}
+                    {/* <p className="margin-bottom">Add Ons</p> */}
+                    {/* {orderSample.addons.map((addon, index) => (
+                      <div
+                        className="flex between spaced margin-bottom center-align"
+                        key={index}
+                      >
+                        <img
+                          src={addon.image}
+                          alt="addon image"
+                          className={styles["addon-image"]}
+                        />
+                        <div>
+                          <p className="margin-bottom">{addon.name}</p>
+                          <p className={styles["light-gray"]}>Tom Ford x 1</p>
+                        </div>
+                        <p className="normal-text bold">₦{addon.price}</p>
+                      </div>
+                    ))} */}
+                  </div>
+                </div>
+              ))}
             </div>
 
             <div className="flex between vertical-margin spaced center-align">
@@ -826,11 +981,11 @@ const Checkout: FunctionComponent = () => {
               <hr className="hr margin-bottom spaced" />
               <div className="flex between normal-text margin-bottom spaced">
                 <span>Subtotal</span>
-                <span className="bold">₦36,000</span>
+                <span className="bold">₦{order?.cost}</span>
               </div>
               <div className="flex between normal-text margin-bottom spaced">
                 <span>Add-Ons total</span>
-                <span className="bold">₦136,000</span>
+                <span className="bold">₦{order?.cost}</span>
               </div>
               <div className="flex between normal-text margin-bottom spaced">
                 <div>
@@ -862,3 +1017,7 @@ const Checkout: FunctionComponent = () => {
 };
 
 export default Checkout;
+
+// const isPaid = paymentStatus => {
+//   return /go\s*ahead/i.test(paymentStatus) || /^paid/i.test(paymentStatus);
+// };

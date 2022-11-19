@@ -17,6 +17,12 @@ export const defaultCurrency: AppCurrency = {
   sign: "₦"
 };
 
+export const currencyOptions: AppCurrency[] = [
+  { ...defaultCurrency },
+  { name: "USD", conversionRate: 415, sign: "$" },
+  { name: "GBP", conversionRate: 523, sign: "£" }
+];
+
 export const aboutUsContent: {
   [key: string]: { title: string; content: string };
 } = {
@@ -206,17 +212,17 @@ export const regalFeatures: Service[] = [
 export const regalOccasions: Occasion[] = [
   {
     title: "Love, Birthdays & Anniversary",
-    url: "/filters/occasions",
+    url: "/filters",
     image: "/images/occasions-love-bday.png"
   },
   {
     title: "Just to say Hi, Sorry, Thank You",
-    url: "/filters/occasions",
+    url: "/filters",
     image: "/images/occasions-sorry-thanks.png"
   },
   {
     title: "Bridal Flowers",
-    url: "/filters/occasions",
+    url: "/filters",
     image: "/images/occasions-bridal.png"
   }
 ];
@@ -391,7 +397,159 @@ export const blogPosts: BlogPost[] = [
 export const deliveryStates: Option[] = [
   {
     label: "Lagos",
-    value: 1
+    value: "lagos"
+  },
+  {
+    label: "Abuja",
+    value: "abuja"
+  },
+  {
+    label: "Port Harcourt",
+    value: "port-harcourt"
+  },
+  {
+    label: "Anambra",
+    value: "anambra"
+  },
+  {
+    label: "Adamawa",
+    value: "adamawa"
+  },
+  {
+    label: "Abia",
+    value: "abia"
+  },
+  {
+    label: "Akwa Ibom",
+    value: "akwa-ibom"
+  },
+  {
+    label: "Borno",
+    value: "borno"
+  },
+  {
+    label: "Bauchi",
+    value: "bauchi"
+  },
+  {
+    label: "Benue",
+    value: "benue"
+  },
+  {
+    label: "Bayelsa",
+    value: "bayelsa"
+  },
+  {
+    label: "Cross River",
+    value: "cross-river"
+  },
+  {
+    label: "Delta",
+    value: "delta"
+  },
+  {
+    label: "Enugu",
+    value: "enugu"
+  },
+  {
+    label: "Edo",
+    value: "edo"
+  },
+  {
+    label: "Ekiti",
+    value: "ekiti"
+  },
+  {
+    label: "Ebonyi",
+    value: "ebonyi"
+  },
+  {
+    label: "Gombe",
+    value: "gombe"
+  },
+  {
+    label: "Imo",
+    value: "imo"
+  },
+  {
+    label: "Jigawa",
+    value: "jigawa"
+  },
+  {
+    label: "Kebbi",
+    value: "kebbi"
+  },
+  {
+    label: "Kano",
+    value: "kano"
+  },
+  {
+    label: "Kaduna",
+    value: "kaduna"
+  },
+  {
+    label: "Katsina",
+    value: "katsina"
+  },
+  {
+    label: "Kwara",
+    value: "kwara"
+  },
+  {
+    label: "Kogi",
+    value: "kogi"
+  },
+  {
+    label: "Niger",
+    value: "niger"
+  },
+  {
+    label: "Nasarawa",
+    value: "nasarawa"
+  },
+  {
+    label: "Oyo",
+    value: "oyo"
+  },
+
+  {
+    label: "Ogun",
+    value: "ogun"
+  },
+  {
+    label: "Osun",
+    value: "osun"
+  },
+
+  {
+    label: "Ondo",
+    value: "ondo"
+  },
+
+  {
+    label: "Plateau",
+    value: "plateau"
+  },
+  {
+    label: "Rivers",
+    value: "rivers"
+  },
+  {
+    label: "Sokoto",
+    value: "sokoto"
+  },
+  {
+    label: "Taraba",
+    value: "taraba"
+  },
+  {
+    label: "Yobe",
+    value: "yobe"
+  },
+
+  {
+    label: "Zamfara",
+    value: "zamfara"
   }
 ];
 
@@ -587,28 +745,28 @@ export const sortOptions: Option[] = [
 export const occasions: { title: string; url: string; category?: string }[] = [
   {
     title: "Love, Birthdays & Anniversary",
-    url: "/filters/occasions?selectedOccasion=love-birthdays-anniversary",
+    url: "/filters?selectedOccasion=Anniversary Flowers",
     category: "Anniversary Flowers"
   },
   {
     title: "Just to Say",
-    url: "/filters/occasions?selectedOccasion=just-to-say",
+    url: "/filters?selectedOccasion=just-to-say",
     category: "Just to Say Bouquets"
   },
   {
     title: "Bridal Bouquets",
-    url: "/filters/occasions?selectedOccasion=bridal-bouquets",
+    url: "/filters?selectedOccasion=bridal-bouquets",
     category:
       "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
   },
   {
     title: "Funeral & Condolence",
-    url: "/filters/occasions?selectedOccasion=funeral-condolence",
+    url: "/filters?selectedOccasion=funeral-condolence",
     category: "Funeral %26amp; Condolence"
   },
   {
     title: "All Occasions",
-    url: "/filters/occasions?selectedOccasion=all-occasions"
+    url: "/filters?selectedOccasion=all-occasions"
   }
 ];
 

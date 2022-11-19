@@ -18,7 +18,7 @@ export type DesignOptionsMap = Partial<
 >;
 
 interface Product {
-  id: number;
+  key: number;
   name: string;
   slug: string;
   type: "simple" | "variable";
