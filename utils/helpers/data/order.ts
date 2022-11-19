@@ -12,9 +12,8 @@ const adaptUpdateOrderRecord = (record: any, fromBackend?: boolean) => {
     deliveryState: record.deliveryState,
     pickUpLocation: record.pickUpLocation,
     deliveryDate: record.deliveryDate,
-    residenceType: record.residenceType,
     additionalInfo: record.additionalInfo,
-    message: record.message,
+    deliveryMessage: record.message,
     purpose: record.purpose,
     pickUpState: record.pickUpState,
     client: {
@@ -28,7 +27,7 @@ const adaptUpdateOrderRecord = (record: any, fromBackend?: boolean) => {
       phone: record.recipientPhoneNumber,
       phoneAlt: record.recipientPhoneNumberAlt,
       email: record.recipientEmail,
-      address: record.recipientHomeAddress
+      address: [...record.recipientHomeAddress]
     }
   };
 
