@@ -129,8 +129,9 @@ const Header: FunctionComponent = () => {
                 "center-align",
                 shouldShowCart && "primary-color"
               ].join(" ")}
-              onClick={() => {
+              onClick={e => {
                 setShouldShowCart(!shouldShowCart);
+                e.stopPropagation();
               }}
             >
               <svg
@@ -241,7 +242,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     return () => {
       document.removeEventListener("mousedown", handleCloseChart);
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible]);
 
   const handleCreateOrder = async () => {
     setLoading(true);
@@ -339,7 +341,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             {cartItems.length ? (
               <div className={styles["delivery-status"]}>
                 <span>Delivery date</span>
-                <span>June 10, 2021</span>
+                <span>{deliveryDate || "Not set yet"}</span>
                 <span className="underline primary-color">Edit</span>
               </div>
             ) : (
