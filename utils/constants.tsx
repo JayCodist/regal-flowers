@@ -1,7 +1,7 @@
 import React from "react";
 import { Option } from "../components/select/Select";
 import AddonGroup from "./types/AddonGroup";
-import { AppCurrency, PaymentMethod } from "./types/Core";
+import { AppCurrency, AppLink, PaymentMethod } from "./types/Core";
 import {
   Service,
   Occasion,
@@ -993,3 +993,256 @@ export const productSampleData = {
     "A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
   details: "5 Peas in a pod"
 };
+
+export const links: AppLink[] = [
+  {
+    url: "#",
+    title: "Send To",
+    subtitle: "Send Flowers To",
+    children: [
+      {
+        title: "",
+        children: [
+          {
+            title: "Bouquets",
+            children: [],
+            url: ""
+          },
+          {
+            title: "Bouquets",
+            children: [],
+            url: ""
+          },
+          {
+            title: "Bouquets",
+            children: [],
+            url: ""
+          }
+        ],
+        url: ""
+      }
+    ]
+  },
+  {
+    url: "/filters?selectedOccasion=Anniversary Flowers",
+    title: "Occasions",
+    subtitle: "Select Occassion",
+    children: [
+      {
+        title: "Love, Birthdays & Anniversary",
+        url: "",
+        children: [
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Just to say Hi, Sorry, Thank You",
+        url: "",
+        children: [
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Get well soon",
+        url: "",
+        children: [
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Bridal",
+        url: "",
+        children: [
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Funeral & Condolence",
+        url: "",
+        children: [
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Others",
+        url: "",
+        children: [
+          {
+            title: "VIP Statements",
+            url: "",
+            children: []
+          },
+          {
+            title: "Events & Centerpiece",
+            url: "",
+            children: []
+          },
+          {
+            title: "Father's Day",
+            url: "",
+            children: []
+          },
+          {
+            title: "Mother's Day",
+            url: "",
+            children: []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    url: "#",
+    title: "Shop By",
+    children: [
+      {
+        title: "Design",
+        url: "",
+        children: [
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Delivery",
+        url: "",
+        children: [
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Packages",
+        url: "",
+        children: [
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          },
+          {
+            title: "Bouquets",
+            url: "",
+            children: []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    url: "#",
+    title: "Flower Types",
+    children: []
+  },
+  {
+    url: "#",
+    title: "Gifts",
+    children: []
+  },
+  {
+    url: "/faq",
+    title: "FAQ",
+    children: []
+  }
+];

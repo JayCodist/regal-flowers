@@ -6,6 +6,7 @@ export interface AppLink {
   url: string;
   title: string;
   children: AppLink[];
+  subtitle?: string;
 }
 
 export interface AppCurrency {
