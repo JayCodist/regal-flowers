@@ -151,8 +151,10 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   const [hasMore, setHasMore] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
-  const [lastProductEleRef, setLastProductEleRef] =
-    useState<HTMLAnchorElement | null>(null);
+  const [
+    lastProductEleRef,
+    setLastProductEleRef
+  ] = useState<HTMLAnchorElement | null>(null);
 
   const [page] = useScrollHandler({
     node: lastProductEleRef

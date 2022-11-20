@@ -70,10 +70,10 @@ const DatePicker = (props: DatePickerProps) => {
     e.stopPropagation();
   };
 
-  const shownValue = useMemo(
-    () => value?.format(format || "YYYY-MM-DD"),
-    [value, format]
-  );
+  const shownValue = useMemo(() => value?.format(format || "YYYY-MM-DD"), [
+    value,
+    format
+  ]);
 
   const initialMonth = useMemo(() => (value || dayjs()).toDate(), [value]);
   const jsDateValue = useMemo(() => value?.toDate() || new Date(), [value]);

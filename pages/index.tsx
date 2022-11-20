@@ -308,7 +308,7 @@ const LandingPage: FunctionComponent = () => {
           </div>
 
           <div className={styles["contact-section-wrapper"]}>
-            <div className={styles["contact-section"]}>
+            <div className={styles["contact-section"]} id="contactSection">
               <img
                 src="/images/landing-contact.png"
                 className={styles["contact-img"]}
@@ -456,10 +456,11 @@ const LandingPage: FunctionComponent = () => {
 const FlowerDeliveryInput: FunctionComponent = () => {
   const [occasion, setOccasion] = useState<Category>({ name: "", id: "" });
   const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
-  const [occassionOptions, setOccassionOptions] =
-    useState<PaginatedOptionsWrapper>({
-      options: []
-    });
+  const [occassionOptions, setOccassionOptions] = useState<
+    PaginatedOptionsWrapper
+  >({
+    options: []
+  });
 
   const fetchCategories = async (props?: FetchResourceParams) => {
     const { pageNumber = 1, pageSize = 10, mergeRecords } = props || {};

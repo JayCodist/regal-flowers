@@ -31,7 +31,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
 };
 
 const Header: FunctionComponent = () => {
-  const [showCart, setShowCart] = useState(false);
+  const [shouldShowCart, setShouldShowCart] = useState(false);
 
   const links: AppLink[] = [
     {
@@ -73,8 +73,6 @@ const Header: FunctionComponent = () => {
   ];
 
   const { currency, setCurrency, cartItems } = useContext(SettingsContext);
-
-  console.log("showCart", showCart);
 
   return (
     <>
@@ -129,10 +127,10 @@ const Header: FunctionComponent = () => {
                 "flex",
                 "column",
                 "center-align",
-                showCart && "primary-color"
+                shouldShowCart && "primary-color"
               ].join(" ")}
               onClick={() => {
-                setShowCart(!showCart);
+                setShouldShowCart(!shouldShowCart);
               }}
             >
               <svg
@@ -154,18 +152,21 @@ const Header: FunctionComponent = () => {
 
               <span>Cart ({cartItems.length})</span>
             </button>
-            <button className="flex column center-align">
+            <a className="flex column center-align" href="#contactSection">
               <img
                 alt="phone"
                 src="/icons/phone.svg"
                 className={styles["control-icon"]}
               />
               <span>Contact</span>
-            </button>
+            </a>
           </div>
         </div>
       </header>
-      <CartContext visible={showCart} cancel={() => setShowCart(false)} />
+      <CartContext
+        visible={shouldShowCart}
+        cancel={() => setShouldShowCart(false)}
+      />
     </>
   );
 };
@@ -178,8 +179,9 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel } = props;
 
-  const { cartItems, setCartItems, deliveryDate, setDeliveryDate } =
-    useContext(SettingsContext);
+  const { cartItems, setCartItems, deliveryDate, setDeliveryDate } = useContext(
+    SettingsContext
+  );
   const [loading, setLoading] = useState(false);
 
   const cartRef = useRef<HTMLDivElement>(null);
@@ -258,22 +260,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       amount: 0,
       anonymousClient: false,
       arrangementTime: "",
-      client: {
-        address: "",
-        email: "",
-        name: "",
-        category: [],
-        firstname: "",
-        lastname: "",
-        phone: "",
-        phoneAlt: "",
-        phoneAlt2: "",
-        phones: [],
-        city: "",
-        dob: "",
-        gender: "",
-        state: ""
-      },
+      client: {},
       business: "Regal Flowers",
       channel: "Regal Website",
       contactDepsArray: [],
@@ -301,18 +288,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       orderDetails: "",
       profit: "",
       purpose: "Unknown",
-      recipient: {
-        address: "",
-        email: "",
-        name: "",
-        category: [],
-        firstname: "",
-        lastname: "",
-        phone: "",
-        phoneAlt: "",
-        phoneAlt2: "",
-        phones: []
-      },
+      recipient: {},
       recipientAddress: "",
       receivedByName: "",
       receivedByPhone: "",
@@ -321,8 +297,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       websiteOrderID: "",
       driverAlerted: false
     });
-
-    console.log(deliveryDate);
 
     if (response.data) {
       setDeliveryDate(
@@ -333,8 +307,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
 
     setLoading(false);
-
-    console.log("response", response);
   };
 
   return (

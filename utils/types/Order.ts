@@ -156,20 +156,7 @@ type Purpose =
   | "Other"
   | "Complimentary";
 
-interface Recipient {
-  name: string;
-  phone: string;
-  phoneAlt: string;
-  email: string;
-  address: string;
-  category: Array<string>;
-  firstname: string;
-  lastname: string;
-  phoneAlt2: string;
-  phones: Array<string>;
-}
-
-interface Client {
+interface Person {
   name: string;
   phone: string;
   phoneAlt: string;
@@ -198,7 +185,7 @@ export interface OrderCreate {
   arrangementTime: string;
   business: "Regal Flowers" | "Floral Hub";
   channel: Channel;
-  client: Client;
+  client: Partial<Person>;
   contactDepsArray: Array<string>;
   costBreakdown: string;
   deliveryMessage: string;
@@ -206,7 +193,7 @@ export interface OrderCreate {
   deliveryStatus: DeliveryStatus;
   deliveryZone: DeliveryZone;
   despatchFrom: DespatchedFrom;
-  driver: Record<string, any>;
+  driver: Partial<Person>;
   driverAlerted: boolean;
   editingAdminsRevised: Array<string>;
   feedback: Record<string, any>;
@@ -227,7 +214,7 @@ export interface OrderCreate {
   purpose: Purpose;
   receivedByName: string;
   receivedByPhone: string;
-  recipient: Recipient;
+  recipient: Partial<Person>;
   recipientAddress: string;
   sendReminders: boolean;
   upsellProfit: number;
