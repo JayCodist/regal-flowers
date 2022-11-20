@@ -183,13 +183,15 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   const [loading, setLoading] = useState(false);
 
   const cartRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
   const handleCloseChart = (e: MouseEvent) => {
     const cartBody = cartRef.current;
+    const backdrop = backdropRef.current;
     if (!cartBody || !cartBody.contains(e.target as Node)) {
-      cancel();
+      if (backdrop?.contains(e.target as Node)) cancel();
     }
   };
 
@@ -344,6 +346,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         visible && styles.active,
         visible && "scrollable"
       ].join(" ")}
+      ref={backdropRef}
     >
       <div
         ref={cartRef}
