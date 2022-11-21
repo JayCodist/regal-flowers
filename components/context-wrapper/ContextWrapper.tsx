@@ -5,7 +5,7 @@ import {
   useRef,
   useState
 } from "react";
-import styles from "ContextWrapper.module.scss";
+import styles from "./ContextWrapper.module.scss";
 
 interface ContextWrapperProps {
   anchor: ReactNode;
@@ -36,7 +36,13 @@ const ContextWrapper: FunctionComponent<ContextWrapperProps> = props => {
       !contextBody?.contains(e.target as Node) &&
       !anchorBody?.contains(e.target as Node)
     ) {
-      cancel?.();
+      const isStateControlled =
+        onOpen && cancel && typeof visible === "boolean";
+      if (isStateControlled) {
+        cancel();
+      } else {
+        setInnerVisible(false);
+      }
     }
   };
 
@@ -50,25 +56,41 @@ const ContextWrapper: FunctionComponent<ContextWrapperProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [innerVisible]);
 
+  const handleAnchorClick = () => {
+    const isStateControlled = onOpen && cancel && typeof visible === "boolean";
+    if (isStateControlled) {
+      if (visible) {
+        cancel();
+      } else {
+        onOpen();
+      }
+    } else {
+      setInnerVisible(!innerVisible);
+    }
+  };
+
   return (
     <>
-      <span ref={anchorRef} onClick={onOpen}>
-        {anchor}
-      </span>
-      <div
-        className={[styles.backdrop, innerVisible && styles.active].join(" ")}
+      <span
+        ref={anchorRef}
+        onClick={handleAnchorClick}
+        className={styles.anchor}
       >
+        {anchor}
         <div
           ref={contextRef}
           className={[
-            styles["cart-context"],
+            styles["context"],
             innerVisible && `scrollable ${styles.active}`,
             className
           ].join(" ")}
         >
           {children}
         </div>
-      </div>
+      </span>
+      <div
+        className={[styles.backdrop, innerVisible && styles.active].join(" ")}
+      />
     </>
   );
 };

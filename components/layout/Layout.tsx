@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 import Button from "../button/Button";
 import { createOrder } from "../../utils/helpers/data/order";
 import dayjs from "dayjs";
+import ContextWrapper from "../context-wrapper/ContextWrapper";
+import AuthDropdown from "./AuthDropdown";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -113,14 +115,20 @@ const Header: FunctionComponent = () => {
           </div>
           <div className="flex spaced-lg">
             <div className={styles.group}>
-              <button className="flex column center-align">
-                <img
-                  alt="user"
-                  src="/icons/user.svg"
-                  className={styles["control-icon"]}
-                />
-                <span>Account</span>
-              </button>
+              <ContextWrapper
+                anchor={
+                  <button className="flex column center-align">
+                    <img
+                      alt="user"
+                      src="/icons/user.svg"
+                      className={styles["control-icon"]}
+                    />
+                    <span>Account</span>
+                  </button>
+                }
+              >
+                <AuthDropdown />
+              </ContextWrapper>
             </div>
             <button
               className={[
