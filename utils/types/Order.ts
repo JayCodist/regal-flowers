@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { Dayjs } from "dayjs";
 
 interface OrderItem {
@@ -261,4 +262,14 @@ export interface OrderUpdate {
   recipientAltCountryCode: string;
   recipientEmail: string;
   pickUpState: string;
+}
+
+export type PaymentName = "paystack" | "googlePay" | "payPal" | "bankTransfer";
+
+export interface PaymentMethod {
+  title: string;
+  paymentName: PaymentName;
+  info: string;
+  icon: ReactNode;
+  other?: { icon: ReactNode }[];
 }
