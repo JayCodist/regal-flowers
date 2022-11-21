@@ -1,4 +1,4 @@
-import {
+import React, {
   FunctionComponent,
   ReactNode,
   useContext,
@@ -8,8 +8,8 @@ import {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { AppCurrency, AppLink } from "../../utils/types/Core";
-import { defaultCurrency } from "../../utils/constants";
+import { AppCurrency } from "../../utils/types/Core";
+import { defaultCurrency, links } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -19,6 +19,7 @@ import { createOrder } from "../../utils/helpers/data/order";
 import dayjs from "dayjs";
 import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
+import useOutsideClick from "../../utils/hooks/useOutsideClick";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -34,39 +35,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
 
 const Header: FunctionComponent = () => {
   const [shouldShowCart, setShouldShowCart] = useState(false);
-
-  const links: AppLink[] = [
-    {
-      url: "#",
-      title: "Send To",
-      children: []
-    },
-    {
-      url: "/filters?selectedOccasion=Anniversary Flowers",
-      title: "Occasions",
-      children: []
-    },
-    {
-      url: "#",
-      title: "Shop By",
-      children: []
-    },
-    {
-      url: "#",
-      title: "VIP Section",
-      children: []
-    },
-    {
-      url: "#",
-      title: "Gifts",
-      children: []
-    },
-    {
-      url: "/faq",
-      title: "FAQ",
-      children: []
-    }
-  ];
+  const [activeNav, setActiveNav] = useState("");
 
   const currencyOptions: AppCurrency[] = [
     { ...defaultCurrency },
@@ -75,6 +44,14 @@ const Header: FunctionComponent = () => {
   ];
 
   const { currency, setCurrency, cartItems } = useContext(SettingsContext);
+
+  const handleActiveNav = (e: React.MouseEvent, title: string) => {
+    e.preventDefault();
+    setActiveNav(title === activeNav ? "" : title);
+    e.stopPropagation();
+  };
+
+  const _subLinkRef = useOutsideClick<HTMLDivElement>(() => setActiveNav(""));
 
   return (
     <>
@@ -89,12 +66,46 @@ const Header: FunctionComponent = () => {
           </a>
         </Link>
         <nav className={styles.nav}>
-          {links.map(link => (
-            <Link href={link.url} key={link.title}>
-              <a>
-                <strong className={styles.link}>{link.title}</strong>
-              </a>
-            </Link>
+          {links.map((link, index) => (
+            <div className={styles.link} key={index} ref={_subLinkRef}>
+              <Link href={link.url} key={link.title}>
+                <a
+                  className={`flex center-align spaced ${styles.title}`}
+                  onClick={e => handleActiveNav(e, link.title)}
+                >
+                  <strong>{link.title}</strong>
+                  {link.children.length > 0 && (
+                    <div className={[styles.arrow].join(" ")}></div>
+                  )}
+                </a>
+              </Link>
+              <div>
+                {link.children.length > 0 && (
+                  <div
+                    className={[
+                      styles["dropdown"],
+                      activeNav === link.title && styles.active
+                    ].join(" ")}
+                  >
+                    <p className={styles.subtitle}>{link.subtitle}</p>
+                    <div className={[styles["grand-children"]].join(" ")}>
+                      {link.children.map((child, index) => (
+                        <div key={index}>
+                          {child.title && <strong>{child.title}</strong>}
+                          <div>
+                            {child.children.map((grandChild, index) => (
+                              <p key={index} className={styles["grand-title"]}>
+                                {grandChild.title}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           ))}
         </nav>
         <div className={styles["controls-area"]}>
@@ -194,13 +205,15 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   const [loading, setLoading] = useState(false);
 
   const cartRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
 
   const handleCloseChart = (e: MouseEvent) => {
     const cartBody = cartRef.current;
+    const backdrop = backdropRef.current;
     if (!cartBody || !cartBody.contains(e.target as Node)) {
-      cancel();
+      if (backdrop?.contains(e.target as Node)) cancel();
     }
   };
 
@@ -326,6 +339,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         visible && styles.active,
         visible && "scrollable"
       ].join(" ")}
+      ref={backdropRef}
     >
       <div
         ref={cartRef}

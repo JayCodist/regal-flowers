@@ -1,10 +1,32 @@
 import Link from "next/link";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { flowers } from "../filters";
+import { getAllProducts } from "../../utils/helpers/data/products";
+import Product from "../../utils/types/Product";
 import styles from "./index.module.scss";
 
 const Index: FunctionComponent = () => {
+  const [featuredFlowers, setFeaturedFlowers] = useState<Product[] | null>();
+  const [loading, setLoading] = useState(false);
+
+  const fetchAllProducts = async () => {
+    setLoading(true);
+    const response = await getAllProducts();
+
+    if (response) {
+      const _featuredFlowers = response?.data
+        ?.filter((product: Product) => product.featured)
+        .slice(0, 4);
+      setFeaturedFlowers(_featuredFlowers);
+    }
+
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAllProducts();
+  }, []);
   return (
     <section className={styles.wrapper}>
       <div className={[styles["hero-bg"], "hero-bg"].join(" ")}>
@@ -243,26 +265,40 @@ const Index: FunctionComponent = () => {
         </div>
         <div className="flex between margin-bottom spaced">
           <span className={styles.title}>Featured Flowers</span>
-          <button
-            className={`primary-color flex center-align spaced ${styles["sub-title"]}`}
+          <Button
+            url="/filters?selectedOccasion=all-occasions"
+            className="flex spaced center center-align"
+            type="transparent"
           >
-            <span>See All</span>{" "}
+            <h3 className="red margin-right">See All</h3>
             <img
-              className="generic-icon"
-              src="./icons/arrow-right.svg"
-              alt="arrow right"
+              alt="arrow"
+              className="generic-icon xsmall"
+              src="/icons/arrow-right.svg"
             />
-          </button>
+          </Button>
         </div>
-        <div className="flex between vertical-margin spaced wrap">
-          {flowers.map((item, index) => (
+        <div
+          className={`flex vertical-margin spaced wrap text-center ${
+            loading ? "center" : "between"
+          }`}
+        >
+          {loading && (
+            <img
+              src="/images/spinner.svg"
+              alt="spinner"
+              className="generic-icon xxl spinner"
+            />
+          )}
+
+          {featuredFlowers?.map(flower => (
             <FlowerCard
-              key={index}
-              name={item.name}
-              image={item.images[0].src}
-              price={item.price}
-              subTitle={item.details}
-              url={`/products/${item.slug}`}
+              key={flower.key}
+              image={flower.images[0]?.src || ""}
+              name={flower.name}
+              subTitle={flower.details}
+              price={flower.price}
+              url={`/products/${flower.slug}`}
             />
           ))}
         </div>

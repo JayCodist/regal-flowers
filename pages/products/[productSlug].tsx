@@ -32,7 +32,7 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
   const [productPrice, setProductPrice] = useState<number>(product.price);
   const [total, setTotal] = useState<number>(product.price);
 
-  const { setCartItems, cartItems } = useContext(SettingsContext);
+  const { setCartItems, cartItems, notify } = useContext(SettingsContext);
 
   const handleAddToCart = () => {
     const cartItem: CartItem = {
@@ -47,10 +47,11 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
 
     const _cartItem = cartItems.find(item => item.key === product.key);
 
-    console.log(_cartItem);
-
     if (!_cartItem) {
       setCartItems([...cartItems, cartItem]);
+      notify("success", "Item Added To Cart");
+    } else {
+      notify("info", "Item Already In Cart");
     }
   };
 
