@@ -71,12 +71,10 @@ const ContextWrapper: FunctionComponent<ContextWrapperProps> = props => {
 
   return (
     <>
-      <span
-        ref={anchorRef}
-        onClick={handleAnchorClick}
-        className={styles.anchor}
-      >
-        {anchor}
+      <span className={styles.anchor}>
+        <span ref={anchorRef} onClick={handleAnchorClick}>
+          {anchor}
+        </span>
         <div
           ref={contextRef}
           className={[
