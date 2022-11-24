@@ -538,7 +538,7 @@ button {
   &::-webkit-scrollbar-corner {
     background-color: transparent;
   }
-  overflow: scroll;
+  overflow: auto;
 }
 
 .bold {

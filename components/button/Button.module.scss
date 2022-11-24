@@ -56,6 +56,13 @@
       background-color: rgba(0, 0, 0, 0.1);
     }
   }
+  &.plain {
+    width: fit-content;
+    min-width: 0;
+    padding: 0;
+    color: #9b0000;
+    background-color: unset;
+  }
 
   &.responsive {
     width: 100%;
@@ -69,6 +76,10 @@
 
   &.icon-only {
     padding: 0;
+    min-width: 0;
+    &:hover {
+      background-color: unset;
+    }
   }
   .loader {
     height: auto;

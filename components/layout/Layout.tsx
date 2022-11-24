@@ -209,7 +209,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   const router = useRouter();
 
-  const handleCloseChart = (e: MouseEvent) => {
+  const handleCloseCart = (e: MouseEvent) => {
     const cartBody = cartRef.current;
     const backdrop = backdropRef.current;
     if (!cartBody || !cartBody.contains(e.target as Node)) {
@@ -258,10 +258,10 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   useEffect(() => {
     if (visible) {
-      document.addEventListener("mousedown", handleCloseChart);
+      document.addEventListener("mousedown", handleCloseCart);
     }
     return () => {
-      document.removeEventListener("mousedown", handleCloseChart);
+      document.removeEventListener("mousedown", handleCloseCart);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
