@@ -47,7 +47,6 @@
       background-color: white;
       width: max-content;
       padding: 1rem;
-      padding-bottom: 0;
       box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06),
         0px 1px 3px rgba(0, 0, 0, 0.1);
       opacity: 0;
@@ -73,11 +72,10 @@
       }
 
       .grand-title {
-        margin-bottom: 1rem;
+        // margin-bottom: 1rem;
       }
 
       strong {
-        margin-bottom: 1rem;
         display: inline-block;
       }
       .subtitle {

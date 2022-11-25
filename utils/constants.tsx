@@ -125,7 +125,8 @@ export const otherSampleProducts = {
     "VIP Large"
   ],
   designOptions: ["wrappedBouquet", "invase", "inLargeVase", "box"],
-  note: "Single stem rose only available for pickup, except as part of larger order.",
+  note:
+    "Single stem rose only available for pickup, except as part of larger order.",
   description:
     "A kiss from a rose is daintily presented single full stemmed rose, available in various colors."
 };
@@ -255,7 +256,8 @@ export const sampleReviews: UserReview[] = [
     }
   },
   {
-    text: "Great arrangement and packaging and was punctual too. Very professional work",
+    text:
+      "Great arrangement and packaging and was punctual too. Very professional work",
     date: "6 April, 2022",
     rating: 5,
     user: {
@@ -660,7 +662,8 @@ export const paymentMethod: PaymentMethod[] = [
         />
       </svg>
     ),
-    info: "You will be redirected to the PayPal website after submitting your order"
+    info:
+      "You will be redirected to the PayPal website after submitting your order"
   },
   {
     title: "GooglePay",
@@ -945,7 +948,8 @@ export const productSampleData = {
     "VIP Large"
   ],
   designOptions: ["wrappedBouquet", "inVase", "inLargeVase", "box"],
-  note: "Single stem rose only available for pickup, except as part of larger order.",
+  note:
+    "Single stem rose only available for pickup, except as part of larger order.",
   description:
     "A kiss from a rose is daintily presented single full stemmed rose, available in various colors.",
   details: "5 Peas in a pod"
@@ -986,136 +990,76 @@ export const links: AppLink[] = [
     subtitle: "Select Occassion",
     children: [
       {
-        title: "Love, Birthdays & Anniversary",
+        title: "Romance, Birthdays & Anniversary",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Get well soon",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Bridal",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Funeral & Condolence",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
-        title: "Others",
+        title: "Events & Centerpiece",
         url: "",
-        children: [
-          {
-            title: "VIP Statements",
-            url: "",
-            children: []
-          },
-          {
-            title: "Events & Centerpiece",
-            url: "",
-            children: []
-          },
-          {
-            title: "Father's Day",
-            url: "",
-            children: []
-          },
-          {
-            title: "Mother's Day",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
+      },
+      {
+        title: "Father's Day",
+        url: "",
+        children: []
+      },
+      {
+        title: "Mother's Day",
+        url: "",
+        children: []
+      },
+      {
+        title: "Valentine’s Day",
+        url: "",
+        children: []
       }
+      // {
+      //   title: "Others",
+      //   url: "",
+      //   children: [
+      //     {
+      //       title: "VIP Statements",
+      //       url: "",
+      //       children: []
+      //     },
+      //     {
+      //       title: "Events & Centerpiece",
+      //       url: "",
+      //       children: []
+      //     },
+      //     {
+      //       title: "Father's Day",
+      //       url: "",
+      //       children: []
+      //     },
+      //     {
+      //       title: "Mother's Day",
+      //       url: "",
+      //       children: []
+      //     }
+      //   ]
+      // }
     ]
   },
   {
