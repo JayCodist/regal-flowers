@@ -190,8 +190,9 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel } = props;
 
-  const { cartItems, setCartItems, deliveryDate, setDeliveryDate } =
-    useContext(SettingsContext);
+  const { cartItems, setCartItems, deliveryDate, setDeliveryDate } = useContext(
+    SettingsContext
+  );
   const [loading, setLoading] = useState(false);
 
   const cartRef = useRef<HTMLDivElement>(null);

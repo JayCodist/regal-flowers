@@ -137,9 +137,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
           <div className={styles.slider}>
             <button
               onClick={handlePreviousCLick}
-              className={`${styles["btn-arrow"]}  ${styles["left"]} ${
-                activeSlide <= 1 && "disabled"
-              }`}
+              className={`${styles["btn-arrow"]}  ${
+                styles["left"]
+              } ${activeSlide <= 1 && "disabled"}`}
             >
               <img
                 src="/icons/chevron-left.svg"
@@ -160,9 +160,9 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
             ))}
             <button
               onClick={handleNextCLick}
-              className={`${styles["btn-arrow"]} ${styles["right"]} ${
-                activeSlide >= product.images.length - 1 && "disabled"
-              }`}
+              className={`${styles["btn-arrow"]} ${
+                styles["right"]
+              } ${activeSlide >= product.images.length - 1 && "disabled"}`}
             >
               <img
                 src="/icons/chevron-right.svg"
@@ -471,9 +471,8 @@ const LandingPage: FunctionComponent<{ product: Product }> = props => {
                     alt={group.name}
                   />
                   <div
-                    className={`${styles.group} ${
-                      group.name === addonGroup && styles.active
-                    } flex between center-align`}
+                    className={`${styles.group} ${group.name === addonGroup &&
+                      styles.active} flex between center-align`}
                   >
                     <p className="bold">{group.name}</p>
                     <svg

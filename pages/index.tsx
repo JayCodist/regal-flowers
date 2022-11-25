@@ -27,28 +27,12 @@ import { Category } from "../utils/types/Category";
 import { getAllProducts } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 
-const LandingPage: FunctionComponent = () => {
-  const [featuredFlowers, setFeaturedFlowers] = useState<Product[] | null>();
+const LandingPage: FunctionComponent<{
+  featuredFlowers: Product[];
+}> = props => {
+  const { featuredFlowers } = props;
+
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
-
-  const fetchAllProducts = async () => {
-    setLoading(true);
-    const response = await getAllProducts();
-
-    if (response) {
-      const _featuredFlowers = response?.data
-        ?.filter((product: Product) => product.featured)
-        .slice(0, 4);
-      setFeaturedFlowers(_featuredFlowers);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchAllProducts();
-  }, []);
 
   return (
     <section className="page-content">
@@ -80,14 +64,6 @@ const LandingPage: FunctionComponent = () => {
               </Button>
             </div>
             <div className={styles.section}>
-              {loading && (
-                <img
-                  src="/images/spinner.svg"
-                  alt="spinner"
-                  className="generic-icon xxl spinner"
-                />
-              )}
-
               {featuredFlowers?.map(flower => (
                 <FlowerCard
                   key={flower.key}
@@ -484,10 +460,11 @@ const LandingPage: FunctionComponent = () => {
 const FlowerDeliveryInput: FunctionComponent = () => {
   const [occasion, setOccasion] = useState<Category>({ name: "", id: "" });
   const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
-  const [occassionOptions, setOccassionOptions] =
-    useState<PaginatedOptionsWrapper>({
-      options: []
-    });
+  const [occassionOptions, setOccassionOptions] = useState<
+    PaginatedOptionsWrapper
+  >({
+    options: []
+  });
 
   const fetchCategories = async (props?: FetchResourceParams) => {
     const { pageNumber = 1, pageSize = 10, mergeRecords } = props || {};
@@ -559,5 +536,27 @@ const FlowerDeliveryInput: FunctionComponent = () => {
     </div>
   );
 };
+
+export async function getStaticProps() {
+  const response = await getAllProducts();
+
+  if (response.data) {
+    const featuredFlowers = response?.data
+      ?.filter((product: Product) => product.featured)
+      .slice(0, 4);
+
+    return {
+      props: {
+        featuredFlowers
+      }
+    };
+  }
+
+  return {
+    props: {
+      featuredFlowers: null
+    }
+  };
+}
 
 export default LandingPage;
