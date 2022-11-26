@@ -1,4 +1,7 @@
-import { FunctionComponent, useState } from "react";
+import { FormEvent, FunctionComponent, useContext, useState } from "react";
+import SettingsContext from "../../utils/context/SettingsContext";
+import { login, signup } from "../../utils/helpers/data/auth";
+import RequestResponse from "../../utils/types/RequestResponse";
 import Button from "../button/Button";
 import Input from "../input/Input";
 import styles from "./Layout.module.scss";
@@ -28,7 +31,37 @@ const AuthDropdown: FunctionComponent = () => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {};
+  const { notify, setUser } = useContext(SettingsContext);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const handlerMap: Partial<Record<
+      FormType,
+      () => Promise<RequestResponse>
+    >> = {
+      login: () => login(email, password),
+      signup: () => signup(email, password)
+    };
+    setLoading(true);
+    const response = await handlerMap[formType]?.();
+    setLoading(false);
+    if (response?.error) {
+      notify(
+        "error",
+        `Unable to ${titleMap[formType].toLowerCase()}: ${response.message}`
+      );
+    } else {
+      if (formType === "login" || formType === "signup") {
+        setUser(response?.data);
+        notify(
+          "success",
+          formType === "login"
+            ? `Logged in successfully as ${response?.data.email}`
+            : "User signed up successfully"
+        );
+      }
+    }
+  };
   return (
     <div className={styles["auth-form"]}>
       <h2 className="text-center margin-bottom">{titleMap[formType]}</h2>
@@ -42,6 +75,7 @@ const AuthDropdown: FunctionComponent = () => {
               placeholder="Enter email"
               type="email"
               name="email"
+              required
               responsive
             />
           </div>
@@ -67,6 +101,7 @@ const AuthDropdown: FunctionComponent = () => {
               type="password"
               autoComplete={formType === "signup" ? "new-password" : "password"}
               placeholder="Enter password"
+              required
               showPasswordIcon
               responsive
             />
@@ -81,13 +116,19 @@ const AuthDropdown: FunctionComponent = () => {
               onChange={setPasswordConfirm}
               type="password"
               placeholder="Confirm password"
+              required
               showPasswordIcon
               responsive
             />
           </div>
         )}
 
-        <Button className="vertical-margin spaced" responsive>
+        <Button
+          buttonType="submit"
+          loading={loading}
+          className="vertical-margin spaced"
+          responsive
+        >
           {loginTextMap[formType]}
         </Button>
         {formType === "login" && (

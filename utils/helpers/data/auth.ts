@@ -8,14 +8,14 @@ export const login: (
   password: string
 ) => Promise<RequestResponse<User>> = async (email, password) => {
   try {
-    const response = await restAPIInstance.post("/v1/regal/auth/login", {
+    const { data } = await restAPIInstance.post("/v1/regal/auth/login", {
       email,
       password
     });
-    AppStorage.save("userData", response.data);
+    AppStorage.save("userData", data);
     return {
       error: false,
-      data: response
+      data
     };
   } catch (err) {
     console.error("Unable to login: ", err);
@@ -32,14 +32,14 @@ export const signup: (
   password: string
 ) => Promise<RequestResponse<User>> = async (email, password) => {
   try {
-    const response = await restAPIInstance.post("/v1/regal/auth/signup", {
+    const { data } = await restAPIInstance.post("/v1/regal/auth/signup", {
       email,
       password
     });
-    AppStorage.save("userData", response.data);
+    AppStorage.save("userData", data);
     return {
       error: false,
-      data: response
+      data
     };
   } catch (err) {
     console.error("Unable to signup: ", err);

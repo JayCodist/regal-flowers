@@ -357,7 +357,7 @@
     border-radius: 50%;
     transition: 0.3s ease-out;
     padding: 0.2rem;
-    background-color: red;
+    background-color: gray;
     height: 1.5rem;
     width: 1.5rem;
     display: flex;
@@ -369,9 +369,9 @@
       background-color: white;
       height: 0.15rem;
       width: 0.8rem;
-      transform: rotate(45deg);
+      transform: rotate(45deg) translate(0.1rem, 0);
       &:nth-child(2) {
-        transform: rotate(-40deg) translate(0.1rem, -0.1rem);
+        transform: rotate(-40deg) translate(0.1rem, -0.07rem);
       }
     }
   }
