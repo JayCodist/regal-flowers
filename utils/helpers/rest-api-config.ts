@@ -1,8 +1,17 @@
-const baseUrl = "https://regal-operations-defy.appspot.com";
-// const baseUrl = "http://localhost:8080";
+import User from "../types/User";
+import AppStorage from "./storage-helpers";
 
-const restAPIHeaders = {
-  "Content-Type": "application/json"
+const baseUrl = "https://regal-operations-defy.appspot.com";
+// const baseUrl = "http://localhost:8080";\
+
+const getAPIHeaders = () => {
+  const savedUser = AppStorage.get<User>("userData");
+
+  const restAPIHeaders: HeadersInit = {
+    "Content-Type": "application/json",
+    authorization: savedUser ? `Bearer ${savedUser.authToken}` : ""
+  };
+  return restAPIHeaders;
 };
 interface FetchInstanceType {
   get: (url: string, config?: RequestInit) => Promise<any>;
@@ -27,7 +36,7 @@ export const restAPIInstance: FetchInstanceType = {
       ...(config || {}),
       method: "GET",
       headers: {
-        ...restAPIHeaders,
+        ...getAPIHeaders(),
         ...(config?.headers || {})
       }
     }).then(processResponse),
@@ -37,7 +46,7 @@ export const restAPIInstance: FetchInstanceType = {
       ...(config || {}),
       method: "POST",
       headers: {
-        ...restAPIHeaders,
+        ...getAPIHeaders(),
         ...(config?.headers || {})
       }
     }).then(processResponse),
@@ -47,7 +56,7 @@ export const restAPIInstance: FetchInstanceType = {
       ...(config || {}),
       method: "PUT",
       headers: {
-        ...restAPIHeaders,
+        ...getAPIHeaders(),
         ...(config?.headers || {})
       }
     }).then(processResponse),
@@ -57,7 +66,7 @@ export const restAPIInstance: FetchInstanceType = {
       ...(config || {}),
       method: "PATCH",
       headers: {
-        ...restAPIHeaders,
+        ...getAPIHeaders(),
         ...(config?.headers || {})
       }
     }).then(processResponse),
@@ -66,7 +75,7 @@ export const restAPIInstance: FetchInstanceType = {
       ...(config || {}),
       method: "DELETE",
       headers: {
-        ...restAPIHeaders,
+        ...getAPIHeaders(),
         ...(config?.headers || {})
       }
     }).then(processResponse)

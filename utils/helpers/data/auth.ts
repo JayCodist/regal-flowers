@@ -72,18 +72,38 @@ export const requestOtp: (
   }
 };
 
-export const changePassword: (
+export const validteOTP: (
   email: string,
-  otp: string,
+  code: string
+) => Promise<RequestResponse<User>> = async (email, code) => {
+  try {
+    const { data } = await restAPIInstance.post("/v1/regal/auth/otp/validate", {
+      email,
+      code
+    });
+    AppStorage.save("userData", data);
+    return {
+      error: false,
+      data
+    };
+  } catch (err) {
+    console.error("Unable to validate otp: ", err);
+    return {
+      error: true,
+      message: (err as Error).message,
+      data: null
+    };
+  }
+};
+
+export const changePassword: (
   password: string
-) => Promise<RequestResponse<User>> = async (email, code, password) => {
+) => Promise<RequestResponse<User>> = async password => {
   try {
     const { data } = await restAPIInstance.put(
-      "/v1/regal/auth/otp/change-password",
+      "/v1/regal/auth/change-password",
       {
-        email,
-        password,
-        code
+        password
       }
     );
     AppStorage.save("userData", data);

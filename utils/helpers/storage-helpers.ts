@@ -9,13 +9,13 @@ const AppStorage = {
       console.error("Unable to save to localStorage: ", error);
     }
   },
-  get: (key: string) => {
+  get: <T = any>(key: string): T | null => {
     const str = localStorage.getItem(key);
     try {
       const output = str ? JSON.parse(str) : null;
       return output;
     } catch (error) {
-      return str;
+      return str as any;
     }
   },
   remove: (key: string) => {
@@ -28,7 +28,7 @@ const AppStorage = {
 
 if (typeof window !== "undefined") {
   const currentVersion = 0;
-  const savedVersionStr = AppStorage.get("LOCAL_STORAGE_SYNC_VERSION");
+  const savedVersionStr = AppStorage.get<number>("LOCAL_STORAGE_SYNC_VERSION");
   const savedVersion = Number(savedVersionStr || 0);
   if (currentVersion > savedVersion) {
     AppStorage.clear();

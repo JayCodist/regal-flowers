@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/styles.scss";
@@ -11,6 +11,7 @@ import { AppCurrency, CartItem, Settings, Stage } from "../utils/types/Core";
 import { defaultCurrency } from "../utils/constants";
 import { Dayjs } from "dayjs";
 import User from "../utils/types/User";
+import AppStorage from "../utils/helpers/storage-helpers";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
@@ -35,6 +36,11 @@ const App: FunctionComponent<AppProps> = props => {
     type?: NotifyType;
   }>({});
   const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const savedUser = AppStorage.get<User>("userData");
+    setUser(savedUser);
+  }, []);
 
   const notify = (type: NotifyType, message: string, duration?: number) => {
     setShowToaster(false);
