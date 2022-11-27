@@ -569,7 +569,8 @@ export const getStaticPaths = async () => {
   if (error) {
     console.error(`Unable to fetch products: ${error}`);
     return {
-      paths: []
+      paths: [],
+      fallback: false
     };
   } else {
     return {
