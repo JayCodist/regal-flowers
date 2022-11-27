@@ -991,12 +991,12 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Romance, Birthdays & Anniversary",
-        url: "",
+        url: "/filters?selectedOccasion=Anniversary Flowers",
         children: []
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
-        url: "",
+        url: "/filters?selectedOccasion=just-to-say",
         children: []
       },
       {
@@ -1006,12 +1006,12 @@ export const links: AppLink[] = [
       },
       {
         title: "Bridal",
-        url: "",
+        url: "/filters?selectedOccasion=bridal-bouquets",
         children: []
       },
       {
         title: "Funeral & Condolence",
-        url: "",
+        url: "/filters?selectedOccasion=funeral-condolence",
         children: []
       },
       {

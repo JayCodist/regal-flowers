@@ -91,16 +91,21 @@ const Header: FunctionComponent = () => {
                     <p className={styles.subtitle}>{link.subtitle}</p>
                     <div className={[styles["grand-children"]].join(" ")}>
                       {link.children.map((child, index) => (
-                        <div key={index}>
-                          {child.title && <strong>{child.title}</strong>}
-                          <div>
-                            {child.children.map((grandChild, index) => (
-                              <p key={index} className={styles["grand-title"]}>
-                                {grandChild.title}
-                              </p>
-                            ))}
-                          </div>
-                        </div>
+                        <Link href={child.url} key={index}>
+                          <a>
+                            {child.title && <strong>{child.title}</strong>}
+                            <div>
+                              {child.children.map((grandChild, index) => (
+                                <p
+                                  key={index}
+                                  className={styles["grand-title"]}
+                                >
+                                  {grandChild.title}
+                                </p>
+                              ))}
+                            </div>
+                          </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
