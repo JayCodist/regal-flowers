@@ -957,35 +957,24 @@ export const productSampleData = {
 
 export const links: AppLink[] = [
   {
-    url: "#",
+    url: "",
     title: "Send To",
     subtitle: "Send Flowers To",
     children: [
       {
-        title: "",
-        children: [
-          {
-            title: "Bouquets",
-            children: [],
-            url: ""
-          },
-          {
-            title: "Bouquets",
-            children: [],
-            url: ""
-          },
-          {
-            title: "Bouquets",
-            children: [],
-            url: ""
-          }
-        ],
+        title: "Lagos",
+        children: [],
+        url: ""
+      },
+      {
+        title: "Abuja",
+        children: [],
         url: ""
       }
     ]
   },
   {
-    url: "/filters?selectedOccasion=Anniversary Flowers",
+    url: "",
     title: "Occasions",
     subtitle: "Select Occassion",
     children: [
@@ -1069,65 +1058,17 @@ export const links: AppLink[] = [
       {
         title: "Design",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Delivery",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Packages",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       }
     ]
   },
