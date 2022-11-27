@@ -1,6 +1,7 @@
 import { FormEvent, FunctionComponent, useContext, useState } from "react";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { login, signup } from "../../utils/helpers/data/auth";
+import AppStorage from "../../utils/helpers/storage-helpers";
 import RequestResponse from "../../utils/types/RequestResponse";
 import Button from "../button/Button";
 import Input from "../input/Input";
@@ -31,7 +32,23 @@ const AuthDropdown: FunctionComponent = () => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { notify, setUser } = useContext(SettingsContext);
+  const { notify, user, setUser } = useContext(SettingsContext);
+
+  const handleLogout = async () => {
+    AppStorage.remove("userData");
+    setUser(null);
+  };
+
+  if (user) {
+    return (
+      <div className={styles["auth-form"]}>
+        <div className="flex column center-align">
+          <em className="margin-bottom spaced">Logged in as {user.email}</em>
+          <Button onClick={handleLogout}>Logout</Button>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

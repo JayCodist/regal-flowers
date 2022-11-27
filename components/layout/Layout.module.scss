@@ -105,6 +105,20 @@
       height: 1rem;
       width: auto;
       margin: 1rem 0 0.4rem;
+      &.initial {
+        background-color: #f5e5e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        height: 1.6rem;
+        width: 1.6rem;
+        margin: 0.6rem 0 0.1rem;
+        font-weight: bold;
+        color: #9b0000;
+        border-radius: 50%;
+        font-size: 1.1rem;
+      }
     }
   }
 

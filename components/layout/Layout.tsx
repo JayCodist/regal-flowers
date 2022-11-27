@@ -43,7 +43,9 @@ const Header: FunctionComponent = () => {
     { name: "GBP", conversionRate: 523 }
   ];
 
-  const { currency, setCurrency, cartItems } = useContext(SettingsContext);
+  const { currency, setCurrency, cartItems, user } = useContext(
+    SettingsContext
+  );
 
   const handleActiveNav = (e: React.MouseEvent, title: string) => {
     e.preventDefault();
@@ -52,6 +54,23 @@ const Header: FunctionComponent = () => {
   };
 
   const _subLinkRef = useOutsideClick<HTMLDivElement>(() => setActiveNav(""));
+
+  const accountAnchor = (
+    <button className="flex column center-align">
+      {user ? (
+        <span className={[styles.initial, styles["control-icon"]].join(" ")}>
+          {(user.name || user.email)[0]}
+        </span>
+      ) : (
+        <img
+          alt="user"
+          src="/icons/user.svg"
+          className={styles["control-icon"]}
+        />
+      )}
+      <span>Account</span>
+    </button>
+  );
 
   return (
     <>
@@ -126,18 +145,7 @@ const Header: FunctionComponent = () => {
           </div>
           <div className="flex spaced-lg">
             <div className={styles.group}>
-              <ContextWrapper
-                anchor={
-                  <button className="flex column center-align">
-                    <img
-                      alt="user"
-                      src="/icons/user.svg"
-                      className={styles["control-icon"]}
-                    />
-                    <span>Account</span>
-                  </button>
-                }
-              >
+              <ContextWrapper anchor={accountAnchor}>
                 <AuthDropdown />
               </ContextWrapper>
             </div>
