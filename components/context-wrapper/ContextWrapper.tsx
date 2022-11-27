@@ -39,7 +39,7 @@ const ContextWrapper: FunctionComponent<ContextWrapperProps> = props => {
       const isStateControlled =
         onOpen && cancel && typeof visible === "boolean";
       if (isStateControlled) {
-        cancel();
+        cancel?.();
       } else {
         setInnerVisible(false);
       }
@@ -60,9 +60,9 @@ const ContextWrapper: FunctionComponent<ContextWrapperProps> = props => {
     const isStateControlled = onOpen && cancel && typeof visible === "boolean";
     if (isStateControlled) {
       if (visible) {
-        cancel();
+        cancel?.();
       } else {
-        onOpen();
+        onOpen?.();
       }
     } else {
       setInnerVisible(!innerVisible);
