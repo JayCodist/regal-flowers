@@ -26,8 +26,11 @@ import { FetchResourceParams } from "../utils/types/FetchResourceParams";
 import { Category } from "../utils/types/Category";
 import { getAllProducts } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
+import { LocationName } from "../utils/types/Regal";
 
-const LandingPage: FunctionComponent = () => {
+const LandingPage: FunctionComponent<{ locationName?: LocationName }> = ({
+  locationName
+}) => {
   const [featuredFlowers, setFeaturedFlowers] = useState<Product[] | null>();
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [loading, setLoading] = useState(false);

@@ -17,7 +17,7 @@ interface Designs {
   price: number;
 }
 
-const LandingPage: FunctionComponent<{ product: Product }> = props => {
+const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const { product } = props;
 
   const [activeSlide, setActiveSlide] = useState<number>(0);
@@ -580,4 +580,4 @@ export const getStaticPaths = async () => {
   }
 };
 
-export default LandingPage;
+export default ProductPage;

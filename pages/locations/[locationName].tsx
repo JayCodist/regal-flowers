@@ -1,10 +1,35 @@
 import { FunctionComponent } from "react";
-import { useRouter } from "next/router";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { LocationName } from "../../utils/types/Regal";
+import LandingPage from "../index";
 
-const LandingPage: FunctionComponent = () => {
-  const router = useRouter();
-  const { locationName } = router.query;
-  return <h1>Location: {locationName}</h1>;
+const LocationLandingPage: FunctionComponent<{
+  locationName: LocationName;
+}> = ({ locationName }) => {
+  return <LandingPage locationName={locationName} />;
 };
 
-export default LandingPage;
+export const getStaticProps: GetStaticProps = ({ params }) => ({
+  props: {
+    locationName: params?.locationName
+  }
+});
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [
+      {
+        params: { id: "lagos", locationName: "lagos" }
+      },
+      {
+        params: { id: "abuja", locationName: "abuja" }
+      },
+      {
+        params: { id: "other-places", locationName: "other-places" }
+      }
+    ],
+    fallback: false // true or 'blocking'
+  };
+};
+
+export default LocationLandingPage;
