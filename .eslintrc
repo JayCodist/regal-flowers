@@ -10,7 +10,14 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "prettier/prettier": "warn",
+    "prettier/prettier": ["warn", {
+      "trailingComma": "none",
+      "arrowParens": "avoid",
+      "semi": true,
+      "tabWidth": 2,
+      "endOfLine": "auto",
+      "singleQuote": false
+    }],
     "@next/next/no-img-element": "off",
     "react/display-name": "off",
     "react/no-unescaped-entities": "off",

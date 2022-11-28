@@ -53,11 +53,11 @@ html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "SharpSans", segoe UI, sans-serif;
 }
 
 body {
   font-size: 0.9rem;
+  font-family: "SharpSans", segoe UI, sans-serif;
 }
 a,
 a:visited {
@@ -239,7 +239,7 @@ button {
   margin-top: 0.6rem;
 
   &.spaced {
-    margin-bottom: 1.2rem;
+    margin-top: 1.2rem;
   }
 }
 .round {
@@ -538,7 +538,7 @@ button {
   &::-webkit-scrollbar-corner {
     background-color: transparent;
   }
-  overflow: scroll;
+  overflow: auto;
 }
 
 .bold {

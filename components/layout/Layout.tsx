@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 import Button from "../button/Button";
 import { createOrder } from "../../utils/helpers/data/order";
 import dayjs from "dayjs";
+import ContextWrapper from "../context-wrapper/ContextWrapper";
+import AuthDropdown from "./AuthDropdown";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
@@ -32,7 +34,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
 };
 
 const Header: FunctionComponent = () => {
-  const [showCart, setShowCart] = useState(false);
+  const [shouldShowCart, setShouldShowCart] = useState(false);
   const [activeNav, setActiveNav] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -42,7 +44,9 @@ const Header: FunctionComponent = () => {
     { name: "GBP", conversionRate: 523 }
   ];
 
-  const { currency, setCurrency, cartItems } = useContext(SettingsContext);
+  const { currency, setCurrency, cartItems, user } = useContext(
+    SettingsContext
+  );
 
   const handleActiveNav = (title: string) => {
     setActiveNav(title === activeNav ? "" : title);
@@ -58,6 +62,23 @@ const Header: FunctionComponent = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeNav]);
+
+  const accountAnchor = (
+    <button className="flex column center-align">
+      {user ? (
+        <span className={[styles.initial, styles["control-icon"]].join(" ")}>
+          {(user.name || user.email)[0]}
+        </span>
+      ) : (
+        <img
+          alt="user"
+          src="/icons/user.svg"
+          className={styles["control-icon"]}
+        />
+      )}
+      <span>Account</span>
+    </button>
+  );
 
   return (
     <>
@@ -210,7 +231,7 @@ const Header: FunctionComponent = () => {
           <button
             className={[styles["cart-btn"]].join(" ")}
             onClick={() => {
-              setShowCart(!showCart);
+              setShouldShowCart(!shouldShowCart);
             }}
           >
             <svg
@@ -251,24 +272,20 @@ const Header: FunctionComponent = () => {
           </div>
           <div className="flex spaced-lg">
             <div className={styles.group}>
-              <button className="flex column center-align">
-                <img
-                  alt="user"
-                  src="/icons/user.svg"
-                  className={styles["control-icon"]}
-                />
-                <span>Account</span>
-              </button>
+              <ContextWrapper anchor={accountAnchor}>
+                <AuthDropdown />
+              </ContextWrapper>
             </div>
             <button
               className={[
                 "flex",
                 "column",
                 "center-align",
-                showCart && "primary-color"
+                shouldShowCart && "primary-color"
               ].join(" ")}
-              onClick={() => {
-                setShowCart(!showCart);
+              onClick={e => {
+                setShouldShowCart(!shouldShowCart);
+                e.stopPropagation();
               }}
             >
               <svg
@@ -290,18 +307,21 @@ const Header: FunctionComponent = () => {
 
               <span>Cart ({cartItems.length})</span>
             </button>
-            <button className="flex column center-align">
+            <a className="flex column center-align" href="#contactSection">
               <img
                 alt="phone"
                 src="/icons/phone.svg"
                 className={styles["control-icon"]}
               />
               <span>Contact</span>
-            </button>
+            </a>
           </div>
         </div>
       </header>
-      <CartContext visible={showCart} cancel={() => setShowCart(false)} />
+      <CartContext
+        visible={shouldShowCart}
+        cancel={() => setShouldShowCart(false)}
+      />
     </>
   );
 };
@@ -324,7 +344,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   const router = useRouter();
 
-  const handleCloseChart = (e: MouseEvent) => {
+  const handleCloseCart = (e: MouseEvent) => {
     const cartBody = cartRef.current;
     const backdrop = backdropRef.current;
     if (!cartBody || !cartBody.contains(e.target as Node)) {
@@ -373,12 +393,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   useEffect(() => {
     if (visible) {
-      document.addEventListener("mousedown", handleCloseChart);
+      document.addEventListener("mousedown", handleCloseCart);
     }
     return () => {
-      document.removeEventListener("mousedown", handleCloseChart);
+      document.removeEventListener("mousedown", handleCloseCart);
     };
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible]);
 
   const handleCreateOrder = async () => {
     setLoading(true);
@@ -397,22 +418,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       amount: 0,
       anonymousClient: false,
       arrangementTime: "",
-      client: {
-        address: "",
-        email: "",
-        name: "",
-        category: [],
-        firstname: "",
-        lastname: "",
-        phone: "",
-        phoneAlt: "",
-        phoneAlt2: "",
-        phones: [],
-        city: "",
-        dob: "",
-        gender: "",
-        state: ""
-      },
+      client: {},
       business: "Regal Flowers",
       channel: "Regal Website",
       contactDepsArray: [],
@@ -440,18 +446,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       orderDetails: "",
       profit: "",
       purpose: "Unknown",
-      recipient: {
-        address: "",
-        email: "",
-        name: "",
-        category: [],
-        firstname: "",
-        lastname: "",
-        phone: "",
-        phoneAlt: "",
-        phoneAlt2: "",
-        phones: []
-      },
+      recipient: {},
       recipientAddress: "",
       receivedByName: "",
       receivedByPhone: "",
@@ -470,8 +465,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
 
     setLoading(false);
-
-    console.log("response", response);
   };
 
   return (
@@ -505,7 +498,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             {cartItems.length ? (
               <div className={styles["delivery-status"]}>
                 <span>Delivery date</span>
-                <span>June 10, 2021</span>
+                <span>{deliveryDate || "Not set yet"}</span>
                 <span className="underline primary-color">Edit</span>
               </div>
             ) : (

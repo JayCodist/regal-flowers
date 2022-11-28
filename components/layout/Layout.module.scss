@@ -241,6 +241,20 @@
       height: 1rem;
       width: auto;
       margin: 1rem 0 0.4rem;
+      &.initial {
+        background-color: #f5e5e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        height: 1.6rem;
+        width: 1.6rem;
+        margin: 0.6rem 0 0.1rem;
+        font-weight: bold;
+        color: #9b0000;
+        border-radius: 50%;
+        font-size: 1.1rem;
+      }
     }
 
     @media (max-width: 650px) {
@@ -497,7 +511,7 @@
     border-radius: 50%;
     transition: 0.3s ease-out;
     padding: 0.2rem;
-    background-color: red;
+    background-color: gray;
     height: 1.5rem;
     width: 1.5rem;
     display: flex;
@@ -509,9 +523,9 @@
       background-color: white;
       height: 0.15rem;
       width: 0.8rem;
-      transform: rotate(45deg);
+      transform: rotate(45deg) translate(0.1rem, 0);
       &:nth-child(2) {
-        transform: rotate(-40deg) translate(0.1rem, -0.1rem);
+        transform: rotate(-40deg) translate(0.1rem, -0.07rem);
       }
     }
   }
@@ -519,7 +533,11 @@
 
 .empty-cart {
   text-align: center;
-  font-weight: bold;
   font-size: 2rem;
   margin: 2rem 0;
+}
+
+.auth-form {
+  padding: 1.5rem;
+  width: 22rem;
 }

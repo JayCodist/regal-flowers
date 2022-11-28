@@ -303,9 +303,8 @@ const Select: FunctionComponent<SelectProps> = props => {
       searchInputRef.current.focus();
     }
     if (!showSearchInput && onSearch && !multiple) {
-      const selectedOptionLabel = options.find(
-        option => option.value === value
-      )?.label;
+      const selectedOptionLabel = options.find(option => option.value === value)
+        ?.label;
       if (selectedOptionLabel && typeof selectedOptionLabel === "string") {
         setSearchStr(selectedOptionLabel);
       }
@@ -358,6 +357,7 @@ const Select: FunctionComponent<SelectProps> = props => {
           responsive && styles.responsive,
           fitContent && styles["fit-content"],
           dimmed && styles["dimmed"],
+          hideCaret && styles["no-border"],
           className
         ].join(" ")}
         onClick={handleSelectClick}
@@ -447,9 +447,8 @@ const Select: FunctionComponent<SelectProps> = props => {
             (option, i, arr) =>
               option && (
                 <div
-                  className={`${styles.option} ${
-                    !option.value && styles.initial
-                  } ${option.value === value && styles.active}`}
+                  className={`${styles.option} ${!option.value &&
+                    styles.initial} ${option.value === value && styles.active}`}
                   role="listitem"
                   key={i}
                   onClick={

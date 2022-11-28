@@ -26,12 +26,12 @@ import { FetchResourceParams } from "../utils/types/FetchResourceParams";
 import { Category } from "../utils/types/Category";
 import { getAllProducts } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
+import { LocationName } from "../utils/types/Regal";
 
 const LandingPage: FunctionComponent<{
+  locationName?: LocationName;
   featuredFlowers: Product[];
-}> = props => {
-  const { featuredFlowers } = props;
-
+}> = ({ featuredFlowers }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   return (
@@ -312,7 +312,7 @@ const LandingPage: FunctionComponent<{
           </div>
 
           <div className={styles["contact-section-wrapper"]}>
-            <div className={styles["contact-section"]}>
+            <div className={styles["contact-section"]} id="contactSection">
               <img
                 src="/images/landing-contact.png"
                 className={styles["contact-img"]}

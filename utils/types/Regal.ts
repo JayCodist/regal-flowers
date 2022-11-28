@@ -33,3 +33,5 @@ export interface BlogPost {
   title: string;
   excerpt: string;
 }
+
+export type LocationName = "lagos" | "abuja" | "other-locations";

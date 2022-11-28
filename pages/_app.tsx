@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/styles.scss";
@@ -10,6 +10,8 @@ import SettingsContext, {
 import { AppCurrency, CartItem, Settings, Stage } from "../utils/types/Core";
 import { defaultCurrency } from "../utils/constants";
 import { Dayjs } from "dayjs";
+import User from "../utils/types/User";
+import AppStorage from "../utils/helpers/storage-helpers";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
@@ -20,7 +22,7 @@ const defaultSettings: Settings = {
 
 let toasterTimer: ReturnType<typeof setTimeout>;
 const toasterDuration = {
-  success: 2000,
+  success: 3000,
   info: 4000,
   error: 5000
 };
@@ -33,6 +35,12 @@ const App: FunctionComponent<AppProps> = props => {
     message?: string;
     type?: NotifyType;
   }>({});
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const savedUser = AppStorage.get<User>("userData");
+    setUser(savedUser);
+  }, []);
 
   const notify = (type: NotifyType, message: string, duration?: number) => {
     setShowToaster(false);
@@ -68,7 +76,9 @@ const App: FunctionComponent<AppProps> = props => {
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
     },
-    notify
+    notify,
+    user,
+    setUser
   };
 
   const headTags = (
