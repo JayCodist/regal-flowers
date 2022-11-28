@@ -187,7 +187,7 @@ const Header: FunctionComponent = () => {
                       {link.children.map((child, index) => (
                         <Link href={child.url} key={index}>
                           <a>
-                            {child.title && <strong>{child.title}</strong>}
+                            {child.title && <span>{child.title}</span>}
                             <div>
                               {child.children.map((grandChild, index) => (
                                 <p
@@ -602,7 +602,6 @@ export const CheckoutHeader: FunctionComponent = () => {
     }
   ];
 
-  console.log(currentStage);
   return (
     <header className={styles.header}>
       <Link href="/">

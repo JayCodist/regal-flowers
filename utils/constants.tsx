@@ -964,12 +964,17 @@ export const links: AppLink[] = [
       {
         title: "Lagos",
         children: [],
-        url: ""
+        url: "/locations/lagos"
       },
       {
         title: "Abuja",
         children: [],
-        url: ""
+        url: "/locations/abuja"
+      },
+      {
+        title: "Other states",
+        children: [],
+        url: "/locations/other-places"
       }
     ]
   },
