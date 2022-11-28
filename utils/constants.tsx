@@ -957,169 +957,98 @@ export const productSampleData = {
 
 export const links: AppLink[] = [
   {
-    url: "#",
+    url: "",
     title: "Send To",
     subtitle: "Send Flowers To",
     children: [
       {
-        title: "",
-        children: [
-          {
-            title: "Bouquets",
-            children: [],
-            url: ""
-          },
-          {
-            title: "Bouquets",
-            children: [],
-            url: ""
-          },
-          {
-            title: "Bouquets",
-            children: [],
-            url: ""
-          }
-        ],
+        title: "Lagos",
+        children: [],
+        url: ""
+      },
+      {
+        title: "Abuja",
+        children: [],
         url: ""
       }
     ]
   },
   {
-    url: "/filters?selectedOccasion=Anniversary Flowers",
+    url: "",
     title: "Occasions",
     subtitle: "Select Occassion",
     children: [
       {
-        title: "Love, Birthdays & Anniversary",
-        url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        title: "Romance, Birthdays & Anniversary",
+        url: "/filters?selectedOccasion=Anniversary Flowers",
+        children: []
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
-        url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        url: "/filters?selectedOccasion=just-to-say",
+        children: []
       },
       {
         title: "Get well soon",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Bridal",
-        url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        url: "/filters?selectedOccasion=bridal-bouquets",
+        children: []
       },
       {
         title: "Funeral & Condolence",
-        url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        url: "/filters?selectedOccasion=funeral-condolence",
+        children: []
       },
       {
-        title: "Others",
+        title: "Events & Centerpiece",
         url: "",
-        children: [
-          {
-            title: "VIP Statements",
-            url: "",
-            children: []
-          },
-          {
-            title: "Events & Centerpiece",
-            url: "",
-            children: []
-          },
-          {
-            title: "Father's Day",
-            url: "",
-            children: []
-          },
-          {
-            title: "Mother's Day",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
+      },
+      {
+        title: "Father's Day",
+        url: "",
+        children: []
+      },
+      {
+        title: "Mother's Day",
+        url: "",
+        children: []
+      },
+      {
+        title: "Valentine’s Day",
+        url: "",
+        children: []
       }
+      // {
+      //   title: "Others",
+      //   url: "",
+      //   children: [
+      //     {
+      //       title: "VIP Statements",
+      //       url: "",
+      //       children: []
+      //     },
+      //     {
+      //       title: "Events & Centerpiece",
+      //       url: "",
+      //       children: []
+      //     },
+      //     {
+      //       title: "Father's Day",
+      //       url: "",
+      //       children: []
+      //     },
+      //     {
+      //       title: "Mother's Day",
+      //       url: "",
+      //       children: []
+      //     }
+      //   ]
+      // }
     ]
   },
   {
@@ -1129,65 +1058,17 @@ export const links: AppLink[] = [
       {
         title: "Design",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Delivery",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       },
       {
         title: "Packages",
         url: "",
-        children: [
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          },
-          {
-            title: "Bouquets",
-            url: "",
-            children: []
-          }
-        ]
+        children: []
       }
     ]
   },

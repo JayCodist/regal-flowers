@@ -10,12 +10,110 @@
   z-index: 9;
   background-color: white;
   box-shadow: 0 0.2rem 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
+
+  .hamburger-menu {
+    display: none;
+    height: 1.5rem;
+
+    @media (max-width: 650px) {
+      display: block;
+    }
+  }
   .logo {
     height: 4rem;
     width: auto;
   }
+
+  .mobile-sidebar {
+    opacity: 0;
+    visibility: hidden;
+    position: fixed;
+    top: 6rem;
+    left: 0;
+    width: 100vw;
+    height: 90vh;
+    background-color: white;
+    z-index: 10;
+    padding: 2rem 3rem;
+    transition: all 0.3s ease-in-out;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    @media (min-width: 650px) {
+      display: none;
+    }
+
+    .arrow {
+      border-top: 0.2rem solid rgba(0, 0, 0, 0.502);
+      width: 1rem;
+      border-left: 0.2rem solid rgba(0, 0, 0, 0.502);
+      height: 1rem;
+      transform: rotate(140deg);
+      margin-left: auto;
+      transition: 0.4s ease-out;
+    }
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      border-bottom: 0.1rem solid #d6d6d6;
+      padding: 1.3rem 0;
+    }
+
+    .sub-link {
+      opacity: 0;
+      visibility: hidden;
+      position: fixed;
+      top: 6rem;
+      left: 0;
+      width: 100vw;
+      height: 90vh;
+      background-color: white;
+      z-index: 10;
+      padding: 2rem 3rem;
+      transition: all 0.3s ease-in-out;
+
+      &.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .back {
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+
+        .back-arrow {
+          border-top: 0.2rem solid #4b5563;
+          width: 0.8rem;
+          border-left: 0.2rem solid #4b5563;
+          height: 0.8rem;
+          transform: rotate(320deg);
+          transition: 0.4s ease-out;
+          margin-right: 0.8rem;
+        }
+      }
+
+      .sub-link-title {
+        font-size: 1.2rem;
+        display: block;
+        padding: 1rem 0;
+        font-weight: 600;
+      }
+    }
+  }
+
   .nav {
     display: flex;
+
+    @media (max-width: 650px) {
+      display: none;
+    }
     .link {
       position: relative;
       cursor: pointer;
@@ -47,7 +145,6 @@
       background-color: white;
       width: max-content;
       padding: 1rem;
-      padding-bottom: 0;
       box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06),
         0px 1px 3px rgba(0, 0, 0, 0.1);
       opacity: 0;
@@ -61,10 +158,18 @@
 
       transition: all 0.3s ease-out;
 
-      .grand-children {
-        display: grid;
-        grid-template-columns: repeat(3, auto);
-        grid-gap: 1.5rem;
+      .sub-link {
+        // display: grid;
+        // grid-template-columns: repeat(3, auto);
+        // grid-gap: 1.5rem;
+        & > * {
+          margin-bottom: 1.5rem;
+          display: block;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
       }
 
       .link {
@@ -72,12 +177,7 @@
         font-size: 0.8rem;
       }
 
-      .grand-title {
-        margin-bottom: 1rem;
-      }
-
       strong {
-        margin-bottom: 1rem;
         display: inline-block;
       }
       .subtitle {
@@ -88,11 +188,47 @@
       }
     }
   }
+  .controls-area-mobile {
+    display: none;
+
+    button {
+      color: #4b5563;
+    }
+
+    .cart-btn {
+      position: relative;
+
+      span {
+        position: absolute;
+        top: -0.5rem;
+        right: -0.5rem;
+        background-color: #ef4444;
+        color: white;
+        border-radius: 50%;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.8rem;
+      }
+    }
+
+    .control-icon {
+      height: 1.8rem;
+      width: auto;
+    }
+
+    @media (max-width: 650px) {
+      display: block;
+    }
+  }
   .controls-area {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-size: 0.8rem;
+
     .currency {
       border: none;
       outline: none;
@@ -119,6 +255,10 @@
         border-radius: 50%;
         font-size: 1.1rem;
       }
+    }
+
+    @media (max-width: 650px) {
+      display: none;
     }
   }
 

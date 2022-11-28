@@ -6,9 +6,12 @@ import { getAllProducts } from "../../utils/helpers/data/products";
 import Product from "../../utils/types/Product";
 import styles from "./index.module.scss";
 
+type ContentLink = "how-it-works" | "payment-methods" | "delivery";
+
 const Index: FunctionComponent = () => {
   const [featuredFlowers, setFeaturedFlowers] = useState<Product[] | null>();
   const [loading, setLoading] = useState(false);
+  const [activeContent, setActiveContent] = useState<ContentLink | null>(null);
 
   const fetchAllProducts = async () => {
     setLoading(true);
@@ -27,6 +30,8 @@ const Index: FunctionComponent = () => {
   useEffect(() => {
     fetchAllProducts();
   }, []);
+
+  console.log(activeContent);
   return (
     <section className={styles.wrapper}>
       <div className={[styles["hero-bg"], "hero-bg"].join(" ")}>
@@ -39,18 +44,39 @@ const Index: FunctionComponent = () => {
           <ol className={`flex column ${styles.links}`}>
             <p className="title small bold">Table of content</p>
             <Link href="#how-it-works">
-              <a className="vertical-margin">
-                <span className="margin-right">1</span> How it works
+              <a
+                className={`vertical-margin `}
+                onClick={() => setActiveContent("how-it-works")}
+              >
+                <p
+                  className={`${activeContent === "how-it-works" &&
+                    "primary-color"}`}
+                >
+                  <span className="margin-right">1</span> How it works
+                </p>
               </a>
             </Link>
             <Link href="#payment-methods">
-              <a className="margin-bottom">
-                <span className="margin-right">2</span> Payment Method
+              <a
+                className="margin-bottom"
+                onClick={() => setActiveContent("payment-methods")}
+              >
+                <p
+                  className={`${activeContent === "payment-methods" &&
+                    "primary-color"}`}
+                >
+                  <span className="margin-right">2</span> Payment Method
+                </p>
               </a>
             </Link>
             <Link href="#delivery">
-              <a>
-                <span className="margin-right">3</span> Delivery
+              <a onClick={() => setActiveContent("delivery")}>
+                <p
+                  className={`${activeContent === "delivery" &&
+                    "primary-color"}`}
+                >
+                  <span className="margin-right">3</span> Delivery
+                </p>
               </a>
             </Link>
           </ol>
@@ -263,7 +289,7 @@ const Index: FunctionComponent = () => {
             </div>
           </div>
         </div>
-        <div className="flex between margin-bottom spaced">
+        <div className={`margin-bottom ${styles["flowers-wrapper"]}`}>
           <span className={styles.title}>Featured Flowers</span>
           <Button
             url="/filters?selectedOccasion=all-occasions"
@@ -279,8 +305,8 @@ const Index: FunctionComponent = () => {
           </Button>
         </div>
         <div
-          className={`flex vertical-margin spaced wrap text-center ${
-            loading ? "center" : "between"
+          className={`${loading ? "center" : "between"} ${
+            styles["flowers-wrapper"]
           }`}
         >
           {loading && (

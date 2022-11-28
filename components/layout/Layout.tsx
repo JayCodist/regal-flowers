@@ -36,6 +36,7 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
 const Header: FunctionComponent = () => {
   const [shouldShowCart, setShouldShowCart] = useState(false);
   const [activeNav, setActiveNav] = useState("");
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const currencyOptions: AppCurrency[] = [
     { ...defaultCurrency },
@@ -47,13 +48,20 @@ const Header: FunctionComponent = () => {
     SettingsContext
   );
 
-  const handleActiveNav = (e: React.MouseEvent, title: string) => {
-    e.preventDefault();
+  const handleActiveNav = (title: string) => {
     setActiveNav(title === activeNav ? "" : title);
-    e.stopPropagation();
   };
 
-  const _subLinkRef = useOutsideClick<HTMLDivElement>(() => setActiveNav(""));
+  const _subLinkRef = useOutsideClick<HTMLDivElement>(() => {
+    setActiveNav("");
+  });
+
+  useEffect(() => {
+    if (!activeNav && showSidebar) {
+      setShowSidebar(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeNav]);
 
   const accountAnchor = (
     <button className="flex column center-align">
@@ -75,12 +83,80 @@ const Header: FunctionComponent = () => {
   return (
     <>
       <header className={styles.header}>
+        <img
+          alt="menu"
+          src={`${
+            showSidebar
+              ? "./icons/cancel-menu.svg"
+              : "./icons/hamburger-menu.svg"
+          }`}
+          className={styles["hamburger-menu"]}
+          onClick={() => setShowSidebar(!showSidebar)}
+        />
+        <nav
+          className={[
+            styles["mobile-sidebar"],
+            showSidebar && styles.active
+          ].join(" ")}
+        >
+          {links.map((link, index) => (
+            <div className={styles.link} key={index} ref={_subLinkRef}>
+              <Link href={link.url} key={link.title}>
+                <a
+                  className={`flex center-align spaced ${styles.title}`}
+                  onClick={() => {
+                    setActiveNav(link.title);
+                    !link.children.length && setShowSidebar(false);
+                  }}
+                >
+                  <strong>{link.title}</strong>
+                  {link.children.length > 0 && (
+                    <div className={[styles.arrow].join(" ")}></div>
+                  )}
+                </a>
+              </Link>
+              <div>
+                {link.children.length > 0 && (
+                  <div
+                    className={[
+                      styles["sub-link"],
+                      activeNav === link.title && styles.active
+                    ].join(" ")}
+                  >
+                    <div
+                      className={styles.back}
+                      onClick={() => {
+                        setActiveNav("");
+                        setShowSidebar(true);
+                      }}
+                    >
+                      <div className={styles["back-arrow"]}></div>
+                      Back
+                    </div>
+
+                    {link.children.map((child, index) => (
+                      <Link href={child.url} key={index}>
+                        <a
+                          className={styles["sub-link-title"]}
+                          onClick={() => handleActiveNav(link.title)}
+                        >
+                          {child.title && <p>{child.title}</p>}
+                        </a>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </nav>
         <Link href="/">
           <a>
             <img
               alt="regal flowers logo"
               src="/icons/logo.png"
               className={styles.logo}
+              onClick={() => setShowSidebar(false)}
             />
           </a>
         </Link>
@@ -90,7 +166,7 @@ const Header: FunctionComponent = () => {
               <Link href={link.url} key={link.title}>
                 <a
                   className={`flex center-align spaced ${styles.title}`}
-                  onClick={e => handleActiveNav(e, link.title)}
+                  onClick={() => handleActiveNav(link.title)}
                 >
                   <strong>{link.title}</strong>
                   {link.children.length > 0 && (
@@ -107,18 +183,23 @@ const Header: FunctionComponent = () => {
                     ].join(" ")}
                   >
                     <p className={styles.subtitle}>{link.subtitle}</p>
-                    <div className={[styles["grand-children"]].join(" ")}>
+                    <div className={[styles["sub-link"]].join(" ")}>
                       {link.children.map((child, index) => (
-                        <div key={index}>
-                          {child.title && <strong>{child.title}</strong>}
-                          <div>
-                            {child.children.map((grandChild, index) => (
-                              <p key={index} className={styles["grand-title"]}>
-                                {grandChild.title}
-                              </p>
-                            ))}
-                          </div>
-                        </div>
+                        <Link href={child.url} key={index}>
+                          <a>
+                            {child.title && <strong>{child.title}</strong>}
+                            <div>
+                              {child.children.map((grandChild, index) => (
+                                <p
+                                  key={index}
+                                  className={styles["grand-title"]}
+                                >
+                                  {grandChild.title}
+                                </p>
+                              ))}
+                            </div>
+                          </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -127,6 +208,52 @@ const Header: FunctionComponent = () => {
             </div>
           ))}
         </nav>
+        <div
+          className={[styles["controls-area-mobile"], "flex spaced-lg"].join(
+            " "
+          )}
+        >
+          <button>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className={styles["control-icon"]}
+            >
+              <path
+                d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z"
+                fill="#4B5563"
+              />
+            </svg>
+          </button>
+          <button
+            className={[styles["cart-btn"]].join(" ")}
+            onClick={() => {
+              setShouldShowCart(!shouldShowCart);
+            }}
+          >
+            <svg
+              width="29"
+              height="24"
+              viewBox="0 0 24 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className={styles["control-icon"]}
+            >
+              <path
+                d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+
+            <span>{cartItems.length}</span>
+          </button>
+        </div>
         <div className={styles["controls-area"]}>
           <div className="flex spaced">
             <span>Currency:</span>
