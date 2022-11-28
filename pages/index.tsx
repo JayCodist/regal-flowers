@@ -30,7 +30,7 @@ import { LocationName } from "../utils/types/Regal";
 
 const LandingPage: FunctionComponent<{
   locationName?: LocationName;
-  featuredFlowers: Product[];
+  featuredFlowers?: Product[];
 }> = ({ featuredFlowers }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
@@ -544,6 +544,7 @@ export async function getStaticProps() {
     const featuredFlowers = response?.data
       ?.filter((product: Product) => product.featured)
       .slice(0, 4);
+    console.log("data", response.data);
 
     return {
       props: {
