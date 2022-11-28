@@ -83,7 +83,10 @@ const Header: FunctionComponent = () => {
               <Link href={link.url} key={link.title}>
                 <a
                   className={`flex center-align spaced ${styles.title}`}
-                  onClick={() => handleActiveNav(link.title)}
+                  onClick={() => {
+                    setActiveNav(link.title);
+                    !link.children.length && setShowSidebar(false);
+                  }}
                 >
                   <strong>{link.title}</strong>
                   {link.children.length > 0 && (
@@ -132,6 +135,7 @@ const Header: FunctionComponent = () => {
               alt="regal flowers logo"
               src="/icons/logo.png"
               className={styles.logo}
+              onClick={() => setShowSidebar(false)}
             />
           </a>
         </Link>
