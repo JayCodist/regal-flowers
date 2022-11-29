@@ -150,7 +150,6 @@ export const regalFeatures: Service[] = [
   }
 ];
 
-// TODO: use dynamic urls
 export const regalOccasions: Occasion[] = [
   {
     title: "Love, Birthdays & Anniversary Flowers",
@@ -1086,3 +1085,36 @@ export const featuredSlugs: Record<LocationName, string[]> = {
     "mon-coeur-my-heart-roses-in-heart-shape"
   ]
 };
+
+export const popularSections: Occasion[] = [
+  {
+    title: "Fresh Flowers",
+    url: `/filters?filter=${encodeURIComponent("Fresh Flowers")}`,
+    image: "/images/popular-fresh.png"
+  },
+  {
+    title: "Forever Roses",
+    url: `/filters?filter=${encodeURIComponent("Forever Roses")}`,
+    image: "/images/popular-forever.png"
+  },
+  {
+    title: "VIP Section",
+    url: "/vip",
+    image: "/images/popular-vip.png"
+  },
+  {
+    title: "Bundled Products",
+    url: `/filters?filter=${encodeURIComponent("Bundled Products")}`,
+    image: "/images/popular-bundled.png"
+  },
+  {
+    title: "Lagos Delivery",
+    url: "/locations/lagos",
+    image: "/images/popular-lagos.png"
+  },
+  {
+    title: "Abuja Delivery",
+    url: "/locations/abuja",
+    image: "/images/popular-abuja.png"
+  }
+];

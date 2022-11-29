@@ -11,12 +11,13 @@ interface IFlowerCardProps {
   image: string;
   price?: number;
   name: string;
-  subTitle: string;
+  subTitle?: string;
   url: string;
   isAddonGroup?: boolean;
-  mode?: "four-x-grid" | "three-x-grid";
+  mode?: "four-x-grid" | "three-x-grid" | "six-x-grid";
   product?: Product;
   cart?: boolean;
+  onlyTitle?: boolean;
 }
 
 const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
@@ -30,7 +31,8 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       url,
       mode,
       product,
-      cart
+      cart,
+      onlyTitle
     } = props;
 
     const { cartItems, setCartItems, notify } = useContext(SettingsContext);
@@ -75,25 +77,29 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
           </div>
           <div className={styles.detail}>
             <strong>{name}</strong>
-            <span className={styles.subtitle}>{subTitle}</span>
-            <div
-              className={`flex margin-top spaced ${
-                price ? "between" : "center"
-              }`}
-            >
-              {price && (
-                <div>
-                  <p className="smaller text-secondary">From</p>
-                  <p className="bold">{price}</p>
-                </div>
-              )}
-              <Button
-                className={`${styles["buy-btn"]}`}
-                onClick={e => cart && handleAddToCart(e)}
+            {subTitle && <span className={styles.subtitle}>{subTitle}</span>}
+            {!onlyTitle && (
+              <div
+                className={`flex margin-top spaced ${
+                  price ? "between" : "center"
+                }`}
               >
-                {buttonText ? buttonText : "Buy Now"}
-              </Button>
-            </div>
+                {price && (
+                  <div>
+                    <p className="smaller text-secondary">From</p>
+                    <p className="bold">{price}</p>
+                  </div>
+                )}
+                (
+                <Button
+                  className={`${styles["buy-btn"]}`}
+                  onClick={e => cart && handleAddToCart(e)}
+                >
+                  {buttonText ? buttonText : "Buy Now"}
+                </Button>
+                )
+              </div>
+            )}
           </div>
         </a>
       </Link>

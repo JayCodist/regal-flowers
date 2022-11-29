@@ -167,6 +167,15 @@
   }
 }
 
+.about-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 3rem 6rem;
+  & > *:first-child {
+    margin-right: 2rem;
+  }
+}
+
 .flower-input-wrapper {
   position: relative;
   display: flex;

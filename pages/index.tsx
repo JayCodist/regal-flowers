@@ -15,7 +15,8 @@ import {
   blogPosts,
   aboutUsContent,
   featuredSlugs,
-  bestSellers
+  bestSellers,
+  popularSections
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -115,6 +116,21 @@ const LandingPage: FunctionComponent<{
                   title={occasion.title}
                   url={occasion.url}
                   image={occasion.image}
+                />
+              ))}
+            </div>
+
+            <br />
+            <h2 className="featured-title">Popular Sections</h2>
+            <div className={styles.section}>
+              {popularSections.map(section => (
+                <FlowerCard
+                  key={section.title}
+                  image={section.image}
+                  name={section.title}
+                  url={section.url}
+                  mode="six-x-grid"
+                  onlyTitle
                 />
               ))}
             </div>
@@ -422,34 +438,34 @@ const LandingPage: FunctionComponent<{
                 />
               ))}
             </div>
-            <h2 className="featured-title text-center margin-bottom spaced">
-              About Us
-            </h2>
-            <div className="flex between spaced-xl xl">
-              <div className="half-width">
-                <p className="title small bold margin-bottom">
-                  {aboutUsContent.howItBegan.title}
-                </p>
-                <p>{aboutUsContent.howItBegan.content}</p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.openingHour.title}
-                </p>
-                <p>{aboutUsContent.openingHour.content}</p>
-              </div>
-              <div className="half-width">
-                <p className="title small bold margin-bottom">
-                  {aboutUsContent.reputation.title}
-                </p>
-                <p>{aboutUsContent.reputation.content}</p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.deliveryTime.title}
-                </p>
-                <p>{aboutUsContent.deliveryTime.content}</p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.budget.title}
-                </p>
-                <p>{aboutUsContent.budget.content}</p>
-              </div>
+          </div>
+          <h2 className="featured-title text-center margin-bottom spaced">
+            About Us
+          </h2>
+          <div className={[styles["about-section"]].join(" ")}>
+            <div className="half-width">
+              <p className="title small bold margin-bottom">
+                {aboutUsContent.howItBegan.title}
+              </p>
+              <p>{aboutUsContent.howItBegan.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.openingHour.title}
+              </p>
+              <p>{aboutUsContent.openingHour.content}</p>
+            </div>
+            <div className="half-width">
+              <p className="title small bold margin-bottom">
+                {aboutUsContent.reputation.title}
+              </p>
+              <p>{aboutUsContent.reputation.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.deliveryTime.title}
+              </p>
+              <p>{aboutUsContent.deliveryTime.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.budget.title}
+              </p>
+              <p>{aboutUsContent.budget.content}</p>
             </div>
           </div>
         </div>
