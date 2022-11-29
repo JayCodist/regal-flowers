@@ -153,18 +153,22 @@ export const regalFeatures: Service[] = [
 // TODO: use dynamic urls
 export const regalOccasions: Occasion[] = [
   {
-    title: "Love, Birthdays & Anniversary",
-    url: "/filters",
+    title: "Love, Birthdays & Anniversary Flowers",
+    url: `/filters?selectedOcassion=${encodeURIComponent(
+      "Romance, Birthdays & Anniversary"
+    )}`,
     image: "/images/occasions-love-bday.png"
   },
   {
-    title: "Just to say Hi, Sorry, Thank You",
-    url: "/filters",
+    title: "Flowers to say Hi, Sorry, Thank You etc",
+    url: `/filters?selectedOcassion=${encodeURIComponent(
+      "Just To Say Hi, Sorry, Thank You"
+    )}`,
     image: "/images/occasions-sorry-thanks.png"
   },
   {
     title: "Bridal Flowers",
-    url: "/filters",
+    url: `/filters?selectedOcassion=${encodeURIComponent("Bridal")}`,
     image: "/images/occasions-bridal.png"
   }
 ];
@@ -906,26 +910,17 @@ export const links: AppLink[] = [
       {
         title: "Lagos",
         children: [],
-        url: {
-          pathname: "/locations/lagos",
-          query: { locationName: "lagos" }
-        }
+        url: "/locations/lagos"
       },
       {
         title: "Abuja",
         children: [],
-        url: {
-          pathname: "/locations/abuja",
-          query: { locationName: "abuja" }
-        }
+        url: "/locations/abuja"
       },
       {
         title: "Other states",
         children: [],
-        url: {
-          pathname: "/locations/other-places",
-          query: { locationName: "other-places" }
-        }
+        url: "/locations/other-locations"
       }
     ]
   },
@@ -946,7 +941,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Get well soon",
-        url: "",
+        url: "#",
         children: []
       },
       {
@@ -961,22 +956,22 @@ export const links: AppLink[] = [
       },
       {
         title: "Events & Centerpiece",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Father's Day",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Mother's Day",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Valentine’s Day",
-        url: "",
+        url: "#",
         children: []
       }
       // {
@@ -1008,22 +1003,22 @@ export const links: AppLink[] = [
     ]
   },
   {
-    url: "#",
+    url: "",
     title: "Shop By",
     children: [
       {
         title: "Design",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Delivery",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Packages",
-        url: "",
+        url: "#",
         children: []
       }
     ]
@@ -1058,6 +1053,13 @@ export const locationHeadlines: RegalContent = {
     "Send Regal Flowers and Gifts to Other Selected Locations in Nigeria"
 };
 
+export const bestSellers: RegalContent = {
+  general: "Bestselling Flowers in Nigeria",
+  lagos: "Bestselling Flowers in Lagos",
+  abuja: "Bestselling Flowers in Abuja",
+  "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"
+};
+
 export const featuredSlugs: Record<LocationName, string[]> = {
   general: [
     "cool-and-classic",
@@ -1075,12 +1077,12 @@ export const featuredSlugs: Record<LocationName, string[]> = {
     "dozen-red-roses-luxurious-bouquet-of-red-roses",
     "cool-and-classic",
     "classic-red-box-arrangement-box-of-red-roses",
-    "5-peas-in-a-pod-box-arrangement-roses-and-mixed-chrysanthemums"
+    "belleza-regal-two-colors-rose-red-yellow-white-pink-orange"
   ],
   "other-locations": [
     "cool-and-classic",
     "classic-roses-are-red-box-arrangement-red-roses-and-million-stars",
-    "5-peas-in-a-pod-box-arrangement-roses-and-mixed-chrysanthemums",
+    "ferrero-rocher-roses-003-exquisite-combination",
     "mon-coeur-my-heart-roses-in-heart-shape"
   ]
 };

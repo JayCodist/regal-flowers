@@ -86,9 +86,7 @@ const Header: FunctionComponent = () => {
         <img
           alt="menu"
           src={`${
-            showSidebar
-              ? "./icons/cancel-menu.svg"
-              : "./icons/hamburger-menu.svg"
+            showSidebar ? "/icons/cancel-menu.svg" : "/icons/hamburger-menu.svg"
           }`}
           className={styles["hamburger-menu"]}
           onClick={() => setShowSidebar(!showSidebar)}

@@ -44,7 +44,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         params: { id: "abuja", locationName: "abuja" }
       },
       {
-        params: { id: "other-places", locationName: "other-places" }
+        params: { id: "other-locations", locationName: "other-locations" }
       }
     ],
     fallback: false // true or 'blocking'

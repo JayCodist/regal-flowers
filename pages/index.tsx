@@ -14,7 +14,8 @@ import {
   regalEmail,
   blogPosts,
   aboutUsContent,
-  featuredSlugs
+  featuredSlugs,
+  bestSellers
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -55,7 +56,7 @@ const LandingPage: FunctionComponent<{
         <div className="featured-content-wrapper">
           <div className="featured-content">
             <div className="flex between">
-              <h2 className="featured-title">Best Selling Flowers</h2>
+              <h2 className="featured-title">{bestSellers[locationName]}</h2>
               <Button
                 url="/filters?selectedOccasion=all-occasions"
                 className="flex spaced center center-align"
