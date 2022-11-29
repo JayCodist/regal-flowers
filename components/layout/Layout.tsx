@@ -163,17 +163,17 @@ const Header: FunctionComponent = () => {
         <nav className={styles.nav}>
           {links.map((link, index) => (
             <div className={styles.link} key={index} ref={_subLinkRef}>
-              <Link href={link.url} key={link.title}>
-                <a
-                  className={`flex center-align spaced ${styles.title}`}
-                  onClick={() => handleActiveNav(link.title)}
-                >
-                  <strong>{link.title}</strong>
-                  {link.children.length > 0 && (
-                    <div className={[styles.arrow].join(" ")}></div>
-                  )}
-                </a>
-              </Link>
+              <span
+                className={`flex center-align spaced ${styles.title}`}
+                onClick={() => handleActiveNav(link.title)}
+                key={link.title}
+                role="button"
+              >
+                <strong>{link.title}</strong>
+                {link.children.length > 0 && (
+                  <div className={[styles.arrow].join(" ")}></div>
+                )}
+              </span>
               <div>
                 {link.children.length > 0 && (
                   <div

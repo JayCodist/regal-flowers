@@ -906,17 +906,26 @@ export const links: AppLink[] = [
       {
         title: "Lagos",
         children: [],
-        url: "/locations/lagos"
+        url: {
+          pathname: "/locations/lagos",
+          query: { locationName: "lagos" }
+        }
       },
       {
         title: "Abuja",
         children: [],
-        url: "/locations/abuja"
+        url: {
+          pathname: "/locations/abuja",
+          query: { locationName: "abuja" }
+        }
       },
       {
         title: "Other states",
         children: [],
-        url: "/locations/other-places"
+        url: {
+          pathname: "/locations/other-places",
+          query: { locationName: "other-places" }
+        }
       }
     ]
   },

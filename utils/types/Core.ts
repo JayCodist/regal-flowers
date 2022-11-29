@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { ProductImage } from "./Product";
 
 export interface AppLink {
-  url: string;
+  url: string | { pathname: string; query: Record<string, string | number> };
   title: string;
   children: AppLink[];
   subtitle?: string;
