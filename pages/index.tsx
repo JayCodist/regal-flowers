@@ -13,7 +13,8 @@ import {
   regalPhones,
   regalEmail,
   blogPosts,
-  aboutUsContent
+  aboutUsContent,
+  featuredSlugs
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -24,23 +25,28 @@ import DatePicker from "../components/date-picker/DatePicker";
 import { getCategory } from "../utils/helpers/data/category";
 import { FetchResourceParams } from "../utils/types/FetchResourceParams";
 import { Category } from "../utils/types/Category";
-import { getAllProducts } from "../utils/helpers/data/products";
+import { getProductsBySlugs } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import { LocationName } from "../utils/types/Regal";
+import { GetStaticProps } from "next";
 
 const LandingPage: FunctionComponent<{
-  locationName?: LocationName;
+  locationName: LocationName;
   featuredFlowers: Product[];
-}> = ({ featuredFlowers }) => {
+}> = ({ featuredFlowers, locationName }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   return (
     <section className="page-content">
-      <div className={[styles["hero-bg"], "hero-bg"].join(" ")}>
+      <div
+        className={[styles["hero-bg"], styles[locationName], "hero-bg"].join(
+          " "
+        )}
+      >
         <div className="hero-content flex column center center-align">
           <h1 className={styles.title}>
-            Same Day Flower Delivery <br />
-            In Lagos & Abuja, Nigeria.
+            They Deserve Regal Flowers. Premium Same Day Flower Delivery in
+            Lagos & Abuja, Nigeria
           </h1>
           <FlowerDeliveryInput />
         </div>
@@ -64,7 +70,7 @@ const LandingPage: FunctionComponent<{
               </Button>
             </div>
             <div className={styles.section}>
-              {featuredFlowers?.map(flower => (
+              {featuredFlowers.map(flower => (
                 <FlowerCard
                   key={flower.key}
                   image={flower.images[0]?.src || ""}
@@ -537,26 +543,22 @@ const FlowerDeliveryInput: FunctionComponent = () => {
   );
 };
 
-export async function getStaticProps() {
-  const response = await getAllProducts();
+export const getStaticProps: GetStaticProps = async () => {
+  const locationName = "general";
+  const { data, error, message } = await getProductsBySlugs(
+    featuredSlugs[locationName]
+  );
 
-  if (response.data) {
-    const featuredFlowers = response?.data
-      ?.filter((product: Product) => product.featured)
-      .slice(0, 4);
-
-    return {
-      props: {
-        featuredFlowers
-      }
-    };
+  if (error) {
+    console.error("Unable to fetch products by slugs: ", message);
   }
 
   return {
     props: {
-      featuredFlowers: null
+      locationName,
+      featuredFlowers: data || []
     }
   };
-}
+};
 
 export default LandingPage;

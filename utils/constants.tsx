@@ -8,7 +8,8 @@ import {
   Occasion,
   UserReview,
   OfficeAddress,
-  BlogPost
+  BlogPost,
+  LocationName
 } from "./types/Regal";
 
 export const defaultCurrency: AppCurrency = {
@@ -130,65 +131,6 @@ export const otherSampleProducts = {
   description:
     "A kiss from a rose is daintily presented single full stemmed rose, available in various colors."
 };
-
-export const featuredFlowers = [
-  {
-    ...otherSampleProducts,
-    id: 11,
-    name: "5 Peas in a pod",
-    price: 6000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-1.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 12,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-2.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 13,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-3.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 16,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-4.png"
-      }
-    ]
-  }
-];
 
 export const regalFeatures: Service[] = [
   {
@@ -1093,3 +1035,43 @@ export const links: AppLink[] = [
     children: []
   }
 ];
+
+type RegalContent = Record<LocationName, string>;
+
+export const locationHeadlines: RegalContent = {
+  general:
+    "They Deserve Regal Flowers. Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria",
+  lagos:
+    "Make it Regal. Premium Online and Walk-in Flower Shop in Lagos and Abuja, Nigeria",
+  abuja:
+    "Make Their Day. Send Flowers and Gifts to Someone in Abuja or Lagos, Nigeria Today",
+  "other-locations":
+    "Send Regal Flowers and Gifts to Other Selected Locations in Nigeria"
+};
+
+export const featuredSlugs: Record<LocationName, string[]> = {
+  general: [
+    "cool-and-classic",
+    "ferrero-rocher-roses-003-exquisite-combination",
+    "bellissimo-beautiful-luxurious-mix-of-red-white-pink-roses",
+    "mon-coeur-my-heart-roses-in-heart-shape"
+  ],
+  lagos: [
+    "cool-and-classic",
+    "roses-are-red-red-roses-accentuated-with-sparkling-million-star-gypsophila",
+    "bellissimo-beautiful-box-arrangement-box-of-mixed-red-white-or-pink-roses",
+    "calligraphy-by-regal-red-roses-white-roses-lilies"
+  ],
+  abuja: [
+    "dozen-red-roses-luxurious-bouquet-of-red-roses",
+    "cool-and-classic",
+    "classic-red-box-arrangement-box-of-red-roses",
+    "5-peas-in-a-pod-box-arrangement-roses-and-mixed-chrysanthemums"
+  ],
+  "other-locations": [
+    "cool-and-classic",
+    "classic-roses-are-red-box-arrangement-red-roses-and-million-stars",
+    "5-peas-in-a-pod-box-arrangement-roses-and-mixed-chrysanthemums",
+    "mon-coeur-my-heart-roses-in-heart-shape"
+  ]
+};
