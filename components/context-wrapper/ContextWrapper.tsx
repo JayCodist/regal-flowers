@@ -86,9 +86,6 @@ const ContextWrapper: FunctionComponent<ContextWrapperProps> = props => {
           {children}
         </div>
       </span>
-      <div
-        className={[styles.backdrop, innerVisible && styles.active].join(" ")}
-      />
     </>
   );
 };
