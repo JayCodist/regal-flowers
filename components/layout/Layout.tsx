@@ -133,9 +133,7 @@ const Header: FunctionComponent = () => {
         <img
           alt="menu"
           src={`${
-            showSidebar
-              ? "./icons/cancel-menu.svg"
-              : "./icons/hamburger-menu.svg"
+            showSidebar ? "/icons/cancel-menu.svg" : "/icons/hamburger-menu.svg"
           }`}
           className={styles["hamburger-menu"]}
           onClick={() => setShowSidebar(!showSidebar)}
@@ -210,17 +208,17 @@ const Header: FunctionComponent = () => {
         <nav className={styles.nav}>
           {links.map((link, index) => (
             <div className={styles.link} key={index} ref={_subLinkRef}>
-              <Link href={link.url} key={link.title}>
-                <a
-                  className={`flex center-align spaced ${styles.title}`}
-                  onClick={() => handleActiveNav(link.title)}
-                >
-                  <strong>{link.title}</strong>
-                  {link.children.length > 0 && (
-                    <div className={[styles.arrow].join(" ")}></div>
-                  )}
-                </a>
-              </Link>
+              <span
+                className={`flex center-align spaced ${styles.title}`}
+                onClick={() => handleActiveNav(link.title)}
+                key={link.title}
+                role="button"
+              >
+                <strong>{link.title}</strong>
+                {link.children.length > 0 && (
+                  <div className={[styles.arrow].join(" ")}></div>
+                )}
+              </span>
               <div>
                 {link.children.length > 0 && (
                   <div
@@ -234,7 +232,7 @@ const Header: FunctionComponent = () => {
                       {link.children.map((child, index) => (
                         <Link href={child.url} key={index}>
                           <a>
-                            {child.title && <strong>{child.title}</strong>}
+                            {child.title && <span>{child.title}</span>}
                             <div>
                               {child.children.map((grandChild, index) => (
                                 <p
@@ -649,7 +647,6 @@ export const CheckoutHeader: FunctionComponent = () => {
     }
   ];
 
-  console.log(currentStage);
   return (
     <header className={styles.header}>
       <Link href="/">

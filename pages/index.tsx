@@ -13,7 +13,10 @@ import {
   regalPhones,
   regalEmail,
   blogPosts,
-  aboutUsContent
+  aboutUsContent,
+  featuredSlugs,
+  bestSellers,
+  popularSections
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -25,22 +28,28 @@ import { getCategory } from "../utils/helpers/data/category";
 import { FetchResourceParams } from "../utils/types/FetchResourceParams";
 import { Category } from "../utils/types/Category";
 import { getFeaturedProducts } from "../utils/helpers/data/products";
+import { getProductsBySlugs } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import { LocationName } from "../utils/types/Regal";
+import { GetStaticProps } from "next";
 
 const LandingPage: FunctionComponent<{
-  locationName?: LocationName;
-  featuredFlowers?: Product[];
-}> = ({ featuredFlowers }) => {
+  locationName: LocationName;
+  featuredFlowers: Product[];
+}> = ({ featuredFlowers, locationName }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   return (
     <section className="page-content">
-      <div className={[styles["hero-bg"], "hero-bg"].join(" ")}>
+      <div
+        className={[styles["hero-bg"], styles[locationName], "hero-bg"].join(
+          " "
+        )}
+      >
         <div className="hero-content flex column center center-align">
           <h1 className={styles.title}>
-            Same Day Flower Delivery <br />
-            In Lagos & Abuja, Nigeria.
+            They Deserve Regal Flowers. Premium Same Day Flower Delivery in
+            Lagos & Abuja, Nigeria
           </h1>
           <FlowerDeliveryInput />
         </div>
@@ -49,7 +58,7 @@ const LandingPage: FunctionComponent<{
         <div className="featured-content-wrapper">
           <div className="featured-content">
             <div className="flex between">
-              <h2 className="featured-title">Best Selling Flowers</h2>
+              <h2 className="featured-title">{bestSellers[locationName]}</h2>
               <Button
                 url="/filters?selectedOccasion=all-occasions"
                 className="flex spaced center center-align"
@@ -64,7 +73,7 @@ const LandingPage: FunctionComponent<{
               </Button>
             </div>
             <div className={styles.section}>
-              {featuredFlowers?.map(flower => (
+              {featuredFlowers.map(flower => (
                 <FlowerCard
                   key={flower.key}
                   image={flower.images[0]?.src || ""}
@@ -108,6 +117,21 @@ const LandingPage: FunctionComponent<{
                   title={occasion.title}
                   url={occasion.url}
                   image={occasion.image}
+                />
+              ))}
+            </div>
+
+            <br />
+            <h2 className="featured-title">Popular Sections</h2>
+            <div className={styles.section}>
+              {popularSections.map(section => (
+                <FlowerCard
+                  key={section.title}
+                  image={section.image}
+                  name={section.title}
+                  url={section.url}
+                  mode="six-x-grid"
+                  onlyTitle
                 />
               ))}
             </div>
@@ -415,34 +439,34 @@ const LandingPage: FunctionComponent<{
                 />
               ))}
             </div>
-            <h2 className="featured-title text-center margin-bottom spaced">
-              About Us
-            </h2>
-            <div className="flex between spaced-xl xl">
-              <div className="half-width">
-                <p className="title small bold margin-bottom">
-                  {aboutUsContent.howItBegan.title}
-                </p>
-                <p>{aboutUsContent.howItBegan.content}</p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.openingHour.title}
-                </p>
-                <p>{aboutUsContent.openingHour.content}</p>
-              </div>
-              <div className="half-width">
-                <p className="title small bold margin-bottom">
-                  {aboutUsContent.reputation.title}
-                </p>
-                <p>{aboutUsContent.reputation.content}</p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.deliveryTime.title}
-                </p>
-                <p>{aboutUsContent.deliveryTime.content}</p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.budget.title}
-                </p>
-                <p>{aboutUsContent.budget.content}</p>
-              </div>
+          </div>
+          <h2 className="featured-title text-center margin-bottom spaced">
+            About Us
+          </h2>
+          <div className={[styles["about-section"]].join(" ")}>
+            <div className="half-width">
+              <p className="title small bold margin-bottom">
+                {aboutUsContent.howItBegan.title}
+              </p>
+              <p>{aboutUsContent.howItBegan.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.openingHour.title}
+              </p>
+              <p>{aboutUsContent.openingHour.content}</p>
+            </div>
+            <div className="half-width">
+              <p className="title small bold margin-bottom">
+                {aboutUsContent.reputation.title}
+              </p>
+              <p>{aboutUsContent.reputation.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.deliveryTime.title}
+              </p>
+              <p>{aboutUsContent.deliveryTime.content}</p>
+              <p className="title small bold vertical-margin">
+                {aboutUsContent.budget.title}
+              </p>
+              <p>{aboutUsContent.budget.content}</p>
             </div>
           </div>
         </div>
@@ -537,27 +561,22 @@ const FlowerDeliveryInput: FunctionComponent = () => {
   );
 };
 
-export async function getStaticProps() {
-  const response = await getFeaturedProducts();
+export const getStaticProps: GetStaticProps = async () => {
+  const locationName = "general";
+  const { data, error, message } = await getProductsBySlugs(
+    featuredSlugs[locationName]
+  );
 
-  if (response.data) {
-    const featuredFlowers = response?.data
-      ?.filter((product: Product) => product.featured)
-      .slice(0, 4);
-    console.log("data", response.data);
-
-    return {
-      props: {
-        featuredFlowers
-      }
-    };
+  if (error) {
+    console.error("Unable to fetch products by slugs: ", message);
   }
 
   return {
     props: {
-      featuredFlowers: null
+      locationName,
+      featuredFlowers: data || []
     }
   };
-}
+};
 
 export default LandingPage;

@@ -157,17 +157,19 @@
         transform: translateY(0);
         max-width: 100vh;
       }
-
       transition: all 0.3s ease-out;
 
+      .subtitle {
+        color: black;
+        font-weight: bold;
+        font-size: inherit;
+        margin-bottom: 1rem;
+      }
       .sub-link {
-        // display: grid;
-        // grid-template-columns: repeat(3, auto);
-        // grid-gap: 1.5rem;
+        color: #202020;
         & > * {
           margin-bottom: 1.5rem;
           display: block;
-
           &:last-child {
             margin-bottom: 0;
           }
@@ -181,12 +183,6 @@
 
       strong {
         display: inline-block;
-      }
-      .subtitle {
-        color: #6b7280;
-        font-weight: 600;
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
       }
     }
   }

@@ -2,6 +2,7 @@
   font-family: "SharpSans";
   src: url("../public/fonts/SharpSans.woff2") format("woff2");
   font-display: swap;
+  font-weight: normal;
 }
 
 @font-face {
@@ -581,7 +582,7 @@ button {
     background-size: 23rem;
     position: relative;
     z-index: 1;
-    min-height: 400rem;
+    min-height: 375rem;
     .featured-content-wrapper {
       position: absolute;
       left: 0;

@@ -147,7 +147,9 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   );
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setproductsLoading] = useState(false);
-
+  const [todayDate, setTodayDate] = useState<Dayjs | null>(dayjs());
+  const [filterCategories, setFilterCategories] = useState(filtersCatgories);
+  const [sort, setSort] = useState<string>("");
   const [hasMore, setHasMore] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -175,10 +177,6 @@ const Index: FunctionComponent<{ product: Product }> = () => {
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
-
-  const [todayDate, setTodayDate] = useState<Dayjs | null>(dayjs());
-  const [filterCategories, setFilterCategories] = useState(filtersCatgories);
-  const [sort, setSort] = useState<string>("");
 
   const handleFilterCategoryChange = (name: string, category: string) => {
     setSelectedFilter(prev =>

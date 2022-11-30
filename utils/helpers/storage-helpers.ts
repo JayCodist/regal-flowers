@@ -1,6 +1,9 @@
 const AppStorage = {
   save: (key: string, value: any) => {
     try {
+      if (typeof window === "undefined") {
+        return;
+      }
       localStorage.setItem(
         key,
         typeof value === "object" ? JSON.stringify(value) : String(value)
@@ -10,6 +13,9 @@ const AppStorage = {
     }
   },
   get: <T = any>(key: string): T | null => {
+    if (typeof window === "undefined") {
+      return null;
+    }
     const str = localStorage.getItem(key);
     try {
       const output = str ? JSON.parse(str) : null;
@@ -19,9 +25,15 @@ const AppStorage = {
     }
   },
   remove: (key: string) => {
+    if (typeof window === "undefined") {
+      return;
+    }
     localStorage.removeItem(key);
   },
   clear: () => {
+    if (typeof window === "undefined") {
+      return;
+    }
     localStorage.clear();
   }
 };

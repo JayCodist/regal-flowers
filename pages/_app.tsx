@@ -90,7 +90,7 @@ const App: FunctionComponent<AppProps> = props => {
 
   return (
     <SettingsContext.Provider value={settingsControls}>
-      <div className="app-wrapper">
+      <div suppressHydrationWarning className="app-wrapper">
         {headTags}
         <Layout>
           <Component {...pageProps} />

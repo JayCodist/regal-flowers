@@ -46,7 +46,7 @@ export const getAllProducts: () => Promise<
   RequestResponse<Product[]>
 > = async () => {
   try {
-    const response = await restAPIInstance.get(`/v1/wordpress/product/all`);
+    const response = await restAPIInstance.get("/v1/wordpress/product/all");
     return {
       error: false,
       data: response.data.data as Product[]
@@ -65,14 +65,34 @@ export const getFeaturedProducts: () => Promise<
 > = async () => {
   try {
     const response = await restAPIInstance.get(
-      `/v1/wordpress/product/featured`
+      "/v1/wordpress/product/featured"
     );
-    console.log("response", response.data);
+    return {
+      error: false,
+      data: response.data.data as Product[]
+    };
+  } catch (err) {
+    return {
+      error: true,
+      message: (err as Error).message,
+      data: null
+    };
+  }
+};
+
+export const getProductsBySlugs: (
+  slugs: string[]
+) => Promise<RequestResponse<Product[]>> = async slugs => {
+  try {
+    const response = await restAPIInstance.get(
+      `/v1/wordpress/product/slug-multiple?slugs=${slugs.join(",")}`
+    );
     return {
       error: false,
       data: response.data as Product[]
     };
   } catch (err) {
+    console.trace(err);
     return {
       error: true,
       message: (err as Error).message,

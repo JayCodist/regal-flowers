@@ -8,7 +8,8 @@ import {
   Occasion,
   UserReview,
   OfficeAddress,
-  BlogPost
+  BlogPost,
+  LocationName
 } from "./types/Regal";
 
 export const defaultCurrency: AppCurrency = {
@@ -131,65 +132,6 @@ export const otherSampleProducts = {
     "A kiss from a rose is daintily presented single full stemmed rose, available in various colors."
 };
 
-export const featuredFlowers = [
-  {
-    ...otherSampleProducts,
-    id: 11,
-    name: "5 Peas in a pod",
-    price: 6000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-1.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 12,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-2.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 13,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-3.png"
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    id: 16,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "5 peas in a pod",
-        id: 1,
-        src: "/images/sample-flowers/sample-4.png"
-      }
-    ]
-  }
-];
-
 export const regalFeatures: Service[] = [
   {
     image: "/images/truck.png",
@@ -208,21 +150,24 @@ export const regalFeatures: Service[] = [
   }
 ];
 
-// TODO: use dynamic urls
 export const regalOccasions: Occasion[] = [
   {
-    title: "Love, Birthdays & Anniversary",
-    url: "/filters",
+    title: "Love, Birthdays & Anniversary Flowers",
+    url: `/filters?selectedOcassion=${encodeURIComponent(
+      "Romance, Birthdays & Anniversary"
+    )}`,
     image: "/images/occasions-love-bday.png"
   },
   {
-    title: "Just to say Hi, Sorry, Thank You",
-    url: "/filters",
+    title: "Flowers to say Hi, Sorry, Thank You etc",
+    url: `/filters?selectedOcassion=${encodeURIComponent(
+      "Just To Say Hi, Sorry, Thank You"
+    )}`,
     image: "/images/occasions-sorry-thanks.png"
   },
   {
     title: "Bridal Flowers",
-    url: "/filters",
+    url: `/filters?selectedOcassion=${encodeURIComponent("Bridal")}`,
     image: "/images/occasions-bridal.png"
   }
 ];
@@ -964,12 +909,17 @@ export const links: AppLink[] = [
       {
         title: "Lagos",
         children: [],
-        url: ""
+        url: "/locations/lagos"
       },
       {
         title: "Abuja",
         children: [],
-        url: ""
+        url: "/locations/abuja"
+      },
+      {
+        title: "Other states",
+        children: [],
+        url: "/locations/other-locations"
       }
     ]
   },
@@ -990,7 +940,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Get well soon",
-        url: "",
+        url: "#",
         children: []
       },
       {
@@ -1005,22 +955,22 @@ export const links: AppLink[] = [
       },
       {
         title: "Events & Centerpiece",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Father's Day",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Mother's Day",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Valentine’s Day",
-        url: "",
+        url: "#",
         children: []
       }
       // {
@@ -1052,22 +1002,22 @@ export const links: AppLink[] = [
     ]
   },
   {
-    url: "#",
+    url: "",
     title: "Shop By",
     children: [
       {
         title: "Design",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Delivery",
-        url: "",
+        url: "#",
         children: []
       },
       {
         title: "Packages",
-        url: "",
+        url: "#",
         children: []
       }
     ]
@@ -1086,5 +1036,85 @@ export const links: AppLink[] = [
     url: "/faq",
     title: "FAQ",
     children: []
+  }
+];
+
+type RegalContent = Record<LocationName, string>;
+
+export const locationHeadlines: RegalContent = {
+  general:
+    "They Deserve Regal Flowers. Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria",
+  lagos:
+    "Make it Regal. Premium Online and Walk-in Flower Shop in Lagos and Abuja, Nigeria",
+  abuja:
+    "Make Their Day. Send Flowers and Gifts to Someone in Abuja or Lagos, Nigeria Today",
+  "other-locations":
+    "Send Regal Flowers and Gifts to Other Selected Locations in Nigeria"
+};
+
+export const bestSellers: RegalContent = {
+  general: "Bestselling Flowers in Nigeria",
+  lagos: "Bestselling Flowers in Lagos",
+  abuja: "Bestselling Flowers in Abuja",
+  "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"
+};
+
+export const featuredSlugs: Record<LocationName, string[]> = {
+  general: [
+    "cool-and-classic",
+    "ferrero-rocher-roses-003-exquisite-combination",
+    "bellissimo-beautiful-luxurious-mix-of-red-white-pink-roses",
+    "mon-coeur-my-heart-roses-in-heart-shape"
+  ],
+  lagos: [
+    "cool-and-classic",
+    "roses-are-red-red-roses-accentuated-with-sparkling-million-star-gypsophila",
+    "bellissimo-beautiful-box-arrangement-box-of-mixed-red-white-or-pink-roses",
+    "calligraphy-by-regal-red-roses-white-roses-lilies"
+  ],
+  abuja: [
+    "dozen-red-roses-luxurious-bouquet-of-red-roses",
+    "cool-and-classic",
+    "classic-red-box-arrangement-box-of-red-roses",
+    "belleza-regal-two-colors-rose-red-yellow-white-pink-orange"
+  ],
+  "other-locations": [
+    "cool-and-classic",
+    "classic-roses-are-red-box-arrangement-red-roses-and-million-stars",
+    "ferrero-rocher-roses-003-exquisite-combination",
+    "mon-coeur-my-heart-roses-in-heart-shape"
+  ]
+};
+
+export const popularSections: Occasion[] = [
+  {
+    title: "Fresh Flowers",
+    url: `/filters?filter=${encodeURIComponent("Fresh Flowers")}`,
+    image: "/images/popular-fresh.png"
+  },
+  {
+    title: "Forever Roses",
+    url: `/filters?filter=${encodeURIComponent("Forever Roses")}`,
+    image: "/images/popular-forever.png"
+  },
+  {
+    title: "VIP Section",
+    url: "/vip",
+    image: "/images/popular-vip.png"
+  },
+  {
+    title: "Bundled Products",
+    url: `/filters?filter=${encodeURIComponent("Bundled Products")}`,
+    image: "/images/popular-bundled.png"
+  },
+  {
+    title: "Lagos Delivery",
+    url: "/locations/lagos",
+    image: "/images/popular-lagos.png"
+  },
+  {
+    title: "Abuja Delivery",
+    url: "/locations/abuja",
+    image: "/images/popular-abuja.png"
   }
 ];
