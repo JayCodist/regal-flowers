@@ -60,6 +60,26 @@ export const getAllProducts: () => Promise<
   }
 };
 
+export const getFeaturedProducts: () => Promise<
+  RequestResponse<Product[]>
+> = async () => {
+  try {
+    const response = await restAPIInstance.get(
+      "/v1/wordpress/product/featured"
+    );
+    return {
+      error: false,
+      data: response.data.data as Product[]
+    };
+  } catch (err) {
+    return {
+      error: true,
+      message: (err as Error).message,
+      data: null
+    };
+  }
+};
+
 export const getProductsBySlugs: (
   slugs: string[]
 ) => Promise<RequestResponse<Product[]>> = async slugs => {

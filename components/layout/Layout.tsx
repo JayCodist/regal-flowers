@@ -9,7 +9,7 @@ import React, {
 import Link from "next/link";
 import styles from "./Layout.module.scss";
 import { AppCurrency } from "../../utils/types/Core";
-import { defaultCurrency, links } from "../../utils/constants";
+import { currencyOptions, defaultCurrency, links } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -20,16 +20,63 @@ import dayjs from "dayjs";
 import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
+import useDeviceType from "../../utils/hooks/useDeviceType";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
   const _pathname = pathname.split("/")[1];
+  const deviceType = useDeviceType();
 
   return (
     <>
       {_pathname === "checkout" ? <CheckoutHeader /> : <Header />}
-      <main className={styles.main}>{children}</main>
+      <main className={styles.main}>
+        {deviceType === "mobile" && <CurrencyController />}
+        {children}
+      </main>
     </>
+  );
+};
+
+const CurrencyController = () => {
+  const { currency, setCurrency } = useContext(SettingsContext);
+  const [shouldShowCurrency, setShouldShowCurrency] = useState(false);
+
+  return (
+    <div className={styles["currency-wrapper"]}>
+      <div
+        className={[
+          styles["currency-controller"],
+          shouldShowCurrency && styles.active
+        ].join(" ")}
+        onClick={() => setShouldShowCurrency(true)}
+      >
+        <span>₦</span>
+      </div>
+      <div
+        className={[
+          styles.currencies,
+          shouldShowCurrency && styles["show-currencies"]
+        ].join(" ")}
+      >
+        <div
+          className={styles["down-arrow"]}
+          onClick={() => setShouldShowCurrency(false)}
+        ></div>
+        {currencyOptions.map(_currency => (
+          <button
+            key={_currency.name}
+            onClick={() => setCurrency(_currency)}
+            className={[
+              styles.currency,
+              currency.name === _currency.name && styles.active
+            ].join(" ")}
+          >
+            {_currency.name}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 };
 

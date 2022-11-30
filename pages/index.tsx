@@ -27,6 +27,7 @@ import DatePicker from "../components/date-picker/DatePicker";
 import { getCategory } from "../utils/helpers/data/category";
 import { FetchResourceParams } from "../utils/types/FetchResourceParams";
 import { Category } from "../utils/types/Category";
+import { getFeaturedProducts } from "../utils/helpers/data/products";
 import { getProductsBySlugs } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import { LocationName } from "../utils/types/Regal";
