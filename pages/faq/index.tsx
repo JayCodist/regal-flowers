@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { getAllProducts } from "../../utils/helpers/data/products";
+import { getFeaturedProducts } from "../../utils/helpers/data/products";
 import Product from "../../utils/types/Product";
 import styles from "./index.module.scss";
 
@@ -13,22 +13,24 @@ const Index: FunctionComponent = () => {
   const [loading, setLoading] = useState(false);
   const [activeContent, setActiveContent] = useState<ContentLink | null>(null);
 
-  const fetchAllProducts = async () => {
+  const fetchFeaturedProducts = async () => {
     setLoading(true);
-    const response = await getAllProducts();
+    const { error, data } = await getFeaturedProducts();
 
-    if (response) {
-      const _featuredFlowers = response?.data
+    if (!error) {
+      const _featuredFlowers = data
         ?.filter((product: Product) => product.featured)
         .slice(0, 4);
       setFeaturedFlowers(_featuredFlowers);
+    } else {
+      console.log(error);
     }
 
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchAllProducts();
+    fetchFeaturedProducts();
   }, []);
 
   console.log(activeContent);

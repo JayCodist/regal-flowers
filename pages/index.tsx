@@ -24,7 +24,7 @@ import DatePicker from "../components/date-picker/DatePicker";
 import { getCategory } from "../utils/helpers/data/category";
 import { FetchResourceParams } from "../utils/types/FetchResourceParams";
 import { Category } from "../utils/types/Category";
-import { getAllProducts } from "../utils/helpers/data/products";
+import { getFeaturedProducts } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import { LocationName } from "../utils/types/Regal";
 
@@ -538,7 +538,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
 };
 
 export async function getStaticProps() {
-  const response = await getAllProducts();
+  const response = await getFeaturedProducts();
 
   if (response.data) {
     const featuredFlowers = response?.data

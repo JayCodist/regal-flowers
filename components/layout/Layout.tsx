@@ -20,16 +20,18 @@ import dayjs from "dayjs";
 import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
+import useDeviceType from "../../utils/hooks/useDeviceType";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
   const _pathname = pathname.split("/")[1];
+  const deviceType = useDeviceType();
 
   return (
     <>
       {_pathname === "checkout" ? <CheckoutHeader /> : <Header />}
       <main className={styles.main}>
-        <CurrencyController />
+        {deviceType === "mobile" && <CurrencyController />}
         {children}
       </main>
     </>
