@@ -20,8 +20,10 @@ const ServiceCard: FunctionComponent<ServiceCardProps> = props => {
       ].join(" ")}
     >
       <img alt={title} className={styles.img} src={image} />
-      <h3 className={styles.title}>{title}</h3>
-      <span className={styles.subtitle}>{subtitle}</span>
+      <div className={styles.description}>
+        <h3 className={styles.title}>{title}</h3>
+        <span className={styles.subtitle}>{subtitle}</span>
+      </div>
     </div>
   );
 };

@@ -13,16 +13,53 @@
   width: 50%;
   text-align: center;
   color: #68203b;
+
+  @media (max-width: 650px) {
+    font-size: 1.8rem;
+    width: 80%;
+  }
 }
 .section {
   display: flex;
   justify-content: space-between;
   margin: 1rem 0 4rem;
+
+  &.wrap {
+    @media (max-width: 650px) {
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+  }
+}
+
+.porpular-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 2rem;
+  justify-items: center;
+  grid-template-columns: repeat(6, 1fr);
+  justify-content: center;
+
+  @media (max-width: 800px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (max-width: 650px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 450px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 .full-width-section {
   display: flex;
   height: 34rem;
   &.summary {
+    @media (max-width: 650px) {
+      display: none;
+    }
     .left {
       background-color: #e0e0ec;
       color: #202020;
@@ -37,6 +74,10 @@
       width: 35%;
     }
   }
+  @media (max-width: 650px) {
+    flex-direction: column;
+    height: auto;
+  }
   .left {
     width: 70%;
     justify-content: center;
@@ -47,6 +88,11 @@
     align-items: center;
     padding: 0 4rem;
     position: relative;
+
+    @media (max-width: 650px) {
+      width: 100%;
+      padding: 2rem;
+    }
     .google-review {
       padding: 0.3rem 1rem;
       border-radius: 0.3rem;
@@ -93,6 +139,11 @@
       right: 15%;
       border-radius: 50%;
       cursor: pointer;
+
+      @media (max-width: 650px) {
+        display: none;
+      }
+
       &.left-arrow {
         transform: rotate(180deg);
         right: unset;
@@ -120,11 +171,44 @@
     object-fit: cover;
   }
 }
+
+.summary-mobile {
+  align-items: flex-start;
+
+  text-align: center;
+  width: 100%;
+  background-color: #e6e6ef;
+
+  & > div {
+    padding: 3rem 5rem;
+    background-color: #e0e0ec;
+    color: #202020;
+    width: 80%;
+    margin: 0 auto;
+
+    @media (max-width: 600px) {
+      width: 90%;
+    }
+
+    & > * {
+      margin: 1rem 0;
+    }
+  }
+
+  @media (min-width: 650px) {
+    display: none;
+  }
+}
+
 .contact-section-wrapper {
   background-image: url(/images/pattern-bg.png);
   background-repeat: no-repeat;
   background-size: 20rem;
   background-position: bottom left;
+
+  @media (max-width: 650px) {
+    display: none;
+  }
   .contact-section {
     padding: 6rem;
     background-color: #fcfcfbe2;
@@ -167,12 +251,66 @@
   }
 }
 
+.mobile-contact-details {
+  background-color: #f5f2ef;
+  padding: 3rem 5rem;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+
+  @media (min-width: 650px) {
+    display: none;
+  }
+
+  .detail {
+    margin: 0.6rem 0;
+    display: flex;
+    flex-direction: column;
+    .key {
+      color: #6b7280;
+    }
+    .value {
+      display: flex;
+      margin: 1rem 0 0.6rem;
+      width: 18rem;
+      & > img {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
+
 .about-section {
   display: flex;
   justify-content: space-between;
   padding: 3rem 6rem;
   & > *:first-child {
     margin-right: 2rem;
+
+    @media (max-width: 650px) {
+      margin-right: 0;
+    }
+  }
+
+  @media (max-width: 600px) {
+    padding: 3rem 2rem;
+  }
+
+  & > * {
+    width: 50%;
+
+    @media (max-width: 650px) {
+      width: 100%;
+      margin: 0;
+      margin-top: 1rem;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  @media (max-width: 650px) {
+    flex-direction: column;
   }
 }
 
@@ -185,15 +323,43 @@
   background-color: white;
   align-items: center;
   margin-top: 1rem;
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+    padding: 1rem;
+    height: auto;
+  }
   .occasion-select {
     border: none;
     padding: 0 0.4rem;
+
+    @media (max-width: 400px) {
+      width: 45%;
+    }
   }
   .occasion-date {
     border: none;
+
+    @media (max-width: 400px) {
+      width: 45%;
+    }
   }
   .occasion-submit {
     align-self: stretch;
     align-items: center;
+
+    @media (max-width: 650px) {
+      margin-top: 0.5rem;
+    }
   }
+}
+
+.see-all {
+  width: fit-content;
+  margin: 1.5rem auto;
+  padding: 0.5rem 1rem;
+}
+
+.occasion-card {
+  width: 100%;
 }

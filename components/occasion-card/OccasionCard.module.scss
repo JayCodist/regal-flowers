@@ -3,10 +3,32 @@
   height: 26vw;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 650px) {
+    width: 30vw;
+    height: 30vw;
+  }
+
+  @media (max-width: 550px) {
+    width: 50vw;
+    height: 50vw;
+    min-width: 30rem;
+    min-height: 30rem;
+  }
+
+  @media (max-width: 400px) {
+    width: 80vw;
+    height: 80vw;
+    min-width: 20rem;
+    min-height: 20rem;
+  }
+
   .img {
     position: absolute;
-    height: 26vw;
-    width: 26vw;
+    height: inherit;
+    width: inherit;
+    min-width: inherit;
+    min-height: inherit;
     top: 0;
     left: 0;
     z-index: 1;
@@ -14,8 +36,10 @@
   }
   .content {
     position: absolute;
-    height: 26vw;
-    width: 26vw;
+    height: inherit;
+    width: inherit;
+    min-width: inherit;
+    min-height: inherit;
     top: 0;
     left: 0;
     z-index: 2;
@@ -45,6 +69,10 @@
       font-size: 1.9rem;
       margin-bottom: 0.6rem;
       transition: 0.3s ease-out;
+
+      @media (max-width: 650px) {
+        font-size: 1.2rem;
+      }
     }
     .explore {
       margin-right: 0.3rem;

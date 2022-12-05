@@ -27,17 +27,19 @@ import DatePicker from "../components/date-picker/DatePicker";
 import { getCategory } from "../utils/helpers/data/category";
 import { FetchResourceParams } from "../utils/types/FetchResourceParams";
 import { Category } from "../utils/types/Category";
-import { getFeaturedProducts } from "../utils/helpers/data/products";
 import { getProductsBySlugs } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import { LocationName } from "../utils/types/Regal";
 import { GetStaticProps } from "next";
+import useDeviceType from "../utils/hooks/useDeviceType";
 
 const LandingPage: FunctionComponent<{
   locationName: LocationName;
   featuredFlowers: Product[];
 }> = ({ featuredFlowers, locationName }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+
+  const deviceType = useDeviceType();
 
   return (
     <section className="page-content">
@@ -59,20 +61,22 @@ const LandingPage: FunctionComponent<{
           <div className="featured-content">
             <div className="flex between">
               <h2 className="featured-title">{bestSellers[locationName]}</h2>
-              <Button
-                url="/filters?selectedOccasion=all-occasions"
-                className="flex spaced center center-align"
-                type="transparent"
-              >
-                <h3 className="red margin-right">See All</h3>
-                <img
-                  alt="arrow"
-                  className="generic-icon xsmall"
-                  src="/icons/arrow-right.svg"
-                />
-              </Button>
+              {deviceType === "desktop" && (
+                <Button
+                  url="/filters?selectedOccasion=all-occasions"
+                  className="flex spaced center center-align"
+                  type="transparent"
+                >
+                  <h3 className="red margin-right">See All</h3>
+                  <img
+                    alt="arrow"
+                    className="generic-icon xsmall"
+                    src="/icons/arrow-right.svg"
+                  />
+                </Button>
+              )}
             </div>
-            <div className={styles.section}>
+            <div className={[styles.section, styles.wrap].join(" ")}>
               {featuredFlowers.map(flower => (
                 <FlowerCard
                   key={flower.key}
@@ -84,33 +88,47 @@ const LandingPage: FunctionComponent<{
                 />
               ))}
             </div>
-            <div className={styles.section}>
-              {regalFeatures.map(feature => (
-                <ServiceCard
-                  title={feature.title}
-                  key={feature.title}
-                  subtitle={feature.subtitle}
-                  image={feature.image}
-                  size="small"
-                />
-              ))}
-            </div>
-            <div className="flex between">
-              <h2 className="featured-title">Featured Occasions</h2>
+            {deviceType === "mobile" && (
               <Button
                 url="/filters?selectedOccasion=all-occasions"
-                className="flex spaced center center-align"
-                type="transparent"
+                type="accent"
+                minWidth
+                className={styles["see-all"]}
               >
                 <h3 className="red margin-right">See All</h3>
-                <img
-                  alt="arrow"
-                  className="generic-icon xsmall"
-                  src="/icons/arrow-right.svg"
-                />
               </Button>
+            )}
+            {deviceType === "desktop" && (
+              <div className={styles.section}>
+                {regalFeatures.map(feature => (
+                  <ServiceCard
+                    title={feature.title}
+                    key={feature.title}
+                    subtitle={feature.subtitle}
+                    image={feature.image}
+                    size="small"
+                  />
+                ))}
+              </div>
+            )}
+            <div className="flex between">
+              <h2 className="featured-title">Featured Occasions</h2>
+              {deviceType === "desktop" && (
+                <Button
+                  url="/filters?selectedOccasion=all-occasions"
+                  className="flex spaced center center-align"
+                  type="transparent"
+                >
+                  <h3 className="red margin-right">See All</h3>
+                  <img
+                    alt="arrow"
+                    className="generic-icon xsmall"
+                    src="/icons/arrow-right.svg"
+                  />
+                </Button>
+              )}
             </div>
-            <div className={styles.section}>
+            <div className={[styles.section, styles.wrap].join(" ")}>
               {regalOccasions.map(occasion => (
                 <OccasionCard
                   key={occasion.title}
@@ -120,10 +138,20 @@ const LandingPage: FunctionComponent<{
                 />
               ))}
             </div>
+            {deviceType === "mobile" && (
+              <Button
+                url="/filters?selectedOccasion=all-occasions"
+                type="accent"
+                minWidth
+                className={styles["see-all"]}
+              >
+                <h3 className="red margin-right">See All</h3>
+              </Button>
+            )}
 
             <br />
             <h2 className="featured-title">Popular Sections</h2>
-            <div className={styles.section}>
+            <div className={styles["porpular-section"]}>
               {popularSections.map(section => (
                 <FlowerCard
                   key={section.title}
@@ -138,8 +166,15 @@ const LandingPage: FunctionComponent<{
           </div>
           <div className={styles["full-width-section"]}>
             <div className={styles.left}>
-              <div className="flex center spaced-lg center-align">
-                <h2 className="featured-title half-width">
+              <div
+                className={`flex center spaced-lg center-align ${deviceType ===
+                  "mobile" && "column text-center"}`}
+              >
+                <h2
+                  className={`featured-title ${
+                    deviceType === "desktop" ? "half-width" : "block"
+                  }`}
+                >
                   We're the most-loved online flower shop in Lagos & Abuja,
                   Nigeria.
                 </h2>
@@ -249,18 +284,20 @@ const LandingPage: FunctionComponent<{
                 ))}
               </div>
             </div>
-            <img
-              className={styles.right}
-              src="/images/reviews-1.png"
-              alt="review"
-            />
+            {deviceType === "desktop" && (
+              <img
+                className={styles.right}
+                src="/images/reviews-1.png"
+                alt="review"
+              />
+            )}
           </div>
 
           <div className="featured-content">
             <h2 className="featured-title text-center">
               Why Send with Regal Flowers
             </h2>
-            <div className={styles.section}>
+            <div className={[styles.section, styles.wrap].join(" ")}>
               {regalReasons.map(reason => (
                 <ServiceCard
                   title={reason.title}
@@ -274,20 +311,22 @@ const LandingPage: FunctionComponent<{
 
             <div className="flex between">
               <h2 className="featured-title">Gifts to Include with Flowers</h2>
-              <Button
-                url="/filters?selectedOccasion=all-occasions"
-                className="flex spaced center center-align"
-                type="transparent"
-              >
-                <h3 className="red margin-right">See All</h3>
-                <img
-                  alt="arrow"
-                  className="generic-icon xsmall"
-                  src="/icons/arrow-right.svg"
-                />
-              </Button>
+              {deviceType === "desktop" && (
+                <Button
+                  url="/filters?selectedOccasion=all-occasions"
+                  className="flex spaced center center-align"
+                  type="transparent"
+                >
+                  <h3 className="red margin-right">See All</h3>
+                  <img
+                    alt="arrow"
+                    className="generic-icon xsmall"
+                    src="/icons/arrow-right.svg"
+                  />
+                </Button>
+              )}
             </div>
-            <div className={styles.section}>
+            <div className={[styles.section, styles.wrap].join(" ")}>
               {featuredAddons.map(addonGroup => (
                 <FlowerCard
                   key={addonGroup.name}
@@ -300,18 +339,33 @@ const LandingPage: FunctionComponent<{
               ))}
             </div>
 
-            <h2 className="featured-title text-center">How It Works</h2>
-            <div className={styles.section}>
-              {regalHowItWorks.map(reason => (
-                <ServiceCard
-                  title={reason.title}
-                  key={reason.title}
-                  subtitle={reason.subtitle}
-                  image={reason.image}
-                  size="default"
-                />
-              ))}
-            </div>
+            {deviceType === "mobile" && (
+              <Button
+                url="/filters?selectedOccasion=all-occasions"
+                type="accent"
+                minWidth
+                className={styles["see-all"]}
+              >
+                <h3 className="red margin-right">See All</h3>
+              </Button>
+            )}
+
+            {deviceType === "desktop" && (
+              <>
+                <h2 className="featured-title text-center">How It Works</h2>
+                <div className={styles.section}>
+                  {regalHowItWorks.map(reason => (
+                    <ServiceCard
+                      title={reason.title}
+                      key={reason.title}
+                      subtitle={reason.subtitle}
+                      image={reason.image}
+                      size="default"
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           <div
@@ -333,6 +387,20 @@ const LandingPage: FunctionComponent<{
               src="/images/landing-summary.png"
               alt="review"
             />
+          </div>
+
+          <div className={[styles["summary-mobile"], ""].join(" ")}>
+            <div>
+              <strong>WORK WITH US</strong>
+              <h2 className="featured-title">Now Let’s Send Yours</h2>
+              <span>
+                The gradual accumulation of information about atomic and
+                small-scale behavior during the first quarter of the 20th{" "}
+              </span>
+              <Button padded url="/filters">
+                Send Flowers
+              </Button>
+            </div>
           </div>
 
           <div className={styles["contact-section-wrapper"]}>
@@ -422,29 +490,113 @@ const LandingPage: FunctionComponent<{
             </div>
           </div>
 
-          <div className="featured-content">
-            <h2 className="featured-title text-center margin-bottom spaced">
-              Our Blog
+          <div
+            className={[styles["mobile-contact-details"], "mobile-margin"].join(
+              " "
+            )}
+          >
+            <strong>GET IN TOUCH</strong>
+            <h2 className="featured-title vertical-margin spaced">
+              Contact Us Today!
             </h2>
-            <div className={styles.section}>
-              {blogPosts.map(post => (
-                <BlogCard
-                  key={post.title}
-                  title={post.title}
-                  readDuration={post.readDuration}
-                  date={post.date}
-                  image={post.image}
-                  excerpt={post.excerpt}
-                  url="#"
-                />
-              ))}
+            {regalAddresses.map(address => (
+              <div key={address.name} className={styles.detail}>
+                <strong className={styles.key}>{address.name}</strong>
+                <span className={styles.value}>
+                  <img
+                    className="generic-icon margin-right"
+                    src="/icons/map-drop.svg"
+                    alt="location"
+                  />
+                  <span className="flex column spaced">
+                    <a
+                      href={`https://maps.google.com?q=${address.location}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {address.location}
+                    </a>
+                    <span className="grayed">{address.workingTimes}</span>
+                  </span>
+                </span>
+              </div>
+            ))}
+
+            <div className={styles.detail}>
+              <strong className={styles.key}>
+                Contact (Calls and WhatsApp)
+              </strong>
+              <span className={styles.value}>
+                <span className="flex spaced">
+                  <img
+                    alt="phone"
+                    src="/icons/phone-solid.svg"
+                    className="generic-icon"
+                  />
+                  <span className="flex column spaced">
+                    {regalPhones.map(phone => (
+                      <a
+                        key={phone}
+                        href={`tel:${phone.replace(/[^\d\+]/g, "")}`}
+                      >
+                        {phone}
+                      </a>
+                    ))}
+                  </span>
+                </span>
+              </span>
             </div>
+
+            <div className={styles.detail}>
+              <strong className={styles.key}>Email</strong>
+              <span className={styles.value}>
+                <span className="flex spaced center-align">
+                  <img
+                    alt="phone"
+                    src="/icons/envelope.svg"
+                    className="generic-icon"
+                  />
+                  <a
+                    href={`mailto:${regalEmail}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {regalEmail}
+                  </a>
+                </span>
+              </span>
+            </div>
+
+            <Button type="accent" className="margin-top" padded>
+              Say Hello
+            </Button>
           </div>
+
+          {deviceType === "desktop" && (
+            <div className="featured-content">
+              <h2 className="featured-title text-center margin-bottom spaced">
+                Our Blog
+              </h2>
+              <div className={styles.section}>
+                {blogPosts.map(post => (
+                  <BlogCard
+                    key={post.title}
+                    title={post.title}
+                    readDuration={post.readDuration}
+                    date={post.date}
+                    image={post.image}
+                    excerpt={post.excerpt}
+                    url="#"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
           <h2 className="featured-title text-center margin-bottom spaced">
             About Us
           </h2>
           <div className={[styles["about-section"]].join(" ")}>
-            <div className="half-width">
+            <div>
               <p className="title small bold margin-bottom">
                 {aboutUsContent.howItBegan.title}
               </p>
@@ -454,7 +606,7 @@ const LandingPage: FunctionComponent<{
               </p>
               <p>{aboutUsContent.openingHour.content}</p>
             </div>
-            <div className="half-width">
+            <div>
               <p className="title small bold margin-bottom">
                 {aboutUsContent.reputation.title}
               </p>
@@ -532,24 +684,26 @@ const FlowerDeliveryInput: FunctionComponent = () => {
 
   return (
     <div className={styles["flower-input-wrapper"]}>
-      <Select
-        options={occassionOptions.options}
-        value={occasion.id}
-        onSelect={value => handleOnselect(value as string)}
-        className={styles["occasion-select"]}
-        placeholder="Select Occasion"
-        startIcon="/icons/bullet-points.svg"
-        hideCaret
-        onScrollEnd={occassionOptions.hasNext ? fetchCategories : undefined}
-      />
-      <DatePicker
-        value={deliveryDate}
-        onChange={setDeliveryDate}
-        format="D MMM YYYY"
-        className={styles["occasion-date"]}
-        placeholder="Delivery Date"
-        iconAtLeft
-      />
+      <div>
+        <Select
+          options={occassionOptions.options}
+          value={occasion.id}
+          onSelect={value => handleOnselect(value as string)}
+          className={styles["occasion-select"]}
+          placeholder="Select Occasion"
+          startIcon="/icons/bullet-points.svg"
+          hideCaret
+          onScrollEnd={occassionOptions.hasNext ? fetchCategories : undefined}
+        />
+        <DatePicker
+          value={deliveryDate}
+          onChange={setDeliveryDate}
+          format="D MMM YYYY"
+          className={styles["occasion-date"]}
+          placeholder="Delivery Date"
+          iconAtLeft
+        />
+      </div>
       <Button
         padded
         url={`/filters?selectedOccasion=${occasion?.name || ""}`}
