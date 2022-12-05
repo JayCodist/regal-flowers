@@ -20,7 +20,11 @@
   }
   &.four-x-grid {
     width: 23%;
-    min-width: 14rem;
+    min-width: 12rem;
+
+    @media (max-width: 650px) {
+      width: 47%;
+    }
   }
   &.three-x-grid {
     width: 30%;
@@ -43,6 +47,10 @@
         }
       }
     }
+  }
+
+  @media (max-width: 650px) {
+    width: 40%;
   }
 
   .detail {

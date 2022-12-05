@@ -107,6 +107,15 @@ button {
         margin-top: 0;
       }
     }
+
+    &.spaced-lg > * {
+      margin: 0;
+      margin-top: 1.2rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
   }
   &.between {
     justify-content: space-between;
@@ -594,10 +603,31 @@ button {
     }
     .featured-content {
       padding: 4rem 7rem;
+
+      @media (max-width: 600px) {
+        padding: 3rem 2rem;
+      }
+
+      @media (max-width: 400px) {
+        padding: 2.5rem 1rem;
+      }
     }
     .featured-title {
       font-size: 2rem;
+
+      @media (max-width: 600px) {
+        font-size: 1.5rem;
+      }
     }
+  }
+}
+
+.mobile-margin {
+  width: 80%;
+  margin: 0 auto;
+
+  @media (max-width: 600px) {
+    width: 90%;
   }
 }
 
