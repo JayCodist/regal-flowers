@@ -90,14 +90,12 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
                     <p className="bold">{price}</p>
                   </div>
                 )}
-                (
                 <Button
                   className={`${styles["buy-btn"]}`}
                   onClick={e => cart && handleAddToCart(e)}
                 >
                   {buttonText ? buttonText : "Buy Now"}
                 </Button>
-                )
               </div>
             )}
           </div>
