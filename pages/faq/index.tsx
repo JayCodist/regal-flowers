@@ -1,39 +1,20 @@
+import { GetStaticProps } from "next";
 import Link from "next/link";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { getFeaturedProducts } from "../../utils/helpers/data/products";
+import { featuredSlugs } from "../../utils/constants";
+import { getProductsBySlugs } from "../../utils/helpers/data/products";
 import Product from "../../utils/types/Product";
 import styles from "./index.module.scss";
 
 type ContentLink = "how-it-works" | "payment-methods" | "delivery";
 
-const Index: FunctionComponent = () => {
-  const [featuredFlowers, setFeaturedFlowers] = useState<Product[] | null>();
-  const [loading, setLoading] = useState(false);
+const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
+  featuredFlowers
+}) => {
   const [activeContent, setActiveContent] = useState<ContentLink | null>(null);
 
-  const fetchFeaturedProducts = async () => {
-    setLoading(true);
-    const { error, data } = await getFeaturedProducts();
-
-    if (!error) {
-      const _featuredFlowers = data
-        ?.filter((product: Product) => product.featured)
-        .slice(0, 4);
-      setFeaturedFlowers(_featuredFlowers);
-    } else {
-      console.log(error);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    fetchFeaturedProducts();
-  }, []);
-
-  console.log(activeContent);
   return (
     <section className={styles.wrapper}>
       <div className={[styles["hero-bg"], "hero-bg"].join(" ")}>
@@ -306,19 +287,7 @@ const Index: FunctionComponent = () => {
             />
           </Button>
         </div>
-        <div
-          className={`${loading ? "center" : "between"} ${
-            styles["flowers-wrapper"]
-          }`}
-        >
-          {loading && (
-            <img
-              src="/images/spinner.svg"
-              alt="spinner"
-              className="generic-icon xxl spinner"
-            />
-          )}
-
+        <div className={`between ${styles["flowers-wrapper"]}`}>
           {featuredFlowers?.map(flower => (
             <FlowerCard
               key={flower.key}
@@ -333,6 +302,20 @@ const Index: FunctionComponent = () => {
       </div>
     </section>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { data, error, message } = await getProductsBySlugs(
+    featuredSlugs.general
+  );
+  if (error) {
+    console.error("Unable to fetch products by slugs: ", message);
+  }
+  return {
+    props: {
+      featuredFlowers: data || []
+    }
+  };
 };
 
 export default Index;
