@@ -151,7 +151,7 @@ const LandingPage: FunctionComponent<{
 
             <br />
             <h2 className="featured-title">Popular Sections</h2>
-            <div className={styles["porpular-section"]}>
+            <div className={[styles.section, styles.wrap].join(" ")}>
               {popularSections.map(section => (
                 <FlowerCard
                   key={section.title}
@@ -642,6 +642,8 @@ const FlowerDeliveryInput: FunctionComponent = () => {
     options: []
   });
 
+  const deviceType = useDeviceType();
+
   const fetchCategories = async (props?: FetchResourceParams) => {
     const { pageNumber = 1, pageSize = 10, mergeRecords } = props || {};
     const response = await getCategory({ pageNumber, pageSize });
@@ -684,13 +686,15 @@ const FlowerDeliveryInput: FunctionComponent = () => {
 
   return (
     <div className={styles["flower-input-wrapper"]}>
-      <div>
+      <div className="block">
         <Select
           options={occassionOptions.options}
           value={occasion.id}
           onSelect={value => handleOnselect(value as string)}
           className={styles["occasion-select"]}
-          placeholder="Select Occasion"
+          placeholder={
+            deviceType === "desktop" ? "Select Occasion" : "Occasion"
+          }
           startIcon="/icons/bullet-points.svg"
           hideCaret
           onScrollEnd={occassionOptions.hasNext ? fetchCategories : undefined}
