@@ -6,7 +6,7 @@ import {
   regalFeatures,
   regalOccasions,
   regalReasons,
-  sampleReviews,
+  reviews,
   featuredAddons,
   regalHowItWorks,
   regalAddresses,
@@ -206,7 +206,7 @@ const LandingPage: FunctionComponent<{
               </div>
               <br /> <br />
               <div className={styles.reviews}>
-                {sampleReviews.map((review, i) => (
+                {reviews[locationName].map((review, i) => (
                   <div
                     key={i}
                     className={[
@@ -237,11 +237,17 @@ const LandingPage: FunctionComponent<{
                         ))}
                     </div>
                     <span className={styles.text}>“{review.text}”</span>
-                    <img
-                      className="generic-icon large"
-                      alt="review user"
-                      src={review.user.avatar}
-                    />
+                    {review.user.avatar ? (
+                      <img
+                        className="generic-icon large"
+                        alt="review user"
+                        src={review.user.avatar}
+                      />
+                    ) : (
+                      <span className={styles.avatar}>
+                        {review.user.name[0]}
+                      </span>
+                    )}
                     <strong className="vertical-margin compact">
                       {review.user.name}
                     </strong>
@@ -261,7 +267,7 @@ const LandingPage: FunctionComponent<{
                   src="/icons/arrow-right-circled.svg"
                 />
               )}
-              {currentReviewIndex < sampleReviews.length - 1 && (
+              {currentReviewIndex < reviews[locationName].length - 1 && (
                 <img
                   className={styles["review-arrow"]}
                   alt="next"
@@ -271,7 +277,7 @@ const LandingPage: FunctionComponent<{
                 />
               )}
               <div className="flex spaced-lg">
-                {sampleReviews.map((_, index) => (
+                {reviews[locationName].map((_, index) => (
                   <span
                     key={index}
                     role="button"
