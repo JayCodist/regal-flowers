@@ -1118,3 +1118,11 @@ export const popularSections: Occasion[] = [
     image: "/images/popular-abuja.png"
   }
 ];
+
+export const mostLoved: RegalContent = {
+  general:
+    "We are the most loved flower delivery service in Abuja and Lagos, Nigeria",
+  lagos: "We're the most loved online flower shop in Lagos & Abuja, Nigeria",
+  abuja: "We're Lagos and Abuja, Nigeria's most-loved online florist",
+  "other-locations": "Did You Know? We are Nigeria's most reviewed flower store"
+};

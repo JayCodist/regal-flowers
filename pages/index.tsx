@@ -16,7 +16,8 @@ import {
   aboutUsContent,
   featuredSlugs,
   bestSellers,
-  popularSections
+  popularSections,
+  mostLoved
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -175,8 +176,7 @@ const LandingPage: FunctionComponent<{
                     deviceType === "desktop" ? "half-width" : "block"
                   }`}
                 >
-                  We're the most-loved online flower shop in Lagos & Abuja,
-                  Nigeria.
+                  {mostLoved[locationName]}
                 </h2>
                 <div className="flex column spaced center-align">
                   <span className="larger margin-bottom">Customer Reviews</span>
