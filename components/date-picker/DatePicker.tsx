@@ -12,6 +12,10 @@ interface DatePickerProps {
   disabled?: boolean;
   className?: string;
   iconAtLeft?: boolean;
+  /**
+   * Defaults to left
+   */
+  dropdownAlignment?: "left" | "right";
   placeholder?: string;
 }
 
@@ -26,7 +30,8 @@ const DatePicker = (props: DatePickerProps) => {
     disabled,
     className,
     iconAtLeft,
-    placeholder
+    placeholder,
+    dropdownAlignment = "left"
   } = props;
 
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -121,8 +126,8 @@ const DatePicker = (props: DatePickerProps) => {
       <div
         className={[
           styles.dropdown,
-          showDropdown && styles["show-dropdown"]
-          // dropdownOnTop && styles["on-top"]
+          showDropdown && styles["show-dropdown"],
+          styles[dropdownAlignment]
         ].join(" ")}
       >
         <DayPicker

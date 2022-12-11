@@ -705,6 +705,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
           format="D MMM YYYY"
           className={styles["occasion-date"]}
           placeholder="Delivery Date"
+          dropdownAlignment={deviceType === "mobile" ? "right" : "left"}
           iconAtLeft
         />
       </div>
