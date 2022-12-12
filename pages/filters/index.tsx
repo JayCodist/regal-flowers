@@ -20,6 +20,7 @@ import { FetchResourceParams } from "../../utils/types/FetchResourceParams";
 import useScrollHandler from "../../utils/hooks/useScrollHandler";
 import useDeviceType from "../../utils/hooks/useDeviceType";
 import Button from "../../components/button/Button";
+import useOutsideClick from "../../utils/hooks/useOutsideClick";
 
 export const flowers = [
   {
@@ -153,6 +154,11 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
   const [hasMore, setHasMore] = useState(false);
+  const [shouldShowFilter, setShouldShowFilter] = useState(false);
+
+  const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setShouldShowFilter(false);
+  });
 
   const deviceType = useDeviceType();
 
@@ -342,26 +348,100 @@ const Index: FunctionComponent<{ product: Product }> = () => {
           </div>
         </div>
         <div className={styles["product-wrapper"]}>
-          <div className={styles["date-wrapper"]}>
-            <div>
-              <span>Delivery Date: </span>
-              <DatePicker
-                onChange={date => {
-                  setTodayDate(date);
-                }}
-                value={todayDate}
-                format="D MMM YYYY"
-              />
+          <div className="flex between">
+            <div className={styles["date-wrapper"]}>
+              <div>
+                <span>Delivery Date: </span>
+                <DatePicker
+                  onChange={date => {
+                    setTodayDate(date);
+                  }}
+                  value={todayDate}
+                  format="D MMM YYYY"
+                />
+              </div>
+
+              <div>
+                <span>Sort: </span>
+                <Select
+                  options={sortOptions}
+                  value={sort}
+                  onSelect={value => setSort(value as string)}
+                  placeholder="Default"
+                />
+              </div>
             </div>
 
-            <div>
-              <span>Sort: </span>
-              <Select
-                options={sortOptions}
-                value={sort}
-                onSelect={value => setSort(value as string)}
-                placeholder="Default"
-              />
+            <div className={styles["filter-mobile"]} ref={filterDropdownRef}>
+              <button
+                className={styles.btn}
+                onClick={() => setShouldShowFilter(!shouldShowFilter)}
+              >
+                <h3 className="margin-right">
+                  Filter({selectedFilter.length})
+                </h3>
+                <img
+                  alt="filter"
+                  className="generic-icon medium"
+                  src="/icons/filter.svg"
+                />
+              </button>
+              <div
+                className={[
+                  styles["filters-dropdown"],
+                  shouldShowFilter && styles.active
+                ].join(" ")}
+              >
+                {filterCategories.map((filter, index) => (
+                  <div key={index} className="vertical-margin spaced">
+                    <p className="bold vertical-margin spaced">{filter.name}</p>
+                    <div>
+                      {(filter.viewMore
+                        ? filter.options
+                        : filter.options.slice(0, filter.limit)
+                      ).map((child, index) => (
+                        <div key={index} className="margin-bottom">
+                          <Checkbox
+                            onChange={() => {
+                              child.category
+                                ? handleFilterCategoryChange(
+                                    child.name,
+                                    child.category || ""
+                                  )
+                                : handleTagCategoryChange(
+                                    child.name,
+                                    child.tag
+                                  );
+                            }}
+                            text={child.name}
+                            checked={selectedFilter.includes(child.name)}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    {filter.limit < filter.options.length && (
+                      <button
+                        className={styles["btn-view"]}
+                        onClick={() => {
+                          setFilterCategories(prev =>
+                            prev.map((item, _index) => {
+                              if (index === _index) {
+                                return {
+                                  ...item,
+                                  viewMore: !item.viewMore
+                                };
+                              }
+                              return item;
+                            })
+                          );
+                        }}
+                      >
+                        {!filter.viewMore ? "View More" : "View Less"}
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
