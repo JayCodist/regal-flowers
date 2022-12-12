@@ -293,7 +293,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <img
                 className={styles.right}
-                src="/images/reviews-1.png"
+                src={reviews[locationName][currentReviewIndex].image}
                 alt="review"
               />
             )}
