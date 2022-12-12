@@ -14,7 +14,7 @@ interface IFlowerCardProps {
   subTitle?: string;
   url: string;
   isAddonGroup?: boolean;
-  mode?: "four-x-grid" | "three-x-grid" | "six-x-grid";
+  mode?: "four-x-grid" | "three-x-grid" | "six-x-grid" | "two-x-grid";
   product?: Product;
   cart?: boolean;
   onlyTitle?: boolean;

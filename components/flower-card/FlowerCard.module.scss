@@ -18,6 +18,7 @@
       height: 1rem;
     }
   }
+
   &.four-x-grid {
     width: 23%;
     min-width: 12rem;
@@ -45,6 +46,17 @@
         @media (max-width: 1050px) {
           height: 14rem;
         }
+      }
+    }
+  }
+
+  &.two-x-grid {
+    width: 47%;
+    min-width: 12rem;
+    .img-wrapper {
+      height: 15rem;
+      .flower-image {
+        height: 15rem;
       }
     }
   }
