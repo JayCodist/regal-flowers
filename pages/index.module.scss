@@ -112,7 +112,7 @@
     }
     .reviews {
       display: flex;
-      height: 16rem;
+      height: 17rem;
       width: 80%;
       .review {
         display: flex;
@@ -132,6 +132,11 @@
           width: 65%;
           font-size: 1.1rem;
           text-align: center;
+          display: -webkit-box;
+          -webkit-line-clamp: 5;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .review-date {
           margin: 0.1rem 0 1.5rem;
