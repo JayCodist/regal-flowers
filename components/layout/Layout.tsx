@@ -550,50 +550,46 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
               ""
             )}
             {cartItems.length ? (
-              cartItems?.map(item => (
-                <>
-                  <div className={styles["cart-item"]}>
+              cartItems?.map((item, i) => (
+                <div className={styles["cart-item"]} key={i}>
+                  <img
+                    src="/icons/delete-cart.svg"
+                    alt="delete"
+                    className="generic-icon large margin-top spaced clickable"
+                    onClick={() => handleRemoveItem(item.key)}
+                  />
+                  <div className="flex spaced align-center block">
                     <img
-                      src="/icons/delete-cart.svg"
-                      alt="delete"
-                      className="generic-icon large margin-top spaced clickable"
-                      onClick={() => handleRemoveItem(item.key)}
+                      src={item.image.src}
+                      alt="product"
+                      className={styles["product-image"]}
                     />
-                    <div className="flex spaced align-center block">
-                      <img
-                        src={item.image.src}
-                        alt="product"
-                        className={styles["product-image"]}
-                      />
-                      <div className="flex-one">
-                        <p>{item.name}</p>
-                        <p>{item.description}</p>
-                        <div className="flex between center-align vertical-margin">
-                          <p className="primary-color normal-text bold">
-                            ₦{item.price}
-                          </p>
-                          <div className="flex center-align spaced-lg">
-                            <div
-                              className={styles.minus}
-                              onClick={() => handleRemoveItemQuantity(item.key)}
-                            ></div>
-                            <span className="small-text">{item.quantity}</span>
-                            <div
-                              className={styles.plus}
-                              onClick={() => handleAddItemQuantity(item.key)}
-                            ></div>
-                          </div>
+                    <div className="flex-one">
+                      <p>{item.name}</p>
+                      <p>{item.description}</p>
+                      <div className="flex between center-align vertical-margin">
+                        <p className="primary-color normal-text bold">
+                          ₦{item.price.toLocaleString()}
+                        </p>
+                        <div className="flex center-align spaced-lg">
+                          <div
+                            className={styles.minus}
+                            onClick={() => handleRemoveItemQuantity(item.key)}
+                          ></div>
+                          <span className="small-text">{item.quantity}</span>
+                          <div
+                            className={styles.plus}
+                            onClick={() => handleAddItemQuantity(item.key)}
+                          ></div>
                         </div>
-                        {item.size && <p>Size: {item.size}</p>}
-                        {item.design && (
-                          <p className="vertical-margin">
-                            Design: {item.design}
-                          </p>
-                        )}
                       </div>
+                      {item.size && <p>Size: {item.size}</p>}
+                      {item.design && (
+                        <p className="vertical-margin">Design: {item.design}</p>
+                      )}
                     </div>
                   </div>
-                </>
+                </div>
               ))
             ) : (
               <div className={styles["empty-cart"]}>Empty Cart</div>
@@ -602,11 +598,15 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
               <>
                 <div className="flex between center-align vertical-margin spaced">
                   <span className="small-text">Subtotal</span>
-                  <strong className="small-text">₦{total}</strong>
+                  <strong className="small-text">
+                    ₦{total.toLocaleString()}
+                  </strong>
                 </div>
                 <div className="flex between center-align margin-bottom spaced">
                   <span className="small-text">Total</span>
-                  <strong className="small-text">₦{total}</strong>
+                  <strong className="small-text">
+                    ₦{total.toLocaleString()}
+                  </strong>
                 </div>
               </>
             ) : (
@@ -619,7 +619,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
               loading={loading}
               disabled={!cartItems.length}
             >
-              Proceed to checkout (₦{total})
+              Proceed to checkout (₦{total.toLocaleString()})
             </Button>
           </div>
         }

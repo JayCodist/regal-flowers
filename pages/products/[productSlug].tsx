@@ -242,7 +242,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             </div>
             <div className="bold primary-color center">
               <p>FROM</p>
-              <p className="larger">₦{product.price}</p>
+              <p className="larger">₦{product.price?.toLocaleString()}</p>
             </div>
           </div>
           <div className="vertical-margin">
@@ -520,11 +520,16 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               <strong>Buy Now</strong>
             </Button>
             <Button
-              // url="/checkout?orderId=008UOmFSK0aSPlZX19XK"
+              disabled={product.type === "variable" && !selectedSize}
               className={styles["add-to-cart"]}
               onClick={() => handleAddToCart()}
+              tooltip={
+                product.type === "variable" && !selectedSize
+                  ? "You must select a budget first"
+                  : ""
+              }
             >
-              <strong>Add to Cart ₦{total?.toLocaleString()}</strong>
+              Add to Cart ₦{total?.toLocaleString()}
             </Button>
           </div>
         </div>
