@@ -208,9 +208,9 @@ const Index: FunctionComponent<{ product: Product }> = () => {
     products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
     const filterParams = {
       category: selectedFilterCategory.length
-        ? selectedFilterCategory.join(",")
-        : category || (selectedOccasion as string),
-      tags: selectedTagCategories.length ? selectedTagCategories.join(" ,") : ""
+        ? selectedFilterCategory
+        : [category || (selectedOccasion as string)],
+      tags: selectedTagCategories
     };
     const params: FetchResourceParams = {
       pageNumber: page,

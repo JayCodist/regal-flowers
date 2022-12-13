@@ -8,7 +8,6 @@ import Product, {
 import styles from "./products.module.scss";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { flowers } from "../filters";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
 
@@ -531,13 +530,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       </div>
       <p className="title bold margin-top spaced">Related Products</p>
       <div className="flex between vertical-margin spaced wrap">
-        {flowers.map((item, index) => (
+        {product.relatedProducts?.map((item, index) => (
           <FlowerCard
             key={index}
             name={item.name}
-            image={item.images[0].src}
+            image={item.images.src}
             price={item.price}
-            subTitle={item.details}
+            subTitle={item.subtitle}
             url={`/products/${item.slug}`}
           />
         ))}
@@ -548,7 +547,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { productSlug } = params || {};
-  const { data, error, message } = await getProduct(String(productSlug));
+  const { data, error, message } = await getProduct(String(productSlug), 4);
   if (error || !data) {
     console.error(`Unable to fetch product "${productSlug}": ${message}`);
     return {
