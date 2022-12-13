@@ -316,7 +316,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name}
+                        {variant.name} | ₦{variant.price?.toLocaleString()}
                       </span>
                     ))}
                   {product.variants?.filter(
@@ -346,7 +346,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name}
+                        {variant.name} | ₦{variant.price?.toLocaleString()}
                       </span>
                     ))}
                   {product.variants?.filter(variant => variant.class === "vip")
@@ -523,7 +523,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               className={styles["add-to-cart"]}
               onClick={() => handleAddToCart()}
             >
-              <strong>Add to Cart ₦{total}</strong>
+              <strong>Add to Cart ₦{total?.toLocaleString()}</strong>
             </Button>
           </div>
         </div>
