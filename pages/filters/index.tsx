@@ -18,6 +18,9 @@ import DatePicker from "../../components/date-picker/DatePicker";
 import Select from "../../components/select/Select";
 import { FetchResourceParams } from "../../utils/types/FetchResourceParams";
 import useScrollHandler from "../../utils/hooks/useScrollHandler";
+import useDeviceType from "../../utils/hooks/useDeviceType";
+import Button from "../../components/button/Button";
+import useOutsideClick from "../../utils/hooks/useOutsideClick";
 
 export const flowers = [
   {
@@ -151,6 +154,13 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
   const [hasMore, setHasMore] = useState(false);
+  const [shouldShowFilter, setShouldShowFilter] = useState(false);
+
+  const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setShouldShowFilter(false);
+  });
+
+  const deviceType = useDeviceType();
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [
@@ -246,8 +256,7 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   return (
     <section className={styles.filters} ref={rootRef}>
       <div className={[styles["hero-bg"]].join(" ")}>
-        <div className="hero-content flex column center center-align">
-          {/* {filter === "occasions" && ( */}
+        <div className={`hero-content flex column center center-align `}>
           <div className={styles["occasion-wrapper"]}>
             {occasions.map(occasion => (
               <Link href={occasion.url} key={occasion.title}>
@@ -255,7 +264,7 @@ const Index: FunctionComponent<{ product: Product }> = () => {
                   className={[
                     styles["occasion"],
                     selectedOccasion === occasion.url.split("=")[1] &&
-                      styles["selected-occasion"]
+                      styles["active"]
                   ].join(" ")}
                   onClick={() => {
                     setCategory(occasion?.category || "");
@@ -275,7 +284,10 @@ const Index: FunctionComponent<{ product: Product }> = () => {
           {/* )} */}
         </div>
       </div>
-      <div className={`${styles["content"]} flex spaced-xl`}>
+      <div
+        className={`${styles["content"]} flex ${deviceType === "desktop" &&
+          "spaced-xl"}`}
+      >
         <div className={styles["left-side"]}>
           <div className="vertical-margin spaced">
             <span className={`bold margin-right ${styles["sub-title"]}`}>
@@ -335,29 +347,104 @@ const Index: FunctionComponent<{ product: Product }> = () => {
             ))}
           </div>
         </div>
-        <div className="flex-one">
+        <div className={styles["product-wrapper"]}>
           <div className="flex between">
-            <div>
-              Delivery Date:{" "}
-              <DatePicker
-                onChange={date => {
-                  setTodayDate(date);
-                }}
-                value={todayDate}
-                format="D MMM YYYY"
-              />
+            <div className={styles["date-wrapper"]}>
+              <div>
+                <span>Delivery Date: </span>
+                <DatePicker
+                  onChange={date => {
+                    setTodayDate(date);
+                  }}
+                  value={todayDate}
+                  format="D MMM YYYY"
+                />
+              </div>
+
+              <div>
+                <span>Sort: </span>
+                <Select
+                  options={sortOptions}
+                  value={sort}
+                  onSelect={value => setSort(value as string)}
+                  placeholder="Default"
+                />
+              </div>
             </div>
 
-            <div className="flex center-align spaced">
-              <span>Sort:</span>
-              <Select
-                options={sortOptions}
-                value={sort}
-                onSelect={value => setSort(value as string)}
-                placeholder="Default"
-              />
+            <div className={styles["filter-mobile"]} ref={filterDropdownRef}>
+              <button
+                className={styles.btn}
+                onClick={() => setShouldShowFilter(!shouldShowFilter)}
+              >
+                <h3 className="margin-right">
+                  Filter({selectedFilter.length})
+                </h3>
+                <img
+                  alt="filter"
+                  className="generic-icon medium"
+                  src="/icons/filter.svg"
+                />
+              </button>
+              <div
+                className={[
+                  styles["filters-dropdown"],
+                  shouldShowFilter && styles.active
+                ].join(" ")}
+              >
+                {filterCategories.map((filter, index) => (
+                  <div key={index} className="vertical-margin spaced">
+                    <p className="bold vertical-margin spaced">{filter.name}</p>
+                    <div>
+                      {(filter.viewMore
+                        ? filter.options
+                        : filter.options.slice(0, filter.limit)
+                      ).map((child, index) => (
+                        <div key={index} className="margin-bottom">
+                          <Checkbox
+                            onChange={() => {
+                              child.category
+                                ? handleFilterCategoryChange(
+                                    child.name,
+                                    child.category || ""
+                                  )
+                                : handleTagCategoryChange(
+                                    child.name,
+                                    child.tag
+                                  );
+                            }}
+                            text={child.name}
+                            checked={selectedFilter.includes(child.name)}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    {filter.limit < filter.options.length && (
+                      <button
+                        className={styles["btn-view"]}
+                        onClick={() => {
+                          setFilterCategories(prev =>
+                            prev.map((item, _index) => {
+                              if (index === _index) {
+                                return {
+                                  ...item,
+                                  viewMore: !item.viewMore
+                                };
+                              }
+                              return item;
+                            })
+                          );
+                        }}
+                      >
+                        {!filter.viewMore ? "View More" : "View Less"}
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
+
           <div>
             <p className={`${styles.title} bold vertical-margin spaced`}>
               {occasions.filter(occasion => {
@@ -366,9 +453,7 @@ const Index: FunctionComponent<{ product: Product }> = () => {
               Flowers
             </p>
 
-            <div
-              className={`${styles.products} flex vertical-margin wrap between`}
-            >
+            <div className={`${styles.products}`}>
               {productsLoading && (
                 <img
                   src="/images/spinner.svg"
@@ -385,7 +470,10 @@ const Index: FunctionComponent<{ product: Product }> = () => {
                   buttonText="Add to Cart"
                   subTitle={product.details}
                   url={`/products/${product.slug}`}
-                  mode="three-x-grid"
+                  // mode="three-x-grid"
+                  mode={`${
+                    deviceType === "desktop" ? "three-x-grid" : "two-x-grid"
+                  }`}
                   ref={
                     index === arr.length - 1
                       ? ele => {
@@ -413,16 +501,20 @@ const Index: FunctionComponent<{ product: Product }> = () => {
       <div className={styles.gifts}>
         <div className="flex between margin-bottom spaced">
           <span className={styles.title}>Gifts to Include with Flowers</span>
-          <button
-            className={`primary-color flex center-align spaced ${styles["sub-title"]}`}
-          >
-            <span>See All</span>{" "}
-            <img
-              className="generic-icon"
-              src="/icons/arrow-right.svg"
-              alt="arrow right"
-            />
-          </button>
+          {deviceType === "desktop" && (
+            <Button
+              url="/filters?selectedOccasion=all-occasions"
+              className="flex spaced center center-align"
+              type="transparent"
+            >
+              <h3 className="red margin-right">See All</h3>
+              <img
+                alt="arrow"
+                className="generic-icon xsmall"
+                src="/icons/arrow-right.svg"
+              />
+            </Button>
+          )}
         </div>
         <div className="flex between vertical-margin spaced wrap">
           {_gifts.map((flower, index) => (
@@ -437,12 +529,27 @@ const Index: FunctionComponent<{ product: Product }> = () => {
             />
           ))}
         </div>
+        {deviceType === "mobile" && (
+          <Button
+            url="/filters?selectedOccasion=all-occasions"
+            type="accent"
+            minWidth
+            className={styles["see-all"]}
+          >
+            <h3 className="red margin-right">See All</h3>
+          </Button>
+        )}
         <div className={styles.stories}>
           <h1 className={`text-center ${styles.title}`}>
             Flower Delivery for all Occasions
           </h1>
-          <div className="flex between spaced-xl">
-            <div className="half-width">
+          <div
+            className={`flex between ${deviceType === "desktop" &&
+              " spaced-xl"} ${deviceType === "mobile" && "column"}`}
+          >
+            <div
+              className={`${deviceType === "mobile" ? "block" : "half-width"}`}
+            >
               <p className="title small bold margin-bottom">
                 {aboutUsContent.howItBegan.title}
               </p>
@@ -452,7 +559,9 @@ const Index: FunctionComponent<{ product: Product }> = () => {
               </p>
               <p>{aboutUsContent.openingHour.content}</p>
             </div>
-            <div className="half-width">
+            <div
+              className={`${deviceType === "mobile" ? "block" : "half-width"}`}
+            >
               <p className="title small bold margin-bottom">
                 {aboutUsContent.reputation.title}
               </p>
