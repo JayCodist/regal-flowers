@@ -17,6 +17,16 @@ export type DesignOptionsMap = Partial<
   Record<DesignOption, "default" | "option">
 >;
 
+export interface MinimalProduct {
+  key: number;
+  name: string;
+  subtitle: string;
+  sku: string;
+  slug: string;
+  price: number;
+  images: ProductImage;
+}
+
 interface Product {
   key: number;
   name: string;
@@ -36,6 +46,7 @@ interface Product {
   temporaryNotes?: string[];
   description?: string;
   details: string;
+  relatedProducts?: MinimalProduct[];
 }
 
 export default Product;

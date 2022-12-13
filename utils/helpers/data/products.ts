@@ -4,11 +4,15 @@ import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 
 export const getProduct: (
-  slug: string
-) => Promise<RequestResponse<Product>> = async slug => {
+  slug: string,
+  relatedProductsCount?: number
+) => Promise<RequestResponse<Product>> = async (
+  slug,
+  relatedProductsCount = 0
+) => {
   try {
     const response = await restAPIInstance.get(
-      `/v1/wordpress/product/single/${slug}`
+      `/v1/wordpress/product/single/${slug}?relatedProductsCount=${relatedProductsCount}`
     );
     return {
       error: false,
@@ -28,7 +32,11 @@ export const getProductsByCategory: (
 ) => Promise<RequestResponse<Product[]>> = async params => {
   try {
     const response = await restAPIInstance.get(
-      `/v1/wordpress/product/paginate?pageNumber=${params?.pageNumber}&tags=${params?.filter?.tags}&categories=${params?.filter?.category}`
+      `/v1/wordpress/product/paginate?pageNumber=${
+        params?.pageNumber
+      }&tags=${params?.filter?.tags?.join(
+        ","
+      )}&categories=${params?.filter?.category?.join(",")}`
     );
     console.log("response", response.data);
     return {
