@@ -89,7 +89,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     setTotal(productPrice + selectedDesign?.price);
   };
 
-  const defualtDesign = () => {
+  const pickDefaultDesign = () => {
     for (const key in product.designOptions) {
       if (product?.designOptions[key as keyof DesignOptionsMap] === "default") {
         setSelectedDesign({
@@ -101,9 +101,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   };
 
   useEffect(() => {
-    defualtDesign();
+    pickDefaultDesign();
+    setActiveSlide(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [product]);
 
   useEffect(() => {
     handleTotal();
