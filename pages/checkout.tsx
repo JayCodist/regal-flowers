@@ -4,31 +4,31 @@ import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import { useRouter } from "next/router";
 import { FunctionComponent, useContext, useEffect, useState } from "react";
-import Button from "../../components/button/Button";
-import Checkbox from "../../components/checkbox/Checkbox";
-import DatePicker from "../../components/date-picker/DatePicker";
-import Input, { TextArea } from "../../components/input/Input";
-import PhoneInput from "../../components/phone-input/PhoneInput";
-import Radio from "../../components/radio/Radio";
-import Select, { Option } from "../../components/select/Select";
+import Button from "../components/button/Button";
+import Checkbox from "../components/checkbox/Checkbox";
+import DatePicker from "../components/date-picker/DatePicker";
+import Input, { TextArea } from "../components/input/Input";
+import PhoneInput from "../components/phone-input/PhoneInput";
+import Radio from "../components/radio/Radio";
+import Select, { Option } from "../components/select/Select";
 import {
   currencyOptions,
   deliveryStates,
   paymentMethod
-} from "../../utils/constants";
-import SettingsContext from "../../utils/context/SettingsContext";
-import { getOrder, updateOrder } from "../../utils/helpers/data/order";
-import { getZoneGroups } from "../../utils/helpers/data/zone-group";
-import { emailValidator } from "../../utils/helpers/validators";
+} from "../utils/constants";
+import SettingsContext from "../utils/context/SettingsContext";
+import { getOrder, updateOrder } from "../utils/helpers/data/order";
+import { getZoneGroups } from "../utils/helpers/data/zone-group";
+import { emailValidator } from "../utils/helpers/validators";
 import {
   BitcoinGoldIcon,
   BuildingRedIcon,
   InfoIcon,
   InfoRedIcon,
   PaypalBlueIcon
-} from "../../utils/resources";
-import { Order, OrderUpdate, PaymentName } from "../../utils/types/Order";
-import styles from "./index.module.scss";
+} from "../utils/resources";
+import { Order, OrderUpdate, PaymentName } from "../utils/types/Order";
+import styles from "./checkout.module.scss";
 
 const initialData = {
   senderName: "",

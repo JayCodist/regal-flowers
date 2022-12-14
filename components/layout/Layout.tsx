@@ -85,6 +85,8 @@ const Header: FunctionComponent = () => {
   const [activeNav, setActiveNav] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
 
+  const deviceType = useDeviceType();
+
   const currencyOptions: AppCurrency[] = [
     { ...defaultCurrency },
     { name: "USD", conversionRate: 415 },
@@ -138,63 +140,65 @@ const Header: FunctionComponent = () => {
           className={styles["hamburger-menu"]}
           onClick={() => setShowSidebar(!showSidebar)}
         />
-        <nav
-          className={[
-            styles["mobile-sidebar"],
-            showSidebar && styles.active
-          ].join(" ")}
-        >
-          {links.map((link, index) => (
-            <div className={styles.link} key={index} ref={_subLinkRef}>
-              <Link href={link.url} key={link.title}>
-                <a
-                  className={`flex center-align spaced ${styles.title}`}
-                  onClick={() => {
-                    setActiveNav(link.title);
-                    !link.children.length && setShowSidebar(false);
-                  }}
-                >
-                  <strong>{link.title}</strong>
-                  {link.children.length > 0 && (
-                    <div className={[styles.arrow].join(" ")}></div>
-                  )}
-                </a>
-              </Link>
-              <div>
-                {link.children.length > 0 && (
-                  <div
-                    className={[
-                      styles["sub-link"],
-                      activeNav === link.title && styles.active
-                    ].join(" ")}
+        {deviceType === "mobile" && (
+          <nav
+            className={[
+              styles["mobile-sidebar"],
+              showSidebar && styles.active
+            ].join(" ")}
+          >
+            {links.map((link, index) => (
+              <div className={styles.link} key={index} ref={_subLinkRef}>
+                <Link href={link.url} key={link.title}>
+                  <a
+                    className={`flex center-align spaced ${styles.title}`}
+                    onClick={() => {
+                      setActiveNav(link.title);
+                      !link.children.length && setShowSidebar(false);
+                    }}
                   >
+                    <strong>{link.title}</strong>
+                    {link.children.length > 0 && (
+                      <div className={[styles.arrow].join(" ")}></div>
+                    )}
+                  </a>
+                </Link>
+                <div>
+                  {link.children.length > 0 && (
                     <div
-                      className={styles.back}
-                      onClick={() => {
-                        setActiveNav("");
-                        setShowSidebar(true);
-                      }}
+                      className={[
+                        styles["sub-link"],
+                        activeNav === link.title && styles.active
+                      ].join(" ")}
                     >
-                      <div className={styles["back-arrow"]}></div>
-                      Back
-                    </div>
+                      <div
+                        className={styles.back}
+                        onClick={() => {
+                          setActiveNav("");
+                          setShowSidebar(true);
+                        }}
+                      >
+                        <div className={styles["back-arrow"]}></div>
+                        Back
+                      </div>
 
-                    {link.children.map((child, index) => (
-                      <Link href={child.url} key={index}>
-                        <a
-                          className={styles["sub-link-title"]}
-                          onClick={() => handleActiveNav(link.title)}
-                        >
-                          {child.title && <p>{child.title}</p>}
-                        </a>
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                      {link.children.map((child, index) => (
+                        <Link href={child.url} key={index}>
+                          <a
+                            className={styles["sub-link-title"]}
+                            onClick={() => handleActiveNav(link.title)}
+                          >
+                            {child.title && <p>{child.title}</p>}
+                          </a>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </nav>
+            ))}
+          </nav>
+        )}
         <Link href="/">
           <a>
             <img
@@ -205,54 +209,64 @@ const Header: FunctionComponent = () => {
             />
           </a>
         </Link>
-        <nav className={styles.nav}>
-          {links.map((link, index) => (
-            <div className={styles.link} key={index} ref={_subLinkRef}>
-              <span
-                className={`flex center-align spaced ${styles.title}`}
-                onClick={() => handleActiveNav(link.title)}
-                key={link.title}
-                role="button"
-              >
-                <strong>{link.title}</strong>
-                {link.children.length > 0 && (
-                  <div className={[styles.arrow].join(" ")}></div>
-                )}
-              </span>
-              <div>
-                {link.children.length > 0 && (
-                  <div
-                    className={[
-                      styles["dropdown"],
-                      activeNav === link.title && styles.active
-                    ].join(" ")}
-                  >
-                    <p className={styles.subtitle}>{link.subtitle}</p>
-                    <div className={[styles["sub-link"]].join(" ")}>
-                      {link.children.map((child, index) => (
-                        <Link href={child.url} key={index}>
-                          <a>
-                            {child.title && <span>{child.title}</span>}
-                            <div>
-                              {child.children.map((grandChild, index) => (
-                                <p
-                                  key={index}
-                                  className={styles["grand-title"]}
-                                >
-                                  {grandChild.title}
-                                </p>
-                              ))}
-                            </div>
-                          </a>
-                        </Link>
-                      ))}
+        {deviceType === "desktop" && (
+          <nav className={styles.nav}>
+            {links.map((link, index) => (
+              <div className={styles.link} key={index} ref={_subLinkRef}>
+                <span
+                  className={`flex center-align spaced ${styles.title}`}
+                  onClick={() => handleActiveNav(link.title)}
+                  key={link.title}
+                  role="button"
+                >
+                  {link.url ? (
+                    <Link href={link.url}>
+                      <a>
+                        <strong>{link.title}</strong>
+                      </a>
+                    </Link>
+                  ) : (
+                    <strong>{link.title}</strong>
+                  )}
+                  {link.children.length > 0 && (
+                    <div className={[styles.arrow].join(" ")}></div>
+                  )}
+                </span>
+                <div>
+                  {link.children.length > 0 && (
+                    <div
+                      className={[
+                        styles["dropdown"],
+                        activeNav === link.title && styles.active
+                      ].join(" ")}
+                    >
+                      <p className={styles.subtitle}>{link.subtitle}</p>
+                      <div className={[styles["sub-link"]].join(" ")}>
+                        {link.children.map((child, index) => (
+                          <Link href={child.url} key={index}>
+                            <a>
+                              {child.title && <span>{child.title}</span>}
+                              <div>
+                                {child.children.map((grandChild, index) => (
+                                  <p
+                                    key={index}
+                                    className={styles["grand-title"]}
+                                  >
+                                    {grandChild.title}
+                                  </p>
+                                ))}
+                              </div>
+                            </a>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </nav>
+            ))}
+          </nav>
+        )}
         <div
           className={[styles["controls-area-mobile"], "flex spaced-lg"].join(
             " "
@@ -448,18 +462,18 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   const handleCreateOrder = async () => {
     setLoading(true);
-    const order = cartItems.map(item => ({
+    const products = cartItems.map(item => ({
       name: item.name,
       quantity: item.quantity
     }));
 
     const response = await createOrder({
-      orderProducts: order,
+      orderProducts: products,
       paymentStatus: "Not Paid (Website - Bank Transfer)",
       cost: total,
-      deliveryDate: deliveryDate?.toISOString(),
+      deliveryDate: "2040-02-03", // (deliveryDate || dayjs().add(1, "day")).format("YYYY-MM-DD"),
       admin: "regalflowersnigeria@gmail.com",
-      adminNotes: "test",
+      adminNotes: "test regal-v2",
       amount: 0,
       anonymousClient: false,
       arrangementTime: "",
