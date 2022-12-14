@@ -2,25 +2,25 @@ import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dayjs, { Dayjs } from "dayjs";
-import { getProductsByCategory } from "../../utils/helpers/data/products";
-import Product from "../../utils/types/Product";
-import styles from "./filters.module.scss";
-import Checkbox from "../../components/checkbox/Checkbox";
-import FlowerCard from "../../components/flower-card/FlowerCard";
+import { getProductsByCategory } from "../utils/helpers/data/products";
+import Product from "../utils/types/Product";
+import Checkbox from "../components/checkbox/Checkbox";
+import FlowerCard from "../components/flower-card/FlowerCard";
 import {
   aboutUsContent,
   filtersCatgories,
   occasions,
   otherSampleProducts,
   sortOptions
-} from "../../utils/constants";
-import DatePicker from "../../components/date-picker/DatePicker";
-import Select from "../../components/select/Select";
-import { FetchResourceParams } from "../../utils/types/FetchResourceParams";
-import useScrollHandler from "../../utils/hooks/useScrollHandler";
-import useDeviceType from "../../utils/hooks/useDeviceType";
-import Button from "../../components/button/Button";
-import useOutsideClick from "../../utils/hooks/useOutsideClick";
+} from "../utils/constants";
+import DatePicker from "../components/date-picker/DatePicker";
+import Select from "../components/select/Select";
+import { FetchResourceParams } from "../utils/types/FetchResourceParams";
+import useScrollHandler from "../utils/hooks/useScrollHandler";
+import useDeviceType from "../utils/hooks/useDeviceType";
+import Button from "../components/button/Button";
+import useOutsideClick from "../utils/hooks/useOutsideClick";
+import styles from "./filters.module.scss";
 
 export const flowers = [
   {
