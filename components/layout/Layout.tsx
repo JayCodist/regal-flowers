@@ -29,7 +29,11 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <>
-      {_pathname === "checkout" ? <CheckoutHeader /> : <Header />}
+      {_pathname === "checkout" && deviceType === "desktop" ? (
+        <CheckoutHeader />
+      ) : (
+        <Header />
+      )}
       <main className={styles.main}>
         {deviceType === "mobile" && <CurrencyController />}
         {children}

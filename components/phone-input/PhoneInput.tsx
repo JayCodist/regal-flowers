@@ -12,6 +12,7 @@ type PhoneInputProps = {
   onChangeCountryCode: (value: ValueType) => void;
   onChangePhoneNumber: (value: string) => void;
   question?: string;
+  required?: boolean;
 };
 
 const PhoneInput = (props: PhoneInputProps) => {
@@ -20,7 +21,8 @@ const PhoneInput = (props: PhoneInputProps) => {
     countryCode,
     onChangeCountryCode,
     onChangePhoneNumber,
-    question
+    question,
+    required
   } = props;
 
   const [countryCodes, setCountryCodes] = useState(_countryCodes);
@@ -53,6 +55,7 @@ const PhoneInput = (props: PhoneInputProps) => {
           responsive
           className={styles["phone-number"]}
           autoComplete="tel"
+          required={required}
         />
       </div>
     </div>
