@@ -112,7 +112,7 @@
     }
     .reviews {
       display: flex;
-      height: 15rem;
+      height: 17rem;
       width: 80%;
       .review {
         display: flex;
@@ -132,9 +132,29 @@
           width: 65%;
           font-size: 1.1rem;
           text-align: center;
+          display: -webkit-box;
+          -webkit-line-clamp: 5;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .review-date {
           margin: 0.1rem 0 1.5rem;
+        }
+        .avatar {
+          background-color: #f5e5e5;
+          display: flex;
+          -moz-box-align: center;
+          align-items: center;
+          justify-content: center;
+          text-transform: uppercase;
+          height: 1.6rem;
+          width: 1.6rem;
+          margin: 0.6rem 0 0.1rem;
+          font-weight: bold;
+          color: #9b0000;
+          border-radius: 50%;
+          font-size: 1.1rem;
         }
       }
     }
@@ -174,6 +194,7 @@
     width: 30%;
     height: auto;
     object-fit: cover;
+    transition: 0.3s ease-out;
   }
 }
 

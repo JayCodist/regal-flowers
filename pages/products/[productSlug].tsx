@@ -8,7 +8,6 @@ import Product, {
 import styles from "./products.module.scss";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
-import { flowers } from "../filters";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
 
@@ -90,7 +89,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     setTotal(productPrice + selectedDesign?.price);
   };
 
-  const defualtDesign = () => {
+  const pickDefaultDesign = () => {
     for (const key in product.designOptions) {
       if (product?.designOptions[key as keyof DesignOptionsMap] === "default") {
         setSelectedDesign({
@@ -102,9 +101,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   };
 
   useEffect(() => {
-    defualtDesign();
+    pickDefaultDesign();
+    setActiveSlide(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [product]);
 
   useEffect(() => {
     handleTotal();
@@ -242,7 +242,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             </div>
             <div className="bold primary-color center">
               <p>FROM</p>
-              <p className="larger">₦{product.price}</p>
+              <p className="larger">₦{product.price?.toLocaleString()}</p>
             </div>
           </div>
           <div className="vertical-margin">
@@ -317,7 +317,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name}
+                        {variant.name} | ₦{variant.price?.toLocaleString()}
                       </span>
                     ))}
                   {product.variants?.filter(
@@ -347,7 +347,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name}
+                        {variant.name} | ₦{variant.price?.toLocaleString()}
                       </span>
                     ))}
                   {product.variants?.filter(variant => variant.class === "vip")
@@ -520,24 +520,29 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               <strong>Buy Now</strong>
             </Button>
             <Button
-              // url="/checkout?orderId=008UOmFSK0aSPlZX19XK"
+              disabled={product.type === "variable" && !selectedSize}
               className={styles["add-to-cart"]}
               onClick={() => handleAddToCart()}
+              tooltip={
+                product.type === "variable" && !selectedSize
+                  ? "You must select a budget first"
+                  : ""
+              }
             >
-              <strong>Add to Cart ₦{total}</strong>
+              Add to Cart ₦{total?.toLocaleString()}
             </Button>
           </div>
         </div>
       </div>
       <p className="title bold margin-top spaced">Related Products</p>
       <div className="flex between vertical-margin spaced wrap">
-        {flowers.map((item, index) => (
+        {product.relatedProducts?.map((item, index) => (
           <FlowerCard
             key={index}
             name={item.name}
-            image={item.images[0].src}
+            image={item.images.src}
             price={item.price}
-            subTitle={item.details}
+            subTitle={item.subtitle}
             url={`/products/${item.slug}`}
           />
         ))}
@@ -548,7 +553,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { productSlug } = params || {};
-  const { data, error, message } = await getProduct(String(productSlug));
+  const { data, error, message } = await getProduct(String(productSlug), 4);
   if (error || !data) {
     console.error(`Unable to fetch product "${productSlug}": ${message}`);
     return {

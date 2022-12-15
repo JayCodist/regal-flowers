@@ -1,6 +1,6 @@
 export interface FilterLogic {
-  category?: string;
-  tags?: string;
+  category?: string[];
+  tags?: string[];
 }
 
 export interface SortLogic {

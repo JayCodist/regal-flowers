@@ -1,12 +1,12 @@
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import React, { FunctionComponent, useState } from "react";
-import Button from "../../components/button/Button";
-import FlowerCard from "../../components/flower-card/FlowerCard";
-import { featuredSlugs } from "../../utils/constants";
-import { getProductsBySlugs } from "../../utils/helpers/data/products";
-import Product from "../../utils/types/Product";
-import styles from "./index.module.scss";
+import Button from "../components/button/Button";
+import FlowerCard from "../components/flower-card/FlowerCard";
+import { featuredSlugs } from "../utils/constants";
+import { getProductsBySlugs } from "../utils/helpers/data/products";
+import Product from "../utils/types/Product";
+import styles from "./faq.module.scss";
 
 type ContentLink = "how-it-works" | "payment-methods" | "delivery";
 
@@ -272,7 +272,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
             </div>
           </div>
         </div>
-        <div className={`margin-bottom ${styles["flowers-wrapper"]}`}>
+        <div className={`margin-bottom spaced ${styles["flowers-wrapper"]}`}>
           <span className={styles.title}>Featured Flowers</span>
           <Button
             url="/filters?selectedOccasion=all-occasions"
@@ -287,7 +287,9 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
             />
           </Button>
         </div>
-        <div className={`between ${styles["flowers-wrapper"]}`}>
+        <div
+          className={`${styles["flowers-wrapper"]} ${styles.wrap} ${styles["bottom-margin"]}`}
+        >
           {featuredFlowers?.map(flower => (
             <FlowerCard
               key={flower.key}
