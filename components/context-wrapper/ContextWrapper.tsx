@@ -75,16 +75,18 @@ const ContextWrapper: FunctionComponent<ContextWrapperProps> = props => {
         <span ref={anchorRef} onClick={handleAnchorClick}>
           {anchor}
         </span>
-        <div
-          ref={contextRef}
-          className={[
-            styles["context"],
-            innerVisible && `scrollable ${styles.active}`,
-            className
-          ].join(" ")}
-        >
-          {children}
-        </div>
+        {innerVisible && (
+          <div
+            ref={contextRef}
+            className={[
+              styles["context"],
+              innerVisible && `scrollable ${styles.active}`,
+              className
+            ].join(" ")}
+          >
+            {children}
+          </div>
+        )}
       </span>
     </>
   );
