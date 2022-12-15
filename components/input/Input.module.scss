@@ -29,6 +29,10 @@
     outline: none;
     font-size: inherit;
     padding: 0.5rem;
+
+    @media (max-width: 650px) {
+      padding: 0.6rem;
+    }
     &.small {
       font-size: 0.75rem;
       padding: 0.3rem;

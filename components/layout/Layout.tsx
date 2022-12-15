@@ -29,7 +29,11 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
 
   return (
     <>
-      {_pathname === "checkout" ? <CheckoutHeader /> : <Header />}
+      {_pathname === "checkout" && deviceType === "desktop" ? (
+        <CheckoutHeader />
+      ) : (
+        <Header />
+      )}
       <main className={styles.main}>
         {deviceType === "mobile" && <CurrencyController />}
         {children}
@@ -51,7 +55,12 @@ const CurrencyController = () => {
         ].join(" ")}
         onClick={() => setShouldShowCurrency(true)}
       >
-        <span>₦</span>
+        <span>
+          {
+            currencyOptions.find(_currency => _currency.name === currency.name)
+              ?.sign
+          }
+        </span>
       </div>
       <div
         className={[
@@ -66,7 +75,10 @@ const CurrencyController = () => {
         {currencyOptions.map(_currency => (
           <button
             key={_currency.name}
-            onClick={() => setCurrency(_currency)}
+            onClick={() => {
+              setCurrency(_currency);
+              setShouldShowCurrency(false);
+            }}
             className={[
               styles.currency,
               currency.name === _currency.name && styles.active
