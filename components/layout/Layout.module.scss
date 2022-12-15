@@ -110,10 +110,6 @@
 
   .nav {
     display: flex;
-
-    @media (max-width: 650px) {
-      display: none;
-    }
     .link {
       position: relative;
       cursor: pointer;
@@ -134,7 +130,7 @@
       margin-top: -0.3rem;
 
       &.active {
-        transform: rotate(45deg);
+        transform: rotate(45deg) translate(0.2rem, 0.1rem);
       }
     }
 
@@ -147,18 +143,10 @@
       padding: 1rem;
       box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06),
         0px 1px 3px rgba(0, 0, 0, 0.1);
-      opacity: 0;
       transform: translateY(-10%);
-      z-index: -1;
       max-width: 0;
-
-      &.active {
-        opacity: 1;
-        transform: translateY(0);
-        max-width: 100vh;
-      }
-      transition: all 0.3s ease-out;
-
+      opacity: 0;
+      animation: slidein 0.3s ease-out forwards;
       .subtitle {
         color: black;
         font-weight: bold;
@@ -618,5 +606,19 @@
         margin-bottom: 0;
       }
     }
+  }
+}
+
+@keyframes slidein {
+  from {
+    transform: translateY(-10%);
+    max-width: 0;
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-width: 100vh;
   }
 }

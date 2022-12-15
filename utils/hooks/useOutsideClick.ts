@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react";
 
 const useOutsideClick = <T = HTMLElement>(onOutsideClick: () => void) => {
-  const componentToCloseRef = useRef<T>(null);
+  const excludedAreaRef = useRef<T>(null);
 
   const handleClose = (e: MouseEvent) => {
-    const componentToClose = componentToCloseRef.current as HTMLElement | null;
+    const excludedArea = excludedAreaRef.current as HTMLElement | null;
 
-    if (!componentToClose || !componentToClose.contains(e.target as Node)) {
+    if (!excludedArea || !excludedArea.contains(e.target as Node)) {
       onOutsideClick();
+      e.stopPropagation();
     }
   };
 
@@ -17,7 +18,7 @@ const useOutsideClick = <T = HTMLElement>(onOutsideClick: () => void) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return componentToCloseRef;
+  return excludedAreaRef;
 };
 
 export default useOutsideClick;

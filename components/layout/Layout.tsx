@@ -1,5 +1,7 @@
 import React, {
   FunctionComponent,
+  LegacyRef,
+  MouseEvent as ReactMouseEvent,
   ReactNode,
   useContext,
   useEffect,
@@ -19,8 +21,8 @@ import { createOrder } from "../../utils/helpers/data/order";
 import dayjs from "dayjs";
 import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
-import useOutsideClick from "../../utils/hooks/useOutsideClick";
 import useDeviceType from "../../utils/hooks/useDeviceType";
+import useOutsideClick from "../../utils/hooks/useOutsideClick";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -97,11 +99,12 @@ const Header: FunctionComponent = () => {
     SettingsContext
   );
 
-  const handleActiveNav = (title: string) => {
+  const handleActiveNav = (title: string, e: ReactMouseEvent) => {
     setActiveNav(title === activeNav ? "" : title);
+    e.stopPropagation();
   };
 
-  const _subLinkRef = useOutsideClick<HTMLDivElement>(() => {
+  const excludedAreaRef = useOutsideClick(() => {
     setActiveNav("");
   });
 
@@ -148,7 +151,7 @@ const Header: FunctionComponent = () => {
             ].join(" ")}
           >
             {links.map((link, index) => (
-              <div className={styles.link} key={index} ref={_subLinkRef}>
+              <div className={styles.link} key={index}>
                 <Link href={link.url} key={link.title}>
                   <a
                     className={`flex center-align spaced ${styles.title}`}
@@ -184,10 +187,7 @@ const Header: FunctionComponent = () => {
 
                       {link.children.map((child, index) => (
                         <Link href={child.url} key={index}>
-                          <a
-                            className={styles["sub-link-title"]}
-                            onClick={() => handleActiveNav(link.title)}
-                          >
+                          <a className={styles["sub-link-title"]}>
                             {child.title && <p>{child.title}</p>}
                           </a>
                         </Link>
@@ -212,10 +212,18 @@ const Header: FunctionComponent = () => {
         {deviceType === "desktop" && (
           <nav className={styles.nav}>
             {links.map((link, index) => (
-              <div className={styles.link} key={index} ref={_subLinkRef}>
+              <div
+                className={styles.link}
+                key={index}
+                ref={
+                  link.title === activeNav
+                    ? (excludedAreaRef as LegacyRef<HTMLDivElement>)
+                    : undefined
+                }
+              >
                 <span
                   className={`flex center-align spaced ${styles.title}`}
-                  onClick={() => handleActiveNav(link.title)}
+                  onClick={e => handleActiveNav(link.title, e)}
                   key={link.title}
                   role="button"
                 >
@@ -229,17 +237,17 @@ const Header: FunctionComponent = () => {
                     <strong>{link.title}</strong>
                   )}
                   {link.children.length > 0 && (
-                    <div className={[styles.arrow].join(" ")}></div>
+                    <div
+                      className={[
+                        styles.arrow,
+                        activeNav === link.title && styles.active
+                      ].join(" ")}
+                    ></div>
                   )}
                 </span>
                 <div>
-                  {link.children.length > 0 && (
-                    <div
-                      className={[
-                        styles["dropdown"],
-                        activeNav === link.title && styles.active
-                      ].join(" ")}
-                    >
+                  {activeNav === link.title && link.children.length > 0 && (
+                    <div className={styles["dropdown"]}>
                       <p className={styles.subtitle}>{link.subtitle}</p>
                       <div className={[styles["sub-link"]].join(" ")}>
                         {link.children.map((child, index) => (
