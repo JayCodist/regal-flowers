@@ -44,10 +44,6 @@
     }
   }
 
-  .shopping-btn {
-    display: inline-block;
-  }
-
   .delivey-method {
     // margin-top: 2rem;
     cursor: pointer;
@@ -323,5 +319,213 @@
   .load-intro {
     font-size: 2rem;
     font-weight: 300;
+  }
+}
+
+.line-through {
+  background-color: #e5e7eb;
+  height: 0.1rem;
+  width: 100%;
+  display: inline-block;
+}
+
+.checkout-mobile {
+  padding: 2rem 4rem;
+  position: relative;
+
+  @media (max-width: 400px) {
+    padding: 2rem 2rem;
+  }
+
+  .content {
+    margin-top: 6rem;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    background-color: white;
+    top: 6rem;
+    height: 5rem;
+    left: 0;
+    padding: 3rem 2rem;
+    padding-top: 5rem;
+    z-index: 5;
+
+    .tab {
+      color: #6b7280;
+      font-weight: bold;
+      padding: 0.8rem;
+      cursor: pointer;
+      border-radius: 1.5rem;
+      width: 30%;
+      text-align: center;
+      transition: 0.3s ease-out;
+      &.active {
+        background-color: #9b0000;
+        color: #fff;
+      }
+    }
+  }
+
+  .title {
+    font-size: 1.2rem;
+    color: black;
+    font-weight: bold;
+  }
+
+  .next {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .grayed {
+    color: #6b7280;
+  }
+
+  .sender-info {
+    border: 0.1rem solid #f3f4f6;
+    background-color: #f9fafb;
+    padding: 0.8rem;
+    color: #202020;
+    margin: 1rem 0;
+    color: black;
+
+    & > * {
+      margin-bottom: 0.5rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .info {
+    background-color: #eff6ff;
+    padding: 0.8rem;
+    border-radius: 0.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .currency {
+    border: 0.1rem solid #e5e7eb;
+    padding: 0.5rem;
+    width: 2rem;
+    &.active {
+      border-color: #9b0000;
+    }
+  }
+
+  .payment-methods {
+    margin-top: 1.5rem;
+    .method {
+      border: 0.1rem solid #c2c2c2;
+      padding: 0.8rem;
+      border-radius: 0.6rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+
+      &.active {
+        border: 0.1rem solid #9b0000;
+      }
+    }
+  }
+
+  .security {
+    font-size: 0.8rem;
+    color: #6b7280;
+    .lock-icon {
+      background-color: #f2f4f7;
+      height: 1.2rem;
+      width: 1.2rem;
+      border-radius: 50%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .order-received {
+    color: #14532d;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 1.2rem 0;
+    background-color: #f3fcf6;
+    padding: 0.5rem 0;
+  }
+
+  .order-number {
+    font-size: 1rem;
+    color: black;
+  }
+
+  .order-info {
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+
+  .order-summary {
+    border: 0.1rem solid #f9fafb;
+    border-radius: 0.6rem;
+    .detail {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2e3a59;
+    }
+
+    .order-details {
+      margin-top: 1.2rem;
+    }
+
+    .order-detail {
+      width: 70%;
+      margin: 0.6rem auto;
+      margin-left: 6rem;
+    }
+
+    .order-image {
+      height: 5.6rem;
+      width: 5.6rem;
+      object-fit: contain;
+      border-radius: 0.4rem;
+    }
+    .addon-image {
+      height: 2.8rem;
+      width: 2.8rem;
+      object-fit: contain;
+      border-radius: 0.4rem;
+    }
+  }
+  .account-wrapper {
+    padding: 1rem;
+    padding-left: 1.5rem;
+    background-color: #fefce8;
+    margin-bottom: 8rem;
+  }
+
+  .done-footer {
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    padding: 1rem;
+    padding-bottom: 2rem;
+    z-index: 5;
+    left: 0;
+  }
+
+  .track {
+    text-decoration: underline;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: block;
+    margin-top: 1rem;
   }
 }
