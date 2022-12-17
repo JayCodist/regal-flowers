@@ -256,8 +256,20 @@ const Header: FunctionComponent = () => {
                       <div className={[styles["sub-link"]].join(" ")}>
                         {link.children.map((child, index) => (
                           <Link href={child.url} key={index}>
-                            <a>
-                              {child.title && <span>{child.title}</span>}
+                            <a
+                              className={[
+                                child.children.length && styles.grid
+                              ].join(" ")}
+                            >
+                              {child.title && (
+                                <span
+                                  className={[
+                                    child.children.length && styles.title
+                                  ].join(" ")}
+                                >
+                                  {child.title}
+                                </span>
+                              )}
                               <div>
                                 {child.children.map((grandChild, index) => (
                                   <p

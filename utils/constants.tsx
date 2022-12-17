@@ -891,74 +891,130 @@ export const links: AppLink[] = [
       {
         title: "Romance, Birthdays & Anniversary",
         url: "/filters?selectedOccasion=Anniversary Flowers",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "VIP Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
         url: "/filters?selectedOccasion=just-to-say",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "VIP Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
       {
         title: "Get well soon",
         url: "#",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "VIP Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
       {
         title: "Bridal",
         url: "/filters?selectedOccasion=bridal-bouquets",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Cascading Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Accessories & Boutonnieres",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
       {
         title: "Funeral & Condolence",
         url: "/filters?selectedOccasion=funeral-condolence",
-        children: []
+        children: [
+          {
+            title: "Wreaths & Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "VIP Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
+
       {
-        title: "Events & Centerpiece",
-        url: "#",
-        children: []
-      },
-      {
-        title: "Father's Day",
-        url: "#",
-        children: []
-      },
-      {
-        title: "Mother's Day",
-        url: "#",
-        children: []
-      },
-      {
-        title: "Valentine’s Day",
-        url: "#",
-        children: []
+        title: "Others",
+        url: "",
+        children: [
+          {
+            title: "VIP Statements",
+            url: "",
+            children: []
+          },
+          {
+            title: "Events & Centerpiece",
+            url: "",
+            children: []
+          },
+          {
+            title: "Father's Day",
+            url: "",
+            children: []
+          },
+          {
+            title: "Mother's Day",
+            url: "",
+            children: []
+          }
+        ]
       }
-      // {
-      //   title: "Others",
-      //   url: "",
-      //   children: [
-      //     {
-      //       title: "VIP Statements",
-      //       url: "",
-      //       children: []
-      //     },
-      //     {
-      //       title: "Events & Centerpiece",
-      //       url: "",
-      //       children: []
-      //     },
-      //     {
-      //       title: "Father's Day",
-      //       url: "",
-      //       children: []
-      //     },
-      //     {
-      //       title: "Mother's Day",
-      //       url: "",
-      //       children: []
-      //     }
-      //   ]
-      // }
     ]
   },
   {
@@ -968,29 +1024,141 @@ export const links: AppLink[] = [
       {
         title: "Design",
         url: "#",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Box Arrangements",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Others",
+            url: "#",
+            children: []
+          }
+        ]
       },
       {
-        title: "Delivery",
-        url: "#",
-        children: []
+        title: "Flower Types",
+        url: "/filters?selectedFlowerType=rose",
+        children: [
+          {
+            title: "Fresh Flowers",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Forever Roses",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Plants",
+            url: "#",
+            children: []
+          }
+        ]
       },
       {
         title: "Packages",
         url: "#",
-        children: []
+        children: [
+          {
+            title: "View Bundled Products",
+            url: "#",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Delivery",
+        url: "#",
+        children: [
+          {
+            title: "Same Day Delivery",
+            url: "#",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Flower Name",
+        url: "#",
+        children: [
+          {
+            title: "Roses",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Chrysanthemums",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Lilies",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Million Stars",
+            url: "#",
+            children: []
+          },
+          {
+            title: "See All",
+            url: "#",
+            children: []
+          }
+        ]
       }
     ]
   },
-  {
-    url: "#",
-    title: "Flower Types",
-    children: []
-  },
+
   {
     url: "#",
     title: "Gifts",
-    children: []
+    children: [
+      {
+        url: "#",
+        title: "Chocolates and Biscuits",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Cakes and Cupcakes",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Teddy Bears",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Wine and Champagne",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Perfumes",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Giftsets",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Balloons",
+        children: []
+      }
+    ]
   },
   {
     url: "/faq",
