@@ -228,7 +228,8 @@ const Checkout: FunctionComponent = () => {
   if (pageLoading) {
     return (
       <div className={styles.loader}>
-        <img src="/images/spinner.svg" alt="loader" />
+        <img src="/images/spinner.svg" alt="loader" className={styles.icon} />
+        <span className={styles["load-intro"]}>Preparing your order. . .</span>
       </div>
     );
   }
@@ -713,11 +714,15 @@ const Checkout: FunctionComponent = () => {
               <div className={`${styles.border} padded`}>
                 <div className="flex between ">
                   <span className="normal-text">Subtotal</span>
-                  <span className="normal-text bold">₦{order?.cost}</span>
+                  <span className="normal-text bold">
+                    ₦{order?.cost.toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex between vertical-margin">
                   <span className="normal-text">Add-Ons total</span>
-                  <span className="normal-text bold">₦{order?.cost}</span>
+                  <span className="normal-text bold">
+                    ₦{order?.cost.toLocaleString()}
+                  </span>
                 </div>
                 {deliveryMethod === "pick-up" && (
                   <div className="flex between">
