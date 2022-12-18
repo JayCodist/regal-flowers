@@ -51,7 +51,7 @@ export const aboutUsContent: {
   budget: {
     title: "Fresh Flowers For All Occasions and Budgets",
     content:
-      "We stock flowers for various occasions such as Birthday Flowers, Romantic Flowers, Anniversary Flowers, Mothers’ Day Flowers, Get Well Soon Flowers, Funeral Wreaths, Condolence Flowers, Bridal Bouquets, and of course, Valentine’s Day flowers available And finally, there are suitable options for all budgets, so when you see a design you like, you can simply pick the size that suits your budget. Want to go all out too? We got you, withe our VIP Category of roses. "
+      "We stock flowers for various occasions such as Birthday Flowers, Romantic Flowers, Anniversary Flowers, Mothers’ Day Flowers, Get Well Soon Flowers, Funeral Wreaths, Condolence Flowers, Bridal Bouquets, and of course, Valentine’s Day flowers available And finally, there are suitable options for all budgets, so when you see a design you like, you can simply pick the size that suits your budget. Want to go all out too? We got you, with our VIP Category of roses. "
   }
 };
 
@@ -177,7 +177,7 @@ export const regalReasons: Service[] = [
     image: "/images/mixer.png",
     title: "Premium Fresh Flowers",
     subtitle:
-      "We stock only the very best fresh flowers, and arrange them withe care. Don't forget to add your free personalized message too."
+      "We stock only the very best fresh flowers, and arrange them with care. Don't forget to add your free personalized message too."
   },
   {
     image: "/images/bulb.png",
@@ -241,7 +241,7 @@ export const regalHowItWorks: Service[] = [
     image: "/images/rocket.png",
     title: "Wait by the phone for that call",
     subtitle:
-      "Relax and wait for the recipient to thank you withe a smile once we deliver."
+      "Relax and wait for the recipient to thank you with a smile once we deliver."
   }
 ];
 
@@ -256,6 +256,11 @@ export const regalAddresses: OfficeAddress[] = [
     location:
       "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos",
     workingTimes: "8am-7pm (Everyday)"
+  },
+  {
+    name: "Lagos Ikeja MMA2 Airport Branch",
+    location: "Muritala Muhammed Airport2, Ikeja, Lagos",
+    workingTimes: "6am-7pm (Everyday)"
   },
   {
     name: "Abuja Office",
