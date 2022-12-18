@@ -51,7 +51,7 @@ export const aboutUsContent: {
   budget: {
     title: "Fresh Flowers For All Occasions and Budgets",
     content:
-      "We stock flowers for various occasions such as Birthday Flowers, Romantic Flowers, Anniversary Flowers, Mothers’ Day Flowers, Get Well Soon Flowers, Funeral Wreaths, Condolence Flowers, Bridal Bouquets, and of course, Valentine’s Day flowers available And finally, there are suitable options for all budgets, so when you see a design you like, you can simply pick the size that suits your budget. Want to go all out too? We got you, withe our VIP Category of roses. "
+      "We stock flowers for various occasions such as Birthday Flowers, Romantic Flowers, Anniversary Flowers, Mothers’ Day Flowers, Get Well Soon Flowers, Funeral Wreaths, Condolence Flowers, Bridal Bouquets, and of course, Valentine’s Day flowers available And finally, there are suitable options for all budgets, so when you see a design you like, you can simply pick the size that suits your budget. Want to go all out too? We got you, with our VIP Category of roses. "
   }
 };
 
@@ -177,7 +177,7 @@ export const regalReasons: Service[] = [
     image: "/images/mixer.png",
     title: "Premium Fresh Flowers",
     subtitle:
-      "We stock only the very best fresh flowers, and arrange them withe care. Don't forget to add your free personalized message too."
+      "We stock only the very best fresh flowers, and arrange them with care. Don't forget to add your free personalized message too."
   },
   {
     image: "/images/bulb.png",
@@ -241,7 +241,7 @@ export const regalHowItWorks: Service[] = [
     image: "/images/rocket.png",
     title: "Wait by the phone for that call",
     subtitle:
-      "Relax and wait for the recipient to thank you withe a smile once we deliver."
+      "Relax and wait for the recipient to thank you with a smile once we deliver."
   }
 ];
 
@@ -256,6 +256,11 @@ export const regalAddresses: OfficeAddress[] = [
     location:
       "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos",
     workingTimes: "8am-7pm (Everyday)"
+  },
+  {
+    name: "Lagos Ikeja MMA2 Airport Branch",
+    location: "Muritala Muhammed Airport2, Ikeja, Lagos",
+    workingTimes: "6am-7pm (Everyday)"
   },
   {
     name: "Abuja Office",
@@ -891,74 +896,130 @@ export const links: AppLink[] = [
       {
         title: "Romance, Birthdays & Anniversary",
         url: "/filters?selectedOccasion=Anniversary Flowers",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "VIP Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
         url: "/filters?selectedOccasion=just-to-say",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "VIP Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
       {
         title: "Get well soon",
         url: "#",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "VIP Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
       {
         title: "Bridal",
         url: "/filters?selectedOccasion=bridal-bouquets",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Cascading Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "Accessories & Boutonnieres",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
       {
         title: "Funeral & Condolence",
         url: "/filters?selectedOccasion=funeral-condolence",
-        children: []
+        children: [
+          {
+            title: "Wreaths & Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          },
+          {
+            title: "VIP Bouquets",
+            url: "/filters?selectedOccasion=Anniversary Flowers",
+            children: []
+          }
+        ]
       },
+
       {
-        title: "Events & Centerpiece",
-        url: "#",
-        children: []
-      },
-      {
-        title: "Father's Day",
-        url: "#",
-        children: []
-      },
-      {
-        title: "Mother's Day",
-        url: "#",
-        children: []
-      },
-      {
-        title: "Valentine’s Day",
-        url: "#",
-        children: []
+        title: "Others",
+        url: "",
+        children: [
+          {
+            title: "VIP Statements",
+            url: "",
+            children: []
+          },
+          {
+            title: "Events & Centerpiece",
+            url: "",
+            children: []
+          },
+          {
+            title: "Father's Day",
+            url: "",
+            children: []
+          },
+          {
+            title: "Mother's Day",
+            url: "",
+            children: []
+          }
+        ]
       }
-      // {
-      //   title: "Others",
-      //   url: "",
-      //   children: [
-      //     {
-      //       title: "VIP Statements",
-      //       url: "",
-      //       children: []
-      //     },
-      //     {
-      //       title: "Events & Centerpiece",
-      //       url: "",
-      //       children: []
-      //     },
-      //     {
-      //       title: "Father's Day",
-      //       url: "",
-      //       children: []
-      //     },
-      //     {
-      //       title: "Mother's Day",
-      //       url: "",
-      //       children: []
-      //     }
-      //   ]
-      // }
     ]
   },
   {
@@ -968,29 +1029,141 @@ export const links: AppLink[] = [
       {
         title: "Design",
         url: "#",
-        children: []
+        children: [
+          {
+            title: "Bouquets",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Box Arrangements",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Others",
+            url: "#",
+            children: []
+          }
+        ]
       },
       {
-        title: "Delivery",
-        url: "#",
-        children: []
+        title: "Flower Types",
+        url: "/filters?selectedFlowerType=rose",
+        children: [
+          {
+            title: "Fresh Flowers",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Forever Roses",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Plants",
+            url: "#",
+            children: []
+          }
+        ]
       },
       {
         title: "Packages",
         url: "#",
-        children: []
+        children: [
+          {
+            title: "View Bundled Products",
+            url: "#",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Delivery",
+        url: "#",
+        children: [
+          {
+            title: "Same Day Delivery",
+            url: "#",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Flower Name",
+        url: "#",
+        children: [
+          {
+            title: "Roses",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Chrysanthemums",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Lilies",
+            url: "#",
+            children: []
+          },
+          {
+            title: "Million Stars",
+            url: "#",
+            children: []
+          },
+          {
+            title: "See All",
+            url: "#",
+            children: []
+          }
+        ]
       }
     ]
   },
-  {
-    url: "#",
-    title: "Flower Types",
-    children: []
-  },
+
   {
     url: "#",
     title: "Gifts",
-    children: []
+    children: [
+      {
+        url: "#",
+        title: "Chocolates and Biscuits",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Cakes and Cupcakes",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Teddy Bears",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Wine and Champagne",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Perfumes",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Giftsets",
+        children: []
+      },
+      {
+        url: "#",
+        title: "Balloons",
+        children: []
+      }
+    ]
   },
   {
     url: "/faq",

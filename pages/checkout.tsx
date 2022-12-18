@@ -20,7 +20,7 @@ import SettingsContext from "../utils/context/SettingsContext";
 import { getOrder, updateOrder } from "../utils/helpers/data/order";
 import { getZoneGroups } from "../utils/helpers/data/zone-group";
 import { emailValidator } from "../utils/helpers/validators";
-import { InfoIcon, InfoRedIcon, PaypalBlueIcon } from "../utils/resources";
+import { InfoIcon, InfoRedIcon } from "../utils/resources";
 import { Order, OrderUpdate, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
