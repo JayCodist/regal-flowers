@@ -12,6 +12,21 @@ import {
   LocationName
 } from "./types/Regal";
 
+export const allOccasionOptions: Option[] = [
+  { value: "ValentinDay", label: "Valentine's Day" },
+  {
+    value: "Anniversary Flowers",
+    label: "Romance, Birthdays & Anniversary"
+  },
+  { value: "just-to-say", label: "Just To Say Hi, Sorry, Thank You" },
+  { value: "GetWellSoon", label: "Get Well Soon" },
+  { value: "bridal-bouquets", label: "Bridal" },
+  { value: "funeral-condolence", label: "Funeral & Condolence" },
+  { value: "selectedOccasion=all-occasions", label: "Events & Centerpiece" },
+  { value: "selectedOccasion=all-occasions", label: "Father's Day" },
+  { value: "selectedOccasion=all-occasions", label: "Mother's Day" }
+];
+
 export const defaultCurrency: AppCurrency = {
   name: "NGN",
   conversionRate: 1,
