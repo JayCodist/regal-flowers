@@ -17,7 +17,8 @@ import {
   featuredSlugs,
   bestSellers,
   popularSections,
-  mostLoved
+  mostLoved,
+  allOccasionOptions
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -673,9 +674,9 @@ const FlowerDeliveryInput: FunctionComponent = () => {
   };
 
   const handleOnselect = (value: string) => {
-    const _selectedOccasion = occassionOptions.options.find(
+    const _selectedOccasion = allOccasionOptions.find(
       _occasion => _occasion.value === value
-    )?.label as string;
+    )?.value as string;
 
     setOccasion(
       {
@@ -694,7 +695,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
     <div className={styles["flower-input-wrapper"]}>
       <div className="block">
         <Select
-          options={occassionOptions.options}
+          options={allOccasionOptions}
           value={occasion.id}
           onSelect={value => handleOnselect(value as string)}
           className={styles["occasion-select"]}
@@ -703,7 +704,6 @@ const FlowerDeliveryInput: FunctionComponent = () => {
           }
           startIcon="/icons/bullet-points.svg"
           hideCaret
-          onScrollEnd={occassionOptions.hasNext ? fetchCategories : undefined}
         />
         <DatePicker
           value={deliveryDate}
