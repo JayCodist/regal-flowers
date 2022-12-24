@@ -490,11 +490,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     const response = await createOrder({
       orderProducts: products,
       paymentStatus: "Not Paid (Website - Bank Transfer)",
-      cost: total,
+      cost: 0,
       deliveryDate: "2040-02-03", // (deliveryDate || dayjs().add(1, "day")).format("YYYY-MM-DD"),
       admin: "regalflowersnigeria@gmail.com",
       adminNotes: "test regal-v2",
-      amount: 0,
+      amount: total,
       anonymousClient: false,
       arrangementTime: "",
       client: {},
