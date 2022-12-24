@@ -20,10 +20,11 @@ import SettingsContext from "../utils/context/SettingsContext";
 import { getOrder, updateOrder } from "../utils/helpers/data/order";
 import { getZoneGroups } from "../utils/helpers/data/zone-group";
 import { emailValidator } from "../utils/helpers/validators";
-import { InfoIcon, InfoRedIcon, PaypalBlueIcon } from "../utils/resources";
+import { InfoIcon, InfoRedIcon } from "../utils/resources";
 import { Order, OrderUpdate, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
+import { getPurposes } from "../utils/helpers/data/purposes";
 
 const initialData = {
   senderName: "",
@@ -106,27 +107,34 @@ const Checkout: FunctionComponent = () => {
   const [deliveryStage, setDeliveryStage] = useState<DeliverStage>(
     "sender-info"
   );
+  const [allPurposes, setAllPurposes] = useState<Option[]>([]);
 
-  const { currentStage, setCurrentStage, currency, setCurrency } = useContext(
-    SettingsContext
-  );
+  const {
+    currentStage,
+    setCurrentStage,
+    currency,
+    setCurrency,
+    notify
+  } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 
   const payStackConfig: PaystackProps = {
     reference: new Date().getTime().toString(),
     email: "jaycodist@gmail.com",
-    amount: 200 * 100,
+    amount: (order?.amount || 0) * 100,
+    currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
   };
 
   const initializePayment = usePaystackPayment(payStackConfig);
 
-  const {
-    query: { orderId }
-  } = useRouter();
   const router = useRouter();
+  const {
+    query: { orderId },
+    isReady
+  } = router;
 
   const handleChange = (key: string, value: any) => {
     setFormData({
@@ -141,6 +149,7 @@ const Checkout: FunctionComponent = () => {
     const { error, data } = res;
 
     if (error) {
+      notify("error", "Order not found! Please create an order");
       router.push("/");
     } else {
       setOrder(data);
@@ -162,15 +171,8 @@ const Checkout: FunctionComponent = () => {
     const { error, message, data } = res;
 
     if (error) {
-      console.log(message);
+      notify("error", `Unable to fetch zone groups: ${message}`);
     } else {
-      setPickUpOptions(
-        data?.map(item => ({
-          label: item,
-          value: item
-        })) || []
-      );
-
       setPickUpOptions(
         data
           ?.filter(item => {
@@ -186,15 +188,37 @@ const Checkout: FunctionComponent = () => {
     }
   };
 
+  const fetchPurposes = async () => {
+    const { error, message, data } = await getPurposes();
+    if (error) {
+      notify("error", `Unable to fetch purposes: ${message}`);
+    } else {
+      setAllPurposes(
+        data?.map(item => ({
+          label: item,
+          value: item
+        })) || []
+      );
+    }
+  };
+
   useEffect(() => {
-    if (orderId) {
-      fetchOrder();
+    if (isReady) {
+      if (orderId) {
+        fetchOrder();
+      } else {
+        notify("error", "Invalid link");
+        router.push("/");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]);
+  }, [orderId, isReady]);
 
   useEffect(() => {
     fetchZoneGroups();
+    fetchPurposes();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -207,14 +231,12 @@ const Checkout: FunctionComponent = () => {
   const handleSubmit = async () => {
     setLoading(true);
 
-    console.log(order);
-
     const response = await updateOrder(orderId as string, formData);
 
     const { error, message } = response;
 
     if (error) {
-      console.log(message);
+      notify("error", `Unable to save order: ${message}`);
     } else {
       setCurrentStage(2);
       setDeliveryStage("payment");
@@ -667,9 +689,10 @@ const Checkout: FunctionComponent = () => {
                           <Select
                             onSelect={value => handleChange("purpose", value)}
                             value={formData.purpose}
-                            options={[]}
+                            options={allPurposes}
                             placeholder="Select Purpose"
                             responsive
+                            dropdownOnTop
                             dimmed
                           />
                         </div>
@@ -783,20 +806,20 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between ">
                       <span className="normal-text">Subtotal</span>
                       <span className="normal-text bold">
-                        ₦{order?.cost.toLocaleString()}
+                        ₦{order?.amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex between vertical-margin">
                       <span className="normal-text">Add-Ons total</span>
                       <span className="normal-text bold">
-                        ₦{order?.cost.toLocaleString()}
+                        ₦{order?.amount.toLocaleString()}
                       </span>
                     </div>
                     {deliveryMethod === "pick-up" && (
                       <div className="flex between">
                         <span className="normal-text">Delivery Charge</span>
                         <span className="normal-text bold">
-                          ₦{order?.cost.toLocaleString()}
+                          ₦{order?.amount.toLocaleString()}
                         </span>
                       </div>
                     )}
@@ -815,7 +838,9 @@ const Checkout: FunctionComponent = () => {
                     <hr className={`${styles.hr} hr`} />
                     <div className="flex between margin-bottom">
                       <span className="normal-text">Total</span>
-                      <span className="normal-text bold">₦196,000</span>
+                      <span className="normal-text bold">
+                        ₦{order?.amount.toLocaleString()}
+                      </span>
                     </div>
                     {currentStage === 1 ? (
                       <Button
@@ -1059,13 +1084,13 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Subtotal</span>
                     <span className="bold">
-                      ₦{order?.cost.toLocaleString()}
+                      ₦{order?.amount.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Add-Ons total</span>
                     <span className="bold">
-                      ₦{order?.cost.toLocaleString()}
+                      ₦{order?.amount.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
@@ -1087,7 +1112,9 @@ const Checkout: FunctionComponent = () => {
                   <hr className="hr margin-bottom spaced" />
                   <div className="flex between sub-heading margin-bottom spaced">
                     <span>Total</span>
-                    <span className="bold primary-color">₦196,000</span>
+                    <span className="bold primary-color">
+                      ₦{order?.amount.toLocaleString()}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1651,19 +1678,19 @@ const Checkout: FunctionComponent = () => {
                 <div className={`${styles.border} padded`}>
                   <div className="flex between ">
                     <span className="normal-text">Order Total</span>
-                    <span className="normal-text bold">₦{order?.cost}</span>
+                    <span className="normal-text bold">₦{order?.amount}</span>
                   </div>
                   {deliveryMethod === "pick-up" && (
                     <div className="flex between">
                       <span className="normal-text">Delivery </span>
-                      <span className="normal-text bold">₦{order?.cost}</span>
+                      <span className="normal-text bold">₦{order?.amount}</span>
                     </div>
                   )}
                   <br />
                   <hr className="hr" />
                   <div className="flex between vertical-margin">
                     <span className="normal-text">Sum Total</span>
-                    <span className="normal-text bold">₦{order?.cost}</span>
+                    <span className="normal-text bold">₦{order?.amount}</span>
                   </div>
                 </div>
 
@@ -1815,13 +1842,13 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Subtotal</strong>
                       <span className="bold">
-                        ₦{order?.cost.toLocaleString()}
+                        ₦{order?.amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Add-Ons total</strong>
                       <span className="bold">
-                        ₦{order?.cost.toLocaleString()}
+                        ₦{order?.amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
@@ -1846,7 +1873,9 @@ const Checkout: FunctionComponent = () => {
                     <hr className="hr margin-bottom spaced" />
                     <div className="flex between sub-heading margin-bottom spaced small-text">
                       <span>Total</span>
-                      <span className="bold primary-color">₦196,000</span>
+                      <span className="bold primary-color">
+                        ₦{order?.amount.toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
