@@ -119,6 +119,10 @@
       }
     }
 
+    @media (max-width: 650px) {
+      display: none;
+    }
+
     .arrow {
       border-top: 0.2rem solid #4b5563;
       width: 0.6rem;
