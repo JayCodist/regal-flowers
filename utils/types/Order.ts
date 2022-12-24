@@ -14,7 +14,7 @@ export interface Order {
   deliveryStatus?: string;
   fullOrderId?: string;
   id: string;
-  cost: number;
+  amount: number;
   deliveryDate: string;
 }
 
