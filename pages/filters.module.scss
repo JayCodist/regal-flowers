@@ -18,6 +18,14 @@
       align-items: center;
       padding: 0 6rem;
 
+      & > * {
+        margin-right: 1rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
       @media (max-width: 800px) {
         padding: 0 2rem;
       }
@@ -56,6 +64,10 @@
         border: 0.2rem solid transparent;
 
         &.active {
+          border-color: #9b0000;
+        }
+
+        &:hover {
           border-color: #9b0000;
         }
 
