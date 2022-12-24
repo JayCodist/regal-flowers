@@ -17,6 +17,17 @@
     .subtitle {
       height: 1rem;
     }
+
+    @media (max-width: 650px) {
+      width: 47%;
+
+      .img-wrapper {
+        height: 14rem;
+        .flower-image {
+          height: 14rem;
+        }
+      }
+    }
   }
 
   &.four-x-grid {
