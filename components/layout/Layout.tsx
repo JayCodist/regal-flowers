@@ -233,8 +233,8 @@ const Header: FunctionComponent = () => {
                     : undefined
                 }
               >
-                <span
-                  className={`flex center-align spaced ${styles.title}`}
+                <div
+                  className={`flex center-align spaced  ${styles.title}`}
                   onClick={e => handleActiveNav(link.title, e)}
                   key={link.title}
                   role="button"
@@ -256,13 +256,15 @@ const Header: FunctionComponent = () => {
                       ].join(" ")}
                     ></div>
                   )}
-                </span>
-                <div>
-                  {activeNav === link.title && link.children.length > 0 && (
-                    <div className={styles["dropdown"]}>
+                </div>
+                {activeNav === link.title && link.children.length > 0 && (
+                  <div className={styles["dropdown"]}>
+                    {link.subtitle && (
                       <p className={styles.subtitle}>{link.subtitle}</p>
-                      <div className={[styles["sub-link"]].join(" ")}>
-                        {link.children.map((child, index) => (
+                    )}
+                    <div className={[styles["sub-link"]].join(" ")}>
+                      {link.children.map((child, index) =>
+                        child.url ? (
                           <Link href={child.url} key={index}>
                             <a
                               className={[
@@ -278,23 +280,37 @@ const Header: FunctionComponent = () => {
                                   {child.title}
                                 </span>
                               )}
-                              <div>
-                                {child.children.map((grandChild, index) => (
-                                  <p
-                                    key={index}
-                                    className={styles["grand-title"]}
-                                  >
-                                    {grandChild.title}
-                                  </p>
-                                ))}
-                              </div>
                             </a>
                           </Link>
-                        ))}
-                      </div>
+                        ) : (
+                          <div
+                            className={[
+                              child.children.length && styles.grid
+                            ].join(" ")}
+                            key={index}
+                          >
+                            {child.title && (
+                              <span
+                                className={[
+                                  child.children.length && styles.title
+                                ].join(" ")}
+                              >
+                                {child.title}
+                              </span>
+                            )}
+                            {child.children.map((grandChild, index) => (
+                              <Link href={grandChild.url} key={index}>
+                                <a className={styles["grand-title"]}>
+                                  {grandChild.title}
+                                </a>
+                              </Link>
+                            ))}
+                          </div>
+                        )
+                      )}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             ))}
           </nav>

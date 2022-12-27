@@ -5,7 +5,7 @@ import { blogPosts, popularSections } from "../utils/constants";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import styles from "./404.module.scss";
 
-function Custom404() {
+function Custom404Page() {
   const deviceType = useDeviceType();
   return (
     <section className="">
@@ -49,4 +49,4 @@ function Custom404() {
   );
 }
 
-export default Custom404;
+export default Custom404Page;

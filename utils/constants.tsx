@@ -910,7 +910,7 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Romance, Birthdays & Anniversary",
-        url: "/filters?selectedOccasion=Anniversary Flowers",
+        url: "",
         children: [
           {
             title: "Bouquets",
@@ -931,7 +931,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
-        url: "/filters?selectedOccasion=just-to-say",
+        url: "",
         children: [
           {
             title: "Bouquets",
@@ -952,7 +952,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Get well soon",
-        url: "#",
+        url: "",
         children: [
           {
             title: "Bouquets",
@@ -973,37 +973,37 @@ export const links: AppLink[] = [
       },
       {
         title: "Bridal",
-        url: "/filters?selectedOccasion=bridal-bouquets",
+        url: "",
         children: [
           {
             title: "Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=bridal-bouquets",
             children: []
           },
           {
             title: "Cascading Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=bridal-bouquets",
             children: []
           },
           {
             title: "Accessories & Boutonnieres",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=bridal-bouquets",
             children: []
           }
         ]
       },
       {
         title: "Funeral & Condolence",
-        url: "/filters?selectedOccasion=funeral-condolence",
+        url: "",
         children: [
           {
             title: "Wreaths & Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=funeral-condolence",
             children: []
           },
           {
             title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=funeral-condolence",
             children: []
           }
         ]
@@ -1043,7 +1043,7 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Design",
-        url: "#",
+        url: "",
         children: [
           {
             title: "Bouquets",
@@ -1064,7 +1064,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Flower Types",
-        url: "/filters?selectedFlowerType=rose",
+        url: "",
         children: [
           {
             title: "Fresh Flowers",
@@ -1073,7 +1073,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Forever Roses",
-            url: "#",
+            url: "/filters?selectedFlowerType=rose",
             children: []
           },
           {
@@ -1085,7 +1085,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Packages",
-        url: "#",
+        url: "",
         children: [
           {
             title: "View Bundled Products",
@@ -1096,7 +1096,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Delivery",
-        url: "#",
+        url: "",
         children: [
           {
             title: "Same Day Delivery",
@@ -1107,7 +1107,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Flower Name",
-        url: "#",
+        url: "",
         children: [
           {
             title: "Roses",
