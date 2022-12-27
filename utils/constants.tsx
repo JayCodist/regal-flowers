@@ -39,6 +39,51 @@ export const currencyOptions: AppCurrency[] = [
   { name: "GBP", conversionRate: 523, sign: "£" }
 ];
 
+interface FooterContent {
+  aboutUs: string;
+  socialIcons: { name: string; src: string; url: string }[];
+  quickLinks: { title: string; url: string }[];
+  phoneNumbers: string[];
+}
+
+export const footerContent: FooterContent = {
+  aboutUs:
+    "Nigeria's most loved online flower shop with same day delivery in Lagos and Abuja",
+  socialIcons: [
+    {
+      name: "facebook",
+      src: "icons/footer/facebook.svg",
+      url: ""
+    },
+    {
+      name: "facebook",
+      src: "icons/footer/instagram.svg",
+      url: ""
+    },
+    {
+      name: "facebook",
+      src: "icons/footer/linkedin.svg",
+      url: ""
+    },
+    {
+      name: "facebook",
+      src: "icons/footer/whatsapp.svg",
+      url: ""
+    }
+  ],
+  quickLinks: [
+    {
+      title: "Occasions",
+      url: "/filters?selectedOccasion=Anniversary%20Flowers"
+    },
+    { title: "VIP Section", url: "/" },
+    { title: "Contact Us", url: "/" },
+    { title: "Our Blog", url: "/" },
+    { title: "FAQ", url: "/faq" }
+  ],
+  phoneNumbers: ["+234 701 000 6664", "+234 701 000 6665", "+234 701 199 2888"]
+};
+
 export const aboutUsContent: {
   [key: string]: { title: string; content: string };
 } = {

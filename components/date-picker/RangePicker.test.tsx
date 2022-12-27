@@ -20,7 +20,9 @@ test("RangePicker works", () => {
   expect(eighteenthDay).toBeVisible();
   fireEvent.click(sixteenthDay);
   expect(onChange).toHaveBeenLastCalledWith([
-    dayjs().set("date", 16).startOf("day"),
+    dayjs()
+      .set("date", 16)
+      .startOf("day"),
     null
   ]);
 });
