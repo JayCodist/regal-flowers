@@ -210,7 +210,7 @@ export interface OrderCreate {
   line: Line;
   messagePrinted: boolean;
   orderDetails: string;
-  profit: string;
+  profit: number;
   purpose: Purpose;
   receivedByName: string;
   receivedByPhone: string;
