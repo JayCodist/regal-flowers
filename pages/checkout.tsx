@@ -111,6 +111,7 @@ const Checkout: FunctionComponent = () => {
   const [allPurposes, setAllPurposes] = useState<Option[]>([]);
 
   const {
+    user,
     currentStage,
     setCurrentStage,
     currency,
@@ -158,10 +159,13 @@ const Checkout: FunctionComponent = () => {
         ...formData,
         deliveryDate: dayjs(data?.deliveryDate)
       });
-      setIsPaid(
+      const _isPaid =
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
-          /^paid/i.test(data?.paymentStatus || "")
-      );
+        /^paid/i.test(data?.paymentStatus || "");
+      setIsPaid(_isPaid);
+      if (_isPaid) {
+        setCurrentStage(3);
+      }
     }
 
     setPageLoading(false);
@@ -222,13 +226,6 @@ const Checkout: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (isPaid) {
-      // setCurrentStage(3);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPaid]);
-
   const handleSubmit = async () => {
     setLoading(true);
 
@@ -265,9 +262,9 @@ const Checkout: FunctionComponent = () => {
       <div className={styles.loader}>
         <img src="/images/spinner.svg" alt="loader" className={styles.icon} />
         <span className={styles["load-intro"]}>
-          {activeTab === "payment"
-            ? "Loading. . ."
-            : "Preparing your order. . ."}
+          {activeTab === "delivery"
+            ? "Preparing your order. . ."
+            : "Loading. . ."}
         </span>
       </div>
     );
@@ -297,6 +294,8 @@ const Checkout: FunctionComponent = () => {
         } else {
           notify("success", `Order paid successfully`);
           setActiveTab("done");
+          setIsPaid(true);
+          setCurrentStage(3);
         }
       };
       initializePayment(successHandler, () => {});
@@ -325,7 +324,7 @@ const Checkout: FunctionComponent = () => {
       TabKey: "done"
     }
   ];
-  console.log(activeTab);
+
   return (
     <>
       {deviceType === "desktop" ? (
@@ -400,11 +399,15 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
                         </div>
-                        <Checkbox
-                          checked={formData.freeAccount}
-                          onChange={value => handleChange("freeAccount", value)}
-                          text="Create a Free Account"
-                        />
+                        {!user && (
+                          <Checkbox
+                            checked={formData.freeAccount}
+                            onChange={value =>
+                              handleChange("freeAccount", value)
+                            }
+                            text="Create a Free Account"
+                          />
+                        )}
                       </div>
                     </div>
                     <div
@@ -951,16 +954,20 @@ const Checkout: FunctionComponent = () => {
                   )}
                 </div>
 
-                <div className={styles["account-wrapper"]}>
-                  <p className="sub-heading bold margin-bottom spaced">
-                    Create a Free Account
-                  </p>
-                  <p className="margin-bottom">
-                    Manage orders, address book and save time when checking out
-                    by creating a free account today!
-                  </p>
-                  <Button className="half-width">Create a Free Account</Button>
-                </div>
+                {!user && (
+                  <div className={styles["account-wrapper"]}>
+                    <div className="sub-heading bold margin-bottom">
+                      Create a Free Account
+                    </div>
+                    <div className="margin-bottom spaced">
+                      Manage orders, address book and save time when checking
+                      out by creating a free account today!
+                    </div>
+                    <Button className="half-width">
+                      Create a Free Account
+                    </Button>
+                  </div>
+                )}
               </div>
               <div className={styles["order-summary"]}>
                 <p className="sub-heading bold">Order Summary</p>
@@ -1207,11 +1214,13 @@ const Checkout: FunctionComponent = () => {
                       />
                     </div>
 
-                    <Checkbox
-                      checked={formData.freeAccount}
-                      onChange={value => handleChange("freeAccount", value)}
-                      text="Create a Free Account"
-                    />
+                    {!user && (
+                      <Checkbox
+                        checked={formData.freeAccount}
+                        onChange={value => handleChange("freeAccount", value)}
+                        text="Create a Free Account"
+                      />
+                    )}
                     <Button
                       onClick={() => setDeliveryStage("delivery-type")}
                       className="vertical-margin xl"
@@ -1882,16 +1891,18 @@ const Checkout: FunctionComponent = () => {
                     </div>
                   </div>
                 </div>
-                <div className={styles["account-wrapper"]}>
-                  <p className="sub-heading bold margin-bottom spaced">
-                    Create a Free Account
-                  </p>
-                  <p className="margin-bottom">
-                    Manage orders, address book and save time when checking out
-                    by creating a free account today!
-                  </p>
-                  <Button>Create a Free Account</Button>
-                </div>
+                {!user && (
+                  <div className={styles["account-wrapper"]}>
+                    <p className="sub-heading bold margin-bottom">
+                      Create a Free Account
+                    </p>
+                    <p className="margin-bottom spaced">
+                      Manage orders, address book and save time when checking
+                      out by creating a free account today!
+                    </p>
+                    <Button>Create a Free Account</Button>
+                  </div>
+                )}
                 <div className={styles["done-footer"]}>
                   <Button responsive className={styles["shopping-btn"]}>
                     Continue Shopping
