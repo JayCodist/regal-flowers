@@ -112,10 +112,10 @@
     display: flex;
     .link {
       position: relative;
-      cursor: pointer;
       .title {
         margin: 0 1rem;
         font-size: 1rem;
+        cursor: pointer;
       }
     }
 
@@ -145,7 +145,6 @@
       background-color: white;
       width: max-content;
       padding: 1rem;
-      padding-right: 4rem;
       box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06),
         0px 1px 3px rgba(0, 0, 0, 0.1);
       transform: translateY(-10%);
@@ -166,7 +165,7 @@
         color: #6b7280;
         font-weight: bold;
         font-size: inherit;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
       }
       .sub-link {
         color: #202020;
@@ -181,20 +180,21 @@
         &:has(.grid) {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          column-gap: 1rem;
+          column-gap: 1.5rem;
 
           .title {
             margin: 0;
             font-weight: bold;
             font-size: inherit;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             display: inline-block;
             white-space: nowrap;
           }
 
           .grand-title {
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             font-size: inherit;
+            display: block;
 
             &:last-child {
               margin-bottom: 0;
@@ -660,4 +660,83 @@
     transform: translateY(0);
     max-width: 100vh;
   }
+}
+
+.footer {
+  .footer-wrapper {
+    padding: 2rem 6rem;
+    background-color: #f9fafb;
+  }
+
+  .logo {
+    height: 4rem;
+    width: auto;
+  }
+
+  .grayed {
+    color: #6b7280;
+  }
+
+  a,
+  strong {
+    display: block;
+  }
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+
+    & > div {
+      max-width: 30%;
+
+      & > * {
+        margin-bottom: 0.8rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .middle {
+    display: flex;
+    justify-content: space-between;
+
+    strong {
+      margin-bottom: 1rem;
+    }
+
+    & > div {
+      width: 25%;
+      min-width: 15rem;
+
+      margin-right: 0.8rem;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  #newsletter {
+    width: 35%;
+
+    .subsribe-btn {
+      min-width: 5rem;
+    }
+
+    .input {
+      width: 20rem;
+    }
+  }
+}
+
+.bottom {
+  background-color: #1e2832;
+  color: white;
+  padding: 1rem 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

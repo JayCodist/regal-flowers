@@ -584,6 +584,7 @@ button {
 }
 .page-content {
   .featured-section-wrapper {
+    position: relative;
     background-image: url(/images/pattern-bg.png);
     background-repeat: no-repeat;
     background-position: right;
@@ -592,15 +593,18 @@ button {
     position: relative;
     z-index: 1;
     min-height: 375rem;
-    .featured-content-wrapper {
+
+    &:before {
+      content: "";
       position: absolute;
       left: 0;
       top: 0;
-      z-index: 2;
       background-color: rgba(255, 255, 255, 0.8);
       width: 100%;
-      height: fit-content;
+      height: 100%;
+      z-index: -2;
     }
+
     .featured-content {
       padding: 4rem 7rem;
 

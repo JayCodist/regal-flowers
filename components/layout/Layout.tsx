@@ -11,7 +11,12 @@ import React, {
 import Link from "next/link";
 import styles from "./Layout.module.scss";
 import { AppCurrency } from "../../utils/types/Core";
-import { currencyOptions, defaultCurrency, links } from "../../utils/constants";
+import {
+  currencyOptions,
+  defaultCurrency,
+  footerContent,
+  links
+} from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -23,6 +28,7 @@ import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
 import useDeviceType from "../../utils/hooks/useDeviceType";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
+import Input from "../input/Input";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -39,8 +45,196 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
       <main className={styles.main}>
         {deviceType === "mobile" && <CurrencyController />}
         {children}
+        {_pathname !== "checkout" && deviceType === "desktop" && <Footer />}
       </main>
     </>
+  );
+};
+
+const Footer: FunctionComponent = () => {
+  return (
+    <footer className={styles.footer}>
+      <div className={styles["footer-wrapper"]}>
+        <div className={styles.top}>
+          <div>
+            <Link href="/">
+              <a>
+                <img
+                  alt="regal flowers logo"
+                  src="/icons/logo.png"
+                  className={styles.logo}
+                />
+              </a>
+            </Link>
+            <p>{footerContent.aboutUs}</p>
+            <div className="flex spaced-xl">
+              {footerContent.socialIcons.map(icon => (
+                <Link key={icon.name} href={icon.url}>
+                  <a>
+                    <img
+                      alt={icon.name}
+                      src={icon.src}
+                      className="generic-icon medium"
+                    />
+                  </a>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <div>
+            <strong>Quick Links</strong>
+            {footerContent.quickLinks.map(link => (
+              <Link key={link.title} href={link.url}>
+                <a>{link.title}</a>
+              </Link>
+            ))}
+          </div>
+          <div>
+            <strong>Get In Touch</strong>
+            <div className="flex spaced-xl">
+              <img
+                className="generic-icon"
+                src="icons/footer/phone.svg"
+                alt="phone"
+              />
+              <img
+                className="generic-icon"
+                src="icons/footer/whatsapp.svg"
+                alt="whtasapp"
+              />
+            </div>
+            {footerContent.phoneNumbers.map(number => (
+              <p key={number}>{number}</p>
+            ))}
+            <div className="flex spaced">
+              <img
+                className="generic-icon"
+                src="icons/footer/message.svg"
+                alt="message"
+              />
+              <span>info@regalflowers.com.ng</span>
+            </div>
+          </div>
+          <div>
+            <strong>Payment Information</strong>
+            <strong>Bank Transfers</strong>
+            <div className="flex spaced">
+              <span>Bank:</span> <strong>GTBank</strong>
+            </div>
+            <div className="flex spaced">
+              <span>Account Number: </span> <strong>0252862666</strong>
+            </div>
+            <div className="flex spaced">
+              <span>Account Name: </span> <strong>Regal Flowers Ltd</strong>
+            </div>
+            <strong>Paypal</strong>
+            <div className="flex spaced">
+              <span>Email:</span> <strong>regalflowerspaypal@gmail.com</strong>
+            </div>
+            <strong>Bitcoin</strong>
+            <div className="flex spaced">
+              <span>Address: </span>{" "}
+              <strong>12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1</strong>
+            </div>
+          </div>
+        </div>
+        <div>
+          <strong className="normal-text">Our Locations</strong>
+          <br />
+
+          <div className={styles.middle}>
+            <div>
+              <strong>Lagos Head Office</strong>
+              <p>81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos.</p>
+              <p className={styles.grayed}>Open 24/7</p>
+            </div>
+            <div>
+              <strong>Lagos Branch</strong>
+              <p>
+                133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island,
+                Lagos.
+              </p>
+              <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+            </div>
+            <div>
+              <strong>Abuja</strong>
+              <p>5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja.</p>
+              <p className={styles.grayed}>Open 24/7</p>
+            </div>
+            <div id={styles.newsletter}>
+              <strong>Subscribe to Newsletter</strong>
+              <div className="flex spaced">
+                <Input
+                  value=""
+                  onChange={() => {}}
+                  placeholder="Enter your email"
+                  className={styles.input}
+                />
+                <Button className={styles["subsribe-btn"]}>Subscribe</Button>
+              </div>
+              <p className={`margin-top ${styles.grayed}`}>
+                We care about your data in our privacy policy
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={styles.bottom}>
+        <p>© 2022 Regal Flowers.</p>
+
+        <div className={`flex between spaced-xl`}>
+          <img
+            src="/icons/visa.svg"
+            alt="visa"
+            className="generic-icon large"
+          />
+          <img
+            src="/icons/master-card.svg"
+            alt="master card"
+            className="generic-icon large"
+          />
+          <img
+            src="/icons/paypal-blue.svg"
+            alt="paypal"
+            className="generic-icon large"
+          />
+          <img
+            src="/icons/bitcoin-gold.svg"
+            alt="bitcoin"
+            className="generic-icon large"
+          />
+          <img
+            src="/icons/building-white.svg"
+            alt="bank"
+            className="generic-icon large"
+          />
+          <img
+            src="/icons/paystack.svg"
+            alt="pay stack"
+            className="generic-icon large"
+          />
+        </div>
+        <Link href="#top">
+          <a className="flex spaced center-align">
+            <span>Scroll to top</span>
+            <svg
+              width="10"
+              height="13"
+              viewBox="0 0 10 13"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="generic-icon"
+            >
+              <path
+                d="M1 5.66602L5 1.66602M5 1.66602L9 5.66602M5 1.66602L5 11.666"
+                stroke="white"
+                strokeLinecap="round"
+              />
+            </svg>
+          </a>
+        </Link>
+      </div>
+    </footer>
   );
 };
 
@@ -146,7 +340,7 @@ const Header: FunctionComponent = () => {
 
   return (
     <>
-      <header className={styles.header}>
+      <header className={styles.header} id="top">
         <img
           alt="menu"
           src={`${
@@ -233,8 +427,8 @@ const Header: FunctionComponent = () => {
                     : undefined
                 }
               >
-                <span
-                  className={`flex center-align spaced ${styles.title}`}
+                <div
+                  className={`flex center-align spaced  ${styles.title}`}
                   onClick={e => handleActiveNav(link.title, e)}
                   key={link.title}
                   role="button"
@@ -256,13 +450,15 @@ const Header: FunctionComponent = () => {
                       ].join(" ")}
                     ></div>
                   )}
-                </span>
-                <div>
-                  {activeNav === link.title && link.children.length > 0 && (
-                    <div className={styles["dropdown"]}>
+                </div>
+                {activeNav === link.title && link.children.length > 0 && (
+                  <div className={styles["dropdown"]}>
+                    {link.subtitle && (
                       <p className={styles.subtitle}>{link.subtitle}</p>
-                      <div className={[styles["sub-link"]].join(" ")}>
-                        {link.children.map((child, index) => (
+                    )}
+                    <div className={[styles["sub-link"]].join(" ")}>
+                      {link.children.map((child, index) =>
+                        child.url ? (
                           <Link href={child.url} key={index}>
                             <a
                               className={[
@@ -278,23 +474,37 @@ const Header: FunctionComponent = () => {
                                   {child.title}
                                 </span>
                               )}
-                              <div>
-                                {child.children.map((grandChild, index) => (
-                                  <p
-                                    key={index}
-                                    className={styles["grand-title"]}
-                                  >
-                                    {grandChild.title}
-                                  </p>
-                                ))}
-                              </div>
                             </a>
                           </Link>
-                        ))}
-                      </div>
+                        ) : (
+                          <div
+                            className={[
+                              child.children.length && styles.grid
+                            ].join(" ")}
+                            key={index}
+                          >
+                            {child.title && (
+                              <span
+                                className={[
+                                  child.children.length && styles.title
+                                ].join(" ")}
+                              >
+                                {child.title}
+                              </span>
+                            )}
+                            {child.children.map((grandChild, index) => (
+                              <Link href={grandChild.url} key={index}>
+                                <a className={styles["grand-title"]}>
+                                  {grandChild.title}
+                                </a>
+                              </Link>
+                            ))}
+                          </div>
+                        )
+                      )}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             ))}
           </nav>

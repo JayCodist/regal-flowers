@@ -59,574 +59,567 @@ const LandingPage: FunctionComponent<{
         </div>
       </div>
       <section className="featured-section-wrapper">
-        <div className="featured-content-wrapper">
-          <div className="featured-content">
-            <div className="flex between">
-              <h2 className="featured-title">{bestSellers[locationName]}</h2>
-              {deviceType === "desktop" && (
-                <Button
-                  url="/filters?selectedOccasion=all-occasions"
-                  className="flex spaced center center-align"
-                  type="transparent"
-                >
-                  <h3 className="red margin-right">See All</h3>
-                  <img
-                    alt="arrow"
-                    className="generic-icon xsmall"
-                    src="/icons/arrow-right.svg"
-                  />
-                </Button>
-              )}
-            </div>
-            <div className={[styles.section, styles.wrap].join(" ")}>
-              {featuredFlowers.map(flower => (
-                <FlowerCard
-                  key={flower.key}
-                  image={flower.images[0]?.src || ""}
-                  name={flower.name}
-                  subTitle={flower.details}
-                  price={flower.price}
-                  url={`/products/${flower.slug}`}
-                />
-              ))}
-            </div>
-            {deviceType === "mobile" && (
-              <Button
-                url="/filters?selectedOccasion=all-occasions"
-                type="accent"
-                minWidth
-                className={styles["see-all"]}
-              >
-                <h3 className="red margin-right">See All</h3>
-              </Button>
-            )}
+        <div className="featured-content">
+          <div className="flex between">
+            <h2 className="featured-title">{bestSellers[locationName]}</h2>
             {deviceType === "desktop" && (
-              <div className={styles.section}>
-                {regalFeatures.map(feature => (
-                  <ServiceCard
-                    title={feature.title}
-                    key={feature.title}
-                    subtitle={feature.subtitle}
-                    image={feature.image}
-                    size="small"
-                  />
-                ))}
-              </div>
-            )}
-            <div className="flex between">
-              <h2 className="featured-title">Featured Occasions</h2>
-              {deviceType === "desktop" && (
-                <Button
-                  url="/filters?selectedOccasion=all-occasions"
-                  className="flex spaced center center-align"
-                  type="transparent"
-                >
-                  <h3 className="red margin-right">See All</h3>
-                  <img
-                    alt="arrow"
-                    className="generic-icon xsmall"
-                    src="/icons/arrow-right.svg"
-                  />
-                </Button>
-              )}
-            </div>
-            <div className={[styles.section, styles.wrap].join(" ")}>
-              {regalOccasions.map(occasion => (
-                <OccasionCard
-                  key={occasion.title}
-                  title={occasion.title}
-                  url={occasion.url}
-                  image={occasion.image}
-                />
-              ))}
-            </div>
-            {deviceType === "mobile" && (
               <Button
                 url="/filters?selectedOccasion=all-occasions"
-                type="accent"
-                minWidth
-                className={styles["see-all"]}
+                className="flex spaced center center-align"
+                type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
+                <img
+                  alt="arrow"
+                  className="generic-icon xsmall"
+                  src="/icons/arrow-right.svg"
+                />
               </Button>
             )}
-
-            <br />
-            <h2 className="featured-title">Popular Sections</h2>
-            <div className={[styles.section, styles.wrap].join(" ")}>
-              {popularSections.map(section => (
-                <FlowerCard
-                  key={section.title}
-                  image={section.image}
-                  name={section.title}
-                  url={section.url}
-                  mode="six-x-grid"
-                  onlyTitle
-                />
-              ))}
-            </div>
           </div>
-          <div className={styles["full-width-section"]}>
-            <div className={styles.left}>
-              <div
-                className={`flex center spaced-lg center-align ${deviceType ===
-                  "mobile" && "column text-center"}`}
+          <div className={[styles.section, styles.wrap].join(" ")}>
+            {featuredFlowers.map(flower => (
+              <FlowerCard
+                key={flower.key}
+                image={flower.images[0]?.src || ""}
+                name={flower.name}
+                subTitle={flower.details}
+                price={flower.price}
+                url={`/products/${flower.slug}`}
+              />
+            ))}
+          </div>
+          {deviceType === "mobile" && (
+            <Button
+              url="/filters?selectedOccasion=all-occasions"
+              type="accent"
+              minWidth
+              className={styles["see-all"]}
+            >
+              <h3 className="red margin-right">See All</h3>
+            </Button>
+          )}
+          {deviceType === "desktop" && (
+            <div className={styles.section}>
+              {regalFeatures.map(feature => (
+                <ServiceCard
+                  title={feature.title}
+                  key={feature.title}
+                  subtitle={feature.subtitle}
+                  image={feature.image}
+                  size="small"
+                />
+              ))}
+            </div>
+          )}
+          <div className="flex between">
+            <h2 className="featured-title">Featured Occasions</h2>
+            {deviceType === "desktop" && (
+              <Button
+                url="/filters?selectedOccasion=all-occasions"
+                className="flex spaced center center-align"
+                type="transparent"
               >
-                <h2
-                  className={`featured-title ${
-                    deviceType === "desktop" ? "half-width" : "block"
-                  }`}
+                <h3 className="red margin-right">See All</h3>
+                <img
+                  alt="arrow"
+                  className="generic-icon xsmall"
+                  src="/icons/arrow-right.svg"
+                />
+              </Button>
+            )}
+          </div>
+          <div className={[styles.section, styles.wrap].join(" ")}>
+            {regalOccasions.map(occasion => (
+              <OccasionCard
+                key={occasion.title}
+                title={occasion.title}
+                url={occasion.url}
+                image={occasion.image}
+              />
+            ))}
+          </div>
+          {deviceType === "mobile" && (
+            <Button
+              url="/filters?selectedOccasion=all-occasions"
+              type="accent"
+              minWidth
+              className={styles["see-all"]}
+            >
+              <h3 className="red margin-right">See All</h3>
+            </Button>
+          )}
+
+          <br />
+          <h2 className="featured-title">Popular Sections</h2>
+          <div className={[styles.section, styles.wrap].join(" ")}>
+            {popularSections.map(section => (
+              <FlowerCard
+                key={section.title}
+                image={section.image}
+                name={section.title}
+                url={section.url}
+                mode="six-x-grid"
+                onlyTitle
+              />
+            ))}
+          </div>
+        </div>
+        <div className={styles["full-width-section"]}>
+          <div className={styles.left}>
+            <div
+              className={`flex center spaced-lg center-align ${deviceType ===
+                "mobile" && "column text-center"}`}
+            >
+              <h2
+                className={`featured-title ${
+                  deviceType === "desktop" ? "half-width" : "block"
+                }`}
+              >
+                {mostLoved[locationName]}
+              </h2>
+              <div className="flex column spaced center-align">
+                <span className="larger margin-bottom">Customer Reviews</span>
+                <a
+                  href="https://google.com"
+                  target="_blank"
+                  className={styles["google-review"]}
+                  rel="noreferrer"
                 >
-                  {mostLoved[locationName]}
-                </h2>
-                <div className="flex column spaced center-align">
-                  <span className="larger margin-bottom">Customer Reviews</span>
-                  <a
-                    href="https://google.com"
-                    target="_blank"
-                    className={styles["google-review"]}
-                    rel="noreferrer"
-                  >
+                  <img
+                    alt="stars"
+                    src="/icons/stars.png"
+                    className="generic-icon medium margin-bottom"
+                  />
+                  <div className="flex spaced center-align">
                     <img
-                      alt="stars"
-                      src="/icons/stars.png"
-                      className="generic-icon medium margin-bottom"
+                      className="generic-icon large"
+                      src="/icons/google.svg"
+                      alt="google"
                     />
-                    <div className="flex spaced center-align">
-                      <img
-                        className="generic-icon large"
-                        src="/icons/google.svg"
-                        alt="google"
-                      />
-                      <span className={styles.stats}>
-                        <strong>4.9 </strong> <span>from 1000+ reviews</span>
-                      </span>
-                    </div>
-                  </a>
-                </div>
-              </div>
-              <br /> <br />
-              <div className={styles.reviews}>
-                {reviews[locationName].map((review, i) => (
-                  <div
-                    key={i}
-                    className={[
-                      styles.review,
-                      i === currentReviewIndex && styles.active
-                    ].join(" ")}
-                  >
-                    <div className="flex spaced">
-                      {Array(review.rating)
-                        .fill("")
-                        .map((_, index) => (
-                          <img
-                            key={index}
-                            className="generic-icon"
-                            alt="star"
-                            src="/icons/star.svg"
-                          />
-                        ))}
-                      {Array(5 - review.rating)
-                        .fill("")
-                        .map((_, index) => (
-                          <img
-                            key={index}
-                            className="generic-icon"
-                            alt="star"
-                            src="/icons/star-white.svg"
-                          />
-                        ))}
-                    </div>
-                    <span className={styles.text}>“{review.text}”</span>
-                    {review.user.avatar ? (
-                      <img
-                        className="generic-icon large"
-                        alt="review user"
-                        src={review.user.avatar}
-                      />
-                    ) : (
-                      <span className={styles.avatar}>
-                        {review.user.name[0]}
-                      </span>
-                    )}
-                    <strong className="vertical-margin compact">
-                      {review.user.name}
-                    </strong>
-                    <span className={styles["review-date"]}>{review.date}</span>
+                    <span className={styles.stats}>
+                      <strong>4.9 </strong> <span>from 1000+ reviews</span>
+                    </span>
                   </div>
-                ))}
-              </div>
-              {currentReviewIndex > 0 && (
-                <img
-                  className={[
-                    styles["review-arrow"],
-                    styles["left-arrow"]
-                  ].join(" ")}
-                  alt="previous"
-                  role="button"
-                  onClick={() => setCurrentReviewIndex(currentReviewIndex - 1)}
-                  src="/icons/arrow-right-circled.svg"
-                />
-              )}
-              {currentReviewIndex < reviews[locationName].length - 1 && (
-                <img
-                  className={styles["review-arrow"]}
-                  alt="next"
-                  src="/icons/arrow-right-circled.svg"
-                  role="button"
-                  onClick={() => setCurrentReviewIndex(currentReviewIndex + 1)}
-                />
-              )}
-              <div className="flex spaced-lg">
-                {reviews[locationName].map((_, index) => (
-                  <span
-                    key={index}
-                    role="button"
-                    onClick={() => setCurrentReviewIndex(index)}
-                    className={[
-                      styles.dot,
-                      index === currentReviewIndex && styles.active
-                    ].join(" ")}
-                  ></span>
-                ))}
+                </a>
               </div>
             </div>
-            {deviceType === "desktop" && (
+            <br /> <br />
+            <div className={styles.reviews}>
+              {reviews[locationName].map((review, i) => (
+                <div
+                  key={i}
+                  className={[
+                    styles.review,
+                    i === currentReviewIndex && styles.active
+                  ].join(" ")}
+                >
+                  <div className="flex spaced">
+                    {Array(review.rating)
+                      .fill("")
+                      .map((_, index) => (
+                        <img
+                          key={index}
+                          className="generic-icon"
+                          alt="star"
+                          src="/icons/star.svg"
+                        />
+                      ))}
+                    {Array(5 - review.rating)
+                      .fill("")
+                      .map((_, index) => (
+                        <img
+                          key={index}
+                          className="generic-icon"
+                          alt="star"
+                          src="/icons/star-white.svg"
+                        />
+                      ))}
+                  </div>
+                  <span className={styles.text}>“{review.text}”</span>
+                  {review.user.avatar ? (
+                    <img
+                      className="generic-icon large"
+                      alt="review user"
+                      src={review.user.avatar}
+                    />
+                  ) : (
+                    <span className={styles.avatar}>{review.user.name[0]}</span>
+                  )}
+                  <strong className="vertical-margin compact">
+                    {review.user.name}
+                  </strong>
+                  <span className={styles["review-date"]}>{review.date}</span>
+                </div>
+              ))}
+            </div>
+            {currentReviewIndex > 0 && (
               <img
-                className={styles.right}
-                src={reviews[locationName][currentReviewIndex].image}
-                alt="review"
+                className={[styles["review-arrow"], styles["left-arrow"]].join(
+                  " "
+                )}
+                alt="previous"
+                role="button"
+                onClick={() => setCurrentReviewIndex(currentReviewIndex - 1)}
+                src="/icons/arrow-right-circled.svg"
               />
             )}
-          </div>
-
-          <div className="featured-content">
-            <h2 className="featured-title text-center">
-              Why Send with Regal Flowers
-            </h2>
-            <div className={[styles.section, styles.wrap].join(" ")}>
-              {regalReasons.map(reason => (
-                <ServiceCard
-                  title={reason.title}
-                  key={reason.title}
-                  subtitle={reason.subtitle}
-                  image={reason.image}
-                  size="default"
-                />
+            {currentReviewIndex < reviews[locationName].length - 1 && (
+              <img
+                className={styles["review-arrow"]}
+                alt="next"
+                src="/icons/arrow-right-circled.svg"
+                role="button"
+                onClick={() => setCurrentReviewIndex(currentReviewIndex + 1)}
+              />
+            )}
+            <div className="flex spaced-lg">
+              {reviews[locationName].map((_, index) => (
+                <span
+                  key={index}
+                  role="button"
+                  onClick={() => setCurrentReviewIndex(index)}
+                  className={[
+                    styles.dot,
+                    index === currentReviewIndex && styles.active
+                  ].join(" ")}
+                ></span>
               ))}
             </div>
-
-            <div className="flex between">
-              <h2 className="featured-title">Gifts to Include with Flowers</h2>
-              {deviceType === "desktop" && (
-                <Button
-                  url="/filters?selectedOccasion=all-occasions"
-                  className="flex spaced center center-align"
-                  type="transparent"
-                >
-                  <h3 className="red margin-right">See All</h3>
-                  <img
-                    alt="arrow"
-                    className="generic-icon xsmall"
-                    src="/icons/arrow-right.svg"
-                  />
-                </Button>
-              )}
-            </div>
-            <div className={[styles.section, styles.wrap].join(" ")}>
-              {featuredAddons.map(addonGroup => (
-                <FlowerCard
-                  key={addonGroup.name}
-                  image={addonGroup.image}
-                  name={addonGroup.name}
-                  subTitle={addonGroup.description}
-                  url={addonGroup.slug}
-                  buttonText="See more"
-                />
-              ))}
-            </div>
-
-            {deviceType === "mobile" && (
-              <Button
-                url="/filters?selectedOccasion=all-occasions"
-                type="accent"
-                minWidth
-                className={styles["see-all"]}
-              >
-                <h3 className="red margin-right">See All</h3>
-              </Button>
-            )}
-
-            {deviceType === "desktop" && (
-              <>
-                <h2 className="featured-title text-center">How It Works</h2>
-                <div className={styles.section}>
-                  {regalHowItWorks.map(reason => (
-                    <ServiceCard
-                      title={reason.title}
-                      key={reason.title}
-                      subtitle={reason.subtitle}
-                      image={reason.image}
-                      size="default"
-                    />
-                  ))}
-                </div>
-              </>
-            )}
           </div>
-
-          <div
-            className={[styles["full-width-section"], styles.summary].join(" ")}
-          >
-            <div className={styles.left}>
-              <strong>WORK WITH US</strong>
-              <h2 className="featured-title">Now Let’s Send Yours</h2>
-              <span>
-                The gradual accumulation of information about atomic and
-                small-scale behavior during the first quarter of the 20th{" "}
-              </span>
-              <Button padded url="/filters">
-                Send Flowers
-              </Button>
-            </div>
+          {deviceType === "desktop" && (
             <img
               className={styles.right}
-              src="/images/landing-summary.png"
+              src={reviews[locationName][currentReviewIndex].image}
               alt="review"
             />
-          </div>
+          )}
+        </div>
 
-          <div className={[styles["summary-mobile"], ""].join(" ")}>
-            <div>
-              <strong>WORK WITH US</strong>
-              <h2 className="featured-title">Now Let’s Send Yours</h2>
-              <span>
-                The gradual accumulation of information about atomic and
-                small-scale behavior during the first quarter of the 20th{" "}
-              </span>
-              <Button padded url="/filters">
-                Send Flowers
-              </Button>
-            </div>
-          </div>
-
-          <div className={styles["contact-section-wrapper"]}>
-            <div className={styles["contact-section"]} id="contactSection">
-              <img
-                src="/images/landing-contact.png"
-                className={styles["contact-img"]}
-                alt="welcoming flower"
+        <div className="featured-content">
+          <h2 className="featured-title text-center">
+            Why Send with Regal Flowers
+          </h2>
+          <div className={[styles.section, styles.wrap].join(" ")}>
+            {regalReasons.map(reason => (
+              <ServiceCard
+                title={reason.title}
+                key={reason.title}
+                subtitle={reason.subtitle}
+                image={reason.image}
+                size="default"
               />
-              <div className={styles.details}>
-                <strong>GET IN TOUCH</strong>
-                <h2 className="featured-title vertical-margin spaced">
-                  Contact Us Today!
-                </h2>
-                {regalAddresses.map(address => (
-                  <div key={address.name} className={styles.detail}>
-                    <strong className={styles.key}>{address.name}</strong>
-                    <span className={styles.value}>
-                      <img
-                        className="generic-icon margin-right"
-                        src="/icons/map-drop.svg"
-                        alt="location"
-                      />
-                      <span className="flex column spaced">
-                        <a
-                          href={`https://maps.google.com?q=${address.location}`}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {address.location}
-                        </a>
-                        <span className="grayed">{address.workingTimes}</span>
-                      </span>
-                    </span>
-                  </div>
+            ))}
+          </div>
+
+          <div className="flex between">
+            <h2 className="featured-title">Gifts to Include with Flowers</h2>
+            {deviceType === "desktop" && (
+              <Button
+                url="/filters?selectedOccasion=all-occasions"
+                className="flex spaced center center-align"
+                type="transparent"
+              >
+                <h3 className="red margin-right">See All</h3>
+                <img
+                  alt="arrow"
+                  className="generic-icon xsmall"
+                  src="/icons/arrow-right.svg"
+                />
+              </Button>
+            )}
+          </div>
+          <div className={[styles.section, styles.wrap].join(" ")}>
+            {featuredAddons.map(addonGroup => (
+              <FlowerCard
+                key={addonGroup.name}
+                image={addonGroup.image}
+                name={addonGroup.name}
+                subTitle={addonGroup.description}
+                url={addonGroup.slug}
+                buttonText="See more"
+              />
+            ))}
+          </div>
+
+          {deviceType === "mobile" && (
+            <Button
+              url="/filters?selectedOccasion=all-occasions"
+              type="accent"
+              minWidth
+              className={styles["see-all"]}
+            >
+              <h3 className="red margin-right">See All</h3>
+            </Button>
+          )}
+
+          {deviceType === "desktop" && (
+            <>
+              <h2 className="featured-title text-center">How It Works</h2>
+              <div className={styles.section}>
+                {regalHowItWorks.map(reason => (
+                  <ServiceCard
+                    title={reason.title}
+                    key={reason.title}
+                    subtitle={reason.subtitle}
+                    image={reason.image}
+                    size="default"
+                  />
                 ))}
+              </div>
+            </>
+          )}
+        </div>
 
-                <div className={styles.detail}>
-                  <strong className={styles.key}>
-                    Contact (Calls and WhatsApp)
-                  </strong>
-                  <span className={styles.value}>
-                    <span className="flex spaced">
-                      <img
-                        alt="phone"
-                        src="/icons/phone-solid.svg"
-                        className="generic-icon"
-                      />
-                      <span className="flex column spaced">
-                        {regalPhones.map(phone => (
-                          <a
-                            key={phone}
-                            href={`tel:${phone.replace(/[^\d\+]/g, "")}`}
-                          >
-                            {phone}
-                          </a>
-                        ))}
-                      </span>
-                    </span>
-                  </span>
-                </div>
+        <div
+          className={[styles["full-width-section"], styles.summary].join(" ")}
+        >
+          <div className={styles.left}>
+            <strong>WORK WITH US</strong>
+            <h2 className="featured-title">Now Let’s Send Yours</h2>
+            <span>
+              The gradual accumulation of information about atomic and
+              small-scale behavior during the first quarter of the 20th{" "}
+            </span>
+            <Button padded url="/filters">
+              Send Flowers
+            </Button>
+          </div>
+          <img
+            className={styles.right}
+            src="/images/landing-summary.png"
+            alt="review"
+          />
+        </div>
 
-                <div className={styles.detail}>
-                  <strong className={styles.key}>Email</strong>
+        <div className={[styles["summary-mobile"], ""].join(" ")}>
+          <div>
+            <strong>WORK WITH US</strong>
+            <h2 className="featured-title">Now Let’s Send Yours</h2>
+            <span>
+              The gradual accumulation of information about atomic and
+              small-scale behavior during the first quarter of the 20th{" "}
+            </span>
+            <Button padded url="/filters">
+              Send Flowers
+            </Button>
+          </div>
+        </div>
+
+        <div className={styles["contact-section-wrapper"]}>
+          <div className={styles["contact-section"]} id="contactSection">
+            <img
+              src="/images/landing-contact.png"
+              className={styles["contact-img"]}
+              alt="welcoming flower"
+            />
+            <div className={styles.details}>
+              <strong>GET IN TOUCH</strong>
+              <h2 className="featured-title vertical-margin spaced">
+                Contact Us Today!
+              </h2>
+              {regalAddresses.map(address => (
+                <div key={address.name} className={styles.detail}>
+                  <strong className={styles.key}>{address.name}</strong>
                   <span className={styles.value}>
-                    <span className="flex spaced center-align">
-                      <img
-                        alt="phone"
-                        src="/icons/envelope.svg"
-                        className="generic-icon"
-                      />
+                    <img
+                      className="generic-icon margin-right"
+                      src="/icons/map-drop.svg"
+                      alt="location"
+                    />
+                    <span className="flex column spaced">
                       <a
-                        href={`mailto:${regalEmail}`}
+                        href={`https://maps.google.com?q=${address.location}`}
                         target="_blank"
                         rel="noreferrer"
                       >
-                        {regalEmail}
+                        {address.location}
                       </a>
+                      <span className="grayed">{address.workingTimes}</span>
                     </span>
                   </span>
                 </div>
+              ))}
 
-                <Button type="accent" className="margin-top" padded>
-                  Say Hello
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className={[styles["mobile-contact-details"], "mobile-margin"].join(
-              " "
-            )}
-          >
-            <strong>GET IN TOUCH</strong>
-            <h2 className="featured-title vertical-margin spaced">
-              Contact Us Today!
-            </h2>
-            {regalAddresses.map(address => (
-              <div key={address.name} className={styles.detail}>
-                <strong className={styles.key}>{address.name}</strong>
+              <div className={styles.detail}>
+                <strong className={styles.key}>
+                  Contact (Calls and WhatsApp)
+                </strong>
                 <span className={styles.value}>
-                  <img
-                    className="generic-icon margin-right"
-                    src="/icons/map-drop.svg"
-                    alt="location"
-                  />
-                  <span className="flex column spaced">
+                  <span className="flex spaced">
+                    <img
+                      alt="phone"
+                      src="/icons/phone-solid.svg"
+                      className="generic-icon"
+                    />
+                    <span className="flex column spaced">
+                      {regalPhones.map(phone => (
+                        <a
+                          key={phone}
+                          href={`tel:${phone.replace(/[^\d\+]/g, "")}`}
+                        >
+                          {phone}
+                        </a>
+                      ))}
+                    </span>
+                  </span>
+                </span>
+              </div>
+
+              <div className={styles.detail}>
+                <strong className={styles.key}>Email</strong>
+                <span className={styles.value}>
+                  <span className="flex spaced center-align">
+                    <img
+                      alt="phone"
+                      src="/icons/envelope.svg"
+                      className="generic-icon"
+                    />
                     <a
-                      href={`https://maps.google.com?q=${address.location}`}
+                      href={`mailto:${regalEmail}`}
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {address.location}
+                      {regalEmail}
                     </a>
-                    <span className="grayed">{address.workingTimes}</span>
                   </span>
                 </span>
               </div>
-            ))}
 
-            <div className={styles.detail}>
-              <strong className={styles.key}>
-                Contact (Calls and WhatsApp)
-              </strong>
-              <span className={styles.value}>
-                <span className="flex spaced">
-                  <img
-                    alt="phone"
-                    src="/icons/phone-solid.svg"
-                    className="generic-icon"
-                  />
-                  <span className="flex column spaced">
-                    {regalPhones.map(phone => (
-                      <a
-                        key={phone}
-                        href={`tel:${phone.replace(/[^\d\+]/g, "")}`}
-                      >
-                        {phone}
-                      </a>
-                    ))}
-                  </span>
-                </span>
-              </span>
+              <Button type="accent" className="margin-top" padded>
+                Say Hello
+              </Button>
             </div>
+          </div>
+        </div>
 
-            <div className={styles.detail}>
-              <strong className={styles.key}>Email</strong>
+        <div
+          className={[styles["mobile-contact-details"], "mobile-margin"].join(
+            " "
+          )}
+        >
+          <strong>GET IN TOUCH</strong>
+          <h2 className="featured-title vertical-margin spaced">
+            Contact Us Today!
+          </h2>
+          {regalAddresses.map(address => (
+            <div key={address.name} className={styles.detail}>
+              <strong className={styles.key}>{address.name}</strong>
               <span className={styles.value}>
-                <span className="flex spaced center-align">
-                  <img
-                    alt="phone"
-                    src="/icons/envelope.svg"
-                    className="generic-icon"
-                  />
+                <img
+                  className="generic-icon margin-right"
+                  src="/icons/map-drop.svg"
+                  alt="location"
+                />
+                <span className="flex column spaced">
                   <a
-                    href={`mailto:${regalEmail}`}
+                    href={`https://maps.google.com?q=${address.location}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {regalEmail}
+                    {address.location}
                   </a>
+                  <span className="grayed">{address.workingTimes}</span>
                 </span>
               </span>
             </div>
+          ))}
 
-            <Button type="accent" className="margin-top" padded>
-              Say Hello
-            </Button>
+          <div className={styles.detail}>
+            <strong className={styles.key}>Contact (Calls and WhatsApp)</strong>
+            <span className={styles.value}>
+              <span className="flex spaced">
+                <img
+                  alt="phone"
+                  src="/icons/phone-solid.svg"
+                  className="generic-icon"
+                />
+                <span className="flex column spaced">
+                  {regalPhones.map(phone => (
+                    <a
+                      key={phone}
+                      href={`tel:${phone.replace(/[^\d\+]/g, "")}`}
+                    >
+                      {phone}
+                    </a>
+                  ))}
+                </span>
+              </span>
+            </span>
           </div>
 
-          {deviceType === "desktop" && (
-            <div className="featured-content">
-              <h2 className="featured-title text-center margin-bottom spaced">
-                Our Blog
-              </h2>
-              <div className={styles.section}>
-                {blogPosts.map(post => (
-                  <BlogCard
-                    key={post.title}
-                    title={post.title}
-                    readDuration={post.readDuration}
-                    date={post.date}
-                    image={post.image}
-                    excerpt={post.excerpt}
-                    url="#"
-                  />
-                ))}
-              </div>
+          <div className={styles.detail}>
+            <strong className={styles.key}>Email</strong>
+            <span className={styles.value}>
+              <span className="flex spaced center-align">
+                <img
+                  alt="phone"
+                  src="/icons/envelope.svg"
+                  className="generic-icon"
+                />
+                <a
+                  href={`mailto:${regalEmail}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {regalEmail}
+                </a>
+              </span>
+            </span>
+          </div>
+
+          <Button type="accent" className="margin-top" padded>
+            Say Hello
+          </Button>
+        </div>
+
+        {deviceType === "desktop" && (
+          <div className="featured-content">
+            <h2 className="featured-title text-center margin-bottom spaced">
+              Our Blog
+            </h2>
+            <div className={styles.section}>
+              {blogPosts.map(post => (
+                <BlogCard
+                  key={post.title}
+                  title={post.title}
+                  readDuration={post.readDuration}
+                  date={post.date}
+                  image={post.image}
+                  excerpt={post.excerpt}
+                  url="#"
+                />
+              ))}
             </div>
-          )}
-          <h2 className="featured-title text-center margin-bottom spaced">
-            About Us
-          </h2>
-          <div className={[styles["about-section"]].join(" ")}>
-            <div>
-              <p className="title small bold margin-bottom">
-                {aboutUsContent.howItBegan.title}
-              </p>
-              <p>{aboutUsContent.howItBegan.content}</p>
-              <p className="title small bold vertical-margin">
-                {aboutUsContent.openingHour.title}
-              </p>
-              <p>{aboutUsContent.openingHour.content}</p>
-            </div>
-            <div>
-              <p className="title small bold margin-bottom">
-                {aboutUsContent.reputation.title}
-              </p>
-              <p>{aboutUsContent.reputation.content}</p>
-              <p className="title small bold vertical-margin">
-                {aboutUsContent.deliveryTime.title}
-              </p>
-              <p>{aboutUsContent.deliveryTime.content}</p>
-              <p className="title small bold vertical-margin">
-                {aboutUsContent.budget.title}
-              </p>
-              <p>{aboutUsContent.budget.content}</p>
-            </div>
+          </div>
+        )}
+        <h2 className="featured-title text-center margin-bottom spaced">
+          About Us
+        </h2>
+        <div className={[styles["about-section"]].join(" ")}>
+          <div>
+            <p className="title small bold margin-bottom">
+              {aboutUsContent.howItBegan.title}
+            </p>
+            <p>{aboutUsContent.howItBegan.content}</p>
+            <p className="title small bold vertical-margin">
+              {aboutUsContent.openingHour.title}
+            </p>
+            <p>{aboutUsContent.openingHour.content}</p>
+          </div>
+          <div>
+            <p className="title small bold margin-bottom">
+              {aboutUsContent.reputation.title}
+            </p>
+            <p>{aboutUsContent.reputation.content}</p>
+            <p className="title small bold vertical-margin">
+              {aboutUsContent.deliveryTime.title}
+            </p>
+            <p>{aboutUsContent.deliveryTime.content}</p>
+            <p className="title small bold vertical-margin">
+              {aboutUsContent.budget.title}
+            </p>
+            <p>{aboutUsContent.budget.content}</p>
           </div>
         </div>
       </section>
