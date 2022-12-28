@@ -25,6 +25,7 @@ import { Order, OrderUpdate, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
+import { verifyPaystackPayment } from "../utils/helpers/data/payments";
 
 const initialData = {
   senderName: "",
@@ -120,8 +121,8 @@ const Checkout: FunctionComponent = () => {
   const deviceType = useDeviceType();
 
   const payStackConfig: PaystackProps = {
-    reference: new Date().getTime().toString(),
-    email: "jaycodist@gmail.com",
+    // reference: order?.id as string,
+    email: formData.senderEmail || "placeholder@regalflowers.com",
     amount: (order?.amount || 0) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
@@ -263,7 +264,11 @@ const Checkout: FunctionComponent = () => {
     return (
       <div className={styles.loader}>
         <img src="/images/spinner.svg" alt="loader" className={styles.icon} />
-        <span className={styles["load-intro"]}>Preparing your order. . .</span>
+        <span className={styles["load-intro"]}>
+          {activeTab === "payment"
+            ? "Loading. . ."
+            : "Preparing your order. . ."}
+        </span>
       </div>
     );
   }
@@ -273,18 +278,28 @@ const Checkout: FunctionComponent = () => {
       interface PaystackSuccessResponse {
         reference: string;
         trans: string;
-        status: "success";
-        message: "Approved";
-        transaction: "2170915167";
+        status: "success" | "error";
+        message: "Approved" | "Declined";
+        transaction: string;
         trxref: string;
-        redirecturl: "?trxref=1665324172269&reference=1665324172269";
+        redirecturl: string;
       }
-      const successHandler: (ref?: PaystackSuccessResponse) => void = ref => {
-        console.log({ ref });
+      const successHandler: (
+        response?: PaystackSuccessResponse
+      ) => Promise<void> = async response => {
+        setPageLoading(true);
+        const { error, message } = await verifyPaystackPayment(
+          response?.reference as string
+        );
+        setPageLoading(false);
+        if (error) {
+          notify("error", `Unable to make payment: ${message}`);
+        } else {
+          notify("success", `Order paid successfully`);
+          setActiveTab("done");
+        }
       };
-      initializePayment(successHandler, () => {
-        console.log("Closed");
-      });
+      initializePayment(successHandler, () => {});
     },
     bankTransfer: () => {},
     googlePay: () => {},
@@ -310,7 +325,7 @@ const Checkout: FunctionComponent = () => {
       TabKey: "done"
     }
   ];
-
+  console.log(activeTab);
   return (
     <>
       {deviceType === "desktop" ? (
@@ -410,9 +425,7 @@ const Checkout: FunctionComponent = () => {
                             <p className={`${styles["method-title"]}`}>
                               Delivery
                             </p>
-                            <p className="">
-                              Get it delivered to the recipient's location
-                            </p>
+                            <p>Get it delivered to the recipient's location</p>
                           </div>
                           <div
                             className={[
@@ -770,7 +783,7 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           ))}
                         </div>
-                        <p className={styles.security}>
+                        <div className={styles.security}>
                           {" "}
                           <div className={styles["lock-icon"]}>
                             <img
@@ -781,15 +794,9 @@ const Checkout: FunctionComponent = () => {
                           </div>{" "}
                           We protect your payment information using encryption
                           to provide bank-level security.
-                        </p>
+                        </div>
                       </div>
                     </div>
-                    <Button
-                      className="half-width"
-                      onClick={() => setCurrentStage(3)}
-                    >
-                      Pay Now
-                    </Button>
                   </>
                 )}
               </form>
@@ -842,17 +849,13 @@ const Checkout: FunctionComponent = () => {
                         ₦{order?.amount.toLocaleString()}
                       </span>
                     </div>
-                    {currentStage === 1 ? (
+                    {currentStage === 1 && (
                       <Button
                         responsive
                         onClick={handleSubmit}
                         loading={loading}
                       >
                         Proceed to Payment
-                      </Button>
-                    ) : (
-                      <Button responsive onClick={() => setCurrentStage(3)}>
-                        Pay Now
                       </Button>
                     )}
                   </div>

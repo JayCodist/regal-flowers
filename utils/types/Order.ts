@@ -9,9 +9,9 @@ interface OrderItem {
 
 export interface Order {
   orderProducts?: OrderItem[];
-  paymentStatus?: string;
+  paymentStatus?: PaymentStatus;
   orderID?: number;
-  deliveryStatus?: string;
+  deliveryStatus?: DeliveryStatus;
   fullOrderId?: string;
   id: string;
   amount: number;
