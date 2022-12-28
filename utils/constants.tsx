@@ -758,7 +758,7 @@ export const filtersCatgories: {
         category: "Just to Say Bouquets"
       },
       {
-        name: "Get well soon",
+        name: "Get Well Soon",
         category: "Get Well Soon Flowers"
       },
       {
@@ -782,6 +782,37 @@ export const filtersCatgories: {
     ],
     limit: 2,
     viewMore: false
+  },
+  {
+    name: "Flower Type",
+    options: [
+      {
+        name: "Fresh Flowers"
+      },
+      {
+        name: "Forever Roses"
+      },
+      {
+        name: "Plants"
+      }
+    ],
+    limit: 3,
+    viewMore: false
+  },
+  {
+    name: "Design",
+    options: [
+      {
+        name: "Bouquets"
+      },
+      {
+        name: "Box Arrangements"
+      },
+      {
+        name: "Others"
+      }
+    ],
+    limit: 3
   },
   {
     name: "Packages",
