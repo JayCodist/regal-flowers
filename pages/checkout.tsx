@@ -57,29 +57,6 @@ const initialData = {
   pickUpState: ""
 };
 
-const orderSample = {
-  name: "A Kiss of Rose",
-  price: 6000,
-  details: "Single stem rose available in red, white, pink and yel...",
-  quantity: 1,
-  size: "Extra Small",
-  design: "Wrapped Bouquet",
-  addons: [
-    {
-      name: "5 Peas in a pod",
-      price: 32999,
-      image: "/images/addons/Rectangle131.png"
-    },
-    {
-      name: "5 Peas in a pod",
-      price: 36000,
-      image: "/images/addons/Rectangle13.png"
-    }
-  ],
-  id: "1",
-  image: "/images/sample-flowers/sample-1.png"
-};
-
 type TabKey = "delivery" | "payment" | "done";
 type DeliverStage =
   | "sender-info"
@@ -122,7 +99,7 @@ const Checkout: FunctionComponent = () => {
   const deviceType = useDeviceType();
 
   const payStackConfig: PaystackProps = {
-    // reference: order?.id as string,
+    reference: order?.id as string,
     email: formData.senderEmail || "placeholder@regalflowers.com",
     amount: (order?.amount || 0) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
@@ -821,16 +798,12 @@ const Checkout: FunctionComponent = () => {
                     </div>
                     <div className="flex between vertical-margin">
                       <span className="normal-text">Add-Ons total</span>
-                      <span className="normal-text bold">
-                        ₦{order?.amount.toLocaleString()}
-                      </span>
+                      <span className="normal-text bold">₦{0}</span>
                     </div>
                     {deliveryMethod === "pick-up" && (
                       <div className="flex between">
                         <span className="normal-text">Delivery Charge</span>
-                        <span className="normal-text bold">
-                          ₦{order?.amount.toLocaleString()}
-                        </span>
+                        <span className="normal-text bold">₦{0}</span>
                       </div>
                     )}
                     <div className="flex center-align">
@@ -944,7 +917,10 @@ const Checkout: FunctionComponent = () => {
                       </p>
                     </div>
                   )}
-                  <Button className={styles["shopping-btn"]}>
+                  <Button
+                    className={styles["shopping-btn"]}
+                    onClick={() => router.push("/filters")}
+                  >
                     Continue Shopping
                   </Button>
                   {isDelivered(order?.deliveryStatus) && (
@@ -972,7 +948,8 @@ const Checkout: FunctionComponent = () => {
               <div className={styles["order-summary"]}>
                 <p className="sub-heading bold">Order Summary</p>
                 <p className="normal-text">
-                  A copy has been sent to your mail for reference.
+                  Payment successful. A copy has been sent to your mail for
+                  reference.
                 </p>
                 <div className="flex between vertical-margin spaced center-align">
                   <p
@@ -1019,30 +996,20 @@ const Checkout: FunctionComponent = () => {
                   ].join(" ")}
                 >
                   {order?.orderProducts?.map((item, index) => (
-                    <div key={index}>
-                      <div className="flex between spaced center-align">
-                        <img
-                          className={styles["order-image"]}
-                          src={orderSample.image}
-                          alt="order"
-                        />
-                        <div>
-                          <p className="margin-bottom spaced">{item.name}</p>
-                          <p>{orderSample.details}</p>
-                        </div>
-                        <p className="sub-heading bold">
-                          ₦{orderSample.price.toLocaleString()}
-                        </p>
-                      </div>
+                    <div key={index} className="flex column spaced">
                       <div className={styles["order-detail"]}>
-                        <p>
-                          <span className="margin-right">Qty:</span>{" "}
-                          {item.quantity}
-                        </p>
-                        <p className="vertical-margin spaced">
-                          <span className="margin-right">Size:</span>{" "}
-                          {orderSample.size}
-                        </p>
+                        <span className="flex between">
+                          <strong>Name</strong>
+                          <span className={styles["detail-value"]}>
+                            {item.name}
+                          </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Qty</strong>
+                          <span className={styles["detail-value"]}>
+                            {item.quantity}
+                          </span>
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -1099,25 +1066,24 @@ const Checkout: FunctionComponent = () => {
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Add-Ons total</span>
-                    <span className="bold">
-                      ₦{order?.amount.toLocaleString()}
-                    </span>
+                    <span className="bold">₦{0}</span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <div>
                       <span>Delivery Charge</span>
                       <p className={`${styles["light-gray"]}`}>Lagos</p>
                     </div>
-                    <span className="bold">₦6,000</span>
+                    <span className="bold">₦{0}</span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <div>
                       <span>Payment Method</span>
-                      <p className={`${styles["light-gray"]}`}>
-                        Card ending with 3412
-                      </p>
                     </div>
-                    <span className="bold">Bank Transfer</span>
+                    <span className="bold">
+                      {order?.paymentStatus
+                        ?.match(/\(.+\)/)?.[0]
+                        ?.replace(/[()]/g, "")}
+                    </span>
                   </div>
                   <hr className="hr margin-bottom spaced" />
                   <div className="flex between sub-heading margin-bottom spaced">
@@ -1690,19 +1656,25 @@ const Checkout: FunctionComponent = () => {
                 <div className={`${styles.border} padded`}>
                   <div className="flex between ">
                     <span className="normal-text">Order Total</span>
-                    <span className="normal-text bold">₦{order?.amount}</span>
+                    <span className="normal-text bold">
+                      ₦{order?.amount.toLocaleString()}
+                    </span>
                   </div>
                   {deliveryMethod === "pick-up" && (
                     <div className="flex between">
                       <span className="normal-text">Delivery </span>
-                      <span className="normal-text bold">₦{order?.amount}</span>
+                      <span className="normal-text bold">
+                        ₦{order?.amount.toLocaleString()}
+                      </span>
                     </div>
                   )}
                   <br />
                   <hr className="hr" />
                   <div className="flex between vertical-margin">
                     <span className="normal-text">Sum Total</span>
-                    <span className="normal-text bold">₦{order?.amount}</span>
+                    <span className="normal-text bold">
+                      ₦{order?.amount.toLocaleString()}
+                    </span>
                   </div>
                 </div>
 
@@ -1810,38 +1782,20 @@ const Checkout: FunctionComponent = () => {
 
                   <div className={[styles["order-details"]].join(" ")}>
                     {order?.orderProducts?.map((item, index) => (
-                      <div key={index}>
-                        <div className="flex between spaced center-align">
-                          <img
-                            className={styles["order-image"]}
-                            src={orderSample.image}
-                            alt="order"
-                          />
-                          <div>
-                            <strong className="margin-bottom small-text">
+                      <div key={index} className="flex column spaced">
+                        <div className={styles["order-detail"]}>
+                          <span className="flex between">
+                            <strong>Name</strong>
+                            <span className={styles["detail-value"]}>
                               {item.name}
-                            </strong>
-                            <p>{orderSample.details}</p>
-                          </div>
-                          <p className="sub-heading bold">
-                            ₦{orderSample.price}
-                          </p>
-                        </div>
-                        <div
-                          className={`${styles["order-detail"]} flex spaced-lg`}
-                        >
-                          <p>
-                            <strong className={`margin-right ${styles.grayed}`}>
-                              Qty:
-                            </strong>{" "}
-                            {item.quantity}
-                          </p>
-                          <p className="">
-                            <strong className={`margin-right ${styles.grayed}`}>
-                              Size:
-                            </strong>{" "}
-                            {orderSample.size}
-                          </p>
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Qty</strong>
+                            <span className={styles["detail-value"]}>
+                              {item.quantity}
+                            </span>
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -1859,9 +1813,7 @@ const Checkout: FunctionComponent = () => {
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Add-Ons total</strong>
-                      <span className="bold">
-                        ₦{order?.amount.toLocaleString()}
-                      </span>
+                      <span className="bold">₦{0}</span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <div>
@@ -1869,18 +1821,19 @@ const Checkout: FunctionComponent = () => {
                           Delivery Charge
                         </strong>
                       </div>
-                      <span className="bold">₦6,000</span>
+                      <span className="bold">₦0</span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <div>
                         <strong className={styles.grayed}>
                           Payment Method
                         </strong>
-                        <p className={`${styles["light-gray"]}`}>
-                          Card ending with 3412
-                        </p>
                       </div>
-                      <span className="bold">Bank Transfer</span>
+                      <span className="bold">
+                        {order?.paymentStatus
+                          ?.match(/\(.+\)/)?.[0]
+                          ?.replace(/[()]/g, "")}
+                      </span>
                     </div>
                     <hr className="hr margin-bottom spaced" />
                     <div className="flex between sub-heading margin-bottom spaced small-text">
@@ -1904,7 +1857,11 @@ const Checkout: FunctionComponent = () => {
                   </div>
                 )}
                 <div className={styles["done-footer"]}>
-                  <Button responsive className={styles["shopping-btn"]}>
+                  <Button
+                    responsive
+                    className={styles["shopping-btn"]}
+                    onClick={() => router.push("/filters")}
+                  >
                     Continue Shopping
                   </Button>
                   {isDelivered(order?.deliveryStatus) && (
