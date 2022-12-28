@@ -9,12 +9,12 @@ interface OrderItem {
 
 export interface Order {
   orderProducts?: OrderItem[];
-  paymentStatus?: string;
+  paymentStatus?: PaymentStatus;
   orderID?: number;
-  deliveryStatus?: string;
+  deliveryStatus?: DeliveryStatus;
   fullOrderId?: string;
   id: string;
-  cost: number;
+  amount: number;
   deliveryDate: string;
 }
 
@@ -210,7 +210,7 @@ export interface OrderCreate {
   line: Line;
   messagePrinted: boolean;
   orderDetails: string;
-  profit: string;
+  profit: number;
   purpose: Purpose;
   receivedByName: string;
   receivedByPhone: string;

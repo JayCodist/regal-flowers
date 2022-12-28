@@ -606,7 +606,11 @@ const Header: FunctionComponent = () => {
                 />
               </svg>
 
-              <span>Cart ({cartItems.length})</span>
+              {cartItems.length ? (
+                <strong>Cart ({cartItems.length})</strong>
+              ) : (
+                <span>Cart ({cartItems.length})</span>
+              )}
             </button>
             <a className="flex column center-align" href="#contactSection">
               <img
@@ -712,17 +716,17 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     const response = await createOrder({
       orderProducts: products,
       paymentStatus: "Not Paid (Website - Bank Transfer)",
-      cost: total,
+      cost: 0,
       deliveryDate: "2040-02-03", // (deliveryDate || dayjs().add(1, "day")).format("YYYY-MM-DD"),
       admin: "regalflowersnigeria@gmail.com",
-      adminNotes: "test regal-v2",
-      amount: 0,
+      adminNotes: "test regal-v2", // ""
+      amount: total,
       anonymousClient: false,
       arrangementTime: "",
-      client: {},
+      client: {}, // Resolve on the backend
       business: "Regal Flowers",
       channel: "Regal Website",
-      contactDepsArray: [],
+      contactDepsArray: [], // Resolve on the backend
       costBreakdown: "",
       deliveryMessage: "",
       deliveryNotePrinted: false,
@@ -732,7 +736,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       driver: {},
       editingAdminsRevised: [],
       feedback: {},
-      isClientRecipient: false,
+      isClientRecipient: false, // Set later
       isDuplicatedOrder: false,
       lastDeliveryNotePrintedAdmin: "",
       lastDeliveryNotePrintedTime: "",
@@ -744,18 +748,20 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       lastPaymentStatusTime: "",
       line: "Unselected",
       messagePrinted: false,
-      orderDetails: "",
-      profit: "",
-      purpose: "Unknown",
-      recipient: {},
-      recipientAddress: "",
+      orderDetails: "", // Set later
+      profit: 0, // Resolve on the backend
+      purpose: "Unknown", // Set later
+      recipient: {}, // Resolve on the backend
+      recipientAddress: "", // Set later
       receivedByName: "",
       receivedByPhone: "",
-      sendReminders: false,
-      upsellProfit: 0,
+      sendReminders: false, // Set later
+      upsellProfit: 0, // Resolve on the backend
       websiteOrderID: "",
       driverAlerted: false
     });
+
+    setLoading(false);
 
     if (response.data) {
       setDeliveryDate(
@@ -764,8 +770,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       router.push(`/checkout?orderId=${response.data.id}`);
       setCartItems([]);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -794,91 +798,89 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             onClick={cancel}
           />
         </div>
-        {
-          <div className={styles["body"]}>
-            {cartItems.length ? (
-              <div className={styles["delivery-status"]}>
-                <span>Delivery date</span>
-                <span>{deliveryDate || "Not set yet"}</span>
-                <span className="underline primary-color">Edit</span>
-              </div>
-            ) : (
-              ""
-            )}
-            {cartItems.length ? (
-              cartItems?.map((item, i) => (
-                <div className={styles["cart-item"]} key={i}>
+        <div className={styles["body"]}>
+          {cartItems.length ? (
+            <div className={styles["delivery-status"]}>
+              <span>Delivery date</span>
+              <span>{deliveryDate?.format("D MMM YYYY") || "Not set yet"}</span>
+              <span className="underline primary-color">Edit</span>
+            </div>
+          ) : (
+            ""
+          )}
+          {cartItems.length ? (
+            cartItems?.map((item, i) => (
+              <div className={styles["cart-item"]} key={i}>
+                <img
+                  src="/icons/delete-cart.svg"
+                  alt="delete"
+                  className="generic-icon large margin-top spaced clickable"
+                  onClick={() => handleRemoveItem(item.key)}
+                />
+                <div className="flex spaced align-center block">
                   <img
-                    src="/icons/delete-cart.svg"
-                    alt="delete"
-                    className="generic-icon large margin-top spaced clickable"
-                    onClick={() => handleRemoveItem(item.key)}
+                    src={item.image.src}
+                    alt="product"
+                    className={styles["product-image"]}
                   />
-                  <div className="flex spaced align-center block">
-                    <img
-                      src={item.image.src}
-                      alt="product"
-                      className={styles["product-image"]}
-                    />
-                    <div className="flex-one">
-                      <p>{item.name}</p>
-                      <p>{item.description}</p>
-                      <div className="flex between center-align vertical-margin">
-                        <p className="primary-color normal-text bold">
-                          ₦{item.price.toLocaleString()}
-                        </p>
-                        <div className="flex center-align spaced-lg">
-                          <div
-                            className={styles.minus}
-                            onClick={() => handleRemoveItemQuantity(item.key)}
-                          ></div>
-                          <span className="small-text">{item.quantity}</span>
-                          <div
-                            className={styles.plus}
-                            onClick={() => handleAddItemQuantity(item.key)}
-                          ></div>
-                        </div>
+                  <div className="flex-one">
+                    <p>{item.name}</p>
+                    <p>{item.description}</p>
+                    <div className="flex between center-align vertical-margin">
+                      <p className="primary-color normal-text bold">
+                        ₦{item.price.toLocaleString()}
+                      </p>
+                      <div className="flex center-align spaced-lg">
+                        <div
+                          className={styles.minus}
+                          onClick={() => handleRemoveItemQuantity(item.key)}
+                        ></div>
+                        <span className="small-text">{item.quantity}</span>
+                        <div
+                          className={styles.plus}
+                          onClick={() => handleAddItemQuantity(item.key)}
+                        ></div>
                       </div>
-                      {item.size && <p>Size: {item.size}</p>}
-                      {item.design && (
-                        <p className="vertical-margin">Design: {item.design}</p>
-                      )}
                     </div>
+                    {item.size && <p>Size: {item.size}</p>}
+                    {item.design && (
+                      <p className="vertical-margin">Design: {item.design}</p>
+                    )}
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className={styles["empty-cart"]}>Empty Cart</div>
-            )}
-            {cartItems.length ? (
-              <>
-                <div className="flex between center-align vertical-margin spaced">
-                  <span className="small-text">Subtotal</span>
-                  <strong className="small-text">
-                    ₦{total.toLocaleString()}
-                  </strong>
-                </div>
-                <div className="flex between center-align margin-bottom spaced">
-                  <span className="small-text">Total</span>
-                  <strong className="small-text">
-                    ₦{total.toLocaleString()}
-                  </strong>
-                </div>
-              </>
-            ) : (
-              ""
-            )}
-            <Button
-              responsive
-              className="margin-top spaced"
-              onClick={handleCreateOrder}
-              loading={loading}
-              disabled={!cartItems.length}
-            >
-              Proceed to checkout (₦{total.toLocaleString()})
-            </Button>
-          </div>
-        }
+              </div>
+            ))
+          ) : (
+            <div className={styles["empty-cart"]}>Empty Cart</div>
+          )}
+          {cartItems.length ? (
+            <>
+              <div className="flex between center-align vertical-margin spaced">
+                <span className="small-text">Subtotal</span>
+                <strong className="small-text">
+                  ₦{total.toLocaleString()}
+                </strong>
+              </div>
+              <div className="flex between center-align margin-bottom spaced">
+                <span className="small-text">Total</span>
+                <strong className="small-text">
+                  ₦{total.toLocaleString()}
+                </strong>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+          <Button
+            responsive
+            className="margin-top spaced"
+            onClick={handleCreateOrder}
+            loading={loading}
+            disabled={!cartItems.length}
+          >
+            Proceed to checkout (₦{total.toLocaleString()})
+          </Button>
+        </div>
       </div>
     </div>
   );

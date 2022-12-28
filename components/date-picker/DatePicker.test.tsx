@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import dayjs from "dayjs";
-import RangePicker from "./RangePicker";
+import DatePicker from "./DatePicker";
 
 jest.mock("@reach/router", () => ({
   navigate: jest.fn(),
@@ -9,7 +9,7 @@ jest.mock("@reach/router", () => ({
 
 test("RangePicker works", () => {
   const onChange = jest.fn();
-  render(<RangePicker value={[null, null]} onChange={onChange} />);
+  render(<DatePicker value={null} onChange={onChange} />);
 
   const rangePicker = screen.getByRole("time");
   expect(rangePicker).toBeVisible();

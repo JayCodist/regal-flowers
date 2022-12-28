@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from "dayjs";
 import { MouseEvent, useEffect, useMemo, useRef, useState } from "react";
-import DayPicker from "react-day-picker";
-import "react-day-picker/lib/style.css";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css";
 import styles from "./DatePicker.module.scss";
 
 interface DatePickerProps {
@@ -131,8 +131,8 @@ const DatePicker = (props: DatePickerProps) => {
         ].join(" ")}
       >
         <DayPicker
-          initialMonth={initialMonth}
-          selectedDays={jsDateValue}
+          defaultMonth={initialMonth}
+          selected={jsDateValue}
           onDayClick={handleDateSelect}
         />
       </div>

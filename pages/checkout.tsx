@@ -24,6 +24,8 @@ import { InfoIcon, InfoRedIcon } from "../utils/resources";
 import { Order, OrderUpdate, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
+import { getPurposes } from "../utils/helpers/data/purposes";
+import { verifyPaystackPayment } from "../utils/helpers/data/payments";
 
 const initialData = {
   senderName: "",
@@ -55,29 +57,6 @@ const initialData = {
   pickUpState: ""
 };
 
-const orderSample = {
-  name: "A Kiss of Rose",
-  price: 6000,
-  details: "Single stem rose available in red, white, pink and yel...",
-  quantity: 1,
-  size: "Extra Small",
-  design: "Wrapped Bouquet",
-  addons: [
-    {
-      name: "5 Peas in a pod",
-      price: 32999,
-      image: "/images/addons/Rectangle131.png"
-    },
-    {
-      name: "5 Peas in a pod",
-      price: 36000,
-      image: "/images/addons/Rectangle13.png"
-    }
-  ],
-  id: "1",
-  image: "/images/sample-flowers/sample-1.png"
-};
-
 type TabKey = "delivery" | "payment" | "done";
 type DeliverStage =
   | "sender-info"
@@ -106,27 +85,35 @@ const Checkout: FunctionComponent = () => {
   const [deliveryStage, setDeliveryStage] = useState<DeliverStage>(
     "sender-info"
   );
+  const [allPurposes, setAllPurposes] = useState<Option[]>([]);
 
-  const { currentStage, setCurrentStage, currency, setCurrency } = useContext(
-    SettingsContext
-  );
+  const {
+    user,
+    currentStage,
+    setCurrentStage,
+    currency,
+    setCurrency,
+    notify
+  } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 
   const payStackConfig: PaystackProps = {
-    reference: new Date().getTime().toString(),
-    email: "jaycodist@gmail.com",
-    amount: 200 * 100,
+    reference: order?.id as string,
+    email: formData.senderEmail || "placeholder@regalflowers.com",
+    amount: (order?.amount || 0) * 100,
+    currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
   };
 
   const initializePayment = usePaystackPayment(payStackConfig);
 
-  const {
-    query: { orderId }
-  } = useRouter();
   const router = useRouter();
+  const {
+    query: { orderId },
+    isReady
+  } = router;
 
   const handleChange = (key: string, value: any) => {
     setFormData({
@@ -141,6 +128,7 @@ const Checkout: FunctionComponent = () => {
     const { error, data } = res;
 
     if (error) {
+      notify("error", "Order not found! Please create an order");
       router.push("/");
     } else {
       setOrder(data);
@@ -148,10 +136,13 @@ const Checkout: FunctionComponent = () => {
         ...formData,
         deliveryDate: dayjs(data?.deliveryDate)
       });
-      setIsPaid(
+      const _isPaid =
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
-          /^paid/i.test(data?.paymentStatus || "")
-      );
+        /^paid/i.test(data?.paymentStatus || "");
+      setIsPaid(_isPaid);
+      if (_isPaid) {
+        setCurrentStage(3);
+      }
     }
 
     setPageLoading(false);
@@ -162,15 +153,8 @@ const Checkout: FunctionComponent = () => {
     const { error, message, data } = res;
 
     if (error) {
-      console.log(message);
+      notify("error", `Unable to fetch zone groups: ${message}`);
     } else {
-      setPickUpOptions(
-        data?.map(item => ({
-          label: item,
-          value: item
-        })) || []
-      );
-
       setPickUpOptions(
         data
           ?.filter(item => {
@@ -186,35 +170,48 @@ const Checkout: FunctionComponent = () => {
     }
   };
 
+  const fetchPurposes = async () => {
+    const { error, message, data } = await getPurposes();
+    if (error) {
+      notify("error", `Unable to fetch purposes: ${message}`);
+    } else {
+      setAllPurposes(
+        data?.map(item => ({
+          label: item,
+          value: item
+        })) || []
+      );
+    }
+  };
+
   useEffect(() => {
-    if (orderId) {
-      fetchOrder();
+    if (isReady) {
+      if (orderId) {
+        fetchOrder();
+      } else {
+        notify("error", "Invalid link");
+        router.push("/");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]);
+  }, [orderId, isReady]);
 
   useEffect(() => {
     fetchZoneGroups();
-  }, []);
+    fetchPurposes();
 
-  useEffect(() => {
-    if (isPaid) {
-      // setCurrentStage(3);
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPaid]);
+  }, []);
 
   const handleSubmit = async () => {
     setLoading(true);
-
-    console.log(order);
 
     const response = await updateOrder(orderId as string, formData);
 
     const { error, message } = response;
 
     if (error) {
-      console.log(message);
+      notify("error", `Unable to save order: ${message}`);
     } else {
       setCurrentStage(2);
       setDeliveryStage("payment");
@@ -241,7 +238,11 @@ const Checkout: FunctionComponent = () => {
     return (
       <div className={styles.loader}>
         <img src="/images/spinner.svg" alt="loader" className={styles.icon} />
-        <span className={styles["load-intro"]}>Preparing your order. . .</span>
+        <span className={styles["load-intro"]}>
+          {activeTab === "delivery"
+            ? "Preparing your order. . ."
+            : "Loading. . ."}
+        </span>
       </div>
     );
   }
@@ -251,18 +252,30 @@ const Checkout: FunctionComponent = () => {
       interface PaystackSuccessResponse {
         reference: string;
         trans: string;
-        status: "success";
-        message: "Approved";
-        transaction: "2170915167";
+        status: "success" | "error";
+        message: "Approved" | "Declined";
+        transaction: string;
         trxref: string;
-        redirecturl: "?trxref=1665324172269&reference=1665324172269";
+        redirecturl: string;
       }
-      const successHandler: (ref?: PaystackSuccessResponse) => void = ref => {
-        console.log({ ref });
+      const successHandler: (
+        response?: PaystackSuccessResponse
+      ) => Promise<void> = async response => {
+        setPageLoading(true);
+        const { error, message } = await verifyPaystackPayment(
+          response?.reference as string
+        );
+        setPageLoading(false);
+        if (error) {
+          notify("error", `Unable to make payment: ${message}`);
+        } else {
+          notify("success", `Order paid successfully`);
+          setActiveTab("done");
+          setIsPaid(true);
+          setCurrentStage(3);
+        }
       };
-      initializePayment(successHandler, () => {
-        console.log("Closed");
-      });
+      initializePayment(successHandler, () => {});
     },
     bankTransfer: () => {},
     googlePay: () => {},
@@ -363,11 +376,15 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
                         </div>
-                        <Checkbox
-                          checked={formData.freeAccount}
-                          onChange={value => handleChange("freeAccount", value)}
-                          text="Create a Free Account"
-                        />
+                        {!user && (
+                          <Checkbox
+                            checked={formData.freeAccount}
+                            onChange={value =>
+                              handleChange("freeAccount", value)
+                            }
+                            text="Create a Free Account"
+                          />
+                        )}
                       </div>
                     </div>
                     <div
@@ -388,9 +405,7 @@ const Checkout: FunctionComponent = () => {
                             <p className={`${styles["method-title"]}`}>
                               Delivery
                             </p>
-                            <p className="">
-                              Get it delivered to the recipient's location
-                            </p>
+                            <p>Get it delivered to the recipient's location</p>
                           </div>
                           <div
                             className={[
@@ -667,9 +682,10 @@ const Checkout: FunctionComponent = () => {
                           <Select
                             onSelect={value => handleChange("purpose", value)}
                             value={formData.purpose}
-                            options={[]}
+                            options={allPurposes}
                             placeholder="Select Purpose"
                             responsive
+                            dropdownOnTop
                             dimmed
                           />
                         </div>
@@ -747,7 +763,7 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           ))}
                         </div>
-                        <p className={styles.security}>
+                        <div className={styles.security}>
                           {" "}
                           <div className={styles["lock-icon"]}>
                             <img
@@ -758,15 +774,9 @@ const Checkout: FunctionComponent = () => {
                           </div>{" "}
                           We protect your payment information using encryption
                           to provide bank-level security.
-                        </p>
+                        </div>
                       </div>
                     </div>
-                    <Button
-                      className="half-width"
-                      onClick={() => setCurrentStage(3)}
-                    >
-                      Pay Now
-                    </Button>
                   </>
                 )}
               </form>
@@ -783,21 +793,17 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between ">
                       <span className="normal-text">Subtotal</span>
                       <span className="normal-text bold">
-                        ₦{order?.cost.toLocaleString()}
+                        ₦{order?.amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex between vertical-margin">
                       <span className="normal-text">Add-Ons total</span>
-                      <span className="normal-text bold">
-                        ₦{order?.cost.toLocaleString()}
-                      </span>
+                      <span className="normal-text bold">₦{0}</span>
                     </div>
                     {deliveryMethod === "pick-up" && (
                       <div className="flex between">
                         <span className="normal-text">Delivery Charge</span>
-                        <span className="normal-text bold">
-                          ₦{order?.cost.toLocaleString()}
-                        </span>
+                        <span className="normal-text bold">₦{0}</span>
                       </div>
                     )}
                     <div className="flex center-align">
@@ -815,19 +821,17 @@ const Checkout: FunctionComponent = () => {
                     <hr className={`${styles.hr} hr`} />
                     <div className="flex between margin-bottom">
                       <span className="normal-text">Total</span>
-                      <span className="normal-text bold">₦196,000</span>
+                      <span className="normal-text bold">
+                        ₦{order?.amount.toLocaleString()}
+                      </span>
                     </div>
-                    {currentStage === 1 ? (
+                    {currentStage === 1 && (
                       <Button
                         responsive
                         onClick={handleSubmit}
                         loading={loading}
                       >
                         Proceed to Payment
-                      </Button>
-                    ) : (
-                      <Button responsive onClick={() => setCurrentStage(3)}>
-                        Pay Now
                       </Button>
                     )}
                   </div>
@@ -913,7 +917,10 @@ const Checkout: FunctionComponent = () => {
                       </p>
                     </div>
                   )}
-                  <Button className={styles["shopping-btn"]}>
+                  <Button
+                    className={styles["shopping-btn"]}
+                    onClick={() => router.push("/filters")}
+                  >
                     Continue Shopping
                   </Button>
                   {isDelivered(order?.deliveryStatus) && (
@@ -923,21 +930,26 @@ const Checkout: FunctionComponent = () => {
                   )}
                 </div>
 
-                <div className={styles["account-wrapper"]}>
-                  <p className="sub-heading bold margin-bottom spaced">
-                    Create a Free Account
-                  </p>
-                  <p className="margin-bottom">
-                    Manage orders, address book and save time when checking out
-                    by creating a free account today!
-                  </p>
-                  <Button className="half-width">Create a Free Account</Button>
-                </div>
+                {!user && (
+                  <div className={styles["account-wrapper"]}>
+                    <div className="sub-heading bold margin-bottom">
+                      Create a Free Account
+                    </div>
+                    <div className="margin-bottom spaced">
+                      Manage orders, address book and save time when checking
+                      out by creating a free account today!
+                    </div>
+                    <Button className="half-width">
+                      Create a Free Account
+                    </Button>
+                  </div>
+                )}
               </div>
               <div className={styles["order-summary"]}>
                 <p className="sub-heading bold">Order Summary</p>
                 <p className="normal-text">
-                  A copy has been sent to your mail for reference.
+                  Payment successful. A copy has been sent to your mail for
+                  reference.
                 </p>
                 <div className="flex between vertical-margin spaced center-align">
                   <p
@@ -984,30 +996,20 @@ const Checkout: FunctionComponent = () => {
                   ].join(" ")}
                 >
                   {order?.orderProducts?.map((item, index) => (
-                    <div key={index}>
-                      <div className="flex between spaced center-align">
-                        <img
-                          className={styles["order-image"]}
-                          src={orderSample.image}
-                          alt="order"
-                        />
-                        <div>
-                          <p className="margin-bottom spaced">{item.name}</p>
-                          <p>{orderSample.details}</p>
-                        </div>
-                        <p className="sub-heading bold">
-                          ₦{orderSample.price.toLocaleString()}
-                        </p>
-                      </div>
+                    <div key={index} className="flex column spaced">
                       <div className={styles["order-detail"]}>
-                        <p>
-                          <span className="margin-right">Qty:</span>{" "}
-                          {item.quantity}
-                        </p>
-                        <p className="vertical-margin spaced">
-                          <span className="margin-right">Size:</span>{" "}
-                          {orderSample.size}
-                        </p>
+                        <span className="flex between">
+                          <strong>Name</strong>
+                          <span className={styles["detail-value"]}>
+                            {item.name}
+                          </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Qty</strong>
+                          <span className={styles["detail-value"]}>
+                            {item.quantity}
+                          </span>
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -1059,35 +1061,36 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Subtotal</span>
                     <span className="bold">
-                      ₦{order?.cost.toLocaleString()}
+                      ₦{order?.amount.toLocaleString()}
                     </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Add-Ons total</span>
-                    <span className="bold">
-                      ₦{order?.cost.toLocaleString()}
-                    </span>
+                    <span className="bold">₦{0}</span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <div>
                       <span>Delivery Charge</span>
                       <p className={`${styles["light-gray"]}`}>Lagos</p>
                     </div>
-                    <span className="bold">₦6,000</span>
+                    <span className="bold">₦{0}</span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <div>
                       <span>Payment Method</span>
-                      <p className={`${styles["light-gray"]}`}>
-                        Card ending with 3412
-                      </p>
                     </div>
-                    <span className="bold">Bank Transfer</span>
+                    <span className="bold">
+                      {order?.paymentStatus
+                        ?.match(/\(.+\)/)?.[0]
+                        ?.replace(/[()]/g, "")}
+                    </span>
                   </div>
                   <hr className="hr margin-bottom spaced" />
                   <div className="flex between sub-heading margin-bottom spaced">
                     <span>Total</span>
-                    <span className="bold primary-color">₦196,000</span>
+                    <span className="bold primary-color">
+                      ₦{order?.amount.toLocaleString()}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1177,11 +1180,13 @@ const Checkout: FunctionComponent = () => {
                       />
                     </div>
 
-                    <Checkbox
-                      checked={formData.freeAccount}
-                      onChange={value => handleChange("freeAccount", value)}
-                      text="Create a Free Account"
-                    />
+                    {!user && (
+                      <Checkbox
+                        checked={formData.freeAccount}
+                        onChange={value => handleChange("freeAccount", value)}
+                        text="Create a Free Account"
+                      />
+                    )}
                     <Button
                       onClick={() => setDeliveryStage("delivery-type")}
                       className="vertical-margin xl"
@@ -1651,19 +1656,25 @@ const Checkout: FunctionComponent = () => {
                 <div className={`${styles.border} padded`}>
                   <div className="flex between ">
                     <span className="normal-text">Order Total</span>
-                    <span className="normal-text bold">₦{order?.cost}</span>
+                    <span className="normal-text bold">
+                      ₦{order?.amount.toLocaleString()}
+                    </span>
                   </div>
                   {deliveryMethod === "pick-up" && (
                     <div className="flex between">
                       <span className="normal-text">Delivery </span>
-                      <span className="normal-text bold">₦{order?.cost}</span>
+                      <span className="normal-text bold">
+                        ₦{order?.amount.toLocaleString()}
+                      </span>
                     </div>
                   )}
                   <br />
                   <hr className="hr" />
                   <div className="flex between vertical-margin">
                     <span className="normal-text">Sum Total</span>
-                    <span className="normal-text bold">₦{order?.cost}</span>
+                    <span className="normal-text bold">
+                      ₦{order?.amount.toLocaleString()}
+                    </span>
                   </div>
                 </div>
 
@@ -1771,38 +1782,20 @@ const Checkout: FunctionComponent = () => {
 
                   <div className={[styles["order-details"]].join(" ")}>
                     {order?.orderProducts?.map((item, index) => (
-                      <div key={index}>
-                        <div className="flex between spaced center-align">
-                          <img
-                            className={styles["order-image"]}
-                            src={orderSample.image}
-                            alt="order"
-                          />
-                          <div>
-                            <strong className="margin-bottom small-text">
+                      <div key={index} className="flex column spaced">
+                        <div className={styles["order-detail"]}>
+                          <span className="flex between">
+                            <strong>Name</strong>
+                            <span className={styles["detail-value"]}>
                               {item.name}
-                            </strong>
-                            <p>{orderSample.details}</p>
-                          </div>
-                          <p className="sub-heading bold">
-                            ₦{orderSample.price}
-                          </p>
-                        </div>
-                        <div
-                          className={`${styles["order-detail"]} flex spaced-lg`}
-                        >
-                          <p>
-                            <strong className={`margin-right ${styles.grayed}`}>
-                              Qty:
-                            </strong>{" "}
-                            {item.quantity}
-                          </p>
-                          <p className="">
-                            <strong className={`margin-right ${styles.grayed}`}>
-                              Size:
-                            </strong>{" "}
-                            {orderSample.size}
-                          </p>
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Qty</strong>
+                            <span className={styles["detail-value"]}>
+                              {item.quantity}
+                            </span>
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -1815,14 +1808,12 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Subtotal</strong>
                       <span className="bold">
-                        ₦{order?.cost.toLocaleString()}
+                        ₦{order?.amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Add-Ons total</strong>
-                      <span className="bold">
-                        ₦{order?.cost.toLocaleString()}
-                      </span>
+                      <span className="bold">₦{0}</span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <div>
@@ -1830,38 +1821,47 @@ const Checkout: FunctionComponent = () => {
                           Delivery Charge
                         </strong>
                       </div>
-                      <span className="bold">₦6,000</span>
+                      <span className="bold">₦0</span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <div>
                         <strong className={styles.grayed}>
                           Payment Method
                         </strong>
-                        <p className={`${styles["light-gray"]}`}>
-                          Card ending with 3412
-                        </p>
                       </div>
-                      <span className="bold">Bank Transfer</span>
+                      <span className="bold">
+                        {order?.paymentStatus
+                          ?.match(/\(.+\)/)?.[0]
+                          ?.replace(/[()]/g, "")}
+                      </span>
                     </div>
                     <hr className="hr margin-bottom spaced" />
                     <div className="flex between sub-heading margin-bottom spaced small-text">
                       <span>Total</span>
-                      <span className="bold primary-color">₦196,000</span>
+                      <span className="bold primary-color">
+                        ₦{order?.amount.toLocaleString()}
+                      </span>
                     </div>
                   </div>
                 </div>
-                <div className={styles["account-wrapper"]}>
-                  <p className="sub-heading bold margin-bottom spaced">
-                    Create a Free Account
-                  </p>
-                  <p className="margin-bottom">
-                    Manage orders, address book and save time when checking out
-                    by creating a free account today!
-                  </p>
-                  <Button>Create a Free Account</Button>
-                </div>
+                {!user && (
+                  <div className={styles["account-wrapper"]}>
+                    <p className="sub-heading bold margin-bottom">
+                      Create a Free Account
+                    </p>
+                    <p className="margin-bottom spaced">
+                      Manage orders, address book and save time when checking
+                      out by creating a free account today!
+                    </p>
+                    <Button>Create a Free Account</Button>
+                  </div>
+                )}
                 <div className={styles["done-footer"]}>
-                  <Button responsive className={styles["shopping-btn"]}>
+                  <Button
+                    responsive
+                    className={styles["shopping-btn"]}
+                    onClick={() => router.push("/filters")}
+                  >
                     Continue Shopping
                   </Button>
                   {isDelivered(order?.deliveryStatus) && (
