@@ -33,6 +33,21 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   const { setCartItems, cartItems, notify } = useContext(SettingsContext);
 
+  const shouldShowRegularTab = product.variants?.some(
+    variant => variant.class === "regular"
+  );
+
+  const shouldShowVipTab = product.variants?.some(
+    variant => variant.class === "vip"
+  );
+
+  useEffect(() => {
+    if (!shouldShowRegularTab) {
+      setsizeType("vip");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleAddToCart = () => {
     const cartItem: CartItem = {
       key: product.key,
@@ -283,22 +298,26 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </div>
               <br />
               <div className={`${styles["tab"]} flex spaced`}>
-                <button
-                  onClick={() => setsizeType("regular")}
-                  className={`${styles["tab-title"]} ${
-                    sizeType === "regular" ? styles.active : null
-                  }`}
-                >
-                  Regular Sizes
-                </button>
-                <button
-                  onClick={() => setsizeType("vip")}
-                  className={`${styles["tab-title"]} ${
-                    sizeType === "vip" ? styles.active : null
-                  }`}
-                >
-                  VIP Sizes
-                </button>
+                {shouldShowRegularTab && (
+                  <button
+                    onClick={() => setsizeType("regular")}
+                    className={`${styles["tab-title"]} ${
+                      sizeType === "regular" ? styles.active : null
+                    }`}
+                  >
+                    Regular Sizes
+                  </button>
+                )}
+                {shouldShowVipTab && (
+                  <button
+                    onClick={() => setsizeType("vip")}
+                    className={`${styles["tab-title"]} ${
+                      sizeType === "vip" ? styles.active : null
+                    }`}
+                  >
+                    VIP Sizes
+                  </button>
+                )}
               </div>
               {sizeType === "regular" && (
                 <div className={styles["size-wrapper"]}>
@@ -317,16 +336,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name} | ₦{variant.price?.toLocaleString()}
+                        {variant.name.slice(1)} | ₦
+                        {variant.price?.toLocaleString()}
                       </span>
                     ))}
-                  {product.variants?.filter(
-                    variant => variant.class === "regular"
-                  ).length === 0 && (
-                    <p className="center-align bold">
-                      No regular sizes available
-                    </p>
-                  )}
                 </div>
               )}
 
@@ -347,13 +360,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name} | ₦{variant.price?.toLocaleString()}
+                        {variant.name.slice(1)} | ₦
+                        {variant.price?.toLocaleString()}
                       </span>
                     ))}
-                  {product.variants?.filter(variant => variant.class === "vip")
-                    .length === 0 && (
-                    <p className="center-align bold">No VIP sizes available</p>
-                  )}
                 </div>
               )}
 
