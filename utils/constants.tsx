@@ -39,6 +39,51 @@ export const currencyOptions: AppCurrency[] = [
   { name: "GBP", conversionRate: 523, sign: "£" }
 ];
 
+interface FooterContent {
+  aboutUs: string;
+  socialIcons: { name: string; src: string; url: string }[];
+  quickLinks: { title: string; url: string }[];
+  phoneNumbers: string[];
+}
+
+export const footerContent: FooterContent = {
+  aboutUs:
+    "Nigeria's most loved online flower shop with same day delivery in Lagos and Abuja",
+  socialIcons: [
+    {
+      name: "facebook",
+      src: "icons/footer/facebook.svg",
+      url: ""
+    },
+    {
+      name: "facebook",
+      src: "icons/footer/instagram.svg",
+      url: ""
+    },
+    {
+      name: "facebook",
+      src: "icons/footer/linkedin.svg",
+      url: ""
+    },
+    {
+      name: "facebook",
+      src: "icons/footer/whatsapp.svg",
+      url: ""
+    }
+  ],
+  quickLinks: [
+    {
+      title: "Occasions",
+      url: "/filters?selectedOccasion=Anniversary%20Flowers"
+    },
+    { title: "VIP Section", url: "/" },
+    { title: "Contact Us", url: "/" },
+    { title: "Our Blog", url: "/" },
+    { title: "FAQ", url: "/faq" }
+  ],
+  phoneNumbers: ["+234 701 000 6664", "+234 701 000 6665", "+234 701 199 2888"]
+};
+
 export const aboutUsContent: {
   [key: string]: { title: string; content: string };
 } = {
@@ -873,7 +918,7 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Romance, Birthdays & Anniversary",
-        url: "/filters?selectedOccasion=Anniversary Flowers",
+        url: "",
         children: [
           {
             title: "Bouquets",
@@ -894,7 +939,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
-        url: "/filters?selectedOccasion=just-to-say",
+        url: "",
         children: [
           {
             title: "Bouquets",
@@ -915,7 +960,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Get well soon",
-        url: "#",
+        url: "",
         children: [
           {
             title: "Bouquets",
@@ -936,37 +981,37 @@ export const links: AppLink[] = [
       },
       {
         title: "Bridal",
-        url: "/filters?selectedOccasion=bridal-bouquets",
+        url: "",
         children: [
           {
             title: "Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=bridal-bouquets",
             children: []
           },
           {
             title: "Cascading Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=bridal-bouquets",
             children: []
           },
           {
             title: "Accessories & Boutonnieres",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=bridal-bouquets",
             children: []
           }
         ]
       },
       {
         title: "Funeral & Condolence",
-        url: "/filters?selectedOccasion=funeral-condolence",
+        url: "",
         children: [
           {
             title: "Wreaths & Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=funeral-condolence",
             children: []
           },
           {
             title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=funeral-condolence",
             children: []
           }
         ]
@@ -1006,7 +1051,7 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Design",
-        url: "#",
+        url: "",
         children: [
           {
             title: "Bouquets",
@@ -1027,7 +1072,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Flower Types",
-        url: "/filters?selectedFlowerType=rose",
+        url: "",
         children: [
           {
             title: "Fresh Flowers",
@@ -1036,7 +1081,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Forever Roses",
-            url: "#",
+            url: "/filters?selectedFlowerType=rose",
             children: []
           },
           {
@@ -1048,7 +1093,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Packages",
-        url: "#",
+        url: "",
         children: [
           {
             title: "View Bundled Products",
@@ -1059,7 +1104,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Delivery",
-        url: "#",
+        url: "",
         children: [
           {
             title: "Same Day Delivery",
@@ -1070,7 +1115,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Flower Name",
-        url: "#",
+        url: "",
         children: [
           {
             title: "Roses",
