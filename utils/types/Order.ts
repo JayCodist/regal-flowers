@@ -251,7 +251,12 @@ export interface OrderUpdate {
   pickUpState: string;
 }
 
-export type PaymentName = "paystack" | "googlePay" | "payPal" | "bankTransfer";
+export type PaymentName =
+  | "paystack"
+  | "googlePay"
+  | "payPal"
+  | "monnify"
+  | "manualTransfer";
 
 export interface PaymentMethod {
   title: string;

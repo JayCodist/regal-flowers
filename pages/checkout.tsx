@@ -14,7 +14,8 @@ import Select, { Option } from "../components/select/Select";
 import {
   currencyOptions,
   deliveryStates,
-  paymentMethod
+  paymentMethod,
+  placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
 import { getOrder, updateOrder } from "../utils/helpers/data/order";
@@ -25,7 +26,11 @@ import { Order, OrderUpdate, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
-import { verifyPaystackPayment } from "../utils/helpers/data/payments";
+import {
+  verifyMonnifyPayment,
+  verifyPaystackPayment
+} from "../utils/helpers/data/payments";
+import useMonnify from "../utils/hooks/useMonnify";
 
 const initialData = {
   senderName: "",
@@ -100,7 +105,7 @@ const Checkout: FunctionComponent = () => {
 
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
-    email: formData.senderEmail || "placeholder@regalflowers.com",
+    email: formData.senderEmail || placeholderEmail,
     amount: (order?.amount || 0) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
@@ -121,6 +126,8 @@ const Checkout: FunctionComponent = () => {
       [key]: value
     });
   };
+
+  const { initializeMonnify, isMonnifyReady } = useMonnify();
 
   const fetchOrder = async () => {
     setPageLoading(true);
@@ -277,7 +284,37 @@ const Checkout: FunctionComponent = () => {
       };
       initializePayment(successHandler, () => {});
     },
-    bankTransfer: () => {},
+    monnify: () => {
+      if (isMonnifyReady) {
+        initializeMonnify({
+          amount: order?.amount || 0,
+          customerEmail: formData.senderEmail || placeholderEmail,
+          customerFullName: formData.senderName || "N/A",
+          apiKey: "MK_TEST_6RX7M5H3DK",
+          contractCode: "2480629209",
+          currency: "NGN",
+          reference: order?.id as string, // Problematic for repeat payments
+          paymentDescription: "Regal Flowers Order",
+          onComplete: async response => {
+            setPageLoading(true);
+            const { error, message } = await verifyMonnifyPayment(
+              response.paymentReference as string
+            );
+            setPageLoading(false);
+            if (error) {
+              notify("error", `Unable to make payment: ${message}`);
+            } else {
+              notify("success", `Order paid successfully`);
+              setActiveTab("done");
+              setIsPaid(true);
+              setCurrentStage(3);
+            }
+          },
+          onClose: () => {}
+        });
+      }
+    },
+    manualTransfer: () => {},
     googlePay: () => {},
     payPal: () => {}
   };
