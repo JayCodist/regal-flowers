@@ -663,6 +663,9 @@
 }
 
 .footer {
+  @media (max-width: 650px) {
+    display: none;
+  }
   .footer-wrapper {
     padding: 2rem 6rem;
     background-color: #f9fafb;
