@@ -721,7 +721,7 @@ export const filtersCatgories: {
         category: "Just to Say Bouquets"
       },
       {
-        name: "Get well soon",
+        name: "Get Well Soon",
         category: "Get Well Soon Flowers"
       },
       {
@@ -745,6 +745,37 @@ export const filtersCatgories: {
     ],
     limit: 2,
     viewMore: false
+  },
+  {
+    name: "Flower Type",
+    options: [
+      {
+        name: "Fresh Flowers"
+      },
+      {
+        name: "Forever Roses"
+      },
+      {
+        name: "Plants"
+      }
+    ],
+    limit: 3,
+    viewMore: false
+  },
+  {
+    name: "Design",
+    options: [
+      {
+        name: "Bouquets"
+      },
+      {
+        name: "Box Arrangements"
+      },
+      {
+        name: "Others"
+      }
+    ],
+    limit: 3
   },
   {
     name: "Packages",
@@ -922,17 +953,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Bouquets",
             children: []
           },
           {
             title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Bouquets",
             children: []
           },
           {
             title: "Gifts",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Gift Packs",
             children: []
           }
         ]
@@ -943,17 +974,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Just to Say Bouquets",
             children: []
           },
           {
             title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Bouquets",
             children: []
           },
           {
             title: "Gifts",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Gift Packs",
             children: []
           }
         ]
@@ -964,17 +995,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Bouquets",
             children: []
           },
           {
             title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Bouquets",
             children: []
           },
           {
             title: "Gifts",
-            url: "/filters?selectedOccasion=Anniversary Flowers",
+            url: "/filters?selectedOccasion=Gift Packs",
             children: []
           }
         ]
@@ -985,17 +1016,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Bouquets",
-            url: "/filters?selectedOccasion=bridal-bouquets",
+            url: "/filters?selectedOccasion=Bridal Bouquets",
             children: []
           },
           {
             title: "Cascading Bouquets",
-            url: "/filters?selectedOccasion=bridal-bouquets",
+            url: "/filters?selectedOccasion=Cascading/Dropping Bouquets",
             children: []
           },
           {
             title: "Accessories & Boutonnieres",
-            url: "/filters?selectedOccasion=bridal-bouquets",
+            url: "/filters",
             children: []
           }
         ]
@@ -1006,12 +1037,12 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Wreaths & Bouquets",
-            url: "/filters?selectedOccasion=funeral-condolence",
+            url: "/filters?selectedOccasion=Bouquets",
             children: []
           },
           {
             title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=funeral-condolence",
+            url: "/filters?selectedOccasion=Bouquets",
             children: []
           }
         ]
@@ -1028,17 +1059,17 @@ export const links: AppLink[] = [
           },
           {
             title: "Events & Centerpiece",
-            url: "",
+            url: "/filters?selectedOccasion=Event & Centerpiece",
             children: []
           },
           {
             title: "Father's Day",
-            url: "",
+            url: "/filters?selectedOccasion=Fathers' Day Flowers",
             children: []
           },
           {
             title: "Mother's Day",
-            url: "",
+            url: "/filters?selectedOccasion=Mothers' Day Flowers",
             children: []
           }
         ]
@@ -1055,17 +1086,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Bouquets",
-            url: "#",
+            url: "/filters?shopBy=Bouquets",
             children: []
           },
           {
             title: "Box Arrangements",
-            url: "#",
+            url: "/filters?shopBy=Box Arrangements - Fresh Flowers",
             children: []
           },
           {
             title: "Others",
-            url: "#",
+            url: "/filters?shopBy=others",
             children: []
           }
         ]
@@ -1076,17 +1107,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Fresh Flowers",
-            url: "#",
+            url: "/filters?shopBy=Box Arrangements - Fresh Flowers",
             children: []
           },
           {
             title: "Forever Roses",
-            url: "/filters?selectedFlowerType=rose",
+            url: "/filters?shopBy=Forever Roses - Preserved Roses",
             children: []
           },
           {
             title: "Plants",
-            url: "#",
+            url: "/filters?shopBy",
             children: []
           }
         ]
@@ -1097,7 +1128,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "View Bundled Products",
-            url: "#",
+            url: "/filters?shopBy=Forever Roses - Preserved Roses",
             children: []
           }
         ]
@@ -1119,22 +1150,22 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Roses",
-            url: "#",
+            url: "/filters?shopBy=Roses",
             children: []
           },
           {
             title: "Chrysanthemums",
-            url: "#",
+            url: "/filters?shopBy=Chrysanthemums",
             children: []
           },
           {
             title: "Lilies",
-            url: "#",
+            url: "/filters?shopBy=Lilles",
             children: []
           },
           {
             title: "Million Stars",
-            url: "#",
+            url: "/filters?shopBy=Million Stars",
             children: []
           },
           {
@@ -1145,6 +1176,11 @@ export const links: AppLink[] = [
         ]
       }
     ]
+  },
+  {
+    url: "/vip",
+    title: "VIP",
+    children: []
   },
 
   {

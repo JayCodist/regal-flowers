@@ -1,42 +1,50 @@
 .filters {
   .hero-bg {
-    background-image: url("/icons/filters-bg.svg");
-    background-position: center center;
-    background-size: cover;
     height: 30rem;
     width: 100%;
     background-attachment: fixed;
 
-    @media (max-width: 650px) {
-      height: 20rem;
+    &.vip-bg {
+      background-image: url("/images/vip-bg.png");
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      font-weight: 700;
+      background-position: center center;
+      background-size: cover;
+
+      .info {
+        background-color: white;
+        padding: 0.3rem;
+        font-weight: normal;
+        font-size: 1.2rem;
+        margin-top: 1rem;
+        border-radius: 0.3rem;
+        display: inline-block;
+      }
+
+      .wow {
+        font-size: 1.5rem;
+      }
     }
 
-    .occasion-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 6rem;
-
-      & > * {
-        margin-right: 1rem;
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-
-      @media (max-width: 800px) {
-        padding: 0 2rem;
-      }
+    &.occasion-bg {
+      background-image: url("/icons/filters-bg.svg");
+      background-position: center center;
+      background-size: cover;
 
       @media (max-width: 650px) {
-        overflow-x: scroll;
-        overflow-y: hidden;
+        height: 20rem;
+      }
 
-        &::-webkit-scrollbar {
-          display: none;
-        }
+      .occasion-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 6rem;
 
         & > * {
           margin-right: 1rem;
@@ -45,37 +53,58 @@
             margin-right: 0;
           }
         }
-      }
 
-      .occasion {
-        background-color: #fdf0f0;
-        position: relative;
-        height: 14rem;
-        width: 14rem;
-        border-radius: 50%;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 0 1rem;
-        color: #9b0000;
-        cursor: pointer;
-        font-size: 1.3rem;
-        border: 0.2rem solid transparent;
-
-        &.active {
-          border-color: #9b0000;
-        }
-
-        &:hover {
-          border-color: #9b0000;
+        @media (max-width: 800px) {
+          padding: 0 2rem;
         }
 
         @media (max-width: 650px) {
-          height: 10rem;
-          width: 10rem;
-          font-size: 1rem;
-          min-width: 10rem;
+          overflow-x: scroll;
+          overflow-y: hidden;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          & > * {
+            margin-right: 1rem;
+
+            &:last-child {
+              margin-right: 0;
+            }
+          }
+        }
+
+        .occasion {
+          background-color: #fdf0f0;
+          position: relative;
+          height: 14rem;
+          width: 14rem;
+          border-radius: 50%;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          padding: 0 1rem;
+          color: #9b0000;
+          cursor: pointer;
+          font-size: 1.3rem;
+          border: 0.2rem solid transparent;
+
+          &.active {
+            border-color: #9b0000;
+          }
+
+          &:hover {
+            border-color: #9b0000;
+          }
+
+          @media (max-width: 650px) {
+            height: 10rem;
+            width: 10rem;
+            font-size: 1rem;
+            min-width: 10rem;
+          }
         }
       }
     }
