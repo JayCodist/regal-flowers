@@ -36,9 +36,11 @@ export const getProductsByCategory: (
         params?.pageNumber
       }&tags=${params?.filter?.tags?.join(
         ","
-      )}&categories=${params?.filter?.category?.join(",")}`
+      )}&categories=${params?.filter?.category?.join(",")}&productClass=${
+        params?.filter?.productClass
+      }`
     );
-    console.log("response", response.data);
+    console.log("params", params);
     return {
       error: false,
       data: response.data.data as Product[]
