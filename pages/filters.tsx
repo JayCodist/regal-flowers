@@ -494,7 +494,7 @@ const ProductsPage: FunctionComponent<{
                   image={product.images[0].src}
                   price={product.price}
                   buttonText="Add to Cart"
-                  subTitle={product.details}
+                  subTitle={product.subtitle}
                   url={`/products/${product.slug}`}
                   // mode="three-x-grid"
                   mode={`${
