@@ -29,7 +29,9 @@ const BlogCard: FunctionComponent<BlogCardProps> = props => {
             <span className={styles.duration}>{readDuration}</span>
           </div>
           <h3 className={styles.title}>{title}</h3>
-          <span className={styles.subtitle}>{excerpt}</span>
+          <span className={[styles.subtitle, "normal-text"].join(" ")}>
+            {excerpt}
+          </span>
           <span className={styles.continue}>
             <strong className="red margin-right">Continue Reading</strong>
             <img
