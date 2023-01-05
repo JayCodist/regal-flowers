@@ -377,7 +377,7 @@ const LandingPage: FunctionComponent<{
           <div className={styles.left}>
             <strong>WORK WITH US</strong>
             <h2 className="featured-title">Now Let’s Send Yours</h2>
-            <span>
+            <span className="normal-text">
               The gradual accumulation of information about atomic and
               small-scale behavior during the first quarter of the 20th{" "}
             </span>
@@ -396,7 +396,7 @@ const LandingPage: FunctionComponent<{
           <div>
             <strong>WORK WITH US</strong>
             <h2 className="featured-title">Now Let’s Send Yours</h2>
-            <span>
+            <span className="normal-text">
               The gradual accumulation of information about atomic and
               small-scale behavior during the first quarter of the 20th{" "}
             </span>
@@ -499,11 +499,9 @@ const LandingPage: FunctionComponent<{
           )}
         >
           <strong>GET IN TOUCH</strong>
-          <h2 className="featured-title vertical-margin spaced">
-            Contact Us Today!
-          </h2>
+          <h2 className=" vertical-margin spaced">Contact Us Today!</h2>
           {regalAddresses.map(address => (
-            <div key={address.name} className={styles.detail}>
+            <div key={address.name} className={[styles.detail].join(" ")}>
               <strong className={styles.key}>{address.name}</strong>
               <span className={styles.value}>
                 <img
@@ -601,25 +599,25 @@ const LandingPage: FunctionComponent<{
             <p className="title small bold margin-bottom">
               {aboutUsContent.howItBegan.title}
             </p>
-            <p>{aboutUsContent.howItBegan.content}</p>
+            <p className="normal-text">{aboutUsContent.howItBegan.content}</p>
             <p className="title small bold vertical-margin">
               {aboutUsContent.openingHour.title}
             </p>
-            <p>{aboutUsContent.openingHour.content}</p>
+            <p className="normal-text">{aboutUsContent.openingHour.content}</p>
           </div>
           <div>
             <p className="title small bold margin-bottom">
               {aboutUsContent.reputation.title}
             </p>
-            <p>{aboutUsContent.reputation.content}</p>
+            <p className="normal-text">{aboutUsContent.reputation.content}</p>
             <p className="title small bold vertical-margin">
               {aboutUsContent.deliveryTime.title}
             </p>
-            <p>{aboutUsContent.deliveryTime.content}</p>
+            <p className="normal-text">{aboutUsContent.deliveryTime.content}</p>
             <p className="title small bold vertical-margin">
               {aboutUsContent.budget.title}
             </p>
-            <p>{aboutUsContent.budget.content}</p>
+            <p className="normal-text">{aboutUsContent.budget.content}</p>
           </div>
         </div>
       </section>

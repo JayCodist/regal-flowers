@@ -252,7 +252,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         <div>
           <div className="flex center-align between">
             <div>
-              <h1 className="title">{product.name}</h1>
+              <h1 className="title">
+                {product.name}-{product.subtitle}
+              </h1>
               <p>{product.subtitle}</p>
             </div>
             <div className="bold primary-color center">

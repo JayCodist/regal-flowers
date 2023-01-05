@@ -69,11 +69,11 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
               <p className="title small bold margin-bottom">
                 How to order flowers and gifts for delivery?
               </p>
-              <p className="margin-bottom spaced">
+              <p className="margin-bottom spaced normal-text">
                 For delivery of fresh flowers in Lagos, Nigeria or fresh flowers
                 in Abuja, Nigeria:
               </p>
-              <p>
+              <p className="normal-text">
                 Browse, and add your desired flowers and gifts to your cart
                 (don't forget to change the currency to USD if you are using a
                 Non-Naira card or Paypal). Proceed to checkout where you fill in
@@ -92,10 +92,10 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
               <p className="title small bold margin-bottom">
                 What payment methods are available?
               </p>
-              <p className="margin-bottom">
+              <p className="margin-bottom normal-text">
                 Online Payment Methods (Delivery fees included during checkout)
               </p>
-              <p className="margin-buttton flex align-center spaced">
+              <p className="margin-buttton flex align-center spaced normal-text">
                 <img
                   className="generic-icon medium"
                   src="./icons/bank-card.svg"
@@ -103,7 +103,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 />
                 <span>Naira Mastercard/Visa/Verve Cards</span>
               </p>
-              <p className="margin-buttton flex align-center spaced">
+              <p className="margin-buttton flex align-center spaced normal-text">
                 <img
                   className="generic-icon medium"
                   src="./icons/paypal.svg"
@@ -116,50 +116,52 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 </span>
               </p>
               <div className={styles["payment-info"]}>
-                <strong className="primary-color">Paypal to email </strong>
-                <p>
+                <strong className="primary-color normal-text">
+                  Paypal to email{" "}
+                </strong>
+                <p className="normal-text">
                   Email Address: <strong> regalpaypal@gmail.com</strong>
                 </p>
-                <p>
+                <p className="normal-text">
                   Account Name: <strong> REGAL FLOWERS LTD</strong>
                 </p>
               </div>
-              <p className="margin-buttton flex align-center spaced">
+              <p className="margin-buttton flex align-center spaced normal-text">
                 <img
                   className="generic-icon medium"
                   src="./icons/building.svg"
                   alt="paypal"
                 />{" "}
-                <span>
+                <span className="normal-text">
                   Transfer Methods (if applicable don't forget to include
                   delivery fees)
                 </span>
               </p>
               <div className={styles["payment-info"]}>
-                <strong className="primary-color margin-bottom">
+                <strong className="primary-color margin-bottom normal-text">
                   Bank Transfers
                 </strong>
-                <p>
+                <p className="normal-text">
                   Bank Name: <strong>GTB</strong>
                 </p>
-                <p>
+                <p className="normal-text">
                   Account Name: <strong> REGAL FLOWERS LTD</strong>
                 </p>
 
-                <p>
+                <p className="normal-text">
                   Naira Account: <strong> 0252862666</strong>
                 </p>
-                <p>
+                <p className="normal-text">
                   Pounds Account: <strong> 0252862862</strong>
                 </p>
-                <p>
+                <p className="normal-text">
                   USD Account: <strong> 0252862673</strong>
                 </p>
-                <p>
+                <p className="normal-text">
                   Euros Account: <strong> 0252862680</strong>
                 </p>
               </div>
-              <p className="margin-buttton flex align-center spaced">
+              <p className="margin-buttton flex align-center spaced normal-text">
                 <img
                   className="generic-icon medium"
                   src="./icons/bitcoin.svg"
@@ -170,45 +172,45 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   <strong>12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1</strong>{" "}
                 </span>
               </p>
-              <p className="margin-buttton">
+              <p className="margin-buttton normal-text">
                 Of course, we are only a call/email away should you require any
                 assistance.
               </p>
             </div>
             <div id="delivery">
               <p className={`${styles.title}`}>Delivery</p>
-              <p className="title small bold margin-bottom">
+              <p className="title small bold margin-bottom ">
                 Is same day flower delivery in Lagos, Nigeria and Abuja, Nigeria
                 possible?
               </p>
-              <p className="margin-bottom spaced">
+              <p className="margin-bottom spaced normal-text">
                 Yes, we usually offer same day flower delivery in Lagos, Nigeria
                 and Abuja, Nigeria However, we encourage you to order flowers
                 and gifts as soon as possible due to traffic congestion, and to
                 ensure we don’t run out of stock for the day.
               </p>
-              <p className="title small bold margin-bottom">
+              <p className="title small bold margin-bottom ">
                 Is a flower delivery in Lagos, Nigeria and Abuja, Nigeria
                 possible on weekends and public holidays?
               </p>
-              <p className="margin-bottom">
+              <p className="margin-bottom normal-text">
                 Yes, <a className="primary-color">Regalflowers.com.ng</a>{" "}
                 delivers flowers on all days INCLUDING Saturdays, Sundays, and
                 Public Holidays. Can't come in? You can always buy flowers in
                 Lagos, Nigeria and Abuja, Nigeria from our online store or by
                 phone or WhatsApp and get them delivered.
               </p>
-              <p className="title small bold margin-bottom">
+              <p className="title small bold margin-bottom ">
                 Do you deliver flowers outside Lagos, Nigeria and Abuja, Nigeria
                 e.g. Port Harcourt?
               </p>
-              <p className="margin-bottom">
+              <p className="margin-bottom normal-text">
                 While we do not offer deliveries outside Lagos and Abuja at the
                 moment, we can however on a case-by-case basis, make use of
                 flights to send them to other states , subject to flight
                 availability.
               </p>
-              <p>
+              <p className="normal-text">
                 If you prefer, you can also provide a representative in Lagos or
                 Abuja that we can deliver to, or you can engage a flight courier
                 at the airport (we can introduce you to one) who would help fly
@@ -218,14 +220,14 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 Why do you need the recipient's number for flower and gift
                 orders?
               </p>
-              <p className="margin-bottom">
+              <p className="margin-bottom normal-text">
                 When our delivery partners (typically Uber and other 3rd party
                 delivery agents), get to the destination, they usually need to
                 communicate with the recipient to collect the flowers and gifts,
                 or to confirm who the recipient would prefer the driver drop the
                 items with.
               </p>
-              <p>
+              <p className="normal-text">
                 In addition, as a security precaution many offices and
                 residences usually request that the driver put a call through to
                 the recipient before accepting the flowers and gifts. Finally,
@@ -236,7 +238,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
               <p className="title small bold vertical-margin">
                 Who do you deliver the items to?
               </p>
-              <p>
+              <p className="normal-text">
                 Our flower delivery in Lagos, Nigeria and Abuja, Nigeria is
                 typically delivered directly to the intended recipient. However,
                 if they are unavailable for any reason (meeting, phone off, not
@@ -248,7 +250,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 What happens if the recipient doesn't pickup their phone, and
                 there is no one to drop the flowers with at the destination?
               </p>
-              <p>
+              <p className="normal-text">
                 We usually at this point communicate with the sender on phone to
                 give an update on the situation. In the event the sender is also
                 unreachable for any reason, we would be forced to return the
@@ -256,14 +258,14 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 and the sender would then be required to pick them up, or pay
                 another delivery fee.
               </p>
-              <p className="vertical-margin">
+              <p className="vertical-margin normal-text">
                 Due to the fact that our delivery partners are not able to wait
                 at the destination for an email response, we usually return the
                 flowers and gifts to our flower shop in Lagos, Nigeria and
                 Abuja, Nigeria if the mode of communication with the sender was
                 by email.
               </p>
-              <p>
+              <p className="normal-text">
                 Due to the perishable nature of flowers and some gifts (cakes,
                 cupcakes), items returned to our flower shop in Lagos, Nigeria
                 and Abuja, Nigeria would be held for a limited amount of time
