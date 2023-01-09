@@ -490,11 +490,11 @@ const ProductsPage: FunctionComponent<{
               {products?.map((product, index, arr) => (
                 <FlowerCard
                   key={index}
-                  name={product.name}
+                  name={product.name.split("–")[0]}
                   image={product.images[0].src}
                   price={product.price}
                   buttonText="Add to Cart"
-                  subTitle={product.subtitle}
+                  subTitle={product.name.split("–")[1]}
                   url={`/products/${product.slug}`}
                   // mode="three-x-grid"
                   mode={`${

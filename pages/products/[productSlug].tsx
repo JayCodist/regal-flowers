@@ -145,7 +145,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             className="generic-icon small margin-left"
           />
         </span>
-        <span className="generic-icon small margin-left">{product.name}</span>
+        <span className="generic-icon small margin-left">
+          {product.name.split("–")[0]}
+        </span>
       </div>
       <div className={`${styles["product-content"]} flex between`}>
         <div className={styles["slider-wrapper"]}>
@@ -252,10 +254,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         <div>
           <div className="flex center-align between">
             <div>
-              <h1 className="title">
-                {product.name}-{product.subtitle}
-              </h1>
-              <p>{product.subtitle}</p>
+              <h1 className="title">{product.name.split("–")[0]}</h1>
+              <p>{product.name}</p>
             </div>
             <div className="bold primary-color center">
               <p>FROM</p>

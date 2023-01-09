@@ -803,7 +803,7 @@ export const filtersCatgories: {
     name: "Design",
     options: [
       {
-        name: "Bouquets"
+        name: "Flowerss"
       },
       {
         name: "Box Arrangements"
@@ -989,13 +989,13 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Bouquets",
-            url: "/filters?selectedOccasion=Bouquets",
+            title: "Flowers",
+            url: "/filters?selectedOccasion=Flowers",
             children: []
           },
           {
-            title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Bouquets",
+            title: "VIP Flowers",
+            url: "/filters?selectedOccasion=Flowers",
             children: []
           },
           {
@@ -1010,13 +1010,13 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Bouquets",
-            url: "/filters?selectedOccasion=Just to Say Bouquets",
+            title: "Flowers",
+            url: "/filters?selectedOccasion=Just to Say Flowers",
             children: []
           },
           {
-            title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Bouquets",
+            title: "VIP Flowers",
+            url: "/filters?selectedOccasion=Flowers",
             children: []
           },
           {
@@ -1031,13 +1031,13 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Bouquets",
-            url: "/filters?selectedOccasion=Bouquets",
+            title: "Flowers",
+            url: "/filters?selectedOccasion=Flowers",
             children: []
           },
           {
-            title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Bouquets",
+            title: "VIP Flowers",
+            url: "/filters?selectedOccasion=Flowers",
             children: []
           },
           {
@@ -1052,13 +1052,13 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Bouquets",
-            url: "/filters?selectedOccasion=Bridal Bouquets",
+            title: "Flowers",
+            url: "/filters?selectedOccasion=Bridal Flowers",
             children: []
           },
           {
-            title: "Cascading Bouquets",
-            url: "/filters?selectedOccasion=Cascading/Dropping Bouquets",
+            title: "Cascading Flowers",
+            url: "/filters?selectedOccasion=Cascading/Dropping Flowers",
             children: []
           },
           {
@@ -1073,13 +1073,13 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Wreaths & Bouquets",
-            url: "/filters?selectedOccasion=Bouquets",
+            title: "Wreaths & Flowers",
+            url: "/filters?selectedOccasion=Flowers",
             children: []
           },
           {
-            title: "VIP Bouquets",
-            url: "/filters?selectedOccasion=Bouquets",
+            title: "VIP Flowers",
+            url: "/filters?selectedOccasion=Flowers",
             children: []
           }
         ]
@@ -1122,8 +1122,8 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Bouquets",
-            url: "/filters?shopBy=Bouquets",
+            title: "Flowers",
+            url: "/filters?shopBy=Flowers",
             children: []
           },
           {
