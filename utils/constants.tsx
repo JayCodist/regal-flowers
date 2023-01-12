@@ -803,7 +803,7 @@ export const filtersCatgories: {
     name: "Design",
     options: [
       {
-        name: "Flowerss"
+        name: "Bouquets"
       },
       {
         name: "Box Arrangements"
@@ -1122,7 +1122,7 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Flowers",
+            title: "Bouquets",
             url: "/filters?shopBy=Flowers",
             children: []
           },
