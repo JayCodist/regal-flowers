@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { Dayjs } from "dayjs";
+import { AppCurrencyName } from "./Core";
 
 interface OrderItem {
   SKU?: string;
@@ -264,4 +265,5 @@ export interface PaymentMethod {
   info: string;
   icon: ReactNode;
   other?: { icon: ReactNode }[];
+  supportedCurrencies: AppCurrencyName[];
 }

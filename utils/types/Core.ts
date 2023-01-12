@@ -9,8 +9,10 @@ export interface AppLink {
   subtitle?: string;
 }
 
+export type AppCurrencyName = "NGN" | "GBP" | "USD";
+
 export interface AppCurrency {
-  name: "NGN" | "GBP" | "USD";
+  name: AppCurrencyName;
   conversionRate: number;
   sign?: string;
 }

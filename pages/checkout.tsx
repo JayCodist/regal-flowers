@@ -32,8 +32,13 @@ import {
 } from "../utils/helpers/data/payments";
 import useMonnify from "../utils/hooks/useMonnify";
 import Modal, { ModalProps } from "../components/modal/Modal";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import { PayPalButtons } from "@paypal/react-paypal-js/dist/types/components/PayPalButtons";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import {
+  CreateOrderActions,
+  CreateOrderData,
+  OnApproveActions,
+  OnApproveData
+} from "@paypal/paypal-js";
 
 const initialData = {
   senderName: "",
@@ -110,7 +115,7 @@ const Checkout: FunctionComponent = () => {
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
     email: formData.senderEmail || placeholderEmail,
-    amount: (order?.amount || 0) * 100,
+    amount: ((order?.amount || 0) * 100) / currency.conversionRate,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
@@ -294,10 +299,10 @@ const Checkout: FunctionComponent = () => {
           amount: order?.amount || 0,
           customerEmail: formData.senderEmail || placeholderEmail,
           customerFullName: formData.senderName || "N/A",
-          apiKey: "MK_TEST_6RX7M5H3DK",
-          contractCode: "2480629209",
+          apiKey: "MK_PROD_Z0NZF5VHDS",
+          contractCode: "252548871448",
           currency: "NGN",
-          reference: order?.id as string, // Problematic for repeat payments
+          reference: order?.id as string, // Problematic for repeat/cancelled payments
           paymentDescription: "Regal Flowers Order",
           onComplete: async response => {
             setPageLoading(true);
@@ -806,10 +811,6 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           ))}
                         </div>
-                        <PaypalModal
-                          visible={showPaypal}
-                          cancel={() => setShowPaypal(false)}
-                        />
                         <div className={styles.security}>
                           {" "}
                           <div className={styles["lock-icon"]}>
@@ -1922,16 +1923,62 @@ const Checkout: FunctionComponent = () => {
           </div>
         </section>
       )}
+      <PaypalModal
+        visible={showPaypal}
+        cancel={() => setShowPaypal(false)}
+        order={order}
+      />
     </>
   );
 };
 
-const PaypalModal: FunctionComponent<ModalProps> = ({ visible, cancel }) => {
+const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
+  visible,
+  cancel,
+  order
+}) => {
+  const { currency } = useContext(SettingsContext);
+
+  const handleSessionCreate = (
+    data: CreateOrderData,
+    actions: CreateOrderActions
+  ) => {
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            value: String(
+              ((order?.amount || 0) * 100) / currency.conversionRate
+            )
+          }
+        }
+      ]
+    });
+  };
+
+  const handleApprove = async (
+    data: OnApproveData,
+    actions: OnApproveActions
+  ) => {
+    const details = await actions.order?.capture();
+    const name = details?.payer.name?.given_name;
+    alert(`Transaction completed by ${name}`);
+  };
+
   return (
     <Modal visible={visible} cancel={cancel}>
       <h1 className="title thin">Paypal</h1>
-      <PayPalScriptProvider options={{ "client-id": "sb" }}>
-        <PayPalButtons style={{ layout: "horizontal" }} />
+      <PayPalScriptProvider
+        options={{
+          "client-id":
+            "AW_ULm5wau1-h9eyogtL-x_9sbXZSMCqqPbCWwyn_K77VgFufBPgtDVmaXHeE4KMYiTgm8OYLcU7Nyqy"
+        }}
+      >
+        <PayPalButtons
+          style={{ layout: "horizontal" }}
+          createOrder={handleSessionCreate}
+          onApprove={handleApprove}
+        />
       </PayPalScriptProvider>
     </Modal>
   );

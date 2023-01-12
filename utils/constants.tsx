@@ -527,6 +527,7 @@ export const paymentMethod: PaymentMethod[] = [
   {
     title: "Pay with Paystack",
     paymentName: "paystack",
+    supportedCurrencies: ["NGN", "USD"],
     icon: (
       <svg
         width="13"
@@ -617,6 +618,7 @@ export const paymentMethod: PaymentMethod[] = [
   {
     title: "PayPal",
     paymentName: "payPal",
+    supportedCurrencies: ["USD"],
     icon: (
       <svg
         width="32"
@@ -638,6 +640,7 @@ export const paymentMethod: PaymentMethod[] = [
   {
     title: "Bank Transfer",
     paymentName: "monnify",
+    supportedCurrencies: ["NGN"],
     icon: (
       <img
         src="/icons/monnify-logo.png"
