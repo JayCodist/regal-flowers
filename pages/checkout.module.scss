@@ -59,10 +59,9 @@
       border: none;
       transition: 0.1s ease-out;
       border: 0.1rem solid transparent;
-
-      &.active {
-        background-color: white;
-        border: 0.1rem solid #9b0000;
+      &.inactive {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
 
       &:hover {
@@ -121,8 +120,9 @@
       align-items: center;
       cursor: pointer;
 
-      &.active {
-        border: 0.1rem solid #9b0000;
+      &.inactive {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
     }
   }
@@ -433,8 +433,9 @@
       align-items: center;
       cursor: pointer;
 
-      &.active {
-        border: 0.1rem solid #9b0000;
+      &.inactive {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
     }
   }

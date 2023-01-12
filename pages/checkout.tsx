@@ -788,9 +788,26 @@ const Checkout: FunctionComponent = () => {
                           {paymentMethod.map((method, index) => (
                             <div key={index}>
                               <div
-                                className={[styles.method].join(" ")}
-                                onClick={() =>
-                                  paymentHandlerMap[method.paymentName]()
+                                className={[
+                                  styles.method,
+                                  !method.supportedCurrencies.includes(
+                                    currency.name
+                                  ) && styles.inactive
+                                ].join(" ")}
+                                onClick={
+                                  method.supportedCurrencies.includes(
+                                    currency.name
+                                  )
+                                    ? () =>
+                                        paymentHandlerMap[method.paymentName]()
+                                    : undefined
+                                }
+                                title={
+                                  !method.supportedCurrencies.includes(
+                                    currency.name
+                                  )
+                                    ? `This payment method does not support ${currency.name}`
+                                    : ""
                                 }
                               >
                                 <div className="flex spaced-lg center-align">
