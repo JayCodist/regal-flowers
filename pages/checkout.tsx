@@ -31,6 +31,9 @@ import {
   verifyPaystackPayment
 } from "../utils/helpers/data/payments";
 import useMonnify from "../utils/hooks/useMonnify";
+import Modal, { ModalProps } from "../components/modal/Modal";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { PayPalButtons } from "@paypal/react-paypal-js/dist/types/components/PayPalButtons";
 
 const initialData = {
   senderName: "",
@@ -85,6 +88,7 @@ const Checkout: FunctionComponent = () => {
   const [isPaid, setIsPaid] = useState(false);
   const [pickUpOptions, setPickUpOptions] = useState<Option[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showPaypal, setShowPaypal] = useState(false);
 
   const [activeTab, setActiveTab] = useState<TabKey>("delivery");
   const [deliveryStage, setDeliveryStage] = useState<DeliverStage>(
@@ -314,9 +318,11 @@ const Checkout: FunctionComponent = () => {
         });
       }
     },
+    payPal: () => {
+      setShowPaypal(true);
+    },
     manualTransfer: () => {},
-    googlePay: () => {},
-    payPal: () => {}
+    googlePay: () => {}
   };
 
   interface Tab {
@@ -800,6 +806,10 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           ))}
                         </div>
+                        <PaypalModal
+                          visible={showPaypal}
+                          cancel={() => setShowPaypal(false)}
+                        />
                         <div className={styles.security}>
                           {" "}
                           <div className={styles["lock-icon"]}>
@@ -1916,8 +1926,15 @@ const Checkout: FunctionComponent = () => {
   );
 };
 
-export default Checkout;
+const PaypalModal: FunctionComponent<ModalProps> = ({ visible, cancel }) => {
+  return (
+    <Modal visible={visible} cancel={cancel}>
+      <h1 className="title thin">Paypal</h1>
+      <PayPalScriptProvider options={{ "client-id": "sb" }}>
+        <PayPalButtons style={{ layout: "horizontal" }} />
+      </PayPalScriptProvider>
+    </Modal>
+  );
+};
 
-// const isPaid = paymentStatus => {
-//   return /go\s*ahead/i.test(paymentStatus) || /^paid/i.test(paymentStatus);
-// };
+export default Checkout;
