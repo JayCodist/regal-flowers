@@ -95,6 +95,14 @@ button {
   &.small {
     font-size: 1.3rem;
   }
+
+  @media (max-width: 850px) {
+    font-size: 2rem;
+
+    &.small {
+      font-size: 1.6rem;
+    }
+  }
 }
 .flex {
   display: flex;
@@ -646,8 +654,20 @@ button {
 
 .normal-text {
   font-size: 1.1rem;
+  line-height: 1.7;
   &.bold {
     font-weight: 600;
+  }
+
+  @media (max-width: 980px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 850px) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: 650px) {
+    font-size: 1.2rem;
   }
 }
 

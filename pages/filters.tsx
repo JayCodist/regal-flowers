@@ -134,17 +134,21 @@ export const _gifts = [
 
 const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
-const Index: FunctionComponent<{ product: Product }> = () => {
+type ProductCategory = "vip" | "occasion";
+
+const ProductsPage: FunctionComponent<{
+  productCategory: ProductCategory;
+}> = props => {
+  const { productCategory = "occasion" } = props;
+
   const { query } = useRouter();
-  const { selectedOccasion } = query;
+  const { selectedOccasion, shopBy } = query;
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
   const [category, setCategory] = useState<string>();
-  const [selectedFilterCategory, setSelectedFilterCategory] = useState<
-    string[]
-  >([]);
+
   const [selectedTagCategories, setSelectedTagCategories] = useState<string[]>(
     []
   );
@@ -188,14 +192,9 @@ const Index: FunctionComponent<{ product: Product }> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
-  const handleFilterCategoryChange = (name: string, category: string) => {
+  const handleFilterCategoryChange = (name: string) => {
     setSelectedFilter(prev =>
       prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
-    );
-    setSelectedFilterCategory(prev =>
-      prev.includes(category)
-        ? prev.filter(item => item !== category)
-        : [...prev, category]
     );
   };
 
@@ -211,16 +210,16 @@ const Index: FunctionComponent<{ product: Product }> = () => {
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
-    setSelectedFilterCategory([]);
   };
 
   const fetchProductCategory = async () => {
     products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
     const filterParams = {
-      category: selectedFilterCategory.length
-        ? selectedFilterCategory
-        : [category || (selectedOccasion as string)],
-      tags: selectedTagCategories
+      category: selectedFilter.length
+        ? selectedFilter
+        : [category || (selectedOccasion as string) || (shopBy as string)],
+      tags: selectedTagCategories,
+      productClass: productCategory === "vip" ? "vip" : "regular"
     };
     const params: FetchResourceParams = {
       pageNumber: page,
@@ -231,6 +230,7 @@ const Index: FunctionComponent<{ product: Product }> = () => {
       console.log(response.error);
     } else {
       setHasMore((response.data as Product[]).length > 0);
+
       setProducts((prev: any) => [...prev, ...(response.data as Product[])]);
     }
     products.length === 0
@@ -239,49 +239,74 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   };
 
   useEffect(() => {
-    setProducts([]);
-  }, [selectedFilterCategory, category, selectedTagCategories]);
+    if (productCategory === "vip") {
+      const filteredCategory = filterCategories.filter(
+        item => item.name.toLowerCase() !== "budget"
+      );
+      setFilterCategories(filteredCategory);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOccasion]);
 
   useEffect(() => {
     fetchProductCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     category,
-    selectedFilterCategory,
+    selectedFilter,
     page,
     selectedTagCategories,
-    selectedOccasion
+    selectedOccasion,
+    shopBy
   ]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
-      <div className={[styles["hero-bg"]].join(" ")}>
+      <div
+        className={[
+          styles["hero-bg"],
+          productCategory === "occasion" && styles["occasion-bg"],
+          productCategory === "vip" && styles["vip-bg"]
+        ].join(" ")}
+      >
         <div className={`hero-content flex column center center-align `}>
-          <div className={styles["occasion-wrapper"]}>
-            {occasions.map(occasion => (
-              <Link href={occasion.url} key={occasion.title}>
-                <a
-                  className={[
-                    styles["occasion"],
-                    selectedOccasion === occasion.url.split("=")[1] &&
-                      styles["active"]
-                  ].join(" ")}
-                  onClick={() => {
-                    setCategory(occasion?.category || "");
-                  }}
-                >
-                  <strong>
-                    {occasion.title}
-                    <br />
-                    {occasion.title === "Just to Say" && (
-                      <span>{JustToSayText}</span>
-                    )}{" "}
-                  </strong>
-                </a>
-              </Link>
-            ))}
-          </div>
-          {/* )} */}
+          {productCategory === "occasion" && (
+            <div className={styles["occasion-wrapper"]}>
+              {occasions.map((occasion, index) => (
+                <Link href={occasion.url} key={index}>
+                  <a
+                    className={[
+                      styles["occasion"],
+                      selectedOccasion === occasion.url.split("=")[1] &&
+                        styles["active"]
+                    ].join(" ")}
+                    onClick={() => {
+                      setCategory(occasion?.category || "");
+                    }}
+                  >
+                    <strong>
+                      {occasion.title}
+                      <br />
+                      {occasion.title === "Just to Say" && (
+                        <span>{JustToSayText}</span>
+                      )}{" "}
+                    </strong>
+                  </a>
+                </Link>
+              ))}
+            </div>
+          )}
+          {productCategory === "vip" && (
+            <div className={styles["vip-wrapper"]}>
+              <strong className={styles["wow"]}>Wow Them</strong>
+              <h1 className="primary-color">
+                Go All-Out With VIP Flower Arrangements
+              </h1>
+              <p className={styles["info"]}>
+                All VIP Orders Come With a Complimentary Gift
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <div
@@ -311,10 +336,7 @@ const Index: FunctionComponent<{ product: Product }> = () => {
                       <Checkbox
                         onChange={() => {
                           child.category
-                            ? handleFilterCategoryChange(
-                                child.name,
-                                child.category || ""
-                              )
+                            ? handleFilterCategoryChange(child.name)
                             : handleTagCategoryChange(child.name, child.tag);
                         }}
                         text={child.name}
@@ -404,10 +426,7 @@ const Index: FunctionComponent<{ product: Product }> = () => {
                           <Checkbox
                             onChange={() => {
                               child.category
-                                ? handleFilterCategoryChange(
-                                    child.name,
-                                    child.category || ""
-                                  )
+                                ? handleFilterCategoryChange(child.name)
                                 : handleTagCategoryChange(
                                     child.name,
                                     child.tag
@@ -446,12 +465,19 @@ const Index: FunctionComponent<{ product: Product }> = () => {
           </div>
 
           <div>
-            <p className={`${styles.title} bold vertical-margin spaced`}>
-              {occasions.filter(occasion => {
-                return selectedOccasion === occasion.url.split("=")[1];
-              })[0]?.title || selectedOccasion}{" "}
-              Flowers
-            </p>
+            {productCategory === "occasion" && (
+              <p className={`${styles.title} bold vertical-margin spaced`}>
+                {occasions.filter(occasion => {
+                  return selectedOccasion === occasion.url.split("=")[1];
+                })[0]?.title || selectedOccasion}{" "}
+                Flowers
+              </p>
+            )}
+            {productCategory === "vip" && (
+              <p className={`${styles.title} bold vertical-margin spaced`}>
+                VIP Flower Arrangements
+              </p>
+            )}
 
             <div className={`${styles.products}`}>
               {productsLoading && (
@@ -464,11 +490,11 @@ const Index: FunctionComponent<{ product: Product }> = () => {
               {products?.map((product, index, arr) => (
                 <FlowerCard
                   key={index}
-                  name={product.name}
+                  name={product.name.split("–")[0]}
                   image={product.images[0].src}
                   price={product.price}
                   buttonText="Add to Cart"
-                  subTitle={product.details}
+                  subTitle={product.name.split("–")[1]}
                   url={`/products/${product.slug}`}
                   // mode="three-x-grid"
                   mode={`${
@@ -582,4 +608,4 @@ const Index: FunctionComponent<{ product: Product }> = () => {
   );
 };
 
-export default Index;
+export default ProductsPage;

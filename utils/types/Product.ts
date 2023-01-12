@@ -47,6 +47,7 @@ interface Product {
   description?: string;
   details: string;
   relatedProducts?: MinimalProduct[];
+  class: "regular" | "vip";
 }
 
 export default Product;

@@ -78,17 +78,9 @@
 
   .detail {
     padding: 0.6rem 1rem;
-
-    & strong {
-      width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: inline-block;
-    }
   }
   .subtitle {
-    font-size: smaller;
+    font-size: small;
     color: #6b7280;
     margin-top: 0.2rem;
     height: 2rem;
