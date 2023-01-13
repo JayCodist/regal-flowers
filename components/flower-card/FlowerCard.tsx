@@ -76,8 +76,8 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
             />
           </div>
           <div className={styles.detail}>
-            <strong>{name}</strong>
-            {subTitle && <span className={styles.subtitle}>{subTitle}</span>}
+            <strong className="normal-text">{name}</strong>
+            {subTitle && <p className={styles.subtitle}>{subTitle}</p>}
             {!onlyTitle && (
               <div
                 className={`flex margin-top spaced ${
