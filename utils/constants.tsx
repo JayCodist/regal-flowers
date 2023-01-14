@@ -618,7 +618,7 @@ export const paymentMethod: PaymentMethod[] = [
   {
     title: "PayPal",
     paymentName: "payPal",
-    supportedCurrencies: ["USD"],
+    supportedCurrencies: ["USD", "GBP"],
     icon: (
       <svg
         width="32"

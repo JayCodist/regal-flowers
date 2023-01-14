@@ -3,7 +3,14 @@ import Link from "next/link";
 import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import { useRouter } from "next/router";
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import {
+  FunctionComponent,
+  MutableRefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import Button from "../components/button/Button";
 import Checkbox from "../components/checkbox/Checkbox";
 import DatePicker from "../components/date-picker/DatePicker";
@@ -28,6 +35,7 @@ import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
 import {
   verifyMonnifyPayment,
+  verifyPaypalPayment,
   verifyPaystackPayment
 } from "../utils/helpers/data/payments";
 import useMonnify from "../utils/hooks/useMonnify";
@@ -39,6 +47,7 @@ import {
   OnApproveActions,
   OnApproveData
 } from "@paypal/paypal-js";
+import { AppCurrency } from "../utils/types/Core";
 
 const initialData = {
   senderName: "",
@@ -1727,7 +1736,7 @@ const Checkout: FunctionComponent = () => {
                   </div>
                   {deliveryMethod === "pick-up" && (
                     <div className="flex between">
-                      <span className="normal-text">Delivery </span>
+                      <span className="normal-text">Delivery</span>
                       <span className="normal-text bold">
                         ₦{order?.amount.toLocaleString()}
                       </span>
@@ -1930,7 +1939,7 @@ const Checkout: FunctionComponent = () => {
                     Continue Shopping
                   </Button>
                   {isDelivered(order?.deliveryStatus) && (
-                    <Link href="/#">
+                    <Link href="#">
                       <a className={styles.track}>Track Order</a>
                     </Link>
                   )}
@@ -1954,7 +1963,10 @@ const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
   cancel,
   order
 }) => {
-  const { currency } = useContext(SettingsContext);
+  const { currency, notify } = useContext(SettingsContext);
+  const currencyRef: MutableRefObject<AppCurrency> = useRef(currency);
+
+  currencyRef.current = currency;
 
   const handleSessionCreate = (
     data: CreateOrderData,
@@ -1965,9 +1977,13 @@ const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
         {
           amount: {
             value: String(
-              ((order?.amount || 0) * 100) / currency.conversionRate
+              (
+                (order?.amount || 0) /
+                (currencyRef.current?.conversionRate || 1)
+              ).toFixed(2)
             )
-          }
+          },
+          reference_id: order?.id
         }
       ]
     });
@@ -1978,21 +1994,37 @@ const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
     actions: OnApproveActions
   ) => {
     const details = await actions.order?.capture();
-    const name = details?.payer.name?.given_name;
-    alert(`Transaction completed by ${name}`);
+    const { error, message } = await verifyPaypalPayment(
+      details?.purchase_units?.[0].reference_id as string
+    );
+    if (error) {
+      notify("error", `Unable to verify paystack payment: ${message}`);
+    } else {
+      notify("success", "Successfully paid for order");
+      cancel?.();
+    }
   };
 
   return (
     <Modal visible={visible} cancel={cancel}>
-      <h1 className="title thin">Paypal</h1>
+      <h1 className="title thin margin-bottom spaced">
+        Complete Paypal Payment
+      </h1>
       <PayPalScriptProvider
         options={{
           "client-id":
-            "AW_ULm5wau1-h9eyogtL-x_9sbXZSMCqqPbCWwyn_K77VgFufBPgtDVmaXHeE4KMYiTgm8OYLcU7Nyqy"
+            "AW_ULm5wau1-h9eyogtL-x_9sbXZSMCqqPbCWwyn_K77VgFufBPgtDVmaXHeE4KMYiTgm8OYLcU7Nyqy",
+          currency: currencyRef.current?.name,
+          "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
         }}
       >
         <PayPalButtons
-          style={{ layout: "horizontal" }}
+          style={{
+            layout: "vertical",
+            shape: "pill",
+            label: "pay"
+          }}
+          className="vertical-margin spaced"
           createOrder={handleSessionCreate}
           onApprove={handleApprove}
         />

@@ -60,7 +60,7 @@
       transition: 0.1s ease-out;
       border: 0.1rem solid transparent;
       &.inactive {
-        opacity: 0.5;
+        opacity: 0.3;
         cursor: not-allowed;
       }
 
@@ -121,7 +121,7 @@
       cursor: pointer;
 
       &.inactive {
-        opacity: 0.5;
+        opacity: 0.3;
         cursor: not-allowed;
       }
     }
@@ -434,7 +434,7 @@
       cursor: pointer;
 
       &.inactive {
-        opacity: 0.5;
+        opacity: 0.3;
         cursor: not-allowed;
       }
     }
