@@ -8,6 +8,7 @@ import {
   MutableRefObject,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
@@ -21,7 +22,7 @@ import Select, { Option } from "../components/select/Select";
 import {
   currencyOptions,
   deliveryStates,
-  paymentMethod,
+  paymentMethods,
   placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
@@ -44,7 +45,6 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import {
   CreateOrderActions,
   CreateOrderData,
-  OnApproveActions,
   OnApproveData
 } from "@paypal/paypal-js";
 import { AppCurrency } from "../utils/types/Core";
@@ -794,7 +794,7 @@ const Checkout: FunctionComponent = () => {
                           </span>{" "}
                         </p>
                         <div className={styles["payment-methods"]}>
-                          {paymentMethod.map((method, index) => (
+                          {paymentMethods.map((method, index) => (
                             <div key={index}>
                               <div
                                 className={[
@@ -1781,7 +1781,7 @@ const Checkout: FunctionComponent = () => {
                   </div>
 
                   <div className={styles["payment-methods"]}>
-                    {paymentMethod.map((method, index) => (
+                    {paymentMethods.map((method, index) => (
                       <div key={index}>
                         <div
                           className={[styles.method].join(" ")}
@@ -1989,14 +1989,8 @@ const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
     });
   };
 
-  const handleApprove = async (
-    data: OnApproveData,
-    actions: OnApproveActions
-  ) => {
-    const details = await actions.order?.capture();
-    const { error, message } = await verifyPaypalPayment(
-      details?.purchase_units?.[0].reference_id as string
-    );
+  const handleApprove = async (data: OnApproveData) => {
+    const { error, message } = await verifyPaypalPayment(data.orderID);
     if (error) {
       notify("error", `Unable to verify paystack payment: ${message}`);
     } else {
@@ -2005,30 +1999,38 @@ const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
     }
   };
 
+  const canInitialize = useMemo(() => {
+    return paymentMethods
+      .find(method => method.paymentName === "payPal")
+      ?.supportedCurrencies.includes(currency.name);
+  }, [currency]);
+
   return (
     <Modal visible={visible} cancel={cancel}>
       <h1 className="title thin margin-bottom spaced">
         Complete Paypal Payment
       </h1>
-      <PayPalScriptProvider
-        options={{
-          "client-id":
-            "AW_ULm5wau1-h9eyogtL-x_9sbXZSMCqqPbCWwyn_K77VgFufBPgtDVmaXHeE4KMYiTgm8OYLcU7Nyqy",
-          currency: currencyRef.current?.name,
-          "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
-        }}
-      >
-        <PayPalButtons
-          style={{
-            layout: "vertical",
-            shape: "pill",
-            label: "pay"
+      {canInitialize && (
+        <PayPalScriptProvider
+          options={{
+            "client-id":
+              "AW_ULm5wau1-h9eyogtL-x_9sbXZSMCqqPbCWwyn_K77VgFufBPgtDVmaXHeE4KMYiTgm8OYLcU7Nyqy",
+            currency: currencyRef.current?.name,
+            "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
           }}
-          className="vertical-margin spaced"
-          createOrder={handleSessionCreate}
-          onApprove={handleApprove}
-        />
-      </PayPalScriptProvider>
+        >
+          <PayPalButtons
+            style={{
+              layout: "vertical",
+              shape: "pill",
+              label: "pay"
+            }}
+            className="vertical-margin spaced"
+            createOrder={handleSessionCreate}
+            onApprove={handleApprove}
+          />
+        </PayPalScriptProvider>
+      )}
     </Modal>
   );
 };

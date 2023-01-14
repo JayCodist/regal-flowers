@@ -523,7 +523,7 @@ export const deliveryStates: Option[] = [
   }
 ];
 
-export const paymentMethod: PaymentMethod[] = [
+export const paymentMethods: PaymentMethod[] = [
   {
     title: "Pay with Paystack",
     paymentName: "paystack",
