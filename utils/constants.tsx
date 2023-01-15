@@ -56,17 +56,17 @@ export const footerContent: FooterContent = {
       url: ""
     },
     {
-      name: "facebook",
+      name: "instagram",
       src: "icons/footer/instagram.svg",
       url: ""
     },
     {
-      name: "facebook",
+      name: "linkedIn",
       src: "icons/footer/linkedin.svg",
       url: ""
     },
     {
-      name: "facebook",
+      name: "whatsapp",
       src: "icons/footer/whatsapp.svg",
       url: ""
     }

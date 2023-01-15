@@ -93,7 +93,8 @@ const ProductsPage: FunctionComponent<{
 }> = props => {
   const { productCategory = "occasion" } = props;
 
-  const { query } = useRouter();
+  const router = useRouter();
+  const { query, isReady } = router;
   const { selectedOccasion, shopBy } = query;
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -115,6 +116,15 @@ const ProductsPage: FunctionComponent<{
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
   });
+
+  useEffect(() => {
+    if (isReady) {
+      const filters = String(shopBy || "")
+        .split(",")
+        .filter(Boolean);
+      setSelectedFilter(filters);
+    }
+  }, [shopBy, isReady]);
 
   const { notify } = useContext(SettingsContext);
 
@@ -205,14 +215,7 @@ const ProductsPage: FunctionComponent<{
   useEffect(() => {
     fetchProductCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    category,
-    selectedFilter,
-    page,
-    selectedTagCategories,
-    selectedOccasion,
-    shopBy
-  ]);
+  }, [category, selectedFilter, page, selectedTagCategories, selectedOccasion]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -285,13 +288,18 @@ const ProductsPage: FunctionComponent<{
                   {(filter.viewMore
                     ? filter.options
                     : filter.options.slice(0, filter.limit)
-                  ).map((child, index) => (
-                    <div key={index} className="margin-bottom">
+                  ).map((child, i) => (
+                    <div key={i} className="margin-bottom">
                       <Checkbox
                         onChange={() => {
-                          child.category
-                            ? handleFilterCategoryChange(child.name)
-                            : handleTagCategoryChange(child.name, child.tag);
+                          const newFilters = selectedFilter.includes(child.name)
+                            ? selectedFilter.filter(
+                                _filter => _filter !== child.name
+                              )
+                            : [...selectedFilter, child.name];
+                          router.push(
+                            `${router.pathname}?shopBy=${newFilters.join(",")}`
+                          );
                         }}
                         text={child.name}
                         checked={selectedFilter.includes(child.name)}
