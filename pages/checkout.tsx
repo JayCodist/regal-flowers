@@ -272,6 +272,12 @@ const Checkout: FunctionComponent = () => {
     );
   }
 
+  const markAsPaid = () => {
+    setActiveTab("done");
+    setIsPaid(true);
+    setCurrentStage(3);
+  };
+
   const paymentHandlerMap: Record<PaymentName, () => void> = {
     paystack: () => {
       interface PaystackSuccessResponse {
@@ -295,9 +301,7 @@ const Checkout: FunctionComponent = () => {
           notify("error", `Unable to make payment: ${message}`);
         } else {
           notify("success", `Order paid successfully`);
-          setActiveTab("done");
-          setIsPaid(true);
-          setCurrentStage(3);
+          markAsPaid();
         }
       };
       initializePayment(successHandler, () => {});
@@ -323,9 +327,7 @@ const Checkout: FunctionComponent = () => {
               notify("error", `Unable to make payment: ${message}`);
             } else {
               notify("success", `Order paid successfully`);
-              setActiveTab("done");
-              setIsPaid(true);
-              setCurrentStage(3);
+              markAsPaid();
             }
           },
           onClose: () => {}
@@ -1953,16 +1955,16 @@ const Checkout: FunctionComponent = () => {
         visible={showPaypal}
         cancel={() => setShowPaypal(false)}
         order={order}
+        onComplete={markAsPaid}
       />
     </>
   );
 };
 
-const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
-  visible,
-  cancel,
-  order
-}) => {
+const PaypalModal: FunctionComponent<ModalProps & {
+  order: Order | null;
+  onComplete: () => void;
+}> = ({ visible, cancel, order, onComplete }) => {
   const { currency, notify } = useContext(SettingsContext);
   const currencyRef: MutableRefObject<AppCurrency> = useRef(currency);
 
@@ -1995,6 +1997,7 @@ const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
       notify("error", `Unable to verify paystack payment: ${message}`);
     } else {
       notify("success", "Successfully paid for order");
+      onComplete();
       cancel?.();
     }
   };
