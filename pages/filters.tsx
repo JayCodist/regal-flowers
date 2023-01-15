@@ -1,4 +1,10 @@
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dayjs, { Dayjs } from "dayjs";
@@ -21,61 +27,7 @@ import useDeviceType from "../utils/hooks/useDeviceType";
 import Button from "../components/button/Button";
 import useOutsideClick from "../utils/hooks/useOutsideClick";
 import styles from "./filters.module.scss";
-
-export const flowers = [
-  {
-    ...otherSampleProducts,
-    images: [
-      {
-        src: "/images/sample-flowers/sample-1.png",
-        id: 12,
-        alt: "5 peas in a pod"
-      }
-    ],
-    name: "5 Peas in a pod",
-    price: 6000,
-    details: "5 Peas in a pod"
-  },
-  {
-    ...otherSampleProducts,
-    images: [
-      {
-        src: "/images/sample-flowers/sample-2.png",
-        id: 12,
-        alt: "5 peas in a pod"
-      }
-    ],
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod"
-  },
-  {
-    ...otherSampleProducts,
-    name: "5 Peas in a pod",
-    images: [
-      {
-        src: "/images/sample-flowers/sample-3.png",
-        id: 12,
-        alt: "5 peas in a pod"
-      }
-    ],
-    price: 36000,
-    details: "5 Peas in a pod"
-  },
-  {
-    ...otherSampleProducts,
-    images: [
-      {
-        src: "/images/sample-flowers/sample-4.png",
-        id: 12,
-        alt: "5 peas in a pod"
-      }
-    ],
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod"
-  }
-];
+import SettingsContext from "../utils/context/SettingsContext";
 
 export const _gifts = [
   {
@@ -164,6 +116,8 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
+  const { notify } = useContext(SettingsContext);
+
   const deviceType = useDeviceType();
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -227,7 +181,7 @@ const ProductsPage: FunctionComponent<{
     };
     const response = await getProductsByCategory(params);
     if (response.error) {
-      console.log(response.error);
+      notify("error", `Unable to fetch product category: ${response.message}`);
     } else {
       setHasMore((response.data as Product[]).length > 0);
 
