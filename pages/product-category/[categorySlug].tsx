@@ -5,7 +5,7 @@ import ProductsPage from "../filters";
 
 const CategoryPage: FunctionComponent<{
   categorySlug: string;
-}> = ({ categorySlug }) => {
+}> = ({}) => {
   return <ProductsPage productCategory="occasion" />;
 };
 
