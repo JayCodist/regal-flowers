@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import ProductsPage from "../filters";
+import ProductsPage from "./filters";
 
 const VipPage: FunctionComponent<{
   filters: string;

@@ -3,7 +3,7 @@ import { FetchResourceParams } from "../../types/FetchResourceParams";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 
-export const getCategory: (
+export const getCategories: (
   params: FetchResourceParams
 ) => Promise<RequestResponse<Category[]>> = async params => {
   try {

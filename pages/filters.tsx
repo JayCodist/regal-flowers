@@ -1,4 +1,10 @@
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import dayjs, { Dayjs } from "dayjs";
@@ -21,61 +27,7 @@ import useDeviceType from "../utils/hooks/useDeviceType";
 import Button from "../components/button/Button";
 import useOutsideClick from "../utils/hooks/useOutsideClick";
 import styles from "./filters.module.scss";
-
-export const flowers = [
-  {
-    ...otherSampleProducts,
-    images: [
-      {
-        src: "/images/sample-flowers/sample-1.png",
-        id: 12,
-        alt: "5 peas in a pod"
-      }
-    ],
-    name: "5 Peas in a pod",
-    price: 6000,
-    details: "5 Peas in a pod"
-  },
-  {
-    ...otherSampleProducts,
-    images: [
-      {
-        src: "/images/sample-flowers/sample-2.png",
-        id: 12,
-        alt: "5 peas in a pod"
-      }
-    ],
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod"
-  },
-  {
-    ...otherSampleProducts,
-    name: "5 Peas in a pod",
-    images: [
-      {
-        src: "/images/sample-flowers/sample-3.png",
-        id: 12,
-        alt: "5 peas in a pod"
-      }
-    ],
-    price: 36000,
-    details: "5 Peas in a pod"
-  },
-  {
-    ...otherSampleProducts,
-    images: [
-      {
-        src: "/images/sample-flowers/sample-4.png",
-        id: 12,
-        alt: "5 peas in a pod"
-      }
-    ],
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod"
-  }
-];
+import SettingsContext from "../utils/context/SettingsContext";
 
 export const _gifts = [
   {
@@ -141,7 +93,8 @@ const ProductsPage: FunctionComponent<{
 }> = props => {
   const { productCategory = "occasion" } = props;
 
-  const { query } = useRouter();
+  const router = useRouter();
+  const { query, isReady } = router;
   const { selectedOccasion, shopBy } = query;
   const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -163,6 +116,17 @@ const ProductsPage: FunctionComponent<{
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
   });
+
+  useEffect(() => {
+    if (isReady) {
+      const filters = String(shopBy || "")
+        .split(",")
+        .filter(Boolean);
+      setSelectedFilter(filters);
+    }
+  }, [shopBy, isReady]);
+
+  const { notify } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 
@@ -227,7 +191,7 @@ const ProductsPage: FunctionComponent<{
     };
     const response = await getProductsByCategory(params);
     if (response.error) {
-      console.log(response.error);
+      notify("error", `Unable to fetch product category: ${response.message}`);
     } else {
       setHasMore((response.data as Product[]).length > 0);
 
@@ -251,14 +215,7 @@ const ProductsPage: FunctionComponent<{
   useEffect(() => {
     fetchProductCategory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    category,
-    selectedFilter,
-    page,
-    selectedTagCategories,
-    selectedOccasion,
-    shopBy
-  ]);
+  }, [category, selectedFilter, page, selectedTagCategories, selectedOccasion]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -331,13 +288,18 @@ const ProductsPage: FunctionComponent<{
                   {(filter.viewMore
                     ? filter.options
                     : filter.options.slice(0, filter.limit)
-                  ).map((child, index) => (
-                    <div key={index} className="margin-bottom">
+                  ).map((child, i) => (
+                    <div key={i} className="margin-bottom">
                       <Checkbox
                         onChange={() => {
-                          child.category
-                            ? handleFilterCategoryChange(child.name)
-                            : handleTagCategoryChange(child.name, child.tag);
+                          const newFilters = selectedFilter.includes(child.name)
+                            ? selectedFilter.filter(
+                                _filter => _filter !== child.name
+                              )
+                            : [...selectedFilter, child.name];
+                          router.push(
+                            `${router.pathname}?shopBy=${newFilters.join(",")}`
+                          );
                         }}
                         text={child.name}
                         checked={selectedFilter.includes(child.name)}

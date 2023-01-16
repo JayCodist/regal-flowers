@@ -3,7 +3,15 @@ import Link from "next/link";
 import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import { useRouter } from "next/router";
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import {
+  FunctionComponent,
+  MutableRefObject,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react";
 import Button from "../components/button/Button";
 import Checkbox from "../components/checkbox/Checkbox";
 import DatePicker from "../components/date-picker/DatePicker";
@@ -14,7 +22,7 @@ import Select, { Option } from "../components/select/Select";
 import {
   currencyOptions,
   deliveryStates,
-  paymentMethod,
+  paymentMethods,
   placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
@@ -28,6 +36,7 @@ import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
 import {
   verifyMonnifyPayment,
+  verifyPaypalPayment,
   verifyPaystackPayment
 } from "../utils/helpers/data/payments";
 import useMonnify from "../utils/hooks/useMonnify";
@@ -36,9 +45,9 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import {
   CreateOrderActions,
   CreateOrderData,
-  OnApproveActions,
   OnApproveData
 } from "@paypal/paypal-js";
+import { AppCurrency } from "../utils/types/Core";
 
 const initialData = {
   senderName: "",
@@ -263,6 +272,12 @@ const Checkout: FunctionComponent = () => {
     );
   }
 
+  const markAsPaid = () => {
+    setActiveTab("done");
+    setIsPaid(true);
+    setCurrentStage(3);
+  };
+
   const paymentHandlerMap: Record<PaymentName, () => void> = {
     paystack: () => {
       interface PaystackSuccessResponse {
@@ -286,9 +301,7 @@ const Checkout: FunctionComponent = () => {
           notify("error", `Unable to make payment: ${message}`);
         } else {
           notify("success", `Order paid successfully`);
-          setActiveTab("done");
-          setIsPaid(true);
-          setCurrentStage(3);
+          markAsPaid();
         }
       };
       initializePayment(successHandler, () => {});
@@ -314,9 +327,7 @@ const Checkout: FunctionComponent = () => {
               notify("error", `Unable to make payment: ${message}`);
             } else {
               notify("success", `Order paid successfully`);
-              setActiveTab("done");
-              setIsPaid(true);
-              setCurrentStage(3);
+              markAsPaid();
             }
           },
           onClose: () => {}
@@ -785,12 +796,29 @@ const Checkout: FunctionComponent = () => {
                           </span>{" "}
                         </p>
                         <div className={styles["payment-methods"]}>
-                          {paymentMethod.map((method, index) => (
+                          {paymentMethods.map((method, index) => (
                             <div key={index}>
                               <div
-                                className={[styles.method].join(" ")}
-                                onClick={() =>
-                                  paymentHandlerMap[method.paymentName]()
+                                className={[
+                                  styles.method,
+                                  !method.supportedCurrencies.includes(
+                                    currency.name
+                                  ) && styles.inactive
+                                ].join(" ")}
+                                onClick={
+                                  method.supportedCurrencies.includes(
+                                    currency.name
+                                  )
+                                    ? () =>
+                                        paymentHandlerMap[method.paymentName]()
+                                    : undefined
+                                }
+                                title={
+                                  !method.supportedCurrencies.includes(
+                                    currency.name
+                                  )
+                                    ? `This payment method does not support ${currency.name}`
+                                    : ""
                                 }
                               >
                                 <div className="flex spaced-lg center-align">
@@ -1710,7 +1738,7 @@ const Checkout: FunctionComponent = () => {
                   </div>
                   {deliveryMethod === "pick-up" && (
                     <div className="flex between">
-                      <span className="normal-text">Delivery </span>
+                      <span className="normal-text">Delivery</span>
                       <span className="normal-text bold">
                         ₦{order?.amount.toLocaleString()}
                       </span>
@@ -1755,7 +1783,7 @@ const Checkout: FunctionComponent = () => {
                   </div>
 
                   <div className={styles["payment-methods"]}>
-                    {paymentMethod.map((method, index) => (
+                    {paymentMethods.map((method, index) => (
                       <div key={index}>
                         <div
                           className={[styles.method].join(" ")}
@@ -1913,7 +1941,7 @@ const Checkout: FunctionComponent = () => {
                     Continue Shopping
                   </Button>
                   {isDelivered(order?.deliveryStatus) && (
-                    <Link href="/#">
+                    <Link href="#">
                       <a className={styles.track}>Track Order</a>
                     </Link>
                   )}
@@ -1927,17 +1955,20 @@ const Checkout: FunctionComponent = () => {
         visible={showPaypal}
         cancel={() => setShowPaypal(false)}
         order={order}
+        onComplete={markAsPaid}
       />
     </>
   );
 };
 
-const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
-  visible,
-  cancel,
-  order
-}) => {
-  const { currency } = useContext(SettingsContext);
+const PaypalModal: FunctionComponent<ModalProps & {
+  order: Order | null;
+  onComplete: () => void;
+}> = ({ visible, cancel, order, onComplete }) => {
+  const { currency, notify } = useContext(SettingsContext);
+  const currencyRef: MutableRefObject<AppCurrency> = useRef(currency);
+
+  currencyRef.current = currency;
 
   const handleSessionCreate = (
     data: CreateOrderData,
@@ -1948,38 +1979,61 @@ const PaypalModal: FunctionComponent<ModalProps & { order: Order | null }> = ({
         {
           amount: {
             value: String(
-              ((order?.amount || 0) * 100) / currency.conversionRate
+              (
+                (order?.amount || 0) /
+                (currencyRef.current?.conversionRate || 1)
+              ).toFixed(2)
             )
-          }
+          },
+          reference_id: order?.id
         }
       ]
     });
   };
 
-  const handleApprove = async (
-    data: OnApproveData,
-    actions: OnApproveActions
-  ) => {
-    const details = await actions.order?.capture();
-    const name = details?.payer.name?.given_name;
-    alert(`Transaction completed by ${name}`);
+  const handleApprove = async (data: OnApproveData) => {
+    const { error, message } = await verifyPaypalPayment(data.orderID);
+    if (error) {
+      notify("error", `Unable to verify paystack payment: ${message}`);
+    } else {
+      notify("success", "Successfully paid for order");
+      onComplete();
+      cancel?.();
+    }
   };
+
+  const canInitialize = useMemo(() => {
+    return paymentMethods
+      .find(method => method.paymentName === "payPal")
+      ?.supportedCurrencies.includes(currency.name);
+  }, [currency]);
 
   return (
     <Modal visible={visible} cancel={cancel}>
-      <h1 className="title thin">Paypal</h1>
-      <PayPalScriptProvider
-        options={{
-          "client-id":
-            "AW_ULm5wau1-h9eyogtL-x_9sbXZSMCqqPbCWwyn_K77VgFufBPgtDVmaXHeE4KMYiTgm8OYLcU7Nyqy"
-        }}
-      >
-        <PayPalButtons
-          style={{ layout: "horizontal" }}
-          createOrder={handleSessionCreate}
-          onApprove={handleApprove}
-        />
-      </PayPalScriptProvider>
+      <h1 className="title thin margin-bottom spaced">
+        Complete Paypal Payment
+      </h1>
+      {canInitialize && (
+        <PayPalScriptProvider
+          options={{
+            "client-id":
+              "AW_ULm5wau1-h9eyogtL-x_9sbXZSMCqqPbCWwyn_K77VgFufBPgtDVmaXHeE4KMYiTgm8OYLcU7Nyqy",
+            currency: currencyRef.current?.name,
+            "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
+          }}
+        >
+          <PayPalButtons
+            style={{
+              layout: "vertical",
+              shape: "pill",
+              label: "pay"
+            }}
+            className="vertical-margin spaced"
+            createOrder={handleSessionCreate}
+            onApprove={handleApprove}
+          />
+        </PayPalScriptProvider>
+      )}
     </Modal>
   );
 };

@@ -26,7 +26,7 @@ import BlogCard from "../components/blog-card/BlogCard";
 import SettingsContext from "../utils/context/SettingsContext";
 import Select, { PaginatedOptionsWrapper } from "../components/select/Select";
 import DatePicker from "../components/date-picker/DatePicker";
-import { getCategory } from "../utils/helpers/data/category";
+import { getCategories } from "../utils/helpers/data/category";
 import { FetchResourceParams } from "../utils/types/FetchResourceParams";
 import { Category } from "../utils/types/Category";
 import { getProductsBySlugs } from "../utils/helpers/data/products";
@@ -781,7 +781,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
 
   const fetchCategories = async (props?: FetchResourceParams) => {
     const { pageNumber = 1, pageSize = 10, mergeRecords } = props || {};
-    const response = await getCategory({ pageNumber, pageSize });
+    const response = await getCategories({ pageNumber, pageSize });
     const { data, error } = response;
 
     if (error) {

@@ -40,12 +40,12 @@ export const getProductsByCategory: (
         params?.filter?.productClass
       }`
     );
-    console.log("params", params);
     return {
       error: false,
       data: response.data.data as Product[]
     };
   } catch (err) {
+    console.error("Unable to get products by category: ", err);
     return {
       error: true,
       message: (err as Error).message,

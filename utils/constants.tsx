@@ -56,17 +56,17 @@ export const footerContent: FooterContent = {
       url: ""
     },
     {
-      name: "facebook",
+      name: "instagram",
       src: "icons/footer/instagram.svg",
       url: ""
     },
     {
-      name: "facebook",
+      name: "linkedIn",
       src: "icons/footer/linkedin.svg",
       url: ""
     },
     {
-      name: "facebook",
+      name: "whatsapp",
       src: "icons/footer/whatsapp.svg",
       url: ""
     }
@@ -523,7 +523,7 @@ export const deliveryStates: Option[] = [
   }
 ];
 
-export const paymentMethod: PaymentMethod[] = [
+export const paymentMethods: PaymentMethod[] = [
   {
     title: "Pay with Paystack",
     paymentName: "paystack",
@@ -618,7 +618,7 @@ export const paymentMethod: PaymentMethod[] = [
   {
     title: "PayPal",
     paymentName: "payPal",
-    supportedCurrencies: ["USD"],
+    supportedCurrencies: ["USD", "GBP"],
     icon: (
       <svg
         width="32"
@@ -679,17 +679,17 @@ export const sortOptions: Option[] = [
 export const occasions: { title: string; url: string; category?: string }[] = [
   {
     title: "Love, Birthdays & Anniversary",
-    url: "/filters?selectedOccasion=Anniversary Flowers",
+    url: "/filters?selectedOccasion=Anniversary+Flowers",
     category: "Anniversary Flowers"
   },
   {
     title: "Just to Say",
-    url: "/filters?selectedOccasion=just-to-say",
+    url: "/filters?selectedOccasion=Just+To+Say",
     category: "Just to Say Bouquets"
   },
   {
     title: "Bridal Bouquets",
-    url: "/filters?selectedOccasion=bridal-bouquets",
+    url: "/filters?selectedOccasion=bridal+bouquets",
     category:
       "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
   },
