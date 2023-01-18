@@ -5,8 +5,10 @@ import ProductsPage from "../filters";
 
 const CategoryPage: FunctionComponent<{
   categorySlug: string;
-}> = ({}) => {
-  return <ProductsPage productCategory="occasion" />;
+}> = ({ categorySlug }) => {
+  return (
+    <ProductsPage productCategory="occasion" categorySlug={categorySlug} />
+  );
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -29,7 +31,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths:
       data?.map(category => ({
-        params: { id: category.slug, categorySlug: category.slug }
+        params: { categorySlug: category.slug }
       })) || [],
     fallback: false // true or 'blocking'
   };

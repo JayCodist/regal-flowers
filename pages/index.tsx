@@ -769,7 +769,11 @@ const LandingPage: FunctionComponent<{
 // }));
 
 const FlowerDeliveryInput: FunctionComponent = () => {
-  const [occasion, setOccasion] = useState<Category>({ name: "", id: "" });
+  const [occasion, setOccasion] = useState<Category>({
+    name: "",
+    id: "",
+    slug: ""
+  });
   const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
   const [occassionOptions, setOccassionOptions] = useState<
     PaginatedOptionsWrapper
@@ -809,7 +813,8 @@ const FlowerDeliveryInput: FunctionComponent = () => {
     setOccasion(
       {
         name: _selectedOccasion,
-        id: value
+        id: value,
+        slug: ""
       } || null
     );
   };

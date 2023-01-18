@@ -676,31 +676,60 @@ export const sortOptions: Option[] = [
   }
 ];
 
+export const gifts: { title: string; url: string; category?: string }[] = [
+  {
+    title: "Chocolates and Biscuits",
+    url: "/product-category/gift-packs",
+    category: "Chocolates and Biscuits"
+  },
+  {
+    title: "Cakes and Cupcakes",
+    url: "/product-category/gift-packs",
+    category: "Cakes and Cupcakes"
+  },
+  {
+    title: "Teddy Bears",
+    url: "/product-category/gift-packs",
+    category: "Teddy Bears"
+  },
+  {
+    title: "Cakes and Cupcakes",
+    url: "/product-category/gift-packs",
+    category: "Wine and Champagne"
+  },
+  {
+    title: "Balloons",
+    url: "/product-category/gift-packs",
+    category: "Balloons"
+  }
+];
+
 export const occasions: { title: string; url: string; category?: string }[] = [
   {
     title: "Love, Birthdays & Anniversary",
-    url: "/filters?selectedOccasion=Anniversary+Flowers",
+    url:
+      "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
     category: "Anniversary Flowers"
   },
   {
     title: "Just to Say",
-    url: "/filters?selectedOccasion=Just+To+Say",
+    url: "/product-category/just-to-say-bouquets",
     category: "Just to Say Bouquets"
   },
   {
     title: "Bridal Bouquets",
-    url: "/filters?selectedOccasion=bridal+bouquets",
+    url: "/product-category/bridal-bouquets",
     category:
       "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
   },
   {
     title: "Funeral & Condolence",
-    url: "/filters?selectedOccasion=funeral-condolence",
+    url: "/product-category/funeral-amp-condolence",
     category: "Funeral %26amp; Condolence"
   },
   {
     title: "All Occasions",
-    url: "/filters?selectedOccasion=all-occasions"
+    url: ""
   }
 ];
 
@@ -713,37 +742,15 @@ export const filtersCatgories: {
   viewMore?: boolean;
 }[] = [
   {
-    name: "Occasions",
-    options: [
-      {
-        name: "Love, Birthdays & Anniversary",
-        category: "Anniversary Flowers"
-      },
-      {
-        name: "Just to say Hi, Sorry, Thank You.",
-        category: "Just to Say Bouquets"
-      },
-      {
-        name: "Get Well Soon",
-        category: "Get Well Soon Flowers"
-      },
-      {
-        name: "Bridal",
-        category:
-          "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
-      }
-    ],
-    limit: 4,
-    viewMore: false
-  },
-  {
     name: "Budget",
     options: [
       {
-        name: "Regular"
+        name: "Regular",
+        tag: "regular"
       },
       {
-        name: "VIP"
+        name: "VIP",
+        tag: "vip"
       }
     ],
     limit: 2,
@@ -753,13 +760,16 @@ export const filtersCatgories: {
     name: "Flower Type",
     options: [
       {
-        name: "Fresh Flowers"
+        name: "Fresh Flowers",
+        tag: "Fresh Flowers"
       },
       {
-        name: "Forever Roses"
+        name: "Forever Roses",
+        tag: "Forever Roses"
       },
       {
-        name: "Plants"
+        name: "Plants",
+        tag: "flowers"
       }
     ],
     limit: 3,
@@ -769,13 +779,16 @@ export const filtersCatgories: {
     name: "Design",
     options: [
       {
-        name: "Bouquets"
+        name: "Bouquets",
+        tag: "flower bouquet"
       },
       {
-        name: "Box Arrangements"
+        name: "Box Arrangements",
+        tag: "Box Arrangements"
       },
       {
-        name: "Others"
+        name: "Others",
+        tag: "others"
       }
     ],
     limit: 3
@@ -784,7 +797,8 @@ export const filtersCatgories: {
     name: "Packages",
     options: [
       {
-        name: "Bundled Products"
+        name: "Bundled Products",
+        tag: "flowers"
       }
     ],
     limit: 3,
@@ -809,10 +823,12 @@ export const filtersCatgories: {
         tag: "Roses"
       },
       {
-        name: "Chrysanthemums"
+        name: "Chrysanthemums",
+        tag: "chrysanthemums"
       },
       {
-        name: "Lilies"
+        name: "Lilies",
+        tag: "lilies"
       },
       {
         name: "Million Stars",
@@ -952,37 +968,39 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Romance, Birthdays & Anniversary",
-        url: "",
+        url:
+          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
         children: [
           {
             title: "Flowers",
-            url: "/filters?selectedOccasion=Flowers",
+            url:
+              "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
             children: []
           },
           {
             title: "VIP Flowers",
-            url: "/filters?selectedOccasion=Flowers",
+            url: "/vip",
             children: []
           },
           {
             title: "Gifts",
-            url: "/filters?selectedOccasion=Gift Packs",
+            url: "/gifts",
             children: []
           }
         ]
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
-        url: "",
+        url: "/product-category/just-to-say-bouquets",
         children: [
           {
             title: "Flowers",
-            url: "/filters?selectedOccasion=Just to Say Flowers",
+            url: "/product-category/just-to-say-bouquets",
             children: []
           },
           {
             title: "VIP Flowers",
-            url: "/filters?selectedOccasion=Flowers",
+            url: "/vip",
             children: []
           },
           {
@@ -994,16 +1012,16 @@ export const links: AppLink[] = [
       },
       {
         title: "Get well soon",
-        url: "",
+        url: "/product-category/get-well-soon",
         children: [
           {
             title: "Flowers",
-            url: "/filters?selectedOccasion=Flowers",
+            url: "/product-category/get-well-soon",
             children: []
           },
           {
             title: "VIP Flowers",
-            url: "/filters?selectedOccasion=Flowers",
+            url: "/vip",
             children: []
           },
           {
@@ -1015,37 +1033,38 @@ export const links: AppLink[] = [
       },
       {
         title: "Bridal",
-        url: "",
+        url: "/product-category/bridal-bouquets",
         children: [
           {
             title: "Flowers",
-            url: "/filters?selectedOccasion=Bridal Flowers",
+            url: "/product-category/bridal-bouquets",
             children: []
           },
           {
             title: "Cascading Flowers",
-            url: "/filters?selectedOccasion=Cascading/Dropping Flowers",
+            url: "cascadingdropping-bouquets",
             children: []
           },
           {
             title: "Accessories & Boutonnieres",
-            url: "/filters",
+            url:
+              "/product-category/accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
             children: []
           }
         ]
       },
       {
         title: "Funeral & Condolence",
-        url: "",
+        url: "/product-category/funeral-amp-condolence",
         children: [
           {
             title: "Wreaths & Flowers",
-            url: "/filters?selectedOccasion=Flowers",
+            url: "/product-category/funeral-amp-condolence",
             children: []
           },
           {
             title: "VIP Flowers",
-            url: "/filters?selectedOccasion=Flowers",
+            url: "/vip",
             children: []
           }
         ]
@@ -1057,22 +1076,22 @@ export const links: AppLink[] = [
         children: [
           {
             title: "VIP Statements",
-            url: "",
+            url: "/vip",
             children: []
           },
           {
             title: "Events & Centerpiece",
-            url: "/filters?selectedOccasion=Event & Centerpiece",
+            url: "/product-category/event-amp-centerpiece",
             children: []
           },
           {
             title: "Father's Day",
-            url: "/filters?selectedOccasion=Fathers' Day Flowers",
+            url: "/product-category/fathers-day-flowers",
             children: []
           },
           {
             title: "Mother's Day",
-            url: "/filters?selectedOccasion=Mothers' Day Flowers",
+            url: "/product-category/mothers-day-flowers",
             children: []
           }
         ]
@@ -1089,12 +1108,12 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Bouquets",
-            url: "/filters?shopBy=Flowers",
+            url: "/filters?shopBy=flower bouquet",
             children: []
           },
           {
             title: "Box Arrangements",
-            url: "/filters?shopBy=Box Arrangements - Fresh Flowers",
+            url: "/filters?shopBy=Box Arrangements",
             children: []
           },
           {
@@ -1110,17 +1129,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Fresh Flowers",
-            url: "/filters?shopBy=Box Arrangements - Fresh Flowers",
+            url: "/filters?shopBy=Fresh Flowers",
             children: []
           },
           {
             title: "Forever Roses",
-            url: "/filters?shopBy=Forever Roses - Preserved Roses",
+            url: "/filters?shopBy=Forever Roses",
             children: []
           },
           {
             title: "Plants",
-            url: "/filters?shopBy",
+            url: "/filters?shopBy=flowers",
             children: []
           }
         ]
@@ -1142,7 +1161,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Same Day Delivery",
-            url: "#",
+            url: "/filters?shopBy=Same Day Delivery",
             children: []
           }
         ]
@@ -1158,17 +1177,17 @@ export const links: AppLink[] = [
           },
           {
             title: "Chrysanthemums",
-            url: "/filters?shopBy=Chrysanthemums",
+            url: "/filters?shopBy=chrysanthemums",
             children: []
           },
           {
             title: "Lilies",
-            url: "/filters?shopBy=Lilles",
+            url: "/filters?shopBy=flowers",
             children: []
           },
           {
             title: "Million Stars",
-            url: "/filters?shopBy=Million Stars",
+            url: "/filters?shopBy=millionstar",
             children: []
           },
           {
@@ -1191,37 +1210,37 @@ export const links: AppLink[] = [
     title: "Gifts",
     children: [
       {
-        url: "#",
+        url: "/product-category/gift-packs",
         title: "Chocolates and Biscuits",
         children: []
       },
       {
-        url: "#",
+        url: "/product-category/gift-packs",
         title: "Cakes and Cupcakes",
         children: []
       },
       {
-        url: "#",
+        url: "/product-category/gift-packs",
         title: "Teddy Bears",
         children: []
       },
       {
-        url: "#",
+        url: "/product-category/gift-packs",
         title: "Wine and Champagne",
         children: []
       },
       {
-        url: "#",
+        url: "/product-category/gift-packs",
         title: "Perfumes",
         children: []
       },
       {
-        url: "#",
+        url: "/product-category/gift-packs",
         title: "Giftsets",
         children: []
       },
       {
-        url: "#",
+        url: "/product-category/gift-packs",
         title: "Balloons",
         children: []
       }
