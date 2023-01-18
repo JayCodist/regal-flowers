@@ -457,14 +457,29 @@ const Header: FunctionComponent = () => {
                       <p className={styles.subtitle}>{link.subtitle}</p>
                     )}
                     <div className={[styles["sub-link"]].join(" ")}>
-                      {link.children.map((child, index) =>
-                        child.url ? (
-                          <Link href={child.url} key={index}>
-                            <a
-                              className={[
-                                child.children.length && styles.grid
-                              ].join(" ")}
-                            >
+                      {link.children.map((child, index) => (
+                        <div
+                          className={[
+                            child.children.length && styles.grid
+                          ].join(" ")}
+                          key={index}
+                        >
+                          {child.url ? (
+                            <Link href={child.url} key={index}>
+                              <a>
+                                {child.title && (
+                                  <span
+                                    className={[
+                                      child.children.length && styles.title
+                                    ].join(" ")}
+                                  >
+                                    {child.title}
+                                  </span>
+                                )}
+                              </a>
+                            </Link>
+                          ) : (
+                            <>
                               {child.title && (
                                 <span
                                   className={[
@@ -474,34 +489,17 @@ const Header: FunctionComponent = () => {
                                   {child.title}
                                 </span>
                               )}
-                            </a>
-                          </Link>
-                        ) : (
-                          <div
-                            className={[
-                              child.children.length && styles.grid
-                            ].join(" ")}
-                            key={index}
-                          >
-                            {child.title && (
-                              <span
-                                className={[
-                                  child.children.length && styles.title
-                                ].join(" ")}
-                              >
-                                {child.title}
-                              </span>
-                            )}
-                            {child.children.map((grandChild, index) => (
-                              <Link href={grandChild.url} key={index}>
-                                <a className={styles["grand-title"]}>
-                                  {grandChild.title}
-                                </a>
-                              </Link>
-                            ))}
-                          </div>
-                        )
-                      )}
+                            </>
+                          )}
+                          {child.children.map((grandChild, index) => (
+                            <Link href={grandChild.url} key={index}>
+                              <a className={styles["grand-title"]}>
+                                {grandChild.title}
+                              </a>
+                            </Link>
+                          ))}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
