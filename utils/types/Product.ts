@@ -50,4 +50,11 @@ interface Product {
   class: "regular" | "vip";
 }
 
+export interface Gift {
+  name: string;
+  image: string;
+  description: string;
+  slug: string;
+}
+
 export default Product;

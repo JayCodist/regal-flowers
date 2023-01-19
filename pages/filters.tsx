@@ -15,9 +15,9 @@ import FlowerCard from "../components/flower-card/FlowerCard";
 import {
   aboutUsContent,
   filtersCatgories,
+  giftItems,
   gifts,
   occasions,
-  otherSampleProducts,
   sortOptions
 } from "../utils/constants";
 import DatePicker from "../components/date-picker/DatePicker";
@@ -30,60 +30,16 @@ import useOutsideClick from "../utils/hooks/useOutsideClick";
 import styles from "./filters.module.scss";
 import SettingsContext from "../utils/context/SettingsContext";
 
-export const _gifts = [
-  {
-    ...otherSampleProducts,
-    name: "5 Peas in a pod",
-    price: 6000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "flower1",
-        src: "/images/sampleImage/filter-page/gift-1.png",
-        id: 1
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "flower1",
-        src: "/images/sampleImage/filter-page/gift-2.png",
-        id: 1
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "flower1",
-        src: "/images/sampleImage/filter-page/gift-3.png",
-        id: 1
-      }
-    ]
-  },
-  {
-    ...otherSampleProducts,
-    name: "5 Peas in a pod",
-    price: 36000,
-    details: "5 Peas in a pod",
-    images: [
-      {
-        alt: "flower1",
-        src: "/images/sampleImage/filter-page/gift-4.png",
-        id: 1
-      }
-    ]
-  }
-];
+const giftMap: Record<string, string> = {
+  "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears":
+    "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
+  "chocolate-and-biscuits": "chocolate-and-biscuits",
+  "cakes-and-cupcakes": "cakes-and-cupcakes",
+  "teddy-bears": "teddy-bears",
+  "wine-and-champagne": "wine-and-champagne",
+  perfumes: "perfumes",
+  balloon: "balloon"
+};
 
 const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
@@ -244,7 +200,7 @@ const ProductsPage: FunctionComponent<{
         <div className={`hero-content flex column center center-align `}>
           {productCategory === "occasion" && (
             <div className={styles["occasion-wrapper"]}>
-              {(categorySlug === "gift-packs" ? gifts : occasions).map(
+              {(giftMap[categorySlug || "1"] ? gifts : occasions).map(
                 (occasion, index) => {
                   return (
                     <Link href={occasion.url} key={index}>
@@ -452,8 +408,8 @@ const ProductsPage: FunctionComponent<{
             <p className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : categorySlug === "gift-packs"
-                ? "Gift Packs"
+                : giftMap[categorySlug || ""]
+                ? "Gifts"
                 : " Flowers"}
             </p>
 
@@ -503,45 +459,50 @@ const ProductsPage: FunctionComponent<{
         </div>
       </div>
       <div className={styles.gifts}>
-        <div className="flex between margin-bottom spaced">
-          <span className={styles.title}>Gifts to Include with Flowers</span>
-          {deviceType === "desktop" && (
-            <Button
-              url="/filters?selectedOccasion=all-occasions"
-              className="flex spaced center center-align"
-              type="transparent"
-            >
-              <h3 className="red margin-right">See All</h3>
-              <img
-                alt="arrow"
-                className="generic-icon xsmall"
-                src="/icons/arrow-right.svg"
-              />
-            </Button>
-          )}
-        </div>
-        <div className="flex between vertical-margin spaced wrap">
-          {_gifts.map((flower, index) => (
-            <FlowerCard
-              key={index}
-              name={flower.name}
-              image={flower.images[0].src}
-              subTitle={"Cakes and cupcakes are a great choice"}
-              buttonText="See More"
-              url={`/products/${flower.slug}`}
-              price={flower.price}
-            />
-          ))}
-        </div>
-        {deviceType === "mobile" && (
-          <Button
-            url="/filters?selectedOccasion=all-occasions"
-            type="accent"
-            minWidth
-            className={styles["see-all"]}
-          >
-            <h3 className="red margin-right">See All</h3>
-          </Button>
+        {!giftMap[categorySlug || ""] && (
+          <>
+            <div className="flex between margin-bottom spaced">
+              <span className={styles.title}>
+                Gifts to Include with Flowers
+              </span>
+              {deviceType === "desktop" && (
+                <Button
+                  url="/filters?selectedOccasion=all-occasions"
+                  className="flex spaced center center-align"
+                  type="transparent"
+                >
+                  <h3 className="red margin-right">See All</h3>
+                  <img
+                    alt="arrow"
+                    className="generic-icon xsmall"
+                    src="/icons/arrow-right.svg"
+                  />
+                </Button>
+              )}
+            </div>
+            <div className="flex between vertical-margin spaced wrap">
+              {giftItems.map((gift, index) => (
+                <FlowerCard
+                  key={index}
+                  name={gift.name}
+                  image={gift.image}
+                  subTitle={"Cakes and cupcakes are a great choice"}
+                  buttonText="See More"
+                  url={gift.slug}
+                />
+              ))}
+            </div>
+            {deviceType === "mobile" && (
+              <Button
+                url="/filters?selectedOccasion=all-occasions"
+                type="accent"
+                minWidth
+                className={styles["see-all"]}
+              >
+                <h3 className="red margin-right">See All</h3>
+              </Button>
+            )}{" "}
+          </>
         )}
         <div className={styles.stories}>
           <h1 className={`text-center ${styles.title}`}>

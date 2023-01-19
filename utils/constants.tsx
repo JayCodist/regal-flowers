@@ -1,8 +1,8 @@
 import React from "react";
 import { Option } from "../components/select/Select";
-import AddonGroup from "./types/AddonGroup";
 import { AppCurrency, AppLink } from "./types/Core";
 import { PaymentMethod } from "./types/Order";
+import { Gift } from "./types/Product";
 import {
   Service,
   Occasion,
@@ -253,34 +253,31 @@ export const regalReasons: Service[] = [
   }
 ];
 
-export const featuredAddons: AddonGroup[] = [
+export const giftItems: Gift[] = [
   {
     name: "Cakes and Cupcakes",
     description: "Cakes and cupcakes are a great choice",
     image: "/images/sample-flowers/addon-group-1.png",
-    slug: "#",
-    addons: []
+    slug: "/product-category/cakes-and-cupcakes"
   },
   {
     name: "Chocolates and Biscuits",
     description: "What are flowers without chocolate?",
     image: "/images/sample-flowers/addon-group-2.png",
-    slug: "#",
-    addons: []
+    slug: "/product-category/chocolate-and-biscuits"
   },
   {
     name: "Teddy Bears",
     description: "Various sizes of teddies, even Life Size",
     image: "/images/sample-flowers/addon-group-3.png",
-    slug: "#",
-    addons: []
+    slug: "/product-category/teddy-bears"
   },
   {
     name: "Giftsets",
     description: "Caravaggio Italian Giftsets are the ultimate luxury",
     image: "/images/sample-flowers/addon-group-4.png",
-    slug: "#",
-    addons: []
+    slug:
+      "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
   }
 ];
 
@@ -679,27 +676,33 @@ export const sortOptions: Option[] = [
 export const gifts: { title: string; url: string; category?: string }[] = [
   {
     title: "Chocolates and Biscuits",
-    url: "/product-category/gift-packs",
+    url: "/product-category/chocolate-and-biscuits",
     category: "Chocolates and Biscuits"
   },
   {
     title: "Cakes and Cupcakes",
-    url: "/product-category/gift-packs",
+    url: "/product-category/cakes-and-cupcakes",
     category: "Cakes and Cupcakes"
   },
   {
     title: "Teddy Bears",
-    url: "/product-category/gift-packs",
+    url: "/product-category/teddy-bears",
     category: "Teddy Bears"
   },
   {
-    title: "Cakes and Cupcakes",
-    url: "/product-category/gift-packs",
+    title: "Wine and Champagne",
+    url: "/product-category/wine-and-champagne",
     category: "Wine and Champagne"
   },
   {
+    title: "Perfumes",
+    url: "/product-category/perfumes",
+    category: "perfumes"
+  },
+
+  {
     title: "Balloons",
-    url: "/product-category/gift-packs",
+    url: "/product-category/balloon",
     category: "Balloons"
   }
 ];
