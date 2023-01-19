@@ -945,20 +945,26 @@ export const links: AppLink[] = [
     subtitle: "Send Flowers To",
     children: [
       {
-        title: "Lagos",
+        title: "Valentine",
         children: [],
-        url: "/locations/lagos"
-      },
-      {
-        title: "Abuja",
-        children: [],
-        url: "/locations/abuja"
-      },
-      {
-        title: "Other states",
-        children: [],
-        url: "/locations/other-locations"
+        url:
+          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
       }
+      // {
+      //   title: "Lagos",
+      //   children: [],
+      //   url: "/locations/lagos"
+      // },
+      // {
+      //   title: "Abuja",
+      //   children: [],
+      //   url: "/locations/abuja"
+      // },
+      // {
+      //   title: "Other states",
+      //   children: [],
+      //   url: "/locations/other-locations"
+      // }
     ]
   },
   {
@@ -1320,17 +1326,17 @@ export const popularSections: Occasion[] = [
     title: "Bundled Products",
     url: `/filters?filter=${encodeURIComponent("Bundled Products")}`,
     image: "/images/popular-bundled.png"
-  },
-  {
-    title: "Lagos Delivery",
-    url: "/locations/lagos",
-    image: "/images/popular-lagos.png"
-  },
-  {
-    title: "Abuja Delivery",
-    url: "/locations/abuja",
-    image: "/images/popular-abuja.png"
   }
+  // {
+  //   title: "Lagos Delivery",
+  //   url: "/locations/lagos",
+  //   image: "/images/popular-lagos.png"
+  // },
+  // {
+  //   title: "Abuja Delivery",
+  //   url: "/locations/abuja",
+  //   image: "/images/popular-abuja.png"
+  // }
 ];
 
 export const mostLoved: RegalContent = {
