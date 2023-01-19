@@ -37,15 +37,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [
-      {
-        params: { id: "lagos", locationName: "lagos" }
-      },
-      {
-        params: { id: "abuja", locationName: "abuja" }
-      },
-      {
-        params: { id: "other-locations", locationName: "other-locations" }
-      }
+      // {
+      //   params: { id: "lagos", locationName: "lagos" }
+      // },
+      // {
+      //   params: { id: "abuja", locationName: "abuja" }
+      // },
+      // {
+      //   params: { id: "other-locations", locationName: "other-locations" }
+      // }
     ],
     fallback: false // true or 'blocking'
   };

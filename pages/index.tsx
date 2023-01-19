@@ -7,7 +7,6 @@ import {
   regalOccasions,
   regalReasons,
   reviews,
-  featuredAddons,
   regalHowItWorks,
   regalAddresses,
   regalPhones,
@@ -18,7 +17,8 @@ import {
   bestSellers,
   popularSections,
   mostLoved,
-  allOccasionOptions
+  allOccasionOptions,
+  giftItems
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -160,7 +160,7 @@ const LandingPage: FunctionComponent<{
                 image={section.image}
                 name={section.title}
                 url={section.url}
-                mode="six-x-grid"
+                mode="four-x-grid"
                 onlyTitle
               />
             ))}
@@ -331,13 +331,13 @@ const LandingPage: FunctionComponent<{
             )}
           </div>
           <div className={[styles.section, styles.wrap].join(" ")}>
-            {featuredAddons.map(addonGroup => (
+            {giftItems.map(gift => (
               <FlowerCard
-                key={addonGroup.name}
-                image={addonGroup.image}
-                name={addonGroup.name}
-                subTitle={addonGroup.description}
-                url={addonGroup.slug}
+                key={gift.name}
+                image={gift.image}
+                name={gift.name}
+                subTitle={gift.description}
+                url={gift.slug}
                 buttonText="See more"
               />
             ))}

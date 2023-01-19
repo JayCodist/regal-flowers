@@ -19,7 +19,7 @@ function Custom404Page() {
               image={section.image}
               name={section.title}
               url={section.url}
-              mode="six-x-grid"
+              mode="four-x-grid"
               onlyTitle
             />
           ))}
