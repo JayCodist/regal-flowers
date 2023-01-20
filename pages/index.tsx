@@ -86,7 +86,7 @@ const LandingPage: FunctionComponent<{
                 name={flower.name}
                 subTitle={flower.details}
                 price={flower.price}
-                url={`/products/${flower.slug}`}
+                url={`/product/${flower.slug}`}
               />
             ))}
           </div>
@@ -611,7 +611,7 @@ const LandingPage: FunctionComponent<{
               to buy fresh flowers for her so he decided to check prices of
               bouquet of flowers online. He specifically wanted flower shops in
               Lagos or Abuja that could deliver a bouquet of{" "}
-              <Link href="/products/classic-red-roses-luxurious-bouquet-of-red-roses">
+              <Link href="/product/classic-red-roses-luxurious-bouquet-of-red-roses">
                 <a className={styles.red}>red roses</a>
               </Link>{" "}
               and chocolates to her the same day.

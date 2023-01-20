@@ -429,7 +429,7 @@ const ProductsPage: FunctionComponent<{
                   price={product.price}
                   buttonText="Add to Cart"
                   subTitle={product.name.split("–")[1]}
-                  url={`/products/${product.slug}`}
+                  url={`/product/${product.slug}`}
                   // mode="three-x-grid"
                   mode={`${
                     deviceType === "desktop" ? "three-x-grid" : "two-x-grid"

@@ -555,7 +555,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             image={item.images.src}
             price={item.price}
             subTitle={item.subtitle}
-            url={`/products/${item.slug}`}
+            url={`/product/${item.slug}`}
           />
         ))}
       </div>
