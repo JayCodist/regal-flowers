@@ -942,33 +942,50 @@ export const productSampleData = {
 };
 
 export const links: AppLink[] = [
+  // {
+  //   url: "",
+  //   title: "Send To",
+  //   subtitle: "Send Flowers To",
+  //   children: [
+
+  //     {
+  //       title: "Lagos",
+  //       children: [],
+  //       url: "/locations/lagos"
+  //     },
+  //     {
+  //       title: "Abuja",
+  //       children: [],
+  //       url: "/locations/abuja"
+  //     },
+  //     {
+  //       title: "Other states",
+  //       children: [],
+  //       url: "/locations/other-locations"
+  //     }
+  //   ]
+  // },
   {
-    url: "",
-    title: "Send To",
-    subtitle: "Send Flowers To",
+    title: "Valentine",
     children: [
       {
-        title: "Valentine",
+        title: "Flowers",
         children: [],
         url:
           "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+      },
+      {
+        title: "Valentine",
+        children: [],
+        url: "/vip"
+      },
+      {
+        title: "Gifts",
+        children: [],
+        url: "/product-category/gift-packs"
       }
-      // {
-      //   title: "Lagos",
-      //   children: [],
-      //   url: "/locations/lagos"
-      // },
-      // {
-      //   title: "Abuja",
-      //   children: [],
-      //   url: "/locations/abuja"
-      // },
-      // {
-      //   title: "Other states",
-      //   children: [],
-      //   url: "/locations/other-locations"
-      // }
-    ]
+    ],
+    url: ""
   },
   {
     url: "",
@@ -1219,27 +1236,27 @@ export const links: AppLink[] = [
     title: "Gifts",
     children: [
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/chocolate-and-biscuits",
         title: "Chocolates and Biscuits",
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/cakes-and-cupcakes",
         title: "Cakes and Cupcakes",
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/teddy-bear",
         title: "Teddy Bears",
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/wine-and-champagne",
         title: "Wine and Champagne",
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/perfumes",
         title: "Perfumes",
         children: []
       },
@@ -1249,7 +1266,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/balloon",
         title: "Balloons",
         children: []
       }
