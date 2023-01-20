@@ -58,6 +58,7 @@ const ProductsPage: FunctionComponent<{
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
+  const [pageTitle, setPageTitle] = useState("Flowers");
 
   const [selectedTagCategories, setSelectedTagCategories] = useState<string[]>(
     []
@@ -73,15 +74,6 @@ const ProductsPage: FunctionComponent<{
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
   });
-
-  useEffect(() => {
-    if (isReady) {
-      const filters = String(shopBy || "")
-        .split(",")
-        .filter(Boolean);
-      setSelectedFilter(filters);
-    }
-  }, [shopBy, isReady]);
 
   const { notify } = useContext(SettingsContext);
 
@@ -106,6 +98,15 @@ const ProductsPage: FunctionComponent<{
       setJustToSayText(JustToSayTexts[count]);
     }
   };
+
+  useEffect(() => {
+    if (isReady) {
+      const filters = String(shopBy || "")
+        .split(",")
+        .filter(Boolean);
+      setSelectedFilter(filters);
+    }
+  }, [shopBy, isReady]);
 
   useEffect(() => {
     const intervalId = setInterval(shuffleText, 3000);
@@ -187,6 +188,20 @@ const ProductsPage: FunctionComponent<{
     fetchProductCategory(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
+  useEffect(() => {
+    const flowerTitle = occasions.find(
+      item => item.url === `/product-category/${categorySlug}`
+    )?.title;
+    const giftTitle = gifts.find(
+      item => item.url === `/product-category/${categorySlug}`
+    )?.title;
+    const title = flowerTitle || giftTitle;
+
+    if (title) {
+      setPageTitle(title);
+    }
+  }, [categorySlug]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -405,13 +420,11 @@ const ProductsPage: FunctionComponent<{
           </div>
 
           <div>
-            <p className={`${styles.title} bold vertical-margin spaced`}>
+            <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : giftMap[categorySlug || ""]
-                ? "Gifts"
-                : " Flowers"}
-            </p>
+                : pageTitle}
+            </h1>
 
             <div className={`${styles.products}`}>
               {productsLoading && (
@@ -486,7 +499,7 @@ const ProductsPage: FunctionComponent<{
                   key={index}
                   name={gift.name}
                   image={gift.image}
-                  subTitle={"Cakes and cupcakes are a great choice"}
+                  subTitle={gift.description}
                   buttonText="See More"
                   url={gift.slug}
                 />
