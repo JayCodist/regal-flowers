@@ -1,11 +1,11 @@
 import User from "../types/User";
-import AppStorage from "./storage-helpers";
+import AppStorage, { AppStorageConstants } from "./storage-helpers";
 
 const baseUrl = "https://regal-operations-defy.appspot.com";
 // const baseUrl = "http://localhost:8080";
 
 const getAPIHeaders = () => {
-  const savedUser = AppStorage.get<User>("userData");
+  const savedUser = AppStorage.get<User>(AppStorageConstants.USER_DATA);
 
   const restAPIHeaders: HeadersInit = {
     "Content-Type": "application/json",

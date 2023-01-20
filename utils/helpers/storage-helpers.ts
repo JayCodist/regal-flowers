@@ -1,3 +1,9 @@
+export const AppStorageConstants = {
+  LOCAL_STORAGE_SYNC_VERSION: "LOCAL_STORAGE_SYNC_VERSION",
+  SAVED_CURRENCY: "SAVED_CURRENCY",
+  USER_DATA: "userData"
+};
+
 const AppStorage = {
   save: (key: string, value: any) => {
     try {
@@ -40,11 +46,16 @@ const AppStorage = {
 
 if (typeof window !== "undefined") {
   const currentVersion = 0;
-  const savedVersionStr = AppStorage.get<number>("LOCAL_STORAGE_SYNC_VERSION");
+  const savedVersionStr = AppStorage.get<number>(
+    AppStorageConstants.LOCAL_STORAGE_SYNC_VERSION
+  );
   const savedVersion = Number(savedVersionStr || 0);
   if (currentVersion > savedVersion) {
     AppStorage.clear();
-    AppStorage.save("LOCAL_STORAGE_SYNC_VERSION", currentVersion);
+    AppStorage.save(
+      AppStorageConstants.LOCAL_STORAGE_SYNC_VERSION,
+      currentVersion
+    );
   }
 }
 

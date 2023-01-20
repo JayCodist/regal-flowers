@@ -10,13 +10,7 @@ import React, {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { AppCurrency } from "../../utils/types/Core";
-import {
-  currencyOptions,
-  defaultCurrency,
-  footerContent,
-  links
-} from "../../utils/constants";
+import { footerContent, links } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -239,7 +233,7 @@ const Footer: FunctionComponent = () => {
 };
 
 const CurrencyController = () => {
-  const { currency, setCurrency } = useContext(SettingsContext);
+  const { currency, setCurrency, allCurrencies } = useContext(SettingsContext);
   const [shouldShowCurrency, setShouldShowCurrency] = useState(false);
 
   return (
@@ -253,7 +247,7 @@ const CurrencyController = () => {
       >
         <span>
           {
-            currencyOptions.find(_currency => _currency.name === currency.name)
+            allCurrencies.find(_currency => _currency.name === currency.name)
               ?.sign
           }
         </span>
@@ -268,7 +262,7 @@ const CurrencyController = () => {
           className={styles["down-arrow"]}
           onClick={() => setShouldShowCurrency(false)}
         ></div>
-        {currencyOptions.map(_currency => (
+        {allCurrencies.map(_currency => (
           <button
             key={_currency.name}
             onClick={() => {
@@ -295,13 +289,7 @@ const Header: FunctionComponent = () => {
 
   const deviceType = useDeviceType();
 
-  const currencyOptions: AppCurrency[] = [
-    { ...defaultCurrency },
-    { name: "USD", conversionRate: 415 },
-    { name: "GBP", conversionRate: 523 }
-  ];
-
-  const { currency, setCurrency, cartItems, user } = useContext(
+  const { currency, setCurrency, cartItems, user, allCurrencies } = useContext(
     SettingsContext
   );
 
@@ -556,7 +544,7 @@ const Header: FunctionComponent = () => {
         <div className={styles["controls-area"]}>
           <div className="flex spaced">
             <span>Currency:</span>
-            {currencyOptions.map(_currency => (
+            {allCurrencies.map(_currency => (
               <button
                 key={_currency.name}
                 onClick={() => setCurrency(_currency)}

@@ -20,7 +20,6 @@ import PhoneInput from "../components/phone-input/PhoneInput";
 import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
-  currencyOptions,
   deliveryStates,
   paymentMethods,
   placeholderEmail
@@ -116,6 +115,7 @@ const Checkout: FunctionComponent = () => {
     setCurrentStage,
     currency,
     setCurrency,
+    allCurrencies,
     notify
   } = useContext(SettingsContext);
 
@@ -770,7 +770,7 @@ const Checkout: FunctionComponent = () => {
                             Select your preferred currency
                           </p>
                           <div className="flex spaced-lg">
-                            {currencyOptions.map((_currency, index) => (
+                            {allCurrencies.map((_currency, index) => (
                               <button
                                 key={index}
                                 onClick={() => setCurrency(_currency)}
@@ -1766,7 +1766,7 @@ const Checkout: FunctionComponent = () => {
                       Select your preferred currency
                     </p>
                     <div className="flex spaced-lg">
-                      {currencyOptions.map((_currency, index) => (
+                      {allCurrencies.map((_currency, index) => (
                         <button
                           key={index}
                           onClick={() => setCurrency(_currency)}

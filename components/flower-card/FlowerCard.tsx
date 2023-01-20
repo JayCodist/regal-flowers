@@ -87,7 +87,7 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
                 {price && (
                   <div>
                     <p className="smaller text-secondary">From</p>
-                    <p className="bold">{price}</p>
+                    <p className="bold">{price.toLocaleString()}</p>
                   </div>
                 )}
                 <Button
