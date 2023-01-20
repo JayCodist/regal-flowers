@@ -1,3 +1,4 @@
+import { ProductFilterLogic } from "../../../pages/filters";
 import { FetchResourceParams } from "../../types/FetchResourceParams";
 import Product from "../../types/Product";
 import RequestResponse from "../../types/RequestResponse";
@@ -28,16 +29,15 @@ export const getProduct: (
 };
 
 export const getProductsByCategory: (
-  params?: FetchResourceParams
+  params?: FetchResourceParams<ProductFilterLogic>
 ) => Promise<RequestResponse<Product[]>> = async params => {
+  const { category, tags, productClass } = params?.filter as ProductFilterLogic;
   try {
     const response = await restAPIInstance.get(
       `/v1/wordpress/product/paginate?pageNumber=${
         params?.pageNumber
-      }&tags=${params?.filter?.tags?.join(
-        ","
-      )}&categories=${params?.filter?.category?.join(",")}&productClass=${
-        params?.filter?.productClass
+      }&tags=${tags?.join(",")}&categories=${category?.join(",")}&${
+        productClass ? `productClass=${productClass}` : ""
       }`
     );
     return {
