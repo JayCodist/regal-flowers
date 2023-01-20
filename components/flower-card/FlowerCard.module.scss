@@ -79,6 +79,15 @@
   .detail {
     padding: 0.6rem 1rem;
   }
+  .title {
+    min-height: 3.5rem;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .subtitle {
     font-size: small;
     color: #6b7280;
