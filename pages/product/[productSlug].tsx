@@ -10,6 +10,7 @@ import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
+import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 
 interface Designs {
   name: DesignOption | string;
@@ -31,7 +32,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const [productPrice, setProductPrice] = useState<number>(product.price);
   const [total, setTotal] = useState<number>(product.price);
 
-  const { setCartItems, cartItems, notify } = useContext(SettingsContext);
+  const { setCartItems, cartItems, notify, currency } = useContext(
+    SettingsContext
+  );
 
   const shouldShowRegularTab = product.variants?.some(
     variant => variant.class === "regular"
@@ -259,7 +262,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             </div>
             <div className="bold primary-color center">
               <p>FROM</p>
-              <p className="larger">₦{product.price?.toLocaleString()}</p>
+              <p className="larger">
+                {getPriceDisplay(product.price, currency)}
+              </p>
             </div>
           </div>
           <div className="vertical-margin">
@@ -338,8 +343,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name.slice(1)} | ₦
-                        {variant.price?.toLocaleString()}
+                        {variant.name.slice(1)} |{" "}
+                        {getPriceDisplay(product.price, currency)}
                       </span>
                     ))}
                 </div>
@@ -362,8 +367,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name.slice(1)} | ₦
-                        {variant.price?.toLocaleString()}
+                        {variant.name.slice(1)} |
+                        {getPriceDisplay(variant.price, currency)}
                       </span>
                     ))}
                 </div>
@@ -399,7 +404,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                       className="generic-icon xxl margin-bottom spaced"
                     />
                     <p className="vertical-margin bold">Wrapped Bouquet</p>
-                    <p>+₦0</p>
+                    <p>+{currency.sign}0</p>
                   </div>
                 )}
                 {product?.designOptions?.inVase && (
@@ -419,7 +424,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                       className="generic-icon xxl margin-bottom spaced"
                     />
                     <p className="vertical-margin bold">In a Vase</p>
-                    <p>+₦15,000</p>
+                    <p>+{getPriceDisplay(15000, currency)}</p>
                   </div>
                 )}
                 {product.designOptions?.inLargeVase && (
@@ -439,7 +444,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                       className="generic-icon xxl margin-bottom spaced"
                     />
                     <p className="vertical-margin bold">In Large Vase</p>
-                    <p>+₦30,000</p>
+                    <p>+{getPriceDisplay(30000, currency)}</p>
                   </div>
                 )}
                 {product.designOptions?.box && (
@@ -515,7 +520,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                       <img src={addon.image} alt={addon.name} />
                       <div className="vertical-margin">
                         <p className="bold margin-bottom">{addon.name}</p>
-                        <p>{addon.price}</p>
+                        <p>{getPriceDisplay(addon.price, currency)}</p>
                       </div>
                     </div>
                   ))}
@@ -541,7 +546,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   : ""
               }
             >
-              Add to Cart ₦{total?.toLocaleString()}
+              Add to Cart {getPriceDisplay(total, currency)}
             </Button>
           </div>
         </div>
