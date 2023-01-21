@@ -10,13 +10,7 @@ import React, {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { AppCurrency } from "../../utils/types/Core";
-import {
-  currencyOptions,
-  defaultCurrency,
-  footerContent,
-  links
-} from "../../utils/constants";
+import { footerContent, links } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -29,6 +23,7 @@ import AuthDropdown from "./AuthDropdown";
 import useDeviceType from "../../utils/hooks/useDeviceType";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 import Input from "../input/Input";
+import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -239,7 +234,7 @@ const Footer: FunctionComponent = () => {
 };
 
 const CurrencyController = () => {
-  const { currency, setCurrency } = useContext(SettingsContext);
+  const { currency, setCurrency, allCurrencies } = useContext(SettingsContext);
   const [shouldShowCurrency, setShouldShowCurrency] = useState(false);
 
   return (
@@ -253,7 +248,7 @@ const CurrencyController = () => {
       >
         <span>
           {
-            currencyOptions.find(_currency => _currency.name === currency.name)
+            allCurrencies.find(_currency => _currency.name === currency.name)
               ?.sign
           }
         </span>
@@ -268,7 +263,7 @@ const CurrencyController = () => {
           className={styles["down-arrow"]}
           onClick={() => setShouldShowCurrency(false)}
         ></div>
-        {currencyOptions.map(_currency => (
+        {allCurrencies.map(_currency => (
           <button
             key={_currency.name}
             onClick={() => {
@@ -295,13 +290,7 @@ const Header: FunctionComponent = () => {
 
   const deviceType = useDeviceType();
 
-  const currencyOptions: AppCurrency[] = [
-    { ...defaultCurrency },
-    { name: "USD", conversionRate: 415 },
-    { name: "GBP", conversionRate: 523 }
-  ];
-
-  const { currency, setCurrency, cartItems, user } = useContext(
+  const { currency, setCurrency, cartItems, user, allCurrencies } = useContext(
     SettingsContext
   );
 
@@ -556,7 +545,7 @@ const Header: FunctionComponent = () => {
         <div className={styles["controls-area"]}>
           <div className="flex spaced">
             <span>Currency:</span>
-            {currencyOptions.map(_currency => (
+            {allCurrencies.map(_currency => (
               <button
                 key={_currency.name}
                 onClick={() => setCurrency(_currency)}
@@ -637,9 +626,13 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel } = props;
 
-  const { cartItems, setCartItems, deliveryDate, setDeliveryDate } = useContext(
-    SettingsContext
-  );
+  const {
+    cartItems,
+    setCartItems,
+    deliveryDate,
+    setDeliveryDate,
+    currency
+  } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
   const cartRef = useRef<HTMLDivElement>(null);
@@ -826,7 +819,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                     <p>{item.description}</p>
                     <div className="flex between center-align vertical-margin">
                       <p className="primary-color normal-text bold">
-                        ₦{item.price.toLocaleString()}
+                        {getPriceDisplay(item.price, currency)}
                       </p>
                       <div className="flex center-align spaced-lg">
                         <div
@@ -856,13 +849,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
               <div className="flex between center-align vertical-margin spaced">
                 <span className="small-text">Subtotal</span>
                 <strong className="small-text">
-                  ₦{total.toLocaleString()}
+                  {getPriceDisplay(total, currency)}
                 </strong>
               </div>
               <div className="flex between center-align margin-bottom spaced">
                 <span className="small-text">Total</span>
                 <strong className="small-text">
-                  ₦{total.toLocaleString()}
+                  {getPriceDisplay(total, currency)}
                 </strong>
               </div>
             </>
@@ -876,7 +869,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             loading={loading}
             disabled={!cartItems.length}
           >
-            Proceed to checkout (₦{total.toLocaleString()})
+            Proceed to checkout ({getPriceDisplay(total, currency)})
           </Button>
         </div>
       </div>

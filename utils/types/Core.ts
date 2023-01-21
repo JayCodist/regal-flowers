@@ -22,6 +22,7 @@ export interface Settings {
   currentStage: Stage;
   deliveryDate: Dayjs | null;
   cartItems: CartItem[];
+  allCurrencies: AppCurrency[];
 }
 
 export enum Stage {

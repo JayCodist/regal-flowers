@@ -20,6 +20,7 @@ export interface SettingsControls extends Settings {
 
 const SettingsContext = createContext<SettingsControls>({
   currency: { name: "NGN", conversionRate: 1 },
+  allCurrencies: [],
   setCurrency: () => {},
   currentStage: 1,
   setCurrentStage: () => {},
