@@ -47,9 +47,18 @@ const App: FunctionComponent<AppProps> = props => {
   }>({});
   const [user, setUser] = useState<User | null>(null);
 
-  const configureCurrencies = async () => {
+  const initializeCurrencies = async () => {
+    const savedCurrency = AppStorage.get<AppCurrency>(
+      AppStorageConstants.SAVED_CURRENCY
+    );
+    if (savedCurrency) {
+      setSettings({
+        ...settings,
+        currency: savedCurrency
+      });
+    }
+
     const { error, data } = await performHandshake();
-    let allCurrencies: AppCurrency[] = settings.allCurrencies;
     if (error) {
       // Fail quietly and continue using the set constant values
     } else {
@@ -61,25 +70,19 @@ const App: FunctionComponent<AppProps> = props => {
           }),
           {}
         ) || {};
-      allCurrencies = settings.allCurrencies.map(currency => ({
-        ...currency,
-        conversionRate:
-          currencyValueMap[currency.name] || currency.conversionRate
-      }));
+      setSettings({
+        ...settings,
+        allCurrencies: settings.allCurrencies.map(currency => ({
+          ...currency,
+          conversionRate:
+            currencyValueMap[currency.name] || currency.conversionRate
+        }))
+      });
     }
-
-    const savedCurrency = AppStorage.get<AppCurrency>(
-      AppStorageConstants.SAVED_CURRENCY
-    );
-    setSettings({
-      ...settings,
-      allCurrencies,
-      currency: savedCurrency || settings.currency
-    });
   };
 
   useEffect(() => {
-    configureCurrencies();
+    initializeCurrencies();
 
     const savedUser = AppStorage.get<User>(AppStorageConstants.USER_DATA);
     setUser(savedUser);

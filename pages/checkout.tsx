@@ -1968,7 +1968,6 @@ const Checkout: FunctionComponent = () => {
         order={order}
         onComplete={markAsPaid}
       />
-      {console.log({ currency })}
     </>
   );
 };
