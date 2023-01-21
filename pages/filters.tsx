@@ -7,7 +7,7 @@ import {
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { getProductsByCategory } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import Checkbox from "../components/checkbox/Checkbox";
@@ -41,6 +41,14 @@ const giftMap: Record<string, string> = {
   balloon: "balloon"
 };
 
+type ProductClass = "vip" | "regular";
+
+export interface ProductFilterLogic {
+  category: string[];
+  tags: string[];
+  productClass?: ProductClass;
+}
+
 const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
 type ProductCategory = "vip" | "occasion" | "gift-packs";
@@ -48,8 +56,9 @@ type ProductCategory = "vip" | "occasion" | "gift-packs";
 const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
   categorySlug?: string;
+  productClass?: ProductClass;
 }> = props => {
-  const { productCategory = "occasion", categorySlug } = props;
+  const { productCategory = "occasion", categorySlug, productClass } = props;
 
   const router = useRouter();
   const { query, isReady } = router;
@@ -58,13 +67,11 @@ const ProductsPage: FunctionComponent<{
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
+  const [pageTitle, setPageTitle] = useState("Flowers");
 
-  const [selectedTagCategories, setSelectedTagCategories] = useState<string[]>(
-    []
-  );
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setproductsLoading] = useState(false);
-  const [todayDate, setTodayDate] = useState<Dayjs | null>(dayjs());
+  const [todayDate, setTodayDate] = useState<Dayjs | null>(null);
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
   const [hasMore, setHasMore] = useState(false);
@@ -73,15 +80,6 @@ const ProductsPage: FunctionComponent<{
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
   });
-
-  useEffect(() => {
-    if (isReady) {
-      const filters = String(shopBy || "")
-        .split(",")
-        .filter(Boolean);
-      setSelectedFilter(filters);
-    }
-  }, [shopBy, isReady]);
 
   const { notify } = useContext(SettingsContext);
 
@@ -108,26 +106,19 @@ const ProductsPage: FunctionComponent<{
   };
 
   useEffect(() => {
+    if (isReady) {
+      const filters = String(shopBy || "")
+        .split(",")
+        .filter(Boolean);
+      setSelectedFilter(filters);
+    }
+  }, [shopBy, isReady]);
+
+  useEffect(() => {
     const intervalId = setInterval(shuffleText, 3000);
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
-
-  const handleFilterCategoryChange = (name: string) => {
-    setSelectedFilter(prev =>
-      prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
-    );
-  };
-
-  const handleTagCategoryChange = (name: string, tag?: string) => {
-    setSelectedFilter(prev =>
-      prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
-    );
-    tag &&
-      setSelectedTagCategories(prev =>
-        prev.includes(tag) ? prev.filter(item => item !== tag) : [...prev, tag]
-      );
-  };
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
@@ -136,11 +127,11 @@ const ProductsPage: FunctionComponent<{
   const fetchProductCategory = async (shouldAppend?: boolean) => {
     products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
     const filterParams = {
-      category: [categorySlug as string],
-      tags: [shopBy as string],
-      productClass: productCategory === "vip" ? "vip" : "regular"
+      category: [(categorySlug as string) || ""],
+      tags: [(shopBy as string) || ""],
+      productClass
     };
-    const params: FetchResourceParams = {
+    const params: FetchResourceParams<ProductFilterLogic> = {
       pageNumber: page,
       filter: filterParams
     };
@@ -173,20 +164,34 @@ const ProductsPage: FunctionComponent<{
   }, [selectedOccasion]);
 
   useEffect(() => {
-    fetchProductCategory();
+    if (isReady) {
+      fetchProductCategory();
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    categorySlug,
-    selectedFilter,
-    selectedTagCategories,
-    selectedOccasion,
-    router
-  ]);
+  }, [categorySlug, selectedFilter, selectedOccasion, router]);
 
   useEffect(() => {
-    fetchProductCategory(true);
+    if (isReady) {
+      fetchProductCategory(true);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
+  useEffect(() => {
+    const flowerTitle = occasions.find(
+      item => item.url === `/product-category/${categorySlug}`
+    )?.title;
+    const giftTitle = gifts.find(
+      item => item.url === `/product-category/${categorySlug}`
+    )?.title;
+    const title = flowerTitle || giftTitle;
+
+    if (title) {
+      setPageTitle(title);
+    }
+  }, [categorySlug]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -320,6 +325,7 @@ const ProductsPage: FunctionComponent<{
                   }}
                   value={todayDate}
                   format="D MMM YYYY"
+                  placeholder="Select Date"
                 />
               </div>
 
@@ -365,12 +371,18 @@ const ProductsPage: FunctionComponent<{
                         <div key={index} className="margin-bottom">
                           <Checkbox
                             onChange={() => {
-                              child.category
-                                ? handleFilterCategoryChange(child.name)
-                                : handleTagCategoryChange(
-                                    child.name,
-                                    child.tag
-                                  );
+                              const newFilters = selectedFilter.includes(
+                                child.tag || ""
+                              )
+                                ? selectedFilter.filter(
+                                    _filter => _filter !== child.tag
+                                  )
+                                : [...selectedFilter, child.tag];
+                              router.push(
+                                `${router.pathname}?shopBy=${newFilters.join(
+                                  ","
+                                )}`
+                              );
                             }}
                             text={child.name}
                             checked={selectedFilter.includes(child.name)}
@@ -405,13 +417,11 @@ const ProductsPage: FunctionComponent<{
           </div>
 
           <div>
-            <p className={`${styles.title} bold vertical-margin spaced`}>
+            <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : giftMap[categorySlug || ""]
-                ? "Gifts"
-                : " Flowers"}
-            </p>
+                : pageTitle}
+            </h1>
 
             <div className={`${styles.products}`}>
               {productsLoading && (
@@ -486,7 +496,7 @@ const ProductsPage: FunctionComponent<{
                   key={index}
                   name={gift.name}
                   image={gift.image}
-                  subTitle={"Cakes and cupcakes are a great choice"}
+                  subTitle={gift.description}
                   buttonText="See More"
                   url={gift.slug}
                 />
