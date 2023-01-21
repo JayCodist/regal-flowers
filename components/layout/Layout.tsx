@@ -23,6 +23,7 @@ import AuthDropdown from "./AuthDropdown";
 import useDeviceType from "../../utils/hooks/useDeviceType";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 import Input from "../input/Input";
+import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -625,9 +626,13 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel } = props;
 
-  const { cartItems, setCartItems, deliveryDate, setDeliveryDate } = useContext(
-    SettingsContext
-  );
+  const {
+    cartItems,
+    setCartItems,
+    deliveryDate,
+    setDeliveryDate,
+    currency
+  } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
   const cartRef = useRef<HTMLDivElement>(null);
@@ -814,7 +819,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                     <p>{item.description}</p>
                     <div className="flex between center-align vertical-margin">
                       <p className="primary-color normal-text bold">
-                        ₦{item.price.toLocaleString()}
+                        {getPriceDisplay(item.price, currency)}
                       </p>
                       <div className="flex center-align spaced-lg">
                         <div
@@ -844,13 +849,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
               <div className="flex between center-align vertical-margin spaced">
                 <span className="small-text">Subtotal</span>
                 <strong className="small-text">
-                  ₦{total.toLocaleString()}
+                  {getPriceDisplay(total, currency)}
                 </strong>
               </div>
               <div className="flex between center-align margin-bottom spaced">
                 <span className="small-text">Total</span>
                 <strong className="small-text">
-                  ₦{total.toLocaleString()}
+                  {getPriceDisplay(total, currency)}
                 </strong>
               </div>
             </>
@@ -864,7 +869,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             loading={loading}
             disabled={!cartItems.length}
           >
-            Proceed to checkout (₦{total.toLocaleString()})
+            Proceed to checkout ({getPriceDisplay(total, currency)})
           </Button>
         </div>
       </div>
