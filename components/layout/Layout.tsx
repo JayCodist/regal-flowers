@@ -89,12 +89,12 @@ const Footer: FunctionComponent = () => {
             <div className="flex spaced-xl">
               <img
                 className="generic-icon"
-                src="icons/footer/phone.svg"
+                src="/icons/footer/phone.svg"
                 alt="phone"
               />
               <img
                 className="generic-icon"
-                src="icons/footer/whatsapp.svg"
+                src="/icons/footer/whatsapp.svg"
                 alt="whtasapp"
               />
             </div>
@@ -104,7 +104,7 @@ const Footer: FunctionComponent = () => {
             <div className="flex spaced">
               <img
                 className="generic-icon"
-                src="icons/footer/message.svg"
+                src="/icons/footer/message.svg"
                 alt="message"
               />
               <span>info@regalflowers.com.ng</span>
