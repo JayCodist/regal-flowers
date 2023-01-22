@@ -1,13 +1,12 @@
 @import "../styles/animations.scss";
 
 .checkout-page {
-  padding: 4rem 7rem;
+  padding: 4rem 7rem 0;
   position: relative;
   padding-bottom: 0;
-  animation: fadein 3s ease-out forwards;
+  animation: fadein 2s ease-out forwards;
 
   .checkout-wrapper {
-    max-height: 89vh;
     position: relative;
     display: flex;
   }
@@ -23,14 +22,15 @@
 
   .left {
     width: 64%;
-    padding-bottom: 2rem;
+    padding-bottom: 6rem;
   }
   .right {
     width: 30%;
     margin-left: 2.2rem;
-    position: fixed;
-    right: 7rem;
-
+    position: sticky;
+    top: 11rem;
+    right: 0;
+    height: 81vh;
     .apply-btn {
       min-width: 5rem;
       padding: 0.6rem 0;

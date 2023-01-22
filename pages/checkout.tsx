@@ -368,7 +368,7 @@ const Checkout: FunctionComponent = () => {
         <section className={styles["checkout-page"]}>
           {currentStage <= 2 && (
             <div className={styles["checkout-wrapper"]}>
-              <form className={`${styles.left} scrollable`}>
+              <form className={`${styles.left}`}>
                 {currentStage === 1 && (
                   <>
                     <div className={styles.border}>

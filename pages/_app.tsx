@@ -57,7 +57,6 @@ const App: FunctionComponent<AppProps> = props => {
         currency: savedCurrency
       });
     }
-
     const { error, data } = await performHandshake();
     if (error) {
       // Fail quietly and continue using the set constant values
@@ -70,8 +69,15 @@ const App: FunctionComponent<AppProps> = props => {
           }),
           {}
         ) || {};
+      const currentCurrency = savedCurrency || settings.currency;
       setSettings({
         ...settings,
+        currency: {
+          ...currentCurrency,
+          conversionRate:
+            currencyValueMap[currentCurrency.name] ||
+            currentCurrency.conversionRate
+        },
         allCurrencies: settings.allCurrencies.map(currency => ({
           ...currency,
           conversionRate:
