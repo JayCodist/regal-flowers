@@ -20,7 +20,6 @@ import PhoneInput from "../components/phone-input/PhoneInput";
 import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
-  currencyOptions,
   deliveryStates,
   paymentMethods,
   placeholderEmail
@@ -48,6 +47,7 @@ import {
   OnApproveData
 } from "@paypal/paypal-js";
 import { AppCurrency } from "../utils/types/Core";
+import { getPriceDisplay } from "../utils/helpers/type-conversions";
 
 const initialData = {
   senderName: "",
@@ -116,6 +116,7 @@ const Checkout: FunctionComponent = () => {
     setCurrentStage,
     currency,
     setCurrency,
+    allCurrencies,
     notify
   } = useContext(SettingsContext);
 
@@ -770,7 +771,7 @@ const Checkout: FunctionComponent = () => {
                             Select your preferred currency
                           </p>
                           <div className="flex spaced-lg">
-                            {currencyOptions.map((_currency, index) => (
+                            {allCurrencies.map((_currency, index) => (
                               <button
                                 key={index}
                                 onClick={() => setCurrency(_currency)}
@@ -869,17 +870,21 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between ">
                       <span className="normal-text">Subtotal</span>
                       <span className="normal-text bold">
-                        ₦{order?.amount.toLocaleString()}
+                        {getPriceDisplay(order?.amount || 0, currency)}
                       </span>
                     </div>
                     <div className="flex between vertical-margin">
                       <span className="normal-text">Add-Ons total</span>
-                      <span className="normal-text bold">₦{0}</span>
+                      <span className="normal-text bold">
+                        {getPriceDisplay(0, currency)}
+                      </span>
                     </div>
                     {deliveryMethod === "pick-up" && (
                       <div className="flex between">
                         <span className="normal-text">Delivery Charge</span>
-                        <span className="normal-text bold">₦{0}</span>
+                        <span className="normal-text bold">
+                          {getPriceDisplay(0, currency)}
+                        </span>
                       </div>
                     )}
                     <div className="flex center-align">
@@ -898,7 +903,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between margin-bottom">
                       <span className="normal-text">Total</span>
                       <span className="normal-text bold">
-                        ₦{order?.amount.toLocaleString()}
+                        {getPriceDisplay(order?.amount || 0, currency)}
                       </span>
                     </div>
                     {currentStage === 1 && (
@@ -974,7 +979,9 @@ const Checkout: FunctionComponent = () => {
                   </p>
                   <p className={styles["order-number"]}>
                     Order No:{" "}
-                    <span className={styles.bold}>{order?.fullOrderId}</span>{" "}
+                    <span className={styles.bold}>
+                      {order?.fullOrderId || ""}
+                    </span>
                   </p>
                   {isDelivered(order?.deliveryStatus) && (
                     <div
@@ -1137,19 +1144,19 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Subtotal</span>
                     <span className="bold">
-                      ₦{order?.amount.toLocaleString()}
+                      {getPriceDisplay(order?.amount || 0, currency)}
                     </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Add-Ons total</span>
-                    <span className="bold">₦{0}</span>
+                    <span className="bold">{getPriceDisplay(0, currency)}</span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <div>
                       <span>Delivery Charge</span>
                       <p className={`${styles["light-gray"]}`}>Lagos</p>
                     </div>
-                    <span className="bold">₦{0}</span>
+                    <span className="bold">{getPriceDisplay(0, currency)}</span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <div>
@@ -1165,7 +1172,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between sub-heading margin-bottom spaced">
                     <span>Total</span>
                     <span className="bold primary-color">
-                      ₦{order?.amount.toLocaleString()}
+                      {getPriceDisplay(order?.amount || 0, currency)}
                     </span>
                   </div>
                 </div>
@@ -1733,14 +1740,14 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between ">
                     <span className="normal-text">Order Total</span>
                     <span className="normal-text bold">
-                      ₦{order?.amount.toLocaleString()}
+                      {getPriceDisplay(order?.amount || 0, currency)}
                     </span>
                   </div>
                   {deliveryMethod === "pick-up" && (
                     <div className="flex between">
                       <span className="normal-text">Delivery</span>
                       <span className="normal-text bold">
-                        ₦{order?.amount.toLocaleString()}
+                        {getPriceDisplay(order?.amount || 0, currency)}
                       </span>
                     </div>
                   )}
@@ -1749,7 +1756,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between vertical-margin">
                     <span className="normal-text">Sum Total</span>
                     <span className="normal-text bold">
-                      ₦{order?.amount.toLocaleString()}
+                      {getPriceDisplay(order?.amount || 0, currency)}
                     </span>
                   </div>
                 </div>
@@ -1766,7 +1773,7 @@ const Checkout: FunctionComponent = () => {
                       Select your preferred currency
                     </p>
                     <div className="flex spaced-lg">
-                      {currencyOptions.map((_currency, index) => (
+                      {allCurrencies.map((_currency, index) => (
                         <button
                           key={index}
                           onClick={() => setCurrency(_currency)}
@@ -1884,12 +1891,14 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Subtotal</strong>
                       <span className="bold">
-                        ₦{order?.amount.toLocaleString()}
+                        {getPriceDisplay(order?.amount || 0, currency)}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Add-Ons total</strong>
-                      <span className="bold">₦{0}</span>
+                      <span className="bold">
+                        {getPriceDisplay(0, currency)}
+                      </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <div>
@@ -1897,7 +1906,9 @@ const Checkout: FunctionComponent = () => {
                           Delivery Charge
                         </strong>
                       </div>
-                      <span className="bold">₦0</span>
+                      <span className="bold">
+                        {getPriceDisplay(0, currency)}
+                      </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
                       <div>
@@ -1915,7 +1926,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between sub-heading margin-bottom spaced small-text">
                       <span>Total</span>
                       <span className="bold primary-color">
-                        ₦{order?.amount.toLocaleString()}
+                        {getPriceDisplay(order?.amount || 0, currency)}
                       </span>
                     </div>
                   </div>

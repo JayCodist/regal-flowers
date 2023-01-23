@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { forwardRef, MouseEvent, useContext } from "react";
 import SettingsContext from "../../utils/context/SettingsContext";
+import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import { CartItem } from "../../utils/types/Core";
 import Product from "../../utils/types/Product";
 import Button from "../button/Button";
@@ -35,7 +36,9 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       onlyTitle
     } = props;
 
-    const { cartItems, setCartItems, notify } = useContext(SettingsContext);
+    const { cartItems, setCartItems, notify, currency } = useContext(
+      SettingsContext
+    );
 
     const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -87,7 +90,7 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
                 {price && (
                   <div>
                     <p className="smaller text-secondary">From</p>
-                    <p className="bold">{price}</p>
+                    <p className="bold">{getPriceDisplay(price, currency)}</p>
                   </div>
                 )}
                 <Button

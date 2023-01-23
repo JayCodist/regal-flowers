@@ -7,14 +7,24 @@ import SettingsContext, {
   NotifyType,
   SettingsControls
 } from "../utils/context/SettingsContext";
-import { AppCurrency, CartItem, Settings, Stage } from "../utils/types/Core";
-import { defaultCurrency } from "../utils/constants";
+import {
+  AppCurrency,
+  AppCurrencyName,
+  CartItem,
+  Settings,
+  Stage
+} from "../utils/types/Core";
+import { currencyOptions, defaultCurrency } from "../utils/constants";
 import { Dayjs } from "dayjs";
 import User from "../utils/types/User";
-import AppStorage from "../utils/helpers/storage-helpers";
+import AppStorage, {
+  AppStorageConstants
+} from "../utils/helpers/storage-helpers";
+import { performHandshake } from "../utils/helpers/data/core";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
+  allCurrencies: currencyOptions,
   currentStage: 1,
   deliveryDate: null,
   cartItems: []
@@ -37,9 +47,46 @@ const App: FunctionComponent<AppProps> = props => {
   }>({});
   const [user, setUser] = useState<User | null>(null);
 
+  const initializeCurrencies = async () => {
+    const savedCurrency = AppStorage.get<AppCurrency>(
+      AppStorageConstants.SAVED_CURRENCY
+    );
+    if (savedCurrency) {
+      setSettings({
+        ...settings,
+        currency: savedCurrency
+      });
+    }
+
+    const { error, data } = await performHandshake();
+    if (error) {
+      // Fail quietly and continue using the set constant values
+    } else {
+      const currencyValueMap: Partial<Record<AppCurrencyName, number>> =
+        data?.currencies.reduce(
+          (map, currency) => ({
+            ...map,
+            [currency.name]: currency.conversionRate
+          }),
+          {}
+        ) || {};
+      setSettings({
+        ...settings,
+        allCurrencies: settings.allCurrencies.map(currency => ({
+          ...currency,
+          conversionRate:
+            currencyValueMap[currency.name] || currency.conversionRate
+        }))
+      });
+    }
+  };
+
   useEffect(() => {
-    const savedUser = AppStorage.get<User>("userData");
+    initializeCurrencies();
+
+    const savedUser = AppStorage.get<User>(AppStorageConstants.USER_DATA);
     setUser(savedUser);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const notify = (type: NotifyType, message: string, duration?: number) => {
@@ -64,8 +111,10 @@ const App: FunctionComponent<AppProps> = props => {
 
   const settingsControls: SettingsControls = {
     currency: settings.currency,
-    setCurrency: (currency: AppCurrency) =>
-      setSettings({ ...settings, currency }),
+    setCurrency: (currency: AppCurrency) => {
+      setSettings({ ...settings, currency });
+      AppStorage.save(AppStorageConstants.SAVED_CURRENCY, currency);
+    },
     currentStage: settings.currentStage,
     setCurrentStage: (currentStage: Stage) =>
       setSettings({ ...settings, currentStage }),
@@ -76,6 +125,7 @@ const App: FunctionComponent<AppProps> = props => {
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
     },
+    allCurrencies: settings.allCurrencies,
     notify,
     user,
     setUser

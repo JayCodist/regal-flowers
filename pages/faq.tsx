@@ -299,7 +299,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
               name={flower.name}
               subTitle={flower.details}
               price={flower.price}
-              url={`/products/${flower.slug}`}
+              url={`/product/${flower.slug}`}
             />
           ))}
         </div>

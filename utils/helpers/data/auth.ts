@@ -1,7 +1,7 @@
 import RequestResponse from "../../types/RequestResponse";
 import User from "../../types/User";
 import { restAPIInstance } from "../rest-api-config";
-import AppStorage from "../storage-helpers";
+import AppStorage, { AppStorageConstants } from "../storage-helpers";
 
 export const login: (
   email: string,
@@ -12,7 +12,7 @@ export const login: (
       email,
       password
     });
-    AppStorage.save("userData", data);
+    AppStorage.save(AppStorageConstants.USER_DATA, data);
     return {
       error: false,
       data
@@ -36,7 +36,7 @@ export const signup: (
       email,
       password
     });
-    AppStorage.save("userData", data);
+    AppStorage.save(AppStorageConstants.USER_DATA, data);
     return {
       error: false,
       data
@@ -81,7 +81,7 @@ export const validteOTP: (
       email,
       code
     });
-    AppStorage.save("userData", data);
+    AppStorage.save(AppStorageConstants.USER_DATA, data);
     return {
       error: false,
       data
@@ -106,7 +106,7 @@ export const changePassword: (
         password
       }
     );
-    AppStorage.save("userData", data);
+    AppStorage.save(AppStorageConstants.USER_DATA, data);
     return {
       error: false,
       data

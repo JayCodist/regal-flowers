@@ -35,8 +35,8 @@ export const defaultCurrency: AppCurrency = {
 
 export const currencyOptions: AppCurrency[] = [
   { ...defaultCurrency },
-  { name: "USD", conversionRate: 415, sign: "$" },
-  { name: "GBP", conversionRate: 523, sign: "£" }
+  { name: "USD", conversionRate: 453, sign: "$" },
+  { name: "GBP", conversionRate: 561, sign: "£" }
 ];
 
 interface FooterContent {
