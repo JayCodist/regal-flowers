@@ -137,6 +137,10 @@
           -webkit-box-orient: vertical;
           overflow: hidden;
           text-overflow: ellipsis;
+
+          @media (max-width: 650px) {
+            width: 80%;
+          }
         }
         .review-date {
           margin: 0.1rem 0 1.5rem;
@@ -361,18 +365,22 @@
     height: auto;
     width: 80%;
   }
+
+  @media (max-width: 500px) {
+    width: 90%;
+  }
   .occasion-select {
     border: none;
     padding: 0 0.4rem;
 
-    @media (max-width: 400px) {
+    @media (max-width: 500px) {
       width: 49%;
     }
   }
   .occasion-date {
     border: none;
 
-    @media (max-width: 400px) {
+    @media (max-width: 500px) {
       width: 49%;
     }
   }

@@ -314,7 +314,9 @@ const LandingPage: FunctionComponent<{
           </div>
 
           <div className="flex between">
-            <h2 className="featured-title">Gifts to Include with Flowers</h2>
+            <h2 className="featured-title">
+              Valentine Gifts to Include with Flowers
+            </h2>
             {deviceType === "desktop" && (
               <Button
                 url="/filters?selectedOccasion=all-occasions"

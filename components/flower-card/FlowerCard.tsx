@@ -76,7 +76,7 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
             />
           </div>
           <div className={styles.detail}>
-            <strong className="normal-text">{name}</strong>
+            <strong className={styles.name}>{name}</strong>
             {subTitle && <p className={styles.subtitle}>{subTitle}</p>}
             {!onlyTitle && (
               <div
