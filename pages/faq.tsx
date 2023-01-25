@@ -19,12 +19,12 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
     <section className={styles.wrapper}>
       <div className={[styles["hero-bg"], "hero-bg"].join(" ")}>
         <div className="hero-content flex column center center-align">
-          <h1 className={styles.title}>Freqently Asked Questions</h1>
+          <h1 className={styles.title}>Frequently Asked Questions</h1>
         </div>
       </div>
       <div className={styles.container}>
         <div className={`${styles.content} flex between spaced-xl`}>
-          <ol className={`flex column ${styles.links}`}>
+          <ol className={`flex column ${styles.links} normal-text`}>
             <p className="title small bold">Table of content</p>
             <Link href="#how-it-works">
               <a
