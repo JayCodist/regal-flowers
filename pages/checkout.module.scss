@@ -59,12 +59,8 @@
       border: none;
       transition: 0.1s ease-out;
       border: 0.1rem solid transparent;
-      &.inactive {
-        opacity: 0.3;
-        cursor: not-allowed;
-      }
-
-      &:hover {
+      &:hover,
+      &.active {
         background-color: white;
         border: 0.1rem solid #9b0000;
       }

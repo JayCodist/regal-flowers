@@ -1,33 +1,39 @@
-import { OrderCreate, Order, OrderUpdate } from "../../types/Order";
+import { OrderCreate, Order, CheckoutFormData } from "../../types/Order";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 import { getKeyMap } from "../type-helpers";
 
-const adaptUpdateOrderRecord = (record: any, fromBackend?: boolean) => {
+const adaptCheckoutStateRecord = (
+  record: CheckoutFormData,
+  fromBackend?: boolean
+) => {
   if (!record) {
     return record;
   }
 
   const processedRecord: Record<string, any> = {
-    deliveryState: record.deliveryState,
-    pickUpLocation: record.pickUpLocation,
-    deliveryDate: record.deliveryDate,
-    additionalInfo: record.additionalInfo,
-    deliveryMessage: record.message,
-    purpose: record.purpose,
-    pickUpState: record.pickUpState,
-    client: {
-      name: record.senderName,
-      email: record.senderEmail,
-      phone: record.senderPhoneNumber,
-      password: record.senderPassword
-    },
-    recipient: {
-      name: record.recipientName,
-      phone: record.recipientPhoneNumber,
-      phoneAlt: record.recipientPhoneNumberAlt,
-      email: record.recipientEmail,
-      address: [...record.recipientHomeAddress]
+    shouldCreateAccount: record.freeAccount,
+    shouldSaveAddress: record.shouldSaveAddress,
+    orderData: {
+      deliveryDate: record.deliveryDate,
+      adminNotes: `TEST ${record.additionalInfo}`,
+      deliveryMessage: record.message,
+      purpose: record.purpose,
+      client: {
+        name: record.senderName,
+        email: record.senderEmail,
+        phone: record.senderPhoneNumber,
+        password: record.senderPassword
+      },
+      recipient: {
+        name: record.recipientName,
+        phone: record.recipientPhoneNumber,
+        phoneAlt: record.recipientPhoneNumberAlt,
+        address: record.recipientHomeAddress,
+        state: record.state,
+        residenceType: record.residenceType,
+        method: record.deliveryMethod
+      }
     }
   };
 
@@ -88,15 +94,14 @@ export const createOrder: (
   }
 };
 
-export const updateOrder: (
+export const updateCheckoutState: (
   id: string,
-  order: OrderUpdate
-) => Promise<RequestResponse<Order>> = async (id, order) => {
-  const data = adaptUpdateOrderRecord(order);
+  formData: CheckoutFormData
+) => Promise<RequestResponse<Order>> = async (id, formData) => {
   try {
     const response = await restAPIInstance.put(
-      `/v1/firebase/order/update/${id}`,
-      data
+      `/v1/firebase/order/checkout-order/${id}`,
+      adaptCheckoutStateRecord(formData)
     );
     return {
       error: false,

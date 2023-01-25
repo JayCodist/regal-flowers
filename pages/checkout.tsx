@@ -25,11 +25,11 @@ import {
   placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
-import { getOrder, updateOrder } from "../utils/helpers/data/order";
+import { getOrder, updateCheckoutState } from "../utils/helpers/data/order";
 import { getZoneGroups } from "../utils/helpers/data/zone-group";
 import { emailValidator } from "../utils/helpers/validators";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
-import { Order, OrderUpdate, PaymentName } from "../utils/types/Order";
+import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
@@ -48,8 +48,9 @@ import {
 } from "@paypal/paypal-js";
 import { AppCurrency } from "../utils/types/Core";
 import { getPriceDisplay } from "../utils/helpers/type-conversions";
+import { Recipient } from "../utils/types/User";
 
-const initialData = {
+const initialData: CheckoutFormData = {
   senderName: "",
   senderEmail: "",
   senderPhoneNumber: "",
@@ -57,12 +58,13 @@ const initialData = {
   freeAccount: true,
   coupon: "",
   deliveryMethod: "delivery",
-  deliveryState: "",
+  state: "",
   pickUpLocation: "",
   recipientName: "",
   deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
+  shouldSaveAddress: true,
   residenceType: "",
   recipientHomeAddress: "",
   additionalInfo: "",
@@ -74,9 +76,7 @@ const initialData = {
   cardCVV: "",
   recipientCountryCode: "",
   senderCountryCode: "",
-  recipientAltCountryCode: "",
-  recipientEmail: "",
-  pickUpState: ""
+  recipientAltCountryCode: ""
 };
 
 type TabKey = "delivery" | "payment" | "done";
@@ -87,8 +87,28 @@ type DeliverStage =
   | "payment"
   | "customization-message";
 
+interface Tab {
+  tabTitle: string;
+  TabKey: TabKey;
+}
+
+const tabs: Tab[] = [
+  {
+    tabTitle: "Delivery",
+    TabKey: "delivery"
+  },
+  {
+    tabTitle: "Payment",
+    TabKey: "payment"
+  },
+  {
+    tabTitle: "Done",
+    TabKey: "done"
+  }
+];
+
 const Checkout: FunctionComponent = () => {
-  const [formData, setFormData] = useState<OrderUpdate>(initialData);
+  const [formData, setFormData] = useState<CheckoutFormData>(initialData);
   const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
     "delivery"
   );
@@ -109,6 +129,9 @@ const Checkout: FunctionComponent = () => {
     "sender-info"
   );
   const [allPurposes, setAllPurposes] = useState<Option[]>([]);
+  const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(
+    null
+  );
 
   const {
     user,
@@ -139,7 +162,7 @@ const Checkout: FunctionComponent = () => {
     isReady
   } = router;
 
-  const handleChange = (key: string, value: any) => {
+  const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
     setFormData({
       ...formData,
       [key]: value
@@ -229,10 +252,15 @@ const Checkout: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    setFormData({ ...formData, freeAccount: Boolean(!user) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order]);
+
   const handleSubmit = async () => {
     setLoading(true);
 
-    const response = await updateOrder(orderId as string, formData);
+    const response = await updateCheckoutState(orderId as string, formData);
 
     const { error, message } = response;
 
@@ -259,6 +287,15 @@ const Checkout: FunctionComponent = () => {
   const isDelivered = (deliveryStatus = "") => {
     return /delivered/i.test(deliveryStatus);
   };
+
+  const pastRecipients = useMemo(
+    () =>
+      user?.recipients.map(recipient => ({
+        label: recipient.name,
+        value: recipient.phone
+      })) || [],
+    [user]
+  );
 
   if (pageLoading) {
     return (
@@ -342,33 +379,13 @@ const Checkout: FunctionComponent = () => {
     googlePay: () => {}
   };
 
-  interface Tab {
-    tabTitle: string;
-    TabKey: TabKey;
-  }
-
-  const tabs: Tab[] = [
-    {
-      tabTitle: "Delivery",
-      TabKey: "delivery"
-    },
-    {
-      tabTitle: "Payment",
-      TabKey: "payment"
-    },
-    {
-      tabTitle: "Done",
-      TabKey: "done"
-    }
-  ];
-
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       {deviceType === "desktop" ? (
         <section className={styles["checkout-page"]}>
           {currentStage <= 2 && (
             <div className={styles["checkout-wrapper"]}>
-              <form className={`${styles.left}`}>
+              <div className={`${styles.left}`}>
                 {currentStage === 1 && (
                   <>
                     <div className={styles.border}>
@@ -387,6 +404,7 @@ const Checkout: FunctionComponent = () => {
                                 handleChange("senderName", value)
                               }
                               dimmed
+                              required
                               responsive
                             />
                           </div>
@@ -401,40 +419,43 @@ const Checkout: FunctionComponent = () => {
                               }
                               dimmed
                               responsive
-                              onBlurValidation={() =>
-                                emailValidator(formData.senderEmail)
-                              }
+                              required={formData.freeAccount}
                             />
                           </div>
                         </div>
                         <div className="flex spaced-xl">
-                          <PhoneInput
-                            phoneNumber={
-                              (formData.senderPhoneNumber as unknown) as number
-                            }
-                            countryCode={formData.senderCountryCode || "+234"}
-                            onChangePhoneNumber={value =>
-                              handleChange("senderPhoneNumber", value)
-                            }
-                            onChangeCountryCode={value =>
-                              handleChange("senderCountryCode", value)
-                            }
-                          />
                           <div className="input-group">
-                            <span className="question">Create Password</span>
+                            <span className="question">Phone number</span>
                             <Input
-                              name="password"
-                              type="password"
-                              placeholder="Password"
-                              value={formData.senderPassword}
+                              value={formData.senderPhoneNumber}
                               onChange={value =>
-                                handleChange("senderPassword", value)
+                                handleChange("senderPhoneNumber", value)
                               }
-                              dimmed
+                              placeholder="Enter phone number"
+                              name="phone"
+                              required
                               responsive
-                              autoComplete="new-password"
+                              dimmed
                             />
                           </div>
+                          {!user && (
+                            <div className="input-group">
+                              <span className="question">Create Password</span>
+                              <Input
+                                name="password"
+                                type="password"
+                                placeholder="Password"
+                                value={formData.senderPassword}
+                                onChange={value =>
+                                  handleChange("senderPassword", value)
+                                }
+                                dimmed
+                                responsive
+                                autoComplete="new-password"
+                                required={formData.freeAccount}
+                              />
+                            </div>
+                          )}
                         </div>
                         {!user && (
                           <Checkbox
@@ -477,7 +498,9 @@ const Checkout: FunctionComponent = () => {
                             <p className={`${styles["method-title"]}`}>
                               Pick Up
                             </p>
-                            <p className="">Pick up from our store</p>
+                            <p className="">
+                              Pick up from any of our stores nation wide
+                            </p>
                           </div>
                         </div>
                         <div className="input-group half-width">
@@ -490,19 +513,8 @@ const Checkout: FunctionComponent = () => {
                           </span>
 
                           <Select
-                            onSelect={value =>
-                              handleChange(
-                                deliveryMethod === "delivery"
-                                  ? "deliveryState"
-                                  : "PickUpState",
-                                value
-                              )
-                            }
-                            value={
-                              deliveryMethod === "delivery"
-                                ? formData.deliveryState
-                                : formData.pickUpState
-                            }
+                            onSelect={value => handleChange("state", value)}
+                            value={formData.state}
                             options={
                               deliveryMethod === "delivery"
                                 ? deliveryStates
@@ -597,11 +609,15 @@ const Checkout: FunctionComponent = () => {
                           </span>
 
                           <Select
-                            onSelect={value =>
-                              handleChange("deliveryState", value)
+                            onSelect={phone =>
+                              setSelectedRecipient(
+                                user?.recipients.find(
+                                  recipient => recipient.phone === phone
+                                ) || null
+                              )
                             }
-                            value={formData.deliveryState}
-                            options={[]}
+                            value={selectedRecipient?.phone || ""}
+                            options={pastRecipients}
                             placeholder="Select Past Recipient"
                             responsive
                             dimmed
@@ -700,7 +716,7 @@ const Checkout: FunctionComponent = () => {
                           />
                         </div>
                         <Checkbox
-                          checked={formData.freeAccount}
+                          checked={formData.shouldSaveAddress}
                           onChange={value => handleChange("freeAccount", value)}
                           text="Save Address"
                           type="transparent"
@@ -754,8 +770,8 @@ const Checkout: FunctionComponent = () => {
 
                     <Button
                       className="half-width"
-                      onClick={handleSubmit}
                       loading={loading}
+                      buttonType="submit"
                     >
                       Proceed to Payment
                     </Button>
@@ -856,10 +872,10 @@ const Checkout: FunctionComponent = () => {
                     </div>
                   </>
                 )}
-              </form>
+              </div>
 
               {currentStage <= 2 && (
-                <form className={styles.right}>
+                <div className={styles.right}>
                   <div className="flex between margin-bottom spaced">
                     <p className="sub-heading bold">Cart Summary</p>
                     <p className="sub-heading bold primary-color underline">
@@ -907,11 +923,7 @@ const Checkout: FunctionComponent = () => {
                       </span>
                     </div>
                     {currentStage === 1 && (
-                      <Button
-                        responsive
-                        onClick={handleSubmit}
-                        loading={loading}
-                      >
+                      <Button responsive buttonType="submit" loading={loading}>
                         Proceed to Payment
                       </Button>
                     )}
@@ -957,7 +969,7 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     </div>
                   )}
-                </form>
+                </div>
               )}
             </div>
           )}
@@ -1200,7 +1212,7 @@ const Checkout: FunctionComponent = () => {
             {activeTab === "delivery" && (
               <div>
                 {deliveryStage === "sender-info" && (
-                  <form>
+                  <div>
                     <div className="flex align-center between">
                       <p className={styles.title}>Sender's Information</p>
                       <strong className="primary-color underline">Login</strong>
@@ -1274,14 +1286,13 @@ const Checkout: FunctionComponent = () => {
                       onClick={() => setDeliveryStage("delivery-type")}
                       className="vertical-margin xl"
                       responsive
-                      buttonType="submit"
                     >
                       Continue
                     </Button>
                     <p className={styles.next}>
                       Next: <strong>Delivery Type</strong>
                     </p>
-                  </form>
+                  </div>
                 )}
 
                 {deliveryStage === "delivery-type" && (
@@ -1315,10 +1326,8 @@ const Checkout: FunctionComponent = () => {
                         </div>
                         {deliveryMethod === "delivery" && (
                           <Select
-                            onSelect={value =>
-                              handleChange("deliveryState", value)
-                            }
-                            value={formData.deliveryState}
+                            onSelect={value => handleChange("state", value)}
+                            value={formData.state}
                             options={deliveryStates}
                             placeholder="Select a state"
                             responsive
@@ -1335,10 +1344,8 @@ const Checkout: FunctionComponent = () => {
                         {deliveryMethod === "pick-up" && (
                           <div className="input-group vertical-margin spaced">
                             <Select
-                              onSelect={value =>
-                                handleChange("PickUpState", value)
-                              }
-                              value={formData.pickUpState}
+                              onSelect={value => handleChange("state", value)}
+                              value={formData.state}
                               options={pickUpOptions}
                               placeholder="Select a State"
                               responsive
@@ -1457,7 +1464,7 @@ const Checkout: FunctionComponent = () => {
                     </div>
                     <div className={`${styles["sender-info"]} flex between`}>
                       <p>Delivery</p>
-                      <p>{formData.deliveryState || formData.pickUpState}</p>
+                      <p>{formData.state}</p>
                     </div>
                     <div>
                       <p className={styles.title}>Receiver's Information</p>
@@ -1468,11 +1475,15 @@ const Checkout: FunctionComponent = () => {
                           </span>
 
                           <Select
-                            onSelect={value =>
-                              handleChange("deliveryState", value)
+                            onSelect={phone =>
+                              setSelectedRecipient(
+                                user?.recipients.find(
+                                  recipient => recipient.phone === phone
+                                ) || null
+                              )
                             }
-                            value={formData.deliveryState}
-                            options={[]}
+                            value={selectedRecipient?.phone || ""}
+                            options={pastRecipients}
                             placeholder="Select Past Recipient"
                             responsive
                             dimmed
@@ -1567,7 +1578,7 @@ const Checkout: FunctionComponent = () => {
                           />
                         </div>
                         <Checkbox
-                          checked={formData.freeAccount}
+                          checked={formData.shouldSaveAddress}
                           onChange={value => handleChange("freeAccount", value)}
                           text="Save Address"
                           type="transparent"
@@ -1618,7 +1629,7 @@ const Checkout: FunctionComponent = () => {
                     </div>
                     <div className={`${styles["sender-info"]} flex between`}>
                       <p>Delivery</p>
-                      <p>{formData.deliveryState || formData.pickUpState}</p>
+                      <p>{formData.state}</p>
                     </div>
                     <div className="flex between">
                       <p className={styles.title}>Receiver's Information</p>
@@ -1968,7 +1979,7 @@ const Checkout: FunctionComponent = () => {
         order={order}
         onComplete={markAsPaid}
       />
-    </>
+    </form>
   );
 };
 

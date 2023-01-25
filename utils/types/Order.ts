@@ -222,7 +222,7 @@ export interface OrderCreate {
   websiteOrderID: string;
 }
 
-export interface OrderUpdate {
+export interface CheckoutFormData {
   senderName: string;
   senderEmail: string;
   senderPhoneNumber: string;
@@ -230,7 +230,6 @@ export interface OrderUpdate {
   freeAccount: boolean;
   coupon: string;
   deliveryMethod: string;
-  deliveryState: string;
   pickUpLocation: string;
   recipientName: string;
   deliveryDate: Dayjs | null;
@@ -238,6 +237,7 @@ export interface OrderUpdate {
   recipientPhoneNumberAlt: string;
   residenceType: string;
   recipientHomeAddress: string;
+  shouldSaveAddress: boolean;
   additionalInfo: string;
   message: string;
   purpose: string;
@@ -248,8 +248,7 @@ export interface OrderUpdate {
   recipientCountryCode: string;
   senderCountryCode: string;
   recipientAltCountryCode: string;
-  recipientEmail: string;
-  pickUpState: string;
+  state: string;
 }
 
 export type PaymentName =
