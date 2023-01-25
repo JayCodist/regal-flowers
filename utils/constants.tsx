@@ -975,14 +975,15 @@ export const links: AppLink[] = [
           "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
       },
       {
-        title: "Valentine",
+        title: "Vip",
         children: [],
         url: "/vip"
       },
       {
         title: "Gifts",
         children: [],
-        url: "/product-category/gift-packs"
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
       }
     ],
     url: ""
@@ -1261,7 +1262,8 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
         title: "Giftsets",
         children: []
       },
@@ -1293,7 +1295,7 @@ export const locationHeadlines: RegalContent = {
 };
 
 export const bestSellers: RegalContent = {
-  general: "Bestselling Flowers in Nigeria",
+  general: "Bestselling Valentine Flowers in Lagos & Abuja, Nigeria",
   lagos: "Bestselling Flowers in Lagos",
   abuja: "Bestselling Flowers in Abuja",
   "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"

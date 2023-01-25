@@ -116,7 +116,7 @@
     font-weight: 700;
 
     @media (max-width: 650px) {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
   }
 
@@ -274,5 +274,38 @@
       opacity: 1;
       z-index: 8;
     }
+  }
+}
+
+.about-section {
+  display: flex;
+  justify-content: space-between;
+  & > *:first-child {
+    margin-right: 2rem;
+
+    @media (max-width: 650px) {
+      margin-right: 0;
+    }
+  }
+
+  & > * {
+    width: 50%;
+
+    @media (max-width: 650px) {
+      width: 100%;
+      margin: 0;
+      margin-top: 1rem;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+  }
+
+  .red {
+    color: #9b0000;
   }
 }
