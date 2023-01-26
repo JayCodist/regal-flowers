@@ -7,7 +7,7 @@ import {
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { getProductsByCategory } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import Checkbox from "../components/checkbox/Checkbox";
@@ -41,15 +41,24 @@ const giftMap: Record<string, string> = {
   balloon: "balloon"
 };
 
+type ProductClass = "vip" | "regular";
+
+export interface ProductFilterLogic {
+  category: string[];
+  tags: string[];
+  productClass?: ProductClass;
+}
+
 const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
-type ProductCategory = "vip" | "occasion" | "gift-packs";
+type ProductCategory = "vip" | "occasion";
 
 const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
   categorySlug?: string;
+  productClass?: ProductClass;
 }> = props => {
-  const { productCategory = "occasion", categorySlug } = props;
+  const { productCategory = "occasion", categorySlug, productClass } = props;
 
   const router = useRouter();
   const { query, isReady } = router;
@@ -58,13 +67,11 @@ const ProductsPage: FunctionComponent<{
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
+  const [pageTitle, setPageTitle] = useState("Flowers");
 
-  const [selectedTagCategories, setSelectedTagCategories] = useState<string[]>(
-    []
-  );
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setproductsLoading] = useState(false);
-  const [todayDate, setTodayDate] = useState<Dayjs | null>(dayjs());
+  const [todayDate, setTodayDate] = useState<Dayjs | null>(null);
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
   const [hasMore, setHasMore] = useState(false);
@@ -73,15 +80,6 @@ const ProductsPage: FunctionComponent<{
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
   });
-
-  useEffect(() => {
-    if (isReady) {
-      const filters = String(shopBy || "")
-        .split(",")
-        .filter(Boolean);
-      setSelectedFilter(filters);
-    }
-  }, [shopBy, isReady]);
 
   const { notify } = useContext(SettingsContext);
 
@@ -108,26 +106,19 @@ const ProductsPage: FunctionComponent<{
   };
 
   useEffect(() => {
+    if (isReady) {
+      const filters = String(shopBy || "")
+        .split(",")
+        .filter(Boolean);
+      setSelectedFilter(filters);
+    }
+  }, [shopBy, isReady]);
+
+  useEffect(() => {
     const intervalId = setInterval(shuffleText, 3000);
     return () => clearInterval(intervalId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
-
-  const handleFilterCategoryChange = (name: string) => {
-    setSelectedFilter(prev =>
-      prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
-    );
-  };
-
-  const handleTagCategoryChange = (name: string, tag?: string) => {
-    setSelectedFilter(prev =>
-      prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
-    );
-    tag &&
-      setSelectedTagCategories(prev =>
-        prev.includes(tag) ? prev.filter(item => item !== tag) : [...prev, tag]
-      );
-  };
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
@@ -136,11 +127,11 @@ const ProductsPage: FunctionComponent<{
   const fetchProductCategory = async (shouldAppend?: boolean) => {
     products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
     const filterParams = {
-      category: [categorySlug as string],
-      tags: [shopBy as string],
-      productClass: productCategory === "vip" ? "vip" : "regular"
+      category: [(categorySlug as string) || ""],
+      tags: [(shopBy as string) || ""],
+      productClass
     };
-    const params: FetchResourceParams = {
+    const params: FetchResourceParams<ProductFilterLogic> = {
       pageNumber: page,
       filter: filterParams
     };
@@ -173,20 +164,34 @@ const ProductsPage: FunctionComponent<{
   }, [selectedOccasion]);
 
   useEffect(() => {
-    fetchProductCategory();
+    if (isReady) {
+      fetchProductCategory();
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    categorySlug,
-    selectedFilter,
-    selectedTagCategories,
-    selectedOccasion,
-    router
-  ]);
+  }, [categorySlug, selectedFilter, selectedOccasion, router]);
 
   useEffect(() => {
-    fetchProductCategory(true);
+    if (isReady) {
+      fetchProductCategory(true);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+
+  useEffect(() => {
+    const flowerTitle = occasions.find(
+      item => item.url === `/product-category/${categorySlug}`
+    )?.title;
+    const giftTitle = gifts.find(
+      item => item.url === `/product-category/${categorySlug}`
+    )?.title;
+    const title = flowerTitle || giftTitle;
+
+    if (title) {
+      setPageTitle(title);
+    }
+  }, [categorySlug]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -207,7 +212,8 @@ const ProductsPage: FunctionComponent<{
                       <a
                         className={[
                           styles["occasion"],
-                          categorySlug !== "gift-packs" &&
+                          categorySlug !==
+                            "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears" &&
                             categorySlug === occasion.url.split("/")[2] &&
                             styles["active"]
                         ].join(" ")}
@@ -320,6 +326,7 @@ const ProductsPage: FunctionComponent<{
                   }}
                   value={todayDate}
                   format="D MMM YYYY"
+                  placeholder="Select Date"
                 />
               </div>
 
@@ -365,12 +372,18 @@ const ProductsPage: FunctionComponent<{
                         <div key={index} className="margin-bottom">
                           <Checkbox
                             onChange={() => {
-                              child.category
-                                ? handleFilterCategoryChange(child.name)
-                                : handleTagCategoryChange(
-                                    child.name,
-                                    child.tag
-                                  );
+                              const newFilters = selectedFilter.includes(
+                                child.tag || ""
+                              )
+                                ? selectedFilter.filter(
+                                    _filter => _filter !== child.tag
+                                  )
+                                : [...selectedFilter, child.tag];
+                              router.push(
+                                `${router.pathname}?shopBy=${newFilters.join(
+                                  ","
+                                )}`
+                              );
                             }}
                             text={child.name}
                             checked={selectedFilter.includes(child.name)}
@@ -405,13 +418,13 @@ const ProductsPage: FunctionComponent<{
           </div>
 
           <div>
-            <p className={`${styles.title} bold vertical-margin spaced`}>
+            <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : giftMap[categorySlug || ""]
-                ? "Gifts"
-                : " Flowers"}
-            </p>
+                : `${pageTitle} ${
+                    !giftMap[categorySlug || ""] ? "Flower" : ""
+                  }`}
+            </h1>
 
             <div className={`${styles.products}`}>
               {productsLoading && (
@@ -463,7 +476,7 @@ const ProductsPage: FunctionComponent<{
           <>
             <div className="flex between margin-bottom spaced">
               <span className={styles.title}>
-                Gifts to Include with Flowers
+                Valentine Gifts to Include with Flowers
               </span>
               {deviceType === "desktop" && (
                 <Button
@@ -486,7 +499,7 @@ const ProductsPage: FunctionComponent<{
                   key={index}
                   name={gift.name}
                   image={gift.image}
-                  subTitle={"Cakes and cupcakes are a great choice"}
+                  subTitle={gift.description}
                   buttonText="See More"
                   url={gift.slug}
                 />
@@ -508,37 +521,167 @@ const ProductsPage: FunctionComponent<{
           <h1 className={`text-center ${styles.title}`}>
             Flower Delivery for all Occasions
           </h1>
-          <div
-            className={`flex between ${deviceType === "desktop" &&
-              " spaced-xl"} ${deviceType === "mobile" && "column"}`}
-          >
-            <div
-              className={`${deviceType === "mobile" ? "block" : "half-width"}`}
-            >
+
+          <div className={[styles["about-section"]].join(" ")}>
+            <div>
               <p className="title small bold margin-bottom">
                 {aboutUsContent.howItBegan.title}
               </p>
-              <p>{aboutUsContent.howItBegan.content}</p>
+              <p className="normal-text">
+                It was a Sunday morning, the year was 2016, in the vibrant city
+                of Lagos, Nigeria, and our founder, reeling from the very recent
+                heartbreak of his relationship (Hint: She left him) was
+                determined to get his girlfriend back.
+                <br />
+                <br />
+                She was traveling to Abuja, Nigeria that afternoon, and he
+                wanted to buy fresh flowers for her so he decided to check
+                prices of bouquet of flowers online. He specifically wanted
+                flower shops in Lagos or Abuja that could deliver a bouquet of{" "}
+                <Link href="/products/classic-red-roses-luxurious-bouquet-of-red-roses">
+                  <a className={styles.red}>red roses</a>
+                </Link>{" "}
+                and chocolates to her the same day.
+                <br />
+                <br />
+                He searched high and low, and while he found some online flower
+                delivery shops in Lagos and Abuja, Nigeria, he couldn’t find one
+                that ticked all the right boxes.
+                <br />
+                <br />
+                The flower shops he found either didn’t look reputable enough
+                (after all he was already heartbroken, he couldn’t afford to
+                lose his money too, and this is Nigeria, where you have to be
+                vigilant), were not picking up or returning his calls, or they
+                didn’t have enough options for various budgets.
+                <br />
+                <br />
+                He finally found one that claimed to be open 24 hours on their
+                Google Maps, and when they also didn’t pick up the phone, he
+                drove down there, only to meet it closed. Ouch.
+                <br />
+                <br />
+                No, he eventually didn’t get her back, and No, it wasn't because
+                he couldn't send her the red roses and chocolates.
+                <br />
+                <br />
+                Instead, it was, as the dictionary would say, irreconcilable
+                differences, and they remain friends, but he instead gained the
+                passion for flowers and gifts that would eventually see him open
+                his own online and walk-in fresh flower shop in Lagos and Abuja,
+                Nigeria.
+                <br />
+                An online flower shop that would precisely tick all the right
+                boxes.
+              </p>
               <p className="title small bold vertical-margin">
                 {aboutUsContent.openingHour.title}
               </p>
-              <p>{aboutUsContent.openingHour.content}</p>
+              <p className="normal-text">
+                Our flower shops in Lagos (Ikoyi Head office) and Abuja (Wuse 2
+                Branch) are open 24 hours not only for website orders but also
+                for walk-ins. We once had a client take us up on the offer by
+                walking in by 3 am. He was on his way to pick up his wife at the
+                airport and wanted to buy red roses to welcome her. He was
+                shocked we were actually open.
+                <br />
+                <br />
+                Many clients are often surprised that unlike others out there,
+                it is not just a slogan for us.
+                <br />
+                <br />
+                Regal Flowers and Gifts is also open every day of the year
+                including weekends and public holidays (yes, Christmas, Easter,
+                and New Year's Day too). We are badass like that
+              </p>
             </div>
-            <div
-              className={`${deviceType === "mobile" ? "block" : "half-width"}`}
-            >
+            <div>
               <p className="title small bold margin-bottom">
                 {aboutUsContent.reputation.title}
               </p>
-              <p>{aboutUsContent.reputation.content}</p>
+              <p className="normal-text">
+                Once you place your order, you can completely relax, as we
+                deliver on time, and you can walk into any of our branches
+                anytime. We have the highest rating (4.97 stars on average) and
+                the highest number of Google Reviews in Nigeria (over 1000
+                reviews from our 4 branches).
+                <br />
+                <br />
+                Regal Flowers has delivered to over 10,000 people including
+                various celebrities and 2 Nigerian Presidents. We have very
+                likely delivered roses for and to someone you know.
+                <br />
+                <br />
+                Furthermore, the flowers are always fresh and imported into
+                Nigeria every week from rose farms across the world. You can
+                definitely say Regal flowers is your plug for reputable and
+                premium fresh flowers in Nigeria.
+              </p>
               <p className="title small bold vertical-margin">
                 {aboutUsContent.deliveryTime.title}
               </p>
-              <p>{aboutUsContent.deliveryTime.content}</p>
+              <p className="normal-text">
+                We offer fast and same-day delivery of{" "}
+                <Link href="/filters?selectedOccasion=just-to-say">
+                  <a className={styles.red}>flower bouquets</a>
+                </Link>{" "}
+                and gifts everywhere in Lagos and Abuja. <br /> <br />
+                Some locations we offer delivery of fresh flowers in Lagos
+                include Ikoyi, Victoria Island, Ikeja, Lekki Phase 1, Chevron,
+                Lekki, Ajah, Ikate, Sangotedo, Gbagada, Yaba, Surulere, Ilupeju,
+                Magodo, Maryland, Opebi, Ogba, Ogudu, Allen Avenue.
+                <br /> <br />
+                We opened our Abuja branch in 2021 and it is also open for
+                walk-ins 24 hours. We offer delivery of fresh flowers everywhere
+                in Auja, including in Wuse 2, Maitama, Central Area, Garki,
+                Jabi, Asokoro, Gwarinpa, Jahi, Lokogoma, Apo, Life Camp, Lugbe,
+                Dawaki, Abuja Municipal Area Council etcetera.
+                <br /> <br />
+                In essence, we deliver EVERYWHERE in Lagos and Abuja
+              </p>
               <p className="title small bold vertical-margin">
                 {aboutUsContent.budget.title}
               </p>
-              <p>{aboutUsContent.budget.content}</p>
+              <p className="normal-text">
+                We stock flowers for various occasions such as{" "}
+                <Link href="/filters?selectedOccasion=just-to-say">
+                  <a className={styles.red}> Birthday Flowers</a>
+                </Link>
+                ,
+                <Link href="/filters?selectedOccasion=just-to-say">
+                  <a className={styles.red}> Romantic Flowers</a>
+                </Link>
+                ,{" "}
+                <Link href="/filters?selectedOccasion=Anniversary%20Flowers">
+                  <a className={styles.red}> Anniversary Flowers</a>
+                </Link>
+                , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
+                <Link href="/filters?selectedOccasion=funeral-condolence">
+                  <a className={styles.red}> Funeral Wreaths</a>
+                </Link>{" "}
+                ,{" "}
+                <Link href="/filters?selectedOccasion=funeral-condolence">
+                  <a className={styles.red}> Condolence Flowers</a>
+                </Link>{" "}
+                ,{" "}
+                <Link href="/filters?selectedOccasion=bridal-bouquets">
+                  <a className={styles.red}>Bridal Bouquets</a>
+                </Link>{" "}
+                , and of course,
+                <Link href="/filters?selectedOccasion=Anniversary%20Flowers">
+                  <a className={styles.red}> Valentine’s Day flowers</a>
+                </Link>{" "}
+                available
+                <br />
+                <br />
+                And finally, there are suitable options for all budgets, so when
+                you see a design you like, you can simply pick the size that
+                suits your budget. Want to go all out too? We got you, with our
+                <Link href="/vip">
+                  <a className={styles.red}> VIP</a>
+                </Link>{" "}
+                Category of roses.
+              </p>
             </div>
           </div>
         </div>
