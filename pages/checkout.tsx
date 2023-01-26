@@ -4,6 +4,7 @@ import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import { useRouter } from "next/router";
 import {
+  FormEvent,
   FunctionComponent,
   MutableRefObject,
   useContext,
@@ -16,7 +17,6 @@ import Button from "../components/button/Button";
 import Checkbox from "../components/checkbox/Checkbox";
 import DatePicker from "../components/date-picker/DatePicker";
 import Input, { TextArea } from "../components/input/Input";
-import PhoneInput from "../components/phone-input/PhoneInput";
 import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
@@ -27,7 +27,6 @@ import {
 import SettingsContext from "../utils/context/SettingsContext";
 import { getOrder, updateCheckoutState } from "../utils/helpers/data/order";
 import { getZoneGroups } from "../utils/helpers/data/zone-group";
-import { emailValidator } from "../utils/helpers/validators";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
 import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
@@ -47,7 +46,10 @@ import {
   OnApproveData
 } from "@paypal/paypal-js";
 import { AppCurrency } from "../utils/types/Core";
-import { getPriceDisplay } from "../utils/helpers/type-conversions";
+import {
+  getOptionsFromArray,
+  getPriceDisplay
+} from "../utils/helpers/type-conversions";
 import { Recipient } from "../utils/types/User";
 
 const initialData: CheckoutFormData = {
@@ -219,6 +221,23 @@ const Checkout: FunctionComponent = () => {
     }
   };
 
+  useEffect(() => {
+    if (selectedRecipient) {
+      setFormData({
+        ...formData,
+        recipientName: selectedRecipient.name,
+        recipientPhoneNumber: selectedRecipient.phone,
+        recipientPhoneNumberAlt: selectedRecipient.phoneAlt,
+        recipientHomeAddress: selectedRecipient.address,
+        message: selectedRecipient.message,
+        deliveryMethod: selectedRecipient.method,
+        residenceType: selectedRecipient.residenceType,
+        state: selectedRecipient.state
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRecipient]);
+
   const fetchPurposes = async () => {
     const { error, message, data } = await getPurposes();
     if (error) {
@@ -257,12 +276,14 @@ const Checkout: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     setLoading(true);
-
-    const response = await updateCheckoutState(orderId as string, formData);
-
-    const { error, message } = response;
+    const { error, message } = await updateCheckoutState(
+      orderId as string,
+      formData
+    );
+    setLoading(false);
 
     if (error) {
       notify("error", `Unable to save order: ${message}`);
@@ -271,8 +292,6 @@ const Checkout: FunctionComponent = () => {
       setDeliveryStage("payment");
       setActiveTab("payment");
     }
-
-    setLoading(false);
   };
 
   const deliveryMap = {
@@ -423,40 +442,38 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
                         </div>
-                        <div className="flex spaced-xl">
+                        <div className="input-group">
+                          <span className="question">Phone number</span>
+                          <Input
+                            value={formData.senderPhoneNumber}
+                            onChange={value =>
+                              handleChange("senderPhoneNumber", value)
+                            }
+                            placeholder="Enter phone number"
+                            name="phone"
+                            required
+                            responsive
+                            dimmed
+                          />
+                        </div>
+                        {!user && (
                           <div className="input-group">
-                            <span className="question">Phone number</span>
+                            <span className="question">Create Password</span>
                             <Input
-                              value={formData.senderPhoneNumber}
+                              name="password"
+                              type="password"
+                              placeholder="Password"
+                              value={formData.senderPassword}
                               onChange={value =>
-                                handleChange("senderPhoneNumber", value)
+                                handleChange("senderPassword", value)
                               }
-                              placeholder="Enter phone number"
-                              name="phone"
-                              required
-                              responsive
                               dimmed
+                              responsive
+                              autoComplete="new-password"
+                              required={formData.freeAccount}
                             />
                           </div>
-                          {!user && (
-                            <div className="input-group">
-                              <span className="question">Create Password</span>
-                              <Input
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                                value={formData.senderPassword}
-                                onChange={value =>
-                                  handleChange("senderPassword", value)
-                                }
-                                dimmed
-                                responsive
-                                autoComplete="new-password"
-                                required={formData.freeAccount}
-                              />
-                            </div>
-                          )}
-                        </div>
+                        )}
                         {!user && (
                           <Checkbox
                             checked={formData.freeAccount}
@@ -654,36 +671,35 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
                         </div>
-                        <div className="flex spaced-xl">
-                          <PhoneInput
-                            phoneNumber={
-                              (formData.recipientPhoneNumber as unknown) as number
-                            }
-                            countryCode={
-                              formData.recipientCountryCode || "+234"
-                            }
-                            onChangePhoneNumber={value =>
+                        <div className="input-group">
+                          <span className="question">
+                            Receiver Phone number
+                          </span>
+                          <Input
+                            value={formData.recipientPhoneNumber}
+                            onChange={value =>
                               handleChange("recipientPhoneNumber", value)
                             }
-                            onChangeCountryCode={value =>
-                              handleChange("recipientCountryCode", value)
-                            }
+                            placeholder="Enter receiver phone"
+                            dimmed
+                            responsive
+                            required
                           />
+                        </div>
 
-                          <PhoneInput
-                            phoneNumber={
-                              (formData.recipientPhoneNumberAlt as unknown) as number
-                            }
-                            countryCode={
-                              formData.recipientAltCountryCode || "+234"
-                            }
-                            onChangePhoneNumber={value =>
+                        <div className="input-group">
+                          <span className="question">
+                            Alternative Phone number
+                          </span>
+                          <Input
+                            value={formData.recipientPhoneNumberAlt}
+                            onChange={value =>
                               handleChange("recipientPhoneNumberAlt", value)
                             }
-                            onChangeCountryCode={value =>
-                              handleChange("recipientAltCountryCode", value)
-                            }
-                            question="Alternative Phone Number (Optional)"
+                            placeholder="Enter alternative phone"
+                            dimmed
+                            responsive
+                            required
                           />
                         </div>
                         <div className="input-group half-width">
@@ -694,7 +710,7 @@ const Checkout: FunctionComponent = () => {
                               handleChange("residenceType", value)
                             }
                             value={formData.residenceType}
-                            options={[]}
+                            options={getOptionsFromArray(["Home", "Office"])}
                             placeholder="Select a residence type"
                             responsive
                             dimmed
@@ -717,9 +733,10 @@ const Checkout: FunctionComponent = () => {
                         </div>
                         <Checkbox
                           checked={formData.shouldSaveAddress}
-                          onChange={value => handleChange("freeAccount", value)}
-                          text="Save Address"
-                          type="transparent"
+                          onChange={value =>
+                            handleChange("shouldSaveAddress", value)
+                          }
+                          text="Save Recipient"
                         />
                       </div>
                     </div>
@@ -1238,42 +1255,41 @@ const Checkout: FunctionComponent = () => {
                         onChange={value => handleChange("senderEmail", value)}
                         dimmed
                         responsive
-                        onBlurValidation={() =>
-                          emailValidator(formData.senderEmail)
-                        }
-                        required
+                        required={formData.freeAccount}
                       />
                     </div>
-
-                    <PhoneInput
-                      phoneNumber={
-                        (formData.senderPhoneNumber as unknown) as number
-                      }
-                      countryCode={formData.senderCountryCode || "+234"}
-                      onChangePhoneNumber={value =>
-                        handleChange("senderPhoneNumber", value)
-                      }
-                      onChangeCountryCode={value =>
-                        handleChange("senderCountryCode", value)
-                      }
-                      required
-                    />
                     <div className="input-group">
-                      <span className="question">Create Password</span>
+                      <span className="question">Phone number</span>
                       <Input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        value={formData.senderPassword}
+                        value={formData.senderPhoneNumber}
                         onChange={value =>
-                          handleChange("senderPassword", value)
+                          handleChange("senderPhoneNumber", value)
                         }
+                        placeholder="Enter phone"
                         dimmed
                         responsive
-                        autoComplete="new-password"
+                        autoComplete="tel"
                         required
                       />
                     </div>
+                    {!user && (
+                      <div className="input-group">
+                        <span className="question">Create Password</span>
+                        <Input
+                          name="password"
+                          type="password"
+                          placeholder="Password"
+                          value={formData.senderPassword}
+                          onChange={value =>
+                            handleChange("senderPassword", value)
+                          }
+                          dimmed
+                          responsive
+                          autoComplete="new-password"
+                          required
+                        />
+                      </div>
+                    )}
 
                     {!user && (
                       <Checkbox
@@ -1520,34 +1536,35 @@ const Checkout: FunctionComponent = () => {
                           />
                         </div>
 
-                        <PhoneInput
-                          phoneNumber={
-                            (formData.recipientPhoneNumber as unknown) as number
-                          }
-                          countryCode={formData.recipientCountryCode || "+234"}
-                          onChangePhoneNumber={value =>
-                            handleChange("recipientPhoneNumber", value)
-                          }
-                          onChangeCountryCode={value =>
-                            handleChange("recipientCountryCode", value)
-                          }
-                        />
+                        <div className="input-group">
+                          <span className="question">Phone number</span>
+                          <Input
+                            value={formData.recipientPhoneNumber}
+                            onChange={value =>
+                              handleChange("recipientPhoneNumber", value)
+                            }
+                            placeholder="Enter recipient phone"
+                            dimmed
+                            responsive
+                            required
+                          />
+                        </div>
 
-                        <PhoneInput
-                          phoneNumber={
-                            (formData.recipientPhoneNumberAlt as unknown) as number
-                          }
-                          countryCode={
-                            formData.recipientAltCountryCode || "+234"
-                          }
-                          onChangePhoneNumber={value =>
-                            handleChange("recipientPhoneNumberAlt", value)
-                          }
-                          onChangeCountryCode={value =>
-                            handleChange("recipientAltCountryCode", value)
-                          }
-                          question="Alternative Phone Number (Optional)"
-                        />
+                        <div className="input-group">
+                          <span className="question">
+                            Alternative Phone number
+                          </span>
+                          <Input
+                            value={formData.recipientPhoneNumberAlt}
+                            onChange={value =>
+                              handleChange("recipientPhoneNumberAlt", value)
+                            }
+                            placeholder="Enter alternative phone"
+                            dimmed
+                            responsive
+                            required
+                          />
+                        </div>
                         <div className="input-group">
                           <span className="question">Residence Type</span>
 
@@ -1556,7 +1573,7 @@ const Checkout: FunctionComponent = () => {
                               handleChange("residenceType", value)
                             }
                             value={formData.residenceType}
-                            options={[]}
+                            options={getOptionsFromArray(["Home", "Office"])}
                             placeholder="Select a residence type"
                             responsive
                             dimmed
@@ -1579,9 +1596,10 @@ const Checkout: FunctionComponent = () => {
                         </div>
                         <Checkbox
                           checked={formData.shouldSaveAddress}
-                          onChange={value => handleChange("freeAccount", value)}
+                          onChange={value =>
+                            handleChange("shouldSaveAddress", value)
+                          }
                           text="Save Address"
-                          type="transparent"
                         />
                       </div>
                       <Button
@@ -1683,14 +1701,14 @@ const Checkout: FunctionComponent = () => {
                         <Select
                           onSelect={value => handleChange("purpose", value)}
                           value={formData.purpose}
-                          options={[]}
+                          options={allPurposes}
                           placeholder="Select Purpose"
                           responsive
                           dimmed
                         />
                       </div>
                       <Button
-                        onClick={handleSubmit}
+                        buttonType="submit"
                         className="vertical-margin xl"
                         responsive
                       >

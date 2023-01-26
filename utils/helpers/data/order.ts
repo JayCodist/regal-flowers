@@ -18,13 +18,8 @@ const adaptCheckoutStateRecord = (
       deliveryDate: record.deliveryDate,
       adminNotes: `TEST ${record.additionalInfo}`,
       deliveryMessage: record.message,
+      despatchLocation: record.pickUpLocation,
       purpose: record.purpose,
-      client: {
-        name: record.senderName,
-        email: record.senderEmail,
-        phone: record.senderPhoneNumber,
-        password: record.senderPassword
-      },
       recipient: {
         name: record.recipientName,
         phone: record.recipientPhoneNumber,
@@ -34,6 +29,12 @@ const adaptCheckoutStateRecord = (
         residenceType: record.residenceType,
         method: record.deliveryMethod
       }
+    },
+    userData: {
+      name: record.senderName,
+      email: record.senderEmail,
+      phone: record.senderPhoneNumber,
+      password: record.senderPassword || undefined
     }
   };
 

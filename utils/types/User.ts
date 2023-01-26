@@ -7,7 +7,8 @@ export interface Recipient {
   message: string;
   method: string;
   state: string;
-  pickupLocation: string;
+  despatchLocation: string;
+  adminNotes: string;
 }
 
 export default interface User {

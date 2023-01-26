@@ -47,7 +47,7 @@ const App: FunctionComponent<AppProps> = props => {
   }>({});
   const [user, setUser] = useState<User | null>(null);
 
-  const initializeCurrencies = async () => {
+  const initializeAppConfig = async () => {
     const savedCurrency = AppStorage.get<AppCurrency>(
       AppStorageConstants.SAVED_CURRENCY
     );
@@ -58,17 +58,21 @@ const App: FunctionComponent<AppProps> = props => {
       });
     }
     const { error, data } = await performHandshake();
-    if (error) {
+    if (error || !data) {
       // Fail quietly and continue using the set constant values
     } else {
+      setUser(data.user || null);
+      AppStorage.save(AppStorageConstants.USER_DATA, data.user);
+
       const currencyValueMap: Partial<Record<AppCurrencyName, number>> =
-        data?.currencies.reduce(
+        data.currencies.reduce(
           (map, currency) => ({
             ...map,
             [currency.name]: currency.conversionRate
           }),
           {}
         ) || {};
+
       const currentCurrency = savedCurrency || settings.currency;
       setSettings({
         ...settings,
@@ -88,10 +92,14 @@ const App: FunctionComponent<AppProps> = props => {
   };
 
   useEffect(() => {
-    initializeCurrencies();
+    initializeAppConfig();
 
     const savedUser = AppStorage.get<User>(AppStorageConstants.USER_DATA);
-    setUser(savedUser);
+    setUser(
+      savedUser
+        ? { ...savedUser, recipients: savedUser.recipients || [] }
+        : null
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
