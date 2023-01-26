@@ -4,6 +4,7 @@ import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
 import { useRouter } from "next/router";
 import {
+  FormEvent,
   FunctionComponent,
   MutableRefObject,
   useContext,
@@ -16,7 +17,6 @@ import Button from "../components/button/Button";
 import Checkbox from "../components/checkbox/Checkbox";
 import DatePicker from "../components/date-picker/DatePicker";
 import Input, { TextArea } from "../components/input/Input";
-import PhoneInput from "../components/phone-input/PhoneInput";
 import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
@@ -25,11 +25,10 @@ import {
   placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
-import { getOrder, updateOrder } from "../utils/helpers/data/order";
+import { getOrder, updateCheckoutState } from "../utils/helpers/data/order";
 import { getZoneGroups } from "../utils/helpers/data/zone-group";
-import { emailValidator } from "../utils/helpers/validators";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
-import { Order, OrderUpdate, PaymentName } from "../utils/types/Order";
+import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
@@ -47,9 +46,13 @@ import {
   OnApproveData
 } from "@paypal/paypal-js";
 import { AppCurrency } from "../utils/types/Core";
-import { getPriceDisplay } from "../utils/helpers/type-conversions";
+import {
+  getOptionsFromArray,
+  getPriceDisplay
+} from "../utils/helpers/type-conversions";
+import { Recipient } from "../utils/types/User";
 
-const initialData = {
+const initialData: CheckoutFormData = {
   senderName: "",
   senderEmail: "",
   senderPhoneNumber: "",
@@ -57,12 +60,13 @@ const initialData = {
   freeAccount: true,
   coupon: "",
   deliveryMethod: "delivery",
-  deliveryState: "",
+  state: "",
   pickUpLocation: "",
   recipientName: "",
   deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
+  shouldSaveAddress: true,
   residenceType: "",
   recipientHomeAddress: "",
   additionalInfo: "",
@@ -74,9 +78,7 @@ const initialData = {
   cardCVV: "",
   recipientCountryCode: "",
   senderCountryCode: "",
-  recipientAltCountryCode: "",
-  recipientEmail: "",
-  pickUpState: ""
+  recipientAltCountryCode: ""
 };
 
 type TabKey = "delivery" | "payment" | "done";
@@ -87,8 +89,28 @@ type DeliverStage =
   | "payment"
   | "customization-message";
 
+interface Tab {
+  tabTitle: string;
+  TabKey: TabKey;
+}
+
+const tabs: Tab[] = [
+  {
+    tabTitle: "Delivery",
+    TabKey: "delivery"
+  },
+  {
+    tabTitle: "Payment",
+    TabKey: "payment"
+  },
+  {
+    tabTitle: "Done",
+    TabKey: "done"
+  }
+];
+
 const Checkout: FunctionComponent = () => {
-  const [formData, setFormData] = useState<OrderUpdate>(initialData);
+  const [formData, setFormData] = useState<CheckoutFormData>(initialData);
   const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
     "delivery"
   );
@@ -109,6 +131,9 @@ const Checkout: FunctionComponent = () => {
     "sender-info"
   );
   const [allPurposes, setAllPurposes] = useState<Option[]>([]);
+  const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(
+    null
+  );
 
   const {
     user,
@@ -139,7 +164,7 @@ const Checkout: FunctionComponent = () => {
     isReady
   } = router;
 
-  const handleChange = (key: string, value: any) => {
+  const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
     setFormData({
       ...formData,
       [key]: value
@@ -196,6 +221,23 @@ const Checkout: FunctionComponent = () => {
     }
   };
 
+  useEffect(() => {
+    if (selectedRecipient) {
+      setFormData({
+        ...formData,
+        recipientName: selectedRecipient.name,
+        recipientPhoneNumber: selectedRecipient.phone,
+        recipientPhoneNumberAlt: selectedRecipient.phoneAlt,
+        recipientHomeAddress: selectedRecipient.address,
+        message: selectedRecipient.message,
+        deliveryMethod: selectedRecipient.method,
+        residenceType: selectedRecipient.residenceType,
+        state: selectedRecipient.state
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedRecipient]);
+
   const fetchPurposes = async () => {
     const { error, message, data } = await getPurposes();
     if (error) {
@@ -229,12 +271,19 @@ const Checkout: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    setFormData({ ...formData, freeAccount: Boolean(!user) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order]);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
     setLoading(true);
-
-    const response = await updateOrder(orderId as string, formData);
-
-    const { error, message } = response;
+    const { error, message } = await updateCheckoutState(
+      orderId as string,
+      formData
+    );
+    setLoading(false);
 
     if (error) {
       notify("error", `Unable to save order: ${message}`);
@@ -243,8 +292,6 @@ const Checkout: FunctionComponent = () => {
       setDeliveryStage("payment");
       setActiveTab("payment");
     }
-
-    setLoading(false);
   };
 
   const deliveryMap = {
@@ -259,6 +306,15 @@ const Checkout: FunctionComponent = () => {
   const isDelivered = (deliveryStatus = "") => {
     return /delivered/i.test(deliveryStatus);
   };
+
+  const pastRecipients = useMemo(
+    () =>
+      user?.recipients.map(recipient => ({
+        label: recipient.name,
+        value: recipient.phone
+      })) || [],
+    [user]
+  );
 
   if (pageLoading) {
     return (
@@ -342,33 +398,13 @@ const Checkout: FunctionComponent = () => {
     googlePay: () => {}
   };
 
-  interface Tab {
-    tabTitle: string;
-    TabKey: TabKey;
-  }
-
-  const tabs: Tab[] = [
-    {
-      tabTitle: "Delivery",
-      TabKey: "delivery"
-    },
-    {
-      tabTitle: "Payment",
-      TabKey: "payment"
-    },
-    {
-      tabTitle: "Done",
-      TabKey: "done"
-    }
-  ];
-
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       {deviceType === "desktop" ? (
         <section className={styles["checkout-page"]}>
           {currentStage <= 2 && (
             <div className={styles["checkout-wrapper"]}>
-              <form className={`${styles.left} scrollable`}>
+              <div className={`${styles.left}`}>
                 {currentStage === 1 && (
                   <>
                     <div className={styles.border}>
@@ -387,6 +423,7 @@ const Checkout: FunctionComponent = () => {
                                 handleChange("senderName", value)
                               }
                               dimmed
+                              required
                               responsive
                             />
                           </div>
@@ -401,38 +438,50 @@ const Checkout: FunctionComponent = () => {
                               }
                               dimmed
                               responsive
-                              onBlurValidation={() =>
-                                emailValidator(formData.senderEmail)
-                              }
+                              required={formData.freeAccount}
                             />
                           </div>
                         </div>
-                        <div className="flex spaced-xl">
-                          <PhoneInput
-                            phoneNumber={
-                              (formData.senderPhoneNumber as unknown) as number
-                            }
-                            countryCode={formData.senderCountryCode || "+234"}
-                            onChangePhoneNumber={value =>
-                              handleChange("senderPhoneNumber", value)
-                            }
-                            onChangeCountryCode={value =>
-                              handleChange("senderCountryCode", value)
-                            }
-                          />
-                          <div className="input-group">
-                            <span className="question">Create Password</span>
+                        <div className="flex spaced-even-xl wrap">
+                          <div className="input-group half-width compact">
+                            <span className="question">Phone number</span>
                             <Input
-                              name="password"
-                              type="password"
-                              placeholder="Password"
-                              value={formData.senderPassword}
+                              value={formData.senderPhoneNumber}
                               onChange={value =>
-                                handleChange("senderPassword", value)
+                                handleChange("senderPhoneNumber", value)
                               }
+                              placeholder="Enter phone number"
+                              name="phone"
+                              required
                               dimmed
+                            />
+                          </div>
+                          {!user && (
+                            <div className="input-group half-width compact">
+                              <span className="question">Create Password</span>
+                              <Input
+                                name="password"
+                                type="password"
+                                placeholder="Password"
+                                value={formData.senderPassword}
+                                onChange={value =>
+                                  handleChange("senderPassword", value)
+                                }
+                                dimmed
+                                autoComplete="new-password"
+                                required={formData.freeAccount}
+                              />
+                            </div>
+                          )}
+                          <div className="input-group half-width compact">
+                            <span className="question">Delivery Date</span>
+                            <DatePicker
+                              value={formData.deliveryDate}
+                              onChange={value =>
+                                handleChange("deliveryDate", value)
+                              }
+                              format="D MMMM YYYY"
                               responsive
-                              autoComplete="new-password"
                             />
                           </div>
                         </div>
@@ -477,7 +526,7 @@ const Checkout: FunctionComponent = () => {
                             <p className={`${styles["method-title"]}`}>
                               Pick Up
                             </p>
-                            <p className="">Pick up from our store</p>
+                            <p>Pick up from any of our stores nation wide</p>
                           </div>
                         </div>
                         <div className="input-group half-width">
@@ -490,19 +539,8 @@ const Checkout: FunctionComponent = () => {
                           </span>
 
                           <Select
-                            onSelect={value =>
-                              handleChange(
-                                deliveryMethod === "delivery"
-                                  ? "deliveryState"
-                                  : "PickUpState",
-                                value
-                              )
-                            }
-                            value={
-                              deliveryMethod === "delivery"
-                                ? formData.deliveryState
-                                : formData.pickUpState
-                            }
+                            onSelect={value => handleChange("state", value)}
+                            value={formData.state}
                             options={
                               deliveryMethod === "delivery"
                                 ? deliveryStates
@@ -597,11 +635,15 @@ const Checkout: FunctionComponent = () => {
                           </span>
 
                           <Select
-                            onSelect={value =>
-                              handleChange("deliveryState", value)
+                            onSelect={phone =>
+                              setSelectedRecipient(
+                                user?.recipients.find(
+                                  recipient => recipient.phone === phone
+                                ) || null
+                              )
                             }
-                            value={formData.deliveryState}
-                            options={[]}
+                            value={selectedRecipient?.phone || ""}
+                            options={pastRecipients}
                             placeholder="Select Past Recipient"
                             responsive
                             dimmed
@@ -617,72 +659,59 @@ const Checkout: FunctionComponent = () => {
                             <span className="question">Full Name</span>
                             <Input
                               name="name"
-                              placeholder=""
+                              placeholder="Enter recipient name"
                               value={formData.recipientName}
                               onChange={value =>
                                 handleChange("recipientName", value)
                               }
                               dimmed
-                              responsive
                             />
                           </div>
                           <div className="input-group">
-                            <span className="question">Delivery Date</span>
-                            <DatePicker
-                              value={formData.deliveryDate}
+                            <span className="question">
+                              Receiver Phone number
+                            </span>
+                            <Input
+                              value={formData.recipientPhoneNumber}
                               onChange={value =>
-                                handleChange("deliveryDate", value)
+                                handleChange("recipientPhoneNumber", value)
                               }
-                              format="DD/MM/YYYY"
-                              responsive
+                              placeholder="Enter receiver phone"
+                              dimmed
+                              required
                             />
                           </div>
                         </div>
-                        <div className="flex spaced-xl">
-                          <PhoneInput
-                            phoneNumber={
-                              (formData.recipientPhoneNumber as unknown) as number
-                            }
-                            countryCode={
-                              formData.recipientCountryCode || "+234"
-                            }
-                            onChangePhoneNumber={value =>
-                              handleChange("recipientPhoneNumber", value)
-                            }
-                            onChangeCountryCode={value =>
-                              handleChange("recipientCountryCode", value)
-                            }
-                          />
 
-                          <PhoneInput
-                            phoneNumber={
-                              (formData.recipientPhoneNumberAlt as unknown) as number
-                            }
-                            countryCode={
-                              formData.recipientAltCountryCode || "+234"
-                            }
-                            onChangePhoneNumber={value =>
-                              handleChange("recipientPhoneNumberAlt", value)
-                            }
-                            onChangeCountryCode={value =>
-                              handleChange("recipientAltCountryCode", value)
-                            }
-                            question="Alternative Phone Number (Optional)"
-                          />
-                        </div>
-                        <div className="input-group half-width">
-                          <span className="question">Residence Type</span>
+                        <div className="flex spaced-xl margin-bottom">
+                          <div className="input-group">
+                            <span className="question">
+                              Alternative Phone number
+                            </span>
+                            <Input
+                              value={formData.recipientPhoneNumberAlt}
+                              onChange={value =>
+                                handleChange("recipientPhoneNumberAlt", value)
+                              }
+                              placeholder="Enter alternative phone"
+                              dimmed
+                              required
+                            />
+                          </div>
+                          <div className="input-group">
+                            <span className="question">Residence Type</span>
 
-                          <Select
-                            onSelect={value =>
-                              handleChange("residenceType", value)
-                            }
-                            value={formData.residenceType}
-                            options={[]}
-                            placeholder="Select a residence type"
-                            responsive
-                            dimmed
-                          />
+                            <Select
+                              onSelect={value =>
+                                handleChange("residenceType", value)
+                              }
+                              value={formData.residenceType}
+                              options={getOptionsFromArray(["Home", "Office"])}
+                              placeholder="Select a residence type"
+                              responsive
+                              dimmed
+                            />
+                          </div>
                         </div>
                         <div className="input-group">
                           <span className="question">
@@ -700,10 +729,11 @@ const Checkout: FunctionComponent = () => {
                           />
                         </div>
                         <Checkbox
-                          checked={formData.freeAccount}
-                          onChange={value => handleChange("freeAccount", value)}
-                          text="Save Address"
-                          type="transparent"
+                          checked={formData.shouldSaveAddress}
+                          onChange={value =>
+                            handleChange("shouldSaveAddress", value)
+                          }
+                          text="Save Recipient"
                         />
                       </div>
                     </div>
@@ -754,8 +784,8 @@ const Checkout: FunctionComponent = () => {
 
                     <Button
                       className="half-width"
-                      onClick={handleSubmit}
                       loading={loading}
+                      buttonType="submit"
                     >
                       Proceed to Payment
                     </Button>
@@ -856,10 +886,10 @@ const Checkout: FunctionComponent = () => {
                     </div>
                   </>
                 )}
-              </form>
+              </div>
 
               {currentStage <= 2 && (
-                <form className={styles.right}>
+                <div className={styles.right}>
                   <div className="flex between margin-bottom spaced">
                     <p className="sub-heading bold">Cart Summary</p>
                     <p className="sub-heading bold primary-color underline">
@@ -907,11 +937,7 @@ const Checkout: FunctionComponent = () => {
                       </span>
                     </div>
                     {currentStage === 1 && (
-                      <Button
-                        responsive
-                        onClick={handleSubmit}
-                        loading={loading}
-                      >
+                      <Button responsive buttonType="submit" loading={loading}>
                         Proceed to Payment
                       </Button>
                     )}
@@ -940,16 +966,6 @@ const Checkout: FunctionComponent = () => {
                           className="generic-icon large"
                         />
                         <img
-                          src="/icons/bitcoin-gold.svg"
-                          alt="bitcoin"
-                          className="generic-icon large"
-                        />
-                        <img
-                          src="/icons/building-red.svg"
-                          alt="bank"
-                          className="generic-icon large"
-                        />
-                        <img
                           src="/icons/paystack.png"
                           alt="pay stack"
                           className="generic-icon large"
@@ -957,7 +973,7 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     </div>
                   )}
-                </form>
+                </div>
               )}
             </div>
           )}
@@ -1200,7 +1216,7 @@ const Checkout: FunctionComponent = () => {
             {activeTab === "delivery" && (
               <div>
                 {deliveryStage === "sender-info" && (
-                  <form>
+                  <div>
                     <div className="flex align-center between">
                       <p className={styles.title}>Sender's Information</p>
                       <strong className="primary-color underline">Login</strong>
@@ -1226,40 +1242,49 @@ const Checkout: FunctionComponent = () => {
                         onChange={value => handleChange("senderEmail", value)}
                         dimmed
                         responsive
-                        onBlurValidation={() =>
-                          emailValidator(formData.senderEmail)
+                        required={formData.freeAccount}
+                      />
+                    </div>
+                    <div className="input-group">
+                      <span className="question">Phone number</span>
+                      <Input
+                        value={formData.senderPhoneNumber}
+                        onChange={value =>
+                          handleChange("senderPhoneNumber", value)
                         }
+                        placeholder="Enter phone"
+                        dimmed
+                        responsive
+                        autoComplete="tel"
                         required
                       />
                     </div>
+                    {!user && (
+                      <div className="input-group">
+                        <span className="question">Create Password</span>
+                        <Input
+                          name="password"
+                          type="password"
+                          placeholder="Password"
+                          value={formData.senderPassword}
+                          onChange={value =>
+                            handleChange("senderPassword", value)
+                          }
+                          dimmed
+                          responsive
+                          autoComplete="new-password"
+                          required
+                        />
+                      </div>
+                    )}
 
-                    <PhoneInput
-                      phoneNumber={
-                        (formData.senderPhoneNumber as unknown) as number
-                      }
-                      countryCode={formData.senderCountryCode || "+234"}
-                      onChangePhoneNumber={value =>
-                        handleChange("senderPhoneNumber", value)
-                      }
-                      onChangeCountryCode={value =>
-                        handleChange("senderCountryCode", value)
-                      }
-                      required
-                    />
                     <div className="input-group">
-                      <span className="question">Create Password</span>
-                      <Input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        value={formData.senderPassword}
-                        onChange={value =>
-                          handleChange("senderPassword", value)
-                        }
-                        dimmed
+                      <span className="question">Delivery Date</span>
+                      <DatePicker
+                        value={formData.deliveryDate}
+                        onChange={value => handleChange("deliveryDate", value)}
+                        format="D MMMM YYYY"
                         responsive
-                        autoComplete="new-password"
-                        required
                       />
                     </div>
 
@@ -1274,14 +1299,13 @@ const Checkout: FunctionComponent = () => {
                       onClick={() => setDeliveryStage("delivery-type")}
                       className="vertical-margin xl"
                       responsive
-                      buttonType="submit"
                     >
                       Continue
                     </Button>
                     <p className={styles.next}>
                       Next: <strong>Delivery Type</strong>
                     </p>
-                  </form>
+                  </div>
                 )}
 
                 {deliveryStage === "delivery-type" && (
@@ -1315,10 +1339,8 @@ const Checkout: FunctionComponent = () => {
                         </div>
                         {deliveryMethod === "delivery" && (
                           <Select
-                            onSelect={value =>
-                              handleChange("deliveryState", value)
-                            }
-                            value={formData.deliveryState}
+                            onSelect={value => handleChange("state", value)}
+                            value={formData.state}
                             options={deliveryStates}
                             placeholder="Select a state"
                             responsive
@@ -1335,10 +1357,8 @@ const Checkout: FunctionComponent = () => {
                         {deliveryMethod === "pick-up" && (
                           <div className="input-group vertical-margin spaced">
                             <Select
-                              onSelect={value =>
-                                handleChange("PickUpState", value)
-                              }
-                              value={formData.pickUpState}
+                              onSelect={value => handleChange("state", value)}
+                              value={formData.state}
                               options={pickUpOptions}
                               placeholder="Select a State"
                               responsive
@@ -1354,7 +1374,7 @@ const Checkout: FunctionComponent = () => {
                                 Pick Up Locations
                               </span>
                             </p>
-                            <div className="">
+                            <div>
                               <Radio
                                 label="Lagos, Ikoyi"
                                 onChange={() =>
@@ -1457,7 +1477,7 @@ const Checkout: FunctionComponent = () => {
                     </div>
                     <div className={`${styles["sender-info"]} flex between`}>
                       <p>Delivery</p>
-                      <p>{formData.deliveryState || formData.pickUpState}</p>
+                      <p>{formData.state}</p>
                     </div>
                     <div>
                       <p className={styles.title}>Receiver's Information</p>
@@ -1468,11 +1488,15 @@ const Checkout: FunctionComponent = () => {
                           </span>
 
                           <Select
-                            onSelect={value =>
-                              handleChange("deliveryState", value)
+                            onSelect={phone =>
+                              setSelectedRecipient(
+                                user?.recipients.find(
+                                  recipient => recipient.phone === phone
+                                ) || null
+                              )
                             }
-                            value={formData.deliveryState}
-                            options={[]}
+                            value={selectedRecipient?.phone || ""}
+                            options={pastRecipients}
                             placeholder="Select Past Recipient"
                             responsive
                             dimmed
@@ -1488,7 +1512,7 @@ const Checkout: FunctionComponent = () => {
                           <span className="question">Full Name</span>
                           <Input
                             name="name"
-                            placeholder=""
+                            placeholder="Enter recipient name"
                             value={formData.recipientName}
                             onChange={value =>
                               handleChange("recipientName", value)
@@ -1497,46 +1521,36 @@ const Checkout: FunctionComponent = () => {
                             responsive
                           />
                         </div>
+
                         <div className="input-group">
-                          <span className="question">Delivery Date</span>
-                          <DatePicker
-                            value={formData.deliveryDate}
+                          <span className="question">Phone number</span>
+                          <Input
+                            value={formData.recipientPhoneNumber}
                             onChange={value =>
-                              handleChange("deliveryDate", value)
+                              handleChange("recipientPhoneNumber", value)
                             }
-                            format="DD/MM/YYYY"
+                            placeholder="Enter recipient phone"
+                            dimmed
                             responsive
+                            required
                           />
                         </div>
 
-                        <PhoneInput
-                          phoneNumber={
-                            (formData.recipientPhoneNumber as unknown) as number
-                          }
-                          countryCode={formData.recipientCountryCode || "+234"}
-                          onChangePhoneNumber={value =>
-                            handleChange("recipientPhoneNumber", value)
-                          }
-                          onChangeCountryCode={value =>
-                            handleChange("recipientCountryCode", value)
-                          }
-                        />
-
-                        <PhoneInput
-                          phoneNumber={
-                            (formData.recipientPhoneNumberAlt as unknown) as number
-                          }
-                          countryCode={
-                            formData.recipientAltCountryCode || "+234"
-                          }
-                          onChangePhoneNumber={value =>
-                            handleChange("recipientPhoneNumberAlt", value)
-                          }
-                          onChangeCountryCode={value =>
-                            handleChange("recipientAltCountryCode", value)
-                          }
-                          question="Alternative Phone Number (Optional)"
-                        />
+                        <div className="input-group">
+                          <span className="question">
+                            Alternative Phone number
+                          </span>
+                          <Input
+                            value={formData.recipientPhoneNumberAlt}
+                            onChange={value =>
+                              handleChange("recipientPhoneNumberAlt", value)
+                            }
+                            placeholder="Enter alternative phone"
+                            dimmed
+                            responsive
+                            required
+                          />
+                        </div>
                         <div className="input-group">
                           <span className="question">Residence Type</span>
 
@@ -1545,7 +1559,7 @@ const Checkout: FunctionComponent = () => {
                               handleChange("residenceType", value)
                             }
                             value={formData.residenceType}
-                            options={[]}
+                            options={getOptionsFromArray(["Home", "Office"])}
                             placeholder="Select a residence type"
                             responsive
                             dimmed
@@ -1567,10 +1581,11 @@ const Checkout: FunctionComponent = () => {
                           />
                         </div>
                         <Checkbox
-                          checked={formData.freeAccount}
-                          onChange={value => handleChange("freeAccount", value)}
+                          checked={formData.shouldSaveAddress}
+                          onChange={value =>
+                            handleChange("shouldSaveAddress", value)
+                          }
                           text="Save Address"
-                          type="transparent"
                         />
                       </div>
                       <Button
@@ -1618,7 +1633,7 @@ const Checkout: FunctionComponent = () => {
                     </div>
                     <div className={`${styles["sender-info"]} flex between`}>
                       <p>Delivery</p>
-                      <p>{formData.deliveryState || formData.pickUpState}</p>
+                      <p>{formData.state}</p>
                     </div>
                     <div className="flex between">
                       <p className={styles.title}>Receiver's Information</p>
@@ -1672,14 +1687,14 @@ const Checkout: FunctionComponent = () => {
                         <Select
                           onSelect={value => handleChange("purpose", value)}
                           value={formData.purpose}
-                          options={[]}
+                          options={allPurposes}
                           placeholder="Select Purpose"
                           responsive
                           dimmed
                         />
                       </div>
                       <Button
-                        onClick={handleSubmit}
+                        buttonType="submit"
                         className="vertical-margin xl"
                         responsive
                       >
@@ -1713,17 +1728,6 @@ const Checkout: FunctionComponent = () => {
                       alt="paypal"
                       className="generic-icon large"
                     />
-                    <img
-                      src="/icons/bitcoin-gold.svg"
-                      alt="bitcoin"
-                      className="generic-icon large"
-                    />
-                    <img
-                      src="/icons/building-red.svg"
-                      alt="bank"
-                      className="generic-icon large"
-                    />
-
                     <img
                       src="/icons/paystack.png"
                       alt="pay stack"
@@ -1840,7 +1844,7 @@ const Checkout: FunctionComponent = () => {
             )}
 
             {activeTab === "done" && (
-              <div className="">
+              <div>
                 <div className="text-center">
                   <div className={styles["order-received"]}>
                     <p>Order Received Succesfully</p>
@@ -1968,7 +1972,7 @@ const Checkout: FunctionComponent = () => {
         order={order}
         onComplete={markAsPaid}
       />
-    </>
+    </form>
   );
 };
 

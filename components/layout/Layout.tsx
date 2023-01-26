@@ -78,52 +78,38 @@ const Footer: FunctionComponent = () => {
               ))}
             </div>
           </div>
-          <div
-            className={`${
-              deviceType === "mobile" ? "flex between spaced" : ""
-            }`}
-          >
-            <div
-              className={`${
-                deviceType === "mobile" ? "flex between spaced column" : ""
-              }`}
-            >
-              <strong>Quick Links</strong>
-              {footerContent.quickLinks.map(link => (
-                <Link key={link.title} href={link.url}>
-                  <a>{link.title}</a>
-                </Link>
-              ))}
+          <div>
+            <strong>Quick Links</strong>
+            {footerContent.quickLinks.map(link => (
+              <Link key={link.title} href={link.url}>
+                <a>{link.title}</a>
+              </Link>
+            ))}
+          </div>
+          <div>
+            <strong>Get In Touch</strong>
+            <div className="flex spaced-xl">
+              <img
+                className="generic-icon"
+                src="/icons/footer/phone.svg"
+                alt="phone"
+              />
+              <img
+                className="generic-icon"
+                src="/icons/footer/whatsapp.svg"
+                alt="whtasapp"
+              />
             </div>
-            <div
-              className={`${
-                deviceType === "mobile" ? "flex between spaced column" : ""
-              }`}
-            >
-              <strong>Get In Touch</strong>
-              <div className="flex spaced-xl">
-                <img
-                  className="generic-icon medium"
-                  src="icons/footer/phone.svg"
-                  alt="phone"
-                />
-                <img
-                  className="generic-icon medium"
-                  src="icons/footer/whatsapp.svg"
-                  alt="whtasapp"
-                />
-              </div>
-              {footerContent.phoneNumbers.map(number => (
-                <p key={number}>{number}</p>
-              ))}
-              <div className="flex spaced center-align">
-                <img
-                  className="generic-icon"
-                  src="icons/footer/message.svg"
-                  alt="message"
-                />
-                <span>info@regalflowers.com.ng</span>
-              </div>
+            {footerContent.phoneNumbers.map(number => (
+              <p key={number}>{number}</p>
+            ))}
+            <div className="flex spaced">
+              <img
+                className="generic-icon"
+                src="/icons/footer/message.svg"
+                alt="message"
+              />
+              <span>info@regalflowers.com.ng</span>
             </div>
           </div>
           <div>

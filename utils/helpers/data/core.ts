@@ -1,15 +1,16 @@
 import { AppCurrency } from "../../types/Core";
 import RequestResponse from "../../types/RequestResponse";
+import User from "../../types/User";
 import { restAPIInstance } from "../rest-api-config";
 
 export const performHandshake: () => Promise<
-  RequestResponse<{ currencies: AppCurrency[] }>
+  RequestResponse<{ currencies: AppCurrency[]; user: User | null }>
 > = async () => {
   try {
     const response = await restAPIInstance.get("/v1/regal/handshake");
     return {
       error: false,
-      data: response.currencies
+      data: response.data
     };
   } catch (err) {
     console.error("Unable to perform handshake: ", err);
