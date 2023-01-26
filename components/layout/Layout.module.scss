@@ -665,12 +665,19 @@
 }
 
 .footer {
+  font-size: 1.2rem;
+  line-height: 1.7;
+
   @media (max-width: 650px) {
-    display: none;
+    font-size: 1.2rem;
   }
   .footer-wrapper {
     padding: 2rem 6rem;
     background-color: #f9fafb;
+
+    @media (max-width: 650px) {
+      padding: 2rem 3rem;
+    }
   }
 
   .logo {
@@ -702,6 +709,22 @@
         }
       }
     }
+
+    @media (max-width: 650px) {
+      flex-direction: column;
+
+      & > div {
+        max-width: 100%;
+
+        & > * {
+          margin-bottom: 0.8rem;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
   }
 
   .middle {
@@ -722,6 +745,21 @@
         margin-right: 0;
       }
     }
+
+    @media (max-width: 650px) {
+      flex-direction: column;
+
+      strong {
+        margin-bottom: 0.5rem;
+      }
+
+      & > div {
+        width: 100%;
+
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+      }
+    }
   }
 
   #newsletter {
@@ -734,6 +772,10 @@
     .input {
       width: 20rem;
     }
+
+    @media (max-width: 650px) {
+      width: 100%;
+    }
   }
 }
 
@@ -744,4 +786,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+    padding: 1rem 3rem;
+
+    .payment-icon {
+      width: 100%;
+    }
+  }
 }

@@ -40,13 +40,15 @@ const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
       <main className={styles.main}>
         {deviceType === "mobile" && <CurrencyController />}
         {children}
-        {_pathname !== "checkout" && deviceType === "desktop" && <Footer />}
+        {_pathname !== "checkout" && <Footer />}
       </main>
     </>
   );
 };
 
 const Footer: FunctionComponent = () => {
+  const deviceType = useDeviceType();
+
   return (
     <footer className={styles.footer}>
       <div className={styles["footer-wrapper"]}>
@@ -76,38 +78,52 @@ const Footer: FunctionComponent = () => {
               ))}
             </div>
           </div>
-          <div>
-            <strong>Quick Links</strong>
-            {footerContent.quickLinks.map(link => (
-              <Link key={link.title} href={link.url}>
-                <a>{link.title}</a>
-              </Link>
-            ))}
-          </div>
-          <div>
-            <strong>Get In Touch</strong>
-            <div className="flex spaced-xl">
-              <img
-                className="generic-icon"
-                src="icons/footer/phone.svg"
-                alt="phone"
-              />
-              <img
-                className="generic-icon"
-                src="icons/footer/whatsapp.svg"
-                alt="whtasapp"
-              />
+          <div
+            className={`${
+              deviceType === "mobile" ? "flex between spaced" : ""
+            }`}
+          >
+            <div
+              className={`${
+                deviceType === "mobile" ? "flex between spaced column" : ""
+              }`}
+            >
+              <strong>Quick Links</strong>
+              {footerContent.quickLinks.map(link => (
+                <Link key={link.title} href={link.url}>
+                  <a>{link.title}</a>
+                </Link>
+              ))}
             </div>
-            {footerContent.phoneNumbers.map(number => (
-              <p key={number}>{number}</p>
-            ))}
-            <div className="flex spaced">
-              <img
-                className="generic-icon"
-                src="icons/footer/message.svg"
-                alt="message"
-              />
-              <span>info@regalflowers.com.ng</span>
+            <div
+              className={`${
+                deviceType === "mobile" ? "flex between spaced column" : ""
+              }`}
+            >
+              <strong>Get In Touch</strong>
+              <div className="flex spaced-xl">
+                <img
+                  className="generic-icon medium"
+                  src="icons/footer/phone.svg"
+                  alt="phone"
+                />
+                <img
+                  className="generic-icon medium"
+                  src="icons/footer/whatsapp.svg"
+                  alt="whtasapp"
+                />
+              </div>
+              {footerContent.phoneNumbers.map(number => (
+                <p key={number}>{number}</p>
+              ))}
+              <div className="flex spaced center-align">
+                <img
+                  className="generic-icon"
+                  src="icons/footer/message.svg"
+                  alt="message"
+                />
+                <span>info@regalflowers.com.ng</span>
+              </div>
             </div>
           </div>
           <div>
@@ -127,7 +143,7 @@ const Footer: FunctionComponent = () => {
               <span>Email:</span> <strong>regalflowerspaypal@gmail.com</strong>
             </div>
             <strong>Bitcoin</strong>
-            <div className="flex spaced">
+            <div className="">
               <span>Address: </span>{" "}
               <strong>12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1</strong>
             </div>
@@ -177,7 +193,7 @@ const Footer: FunctionComponent = () => {
       <div className={styles.bottom}>
         <p>© 2022 Regal Flowers.</p>
 
-        <div className={`flex between spaced-xl`}>
+        <div className={`flex between spaced-xl ${styles["payment-icon"]}`}>
           <img
             src="/icons/visa.svg"
             alt="visa"
@@ -209,25 +225,27 @@ const Footer: FunctionComponent = () => {
             className="generic-icon large"
           />
         </div>
-        <Link href="#top">
-          <a className="flex spaced center-align">
-            <span>Scroll to top</span>
-            <svg
-              width="10"
-              height="13"
-              viewBox="0 0 10 13"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="generic-icon"
-            >
-              <path
-                d="M1 5.66602L5 1.66602M5 1.66602L9 5.66602M5 1.66602L5 11.666"
-                stroke="white"
-                strokeLinecap="round"
-              />
-            </svg>
-          </a>
-        </Link>
+        {deviceType === "desktop" && (
+          <Link href="#top">
+            <a className="flex spaced center-align">
+              <span>Scroll to top</span>
+              <svg
+                width="10"
+                height="13"
+                viewBox="0 0 10 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="generic-icon"
+              >
+                <path
+                  d="M1 5.66602L5 1.66602M5 1.66602L9 5.66602M5 1.66602L5 11.666"
+                  stroke="white"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </a>
+          </Link>
+        )}
       </div>
     </footer>
   );
