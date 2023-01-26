@@ -442,38 +442,49 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
                         </div>
-                        <div className="input-group">
-                          <span className="question">Phone number</span>
-                          <Input
-                            value={formData.senderPhoneNumber}
-                            onChange={value =>
-                              handleChange("senderPhoneNumber", value)
-                            }
-                            placeholder="Enter phone number"
-                            name="phone"
-                            required
-                            responsive
-                            dimmed
-                          />
-                        </div>
-                        {!user && (
-                          <div className="input-group">
-                            <span className="question">Create Password</span>
+                        <div className="flex spaced-even-xl wrap">
+                          <div className="input-group half-width compact">
+                            <span className="question">Phone number</span>
                             <Input
-                              name="password"
-                              type="password"
-                              placeholder="Password"
-                              value={formData.senderPassword}
+                              value={formData.senderPhoneNumber}
                               onChange={value =>
-                                handleChange("senderPassword", value)
+                                handleChange("senderPhoneNumber", value)
                               }
+                              placeholder="Enter phone number"
+                              name="phone"
+                              required
                               dimmed
-                              responsive
-                              autoComplete="new-password"
-                              required={formData.freeAccount}
                             />
                           </div>
-                        )}
+                          {!user && (
+                            <div className="input-group half-width compact">
+                              <span className="question">Create Password</span>
+                              <Input
+                                name="password"
+                                type="password"
+                                placeholder="Password"
+                                value={formData.senderPassword}
+                                onChange={value =>
+                                  handleChange("senderPassword", value)
+                                }
+                                dimmed
+                                autoComplete="new-password"
+                                required={formData.freeAccount}
+                              />
+                            </div>
+                          )}
+                          <div className="input-group half-width compact">
+                            <span className="question">Delivery Date</span>
+                            <DatePicker
+                              value={formData.deliveryDate}
+                              onChange={value =>
+                                handleChange("deliveryDate", value)
+                              }
+                              format="D MMMM YYYY"
+                              responsive
+                            />
+                          </div>
+                        </div>
                         {!user && (
                           <Checkbox
                             checked={formData.freeAccount}
@@ -515,9 +526,7 @@ const Checkout: FunctionComponent = () => {
                             <p className={`${styles["method-title"]}`}>
                               Pick Up
                             </p>
-                            <p className="">
-                              Pick up from any of our stores nation wide
-                            </p>
+                            <p>Pick up from any of our stores nation wide</p>
                           </div>
                         </div>
                         <div className="input-group half-width">
@@ -650,71 +659,59 @@ const Checkout: FunctionComponent = () => {
                             <span className="question">Full Name</span>
                             <Input
                               name="name"
-                              placeholder=""
+                              placeholder="Enter recipient name"
                               value={formData.recipientName}
                               onChange={value =>
                                 handleChange("recipientName", value)
                               }
                               dimmed
-                              responsive
                             />
                           </div>
                           <div className="input-group">
-                            <span className="question">Delivery Date</span>
-                            <DatePicker
-                              value={formData.deliveryDate}
+                            <span className="question">
+                              Receiver Phone number
+                            </span>
+                            <Input
+                              value={formData.recipientPhoneNumber}
                               onChange={value =>
-                                handleChange("deliveryDate", value)
+                                handleChange("recipientPhoneNumber", value)
                               }
-                              format="DD/MM/YYYY"
-                              responsive
+                              placeholder="Enter receiver phone"
+                              dimmed
+                              required
                             />
                           </div>
                         </div>
-                        <div className="input-group">
-                          <span className="question">
-                            Receiver Phone number
-                          </span>
-                          <Input
-                            value={formData.recipientPhoneNumber}
-                            onChange={value =>
-                              handleChange("recipientPhoneNumber", value)
-                            }
-                            placeholder="Enter receiver phone"
-                            dimmed
-                            responsive
-                            required
-                          />
-                        </div>
 
-                        <div className="input-group">
-                          <span className="question">
-                            Alternative Phone number
-                          </span>
-                          <Input
-                            value={formData.recipientPhoneNumberAlt}
-                            onChange={value =>
-                              handleChange("recipientPhoneNumberAlt", value)
-                            }
-                            placeholder="Enter alternative phone"
-                            dimmed
-                            responsive
-                            required
-                          />
-                        </div>
-                        <div className="input-group half-width">
-                          <span className="question">Residence Type</span>
+                        <div className="flex spaced-xl margin-bottom">
+                          <div className="input-group">
+                            <span className="question">
+                              Alternative Phone number
+                            </span>
+                            <Input
+                              value={formData.recipientPhoneNumberAlt}
+                              onChange={value =>
+                                handleChange("recipientPhoneNumberAlt", value)
+                              }
+                              placeholder="Enter alternative phone"
+                              dimmed
+                              required
+                            />
+                          </div>
+                          <div className="input-group">
+                            <span className="question">Residence Type</span>
 
-                          <Select
-                            onSelect={value =>
-                              handleChange("residenceType", value)
-                            }
-                            value={formData.residenceType}
-                            options={getOptionsFromArray(["Home", "Office"])}
-                            placeholder="Select a residence type"
-                            responsive
-                            dimmed
-                          />
+                            <Select
+                              onSelect={value =>
+                                handleChange("residenceType", value)
+                              }
+                              value={formData.residenceType}
+                              options={getOptionsFromArray(["Home", "Office"])}
+                              placeholder="Select a residence type"
+                              responsive
+                              dimmed
+                            />
+                          </div>
                         </div>
                         <div className="input-group">
                           <span className="question">
@@ -966,16 +963,6 @@ const Checkout: FunctionComponent = () => {
                         <img
                           src="/icons/paypal-blue.svg"
                           alt="paypal"
-                          className="generic-icon large"
-                        />
-                        <img
-                          src="/icons/bitcoin-gold.svg"
-                          alt="bitcoin"
-                          className="generic-icon large"
-                        />
-                        <img
-                          src="/icons/building-red.svg"
-                          alt="bank"
                           className="generic-icon large"
                         />
                         <img
@@ -1291,6 +1278,16 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     )}
 
+                    <div className="input-group">
+                      <span className="question">Delivery Date</span>
+                      <DatePicker
+                        value={formData.deliveryDate}
+                        onChange={value => handleChange("deliveryDate", value)}
+                        format="D MMMM YYYY"
+                        responsive
+                      />
+                    </div>
+
                     {!user && (
                       <Checkbox
                         checked={formData.freeAccount}
@@ -1377,7 +1374,7 @@ const Checkout: FunctionComponent = () => {
                                 Pick Up Locations
                               </span>
                             </p>
-                            <div className="">
+                            <div>
                               <Radio
                                 label="Lagos, Ikoyi"
                                 onChange={() =>
@@ -1515,23 +1512,12 @@ const Checkout: FunctionComponent = () => {
                           <span className="question">Full Name</span>
                           <Input
                             name="name"
-                            placeholder=""
+                            placeholder="Enter recipient name"
                             value={formData.recipientName}
                             onChange={value =>
                               handleChange("recipientName", value)
                             }
                             dimmed
-                            responsive
-                          />
-                        </div>
-                        <div className="input-group">
-                          <span className="question">Delivery Date</span>
-                          <DatePicker
-                            value={formData.deliveryDate}
-                            onChange={value =>
-                              handleChange("deliveryDate", value)
-                            }
-                            format="DD/MM/YYYY"
                             responsive
                           />
                         </div>
@@ -1743,17 +1729,6 @@ const Checkout: FunctionComponent = () => {
                       className="generic-icon large"
                     />
                     <img
-                      src="/icons/bitcoin-gold.svg"
-                      alt="bitcoin"
-                      className="generic-icon large"
-                    />
-                    <img
-                      src="/icons/building-red.svg"
-                      alt="bank"
-                      className="generic-icon large"
-                    />
-
-                    <img
                       src="/icons/paystack.png"
                       alt="pay stack"
                       className="generic-icon large"
@@ -1869,7 +1844,7 @@ const Checkout: FunctionComponent = () => {
             )}
 
             {activeTab === "done" && (
-              <div className="">
+              <div>
                 <div className="text-center">
                   <div className={styles["order-received"]}>
                     <p>Order Received Succesfully</p>

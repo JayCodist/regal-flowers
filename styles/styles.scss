@@ -115,7 +115,6 @@ button {
         margin-top: 0;
       }
     }
-
     &.spaced-lg > * {
       margin: 0;
       margin-top: 1.2rem;
@@ -150,6 +149,13 @@ button {
       margin-left: 0;
     }
   }
+  &.spaced-even {
+    margin: 0;
+    margin-left: 0.6rem;
+    &:nth-child(2) {
+      margin-left: 0;
+    }
+  }
   &.spaced-lg > * {
     margin-left: 1.2rem;
     &:first-child {
@@ -160,6 +166,12 @@ button {
     margin-left: 2.4rem;
     &:first-child {
       margin-left: 0;
+    }
+  }
+  &.spaced-even-xl > * {
+    margin-left: 0;
+    &:nth-child(2) {
+      margin-left: 2.4rem;
     }
   }
   &.wrap {
@@ -442,6 +454,9 @@ button {
   }
   &.half-width {
     width: 50%;
+    &.compact {
+      width: 46%;
+    }
   }
   .question {
     font-weight: bold;
