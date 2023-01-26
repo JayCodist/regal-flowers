@@ -381,8 +381,9 @@ const LandingPage: FunctionComponent<{
             <strong>WORK WITH US</strong>
             <h2 className="featured-title">Now Let’s Send Yours</h2>
             <span className="normal-text">
-              The gradual accumulation of information about atomic and
-              small-scale behavior during the first quarter of the 20th{" "}
+              There's a reason people love Regal Flowers. ..because we make
+              every flower and gift delivery a special experience. We didn't say
+              so, the various recipients of our flowers did.
             </span>
             <Button padded url="/filters">
               Send Flowers
@@ -400,8 +401,9 @@ const LandingPage: FunctionComponent<{
             <strong>WORK WITH US</strong>
             <h2 className="featured-title">Now Let’s Send Yours</h2>
             <span className="normal-text">
-              The gradual accumulation of information about atomic and
-              small-scale behavior during the first quarter of the 20th{" "}
+              There's a reason people love Regal Flowers. ..because we make
+              every flower and gift delivery a special experience. We didn't say
+              so, the various recipients of our flowers did.
             </span>
             <Button padded url="/filters">
               Send Flowers
