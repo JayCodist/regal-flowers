@@ -378,7 +378,9 @@ const LandingPage: FunctionComponent<{
           className={[styles["full-width-section"], styles.summary].join(" ")}
         >
           <div className={styles.left}>
-            <strong>WORK WITH US</strong>
+            <strong className="featured-title-small">
+              NOT JUST FLOWERS. REGAL FLOWERS
+            </strong>
             <h2 className="featured-title">Now Let’s Send Yours</h2>
             <span className="normal-text">
               There's a reason people love Regal Flowers. ..because we make
@@ -398,7 +400,9 @@ const LandingPage: FunctionComponent<{
 
         <div className={[styles["summary-mobile"], ""].join(" ")}>
           <div>
-            <strong>WORK WITH US</strong>
+            <strong className="featured-title-small">
+              NOT JUST FLOWERS. REGAL FLOWERS
+            </strong>
             <h2 className="featured-title">Now Let’s Send Yours</h2>
             <span className="normal-text">
               There's a reason people love Regal Flowers. ..because we make
