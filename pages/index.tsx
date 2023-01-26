@@ -378,11 +378,14 @@ const LandingPage: FunctionComponent<{
           className={[styles["full-width-section"], styles.summary].join(" ")}
         >
           <div className={styles.left}>
-            <strong>WORK WITH US</strong>
+            <strong className="featured-title-small">
+              NOT JUST FLOWERS. REGAL FLOWERS
+            </strong>
             <h2 className="featured-title">Now Let’s Send Yours</h2>
             <span className="normal-text">
-              The gradual accumulation of information about atomic and
-              small-scale behavior during the first quarter of the 20th{" "}
+              There's a reason people love Regal Flowers. ..because we make
+              every flower and gift delivery a special experience. We didn't say
+              so, the various recipients of our flowers did.
             </span>
             <Button padded url="/filters">
               Send Flowers
@@ -397,11 +400,14 @@ const LandingPage: FunctionComponent<{
 
         <div className={[styles["summary-mobile"], ""].join(" ")}>
           <div>
-            <strong>WORK WITH US</strong>
+            <strong className="featured-title-small">
+              NOT JUST FLOWERS. REGAL FLOWERS
+            </strong>
             <h2 className="featured-title">Now Let’s Send Yours</h2>
             <span className="normal-text">
-              The gradual accumulation of information about atomic and
-              small-scale behavior during the first quarter of the 20th{" "}
+              There's a reason people love Regal Flowers. ..because we make
+              every flower and gift delivery a special experience. We didn't say
+              so, the various recipients of our flowers did.
             </span>
             <Button padded url="/filters">
               Send Flowers
