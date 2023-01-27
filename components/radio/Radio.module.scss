@@ -28,6 +28,10 @@
   justify-content: center;
   align-items: center;
   transition: 0.3s ease-out;
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
   &.inline {
     display: inline-flex;
   }

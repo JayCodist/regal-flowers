@@ -14,6 +14,7 @@ interface RadioProps {
   blue?: boolean;
   inline?: boolean;
   type?: "default" | "classic";
+  disabled?: boolean;
 }
 
 const Radio = (props: RadioProps) => {
@@ -31,7 +32,8 @@ const Radio = (props: RadioProps) => {
     responsive,
     blue,
     inline,
-    type
+    type,
+    disabled
   } = props;
 
   useEffect(() => {
@@ -56,6 +58,7 @@ const Radio = (props: RadioProps) => {
         defaultChecked={defaultChecked}
         checked={checked}
         id={id || undefined}
+        disabled={disabled}
       />
 
       <label
@@ -64,7 +67,8 @@ const Radio = (props: RadioProps) => {
           bordered && styles.bordered,
           responsive && styles.responsive,
           inline && styles.inline,
-          styles[type ?? "default"]
+          styles[type ?? "default"],
+          disabled && styles.disabled
         ].join(" ")}
         htmlFor={id}
       >
