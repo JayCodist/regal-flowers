@@ -1,3 +1,5 @@
+import { LocationName } from "./Regal";
+
 export interface Recipient {
   name: string;
   address: string;
@@ -5,8 +7,8 @@ export interface Recipient {
   phoneAlt: string;
   residenceType: string;
   message: string;
-  method: string;
-  state: string;
+  method: "delivery" | "pick-up";
+  state: LocationName;
   despatchLocation: string;
   adminNotes: string;
 }

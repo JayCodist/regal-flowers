@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import { Dayjs } from "dayjs";
 import { AppCurrencyName } from "./Core";
+import { LocationName } from "./Regal";
+import { DeliveryLocationOption } from "../constants";
 
 interface OrderItem {
   SKU?: string;
@@ -229,8 +231,9 @@ export interface CheckoutFormData {
   senderPassword: string;
   freeAccount: boolean;
   coupon: string;
-  deliveryMethod: string;
+  deliveryMethod: "delivery" | "pick-up";
   pickUpLocation: string;
+  deliveryLocation: DeliveryLocationOption | null;
   recipientName: string;
   deliveryDate: Dayjs | null;
   recipientPhoneNumber: string;
@@ -245,10 +248,7 @@ export interface CheckoutFormData {
   cardExpiry: string;
   cardNumber: string;
   cardCVV: string;
-  recipientCountryCode: string;
-  senderCountryCode: string;
-  recipientAltCountryCode: string;
-  state: string;
+  state: LocationName;
 }
 
 export type PaymentName =

@@ -708,7 +708,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       orderProducts: products,
       paymentStatus: "Not Paid (Website - Bank Transfer)",
       cost: 0,
-      deliveryDate: "2040-02-03", // (deliveryDate || dayjs().add(1, "day")).format("YYYY-MM-DD"),
+      deliveryDate: "",
       admin: "regalflowersnigeria@gmail.com",
       adminNotes: "test regal-v2", // ""
       amount: total,
@@ -792,7 +792,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         <div className={styles["body"]}>
           {cartItems.length ? (
             <div className={styles["delivery-status"]}>
-              <span>Delivery date</span>
+              <span>Pickup/Delivery date</span>
               <span>{deliveryDate?.format("D MMM YYYY") || "Not set yet"}</span>
               <span className="underline primary-color">Edit</span>
             </div>

@@ -203,12 +203,9 @@ button {
   color: #2684ff;
   &.neutral {
     color: inherit;
-    &.underline {
-      border-color: rgba(255, 255, 255, 0.3);
-    }
   }
   &.underline {
-    border-bottom: 0.08rem solid;
+    text-decoration: underline;
   }
   &.danger {
     color: #ff7452;

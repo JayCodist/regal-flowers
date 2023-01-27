@@ -77,14 +77,14 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 Browse, and add your desired flowers and gifts to your cart
                 (don't forget to change the currency to USD if you are using a
                 Non-Naira card or Paypal). Proceed to checkout where you fill in
-                the delivery details (include the preferred delivery date,
-                recipient's phone number and your optional message), and pay
-                using any of the methods below this page. We can also work to
-                suit your budget, desired colours, flower types etc.. Reach us
-                at <span>info@regalflowers.com.ng</span> or +234 (0) 7010006665,
-                +234 (0) 7011992888 to make your order. For any enquiries or to
-                amend delivery details, message on the flowers etc, feel free to
-                reach out to us.
+                the delivery details (include the preferred pickup/delivery
+                date, recipient's phone number and your optional message), and
+                pay using any of the methods below this page. We can also work
+                to suit your budget, desired colours, flower types etc.. Reach
+                us at <span>info@regalflowers.com.ng</span> or +234 (0)
+                7010006665, +234 (0) 7011992888 to make your order. For any
+                enquiries or to amend delivery details, message on the flowers
+                etc, feel free to reach out to us.
               </p>
             </div>
             <div id="payment-methods" className="">

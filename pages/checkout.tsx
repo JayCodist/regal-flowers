@@ -20,13 +20,15 @@ import Input, { TextArea } from "../components/input/Input";
 import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
+  allDeliveryLocationOptions,
   deliveryStates,
+  freeDeliveryThreshold,
+  freeDeliveryThresholdVals,
   paymentMethods,
   placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
 import { getOrder, updateCheckoutState } from "../utils/helpers/data/order";
-import { getZoneGroups } from "../utils/helpers/data/zone-group";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
 import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
@@ -62,6 +64,7 @@ const initialData: CheckoutFormData = {
   deliveryMethod: "delivery",
   state: "",
   pickUpLocation: "",
+  deliveryLocation: null,
   recipientName: "",
   deliveryDate: null,
   recipientPhoneNumber: "",
@@ -75,10 +78,7 @@ const initialData: CheckoutFormData = {
   cardName: "",
   cardExpiry: "",
   cardNumber: "",
-  cardCVV: "",
-  recipientCountryCode: "",
-  senderCountryCode: "",
-  recipientAltCountryCode: ""
+  cardCVV: ""
 };
 
 type TabKey = "delivery" | "payment" | "done";
@@ -111,9 +111,6 @@ const tabs: Tab[] = [
 
 const Checkout: FunctionComponent = () => {
   const [formData, setFormData] = useState<CheckoutFormData>(initialData);
-  const [deliveryMethod, setDeliveryMethod] = useState<"delivery" | "pick-up">(
-    "delivery"
-  );
   // const [selectedMethod, setSelectedMethod] = useState<number | null>();
   const [pageLoading, setPageLoading] = useState(false);
   const [order, setOrder] = useState<Order | null>(null);
@@ -122,7 +119,6 @@ const Checkout: FunctionComponent = () => {
     payment?: boolean;
   }>({ order: true, payment: false });
   const [isPaid, setIsPaid] = useState(false);
-  const [pickUpOptions, setPickUpOptions] = useState<Option[]>([]);
   const [loading, setLoading] = useState(false);
   const [showPaypal, setShowPaypal] = useState(false);
 
@@ -185,7 +181,7 @@ const Checkout: FunctionComponent = () => {
       setOrder(data);
       setFormData({
         ...formData,
-        deliveryDate: dayjs(data?.deliveryDate)
+        deliveryDate: data?.deliveryDate ? dayjs(data?.deliveryDate) : null
       });
       const _isPaid =
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
@@ -197,28 +193,6 @@ const Checkout: FunctionComponent = () => {
     }
 
     setPageLoading(false);
-  };
-
-  const fetchZoneGroups = async () => {
-    const res = await getZoneGroups();
-    const { error, message, data } = res;
-
-    if (error) {
-      notify("error", `Unable to fetch zone groups: ${message}`);
-    } else {
-      setPickUpOptions(
-        data
-          ?.filter(item => {
-            if (item !== "Unselected State" && item !== "Outside Nigeria") {
-              return item;
-            }
-          })
-          ?.map(item => ({
-            label: item,
-            value: item
-          })) || []
-      );
-    }
   };
 
   useEffect(() => {
@@ -265,7 +239,6 @@ const Checkout: FunctionComponent = () => {
   }, [orderId, isReady]);
 
   useEffect(() => {
-    fetchZoneGroups();
     fetchPurposes();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -315,6 +288,15 @@ const Checkout: FunctionComponent = () => {
       })) || [],
     [user]
   );
+
+  const deliveryLocationOptions = useMemo(() => {
+    return (
+      allDeliveryLocationOptions[formData.state]?.(
+        currency,
+        formData.deliveryDate || dayjs()
+      ) || []
+    );
+  }, [currency, formData.deliveryDate, formData.state]);
 
   if (pageLoading) {
     return (
@@ -474,7 +456,9 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           )}
                           <div className="input-group half-width compact">
-                            <span className="question">Delivery Date</span>
+                            <span className="question">
+                              Pickup/Delivery Date
+                            </span>
                             <DatePicker
                               value={formData.deliveryDate}
                               onChange={value =>
@@ -503,55 +487,145 @@ const Checkout: FunctionComponent = () => {
                     >
                       <p className={styles["payment-info"]}>Delivery Method</p>
                       <div className={styles.padding}>
+                        <div className="margin-top">
+                          <em>
+                            {["13-02", "14-02", "15-02"].includes(
+                              formData.deliveryDate?.format("DD-MM") || ""
+                            )
+                              ? `Free Valentine (Feb 13th, 14th, 15th) Delivery across Lagos and Abuja on orders above ${
+                                  currency.sign
+                                }${freeDeliveryThresholdVals[
+                                  currency.name
+                                ].toLocaleString()}`
+                              : `Free Delivery across Lagos and Abuja on orders above ${
+                                  currency.sign
+                                }${freeDeliveryThreshold[
+                                  currency.name
+                                ].toLocaleString()}`}
+                          </em>
+                        </div>
                         <div className="flex between center-align">
                           <div
                             className={[
                               styles.method,
-                              deliveryMethod === "delivery" && styles.active
+                              formData.deliveryMethod === "pick-up" &&
+                                styles.active
                             ].join(" ")}
-                            onClick={() => setDeliveryMethod("delivery")}
-                          >
-                            <p className={`${styles["method-title"]}`}>
-                              Delivery
-                            </p>
-                            <p>Get it delivered to the recipient's location</p>
-                          </div>
-                          <div
-                            className={[
-                              styles.method,
-                              deliveryMethod === "pick-up" && styles.active
-                            ].join(" ")}
-                            onClick={() => setDeliveryMethod("pick-up")}
+                            onClick={() =>
+                              handleChange("deliveryMethod", "pick-up")
+                            }
                           >
                             <p className={`${styles["method-title"]}`}>
                               Pick Up
                             </p>
                             <p>Pick up from any of our stores nation wide</p>
                           </div>
-                        </div>
-                        <div className="input-group half-width">
-                          <span className="question">
-                            {" "}
-                            {deliveryMethod === "delivery"
-                              ? "Delivery"
-                              : "Pick Up"}{" "}
-                            State
-                          </span>
-
-                          <Select
-                            onSelect={value => handleChange("state", value)}
-                            value={formData.state}
-                            options={
-                              deliveryMethod === "delivery"
-                                ? deliveryStates
-                                : pickUpOptions
+                          <div
+                            className={[
+                              styles.method,
+                              formData.deliveryMethod === "delivery" &&
+                                styles.active
+                            ].join(" ")}
+                            onClick={() =>
+                              handleChange("deliveryMethod", "delivery")
                             }
-                            placeholder="Select a state"
-                            responsive
-                            dimmed
-                          />
+                          >
+                            <p className={`${styles["method-title"]}`}>
+                              Delivery
+                            </p>
+                            <p>Get it delivered to the recipient's location</p>
+                          </div>
                         </div>
-                        {deliveryMethod === "pick-up" && (
+
+                        {formData.deliveryMethod === "delivery" && (
+                          <div className="input-group half-width">
+                            <span className="question">Delivery State</span>
+                            <Select
+                              onSelect={value => handleChange("state", value)}
+                              value={formData.state}
+                              options={deliveryStates}
+                              placeholder="Select a state"
+                              responsive
+                              dimmed
+                            />
+                          </div>
+                        )}
+
+                        {formData.deliveryMethod === "delivery" &&
+                          formData.state && (
+                            <div className={styles["pickup-locations"]}>
+                              {deliveryLocationOptions.length > 0 && (
+                                <p className="primary-color align-icon normal-text bold margin-bottom">
+                                  <InfoRedIcon />
+                                  <span className="margin-left">
+                                    Delivery Locations
+                                  </span>
+                                </p>
+                              )}
+
+                              {deliveryLocationOptions.length === 0 && (
+                                <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                  <InfoRedIcon className="generic-icon xl" />
+                                  <span>
+                                    At the moment, we only deliver VIP Orders to
+                                    other states on request, by either
+                                    chartering a vehicle or by flight. Kindly
+                                    contact us on Phone/WhatsApp:
+                                    <br />
+                                    <a
+                                      href="tel:+2347011992888"
+                                      className="clickable neutral underline"
+                                    >
+                                      +234 7011992888
+                                    </a>
+                                    ,{" "}
+                                    <a
+                                      href="tel:+2347010006665"
+                                      className="clickable neutral underline"
+                                    >
+                                      +234 7010006665
+                                    </a>
+                                  </span>
+                                </div>
+                              )}
+
+                              {deliveryLocationOptions.map(locationOption => (
+                                <div
+                                  className="vertical-margin spaced"
+                                  key={locationOption.name}
+                                >
+                                  <Radio
+                                    label={locationOption.label}
+                                    onChange={() =>
+                                      handleChange(
+                                        "deliveryLocation",
+                                        locationOption
+                                      )
+                                    }
+                                    disabled={
+                                      locationOption.amount === 0 &&
+                                      (order?.amount || 0) <=
+                                        (["13-02", "14-02", "15-02"].includes(
+                                          formData.deliveryDate?.format(
+                                            "DD-MM"
+                                          ) || ""
+                                        )
+                                          ? freeDeliveryThresholdVals
+                                          : freeDeliveryThreshold)[
+                                          currency.name
+                                        ]
+                                    }
+                                    checked={
+                                      formData.deliveryLocation ===
+                                      locationOption
+                                    }
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                        {formData.deliveryMethod === "pick-up" && (
                           <div className={styles["pickup-locations"]}>
                             <p className="primary-color align-icon normal-text bold margin-bottom">
                               <InfoRedIcon />
@@ -559,65 +633,22 @@ const Checkout: FunctionComponent = () => {
                                 Pick Up Locations
                               </span>
                             </p>
-                            <div className="">
+                            <div>
                               <Radio
-                                defaultChecked
-                                label="Lagos, Ikoyi"
+                                label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
                                 onChange={() =>
-                                  handleChange("pickUpLocation", "ikoyi")
+                                  handleChange("pickUpLocation", "Ikoyi")
                                 }
-                                checked={formData.pickUpLocation === "ikoyi"}
+                                checked={formData.pickUpLocation === "Ikoyi"}
                               />
                             </div>
                             <div className="vertical-margin">
                               <Radio
-                                defaultChecked
-                                label="Lagos, Victoria Island"
+                                label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
                                 onChange={() =>
-                                  handleChange(
-                                    "pickUpLocation",
-                                    "victoria-island"
-                                  )
+                                  handleChange("pickUpLocation", "Abuja")
                                 }
-                                checked={
-                                  formData.pickUpLocation === "victoria-island"
-                                }
-                              />
-                            </div>
-
-                            <div className="vertical-margin">
-                              <Radio
-                                defaultChecked
-                                label="Lagos, Lagos Island"
-                                onChange={() =>
-                                  handleChange("pickUpLocation", "island")
-                                }
-                                checked={formData.pickUpLocation === "island"}
-                              />
-                            </div>
-                            <div className="vertical-margin">
-                              <Radio
-                                defaultChecked
-                                label="Lagos, Lekki Phase 1 only"
-                                onChange={() =>
-                                  handleChange("pickUpLocation", "lekki")
-                                }
-                                checked={formData.pickUpLocation === "lekki"}
-                              />
-                            </div>
-                            <div className="vertical-margin">
-                              <Radio
-                                defaultChecked
-                                label="Lagos, Bettween Lekki Phase 1 - Ikate/Chevron/Mega Chicken  B/Stop"
-                                onChange={() =>
-                                  handleChange(
-                                    "pickUpLocation",
-                                    "between-lekki"
-                                  )
-                                }
-                                checked={
-                                  formData.pickUpLocation === "between-lekki"
-                                }
+                                checked={formData.pickUpLocation === "Abuja"}
                               />
                             </div>
                           </div>
@@ -909,7 +940,7 @@ const Checkout: FunctionComponent = () => {
                         {getPriceDisplay(0, currency)}
                       </span>
                     </div>
-                    {deliveryMethod === "pick-up" && (
+                    {formData.deliveryMethod === "pick-up" && (
                       <div className="flex between">
                         <span className="normal-text">Delivery Charge</span>
                         <span className="normal-text bold">
@@ -1279,7 +1310,7 @@ const Checkout: FunctionComponent = () => {
                     )}
 
                     <div className="input-group">
-                      <span className="question">Delivery Date</span>
+                      <span className="question">Pickup/Delivery Date</span>
                       <DatePicker
                         value={formData.deliveryDate}
                         onChange={value => handleChange("deliveryDate", value)}
@@ -1330,14 +1361,42 @@ const Checkout: FunctionComponent = () => {
                     <div>
                       <p className={styles.title}>Delivery Method</p>
                       <div>
+                        <div className="margin-top">
+                          <em>
+                            {["13-02", "14-02", "15-02"].includes(
+                              formData.deliveryDate?.format("DD-MM") || ""
+                            )
+                              ? `Free Valentine (Feb 13th, 14th, 15th) Delivery across Lagos and Abuja on orders above ${
+                                  currency.sign
+                                }${freeDeliveryThresholdVals[
+                                  currency.name
+                                ].toLocaleString()}`
+                              : `Free Delivery across Lagos and Abuja on orders above ${
+                                  currency.sign
+                                }${freeDeliveryThreshold[
+                                  currency.name
+                                ].toLocaleString()}`}
+                          </em>
+                        </div>
+                        <div className="vertical-margin spaced">
+                          <Radio
+                            label="Pick Up"
+                            onChange={() =>
+                              handleChange("deliveryMethod", "pick-up")
+                            }
+                            checked={formData.deliveryMethod === "pick-up"}
+                          />
+                        </div>
                         <div className="vertical-margin spaced">
                           <Radio
                             label="Delivery"
-                            onChange={() => setDeliveryMethod("delivery")}
-                            checked={deliveryMethod === "delivery"}
+                            onChange={() =>
+                              handleChange("deliveryMethod", "delivery")
+                            }
+                            checked={formData.deliveryMethod === "delivery"}
                           />
                         </div>
-                        {deliveryMethod === "delivery" && (
+                        {formData.deliveryMethod === "delivery" && (
                           <Select
                             onSelect={value => handleChange("state", value)}
                             value={formData.state}
@@ -1347,26 +1406,82 @@ const Checkout: FunctionComponent = () => {
                             dimmed
                           />
                         )}
-                        <div className="vertical-margin spaced">
-                          <Radio
-                            label="Pick Up"
-                            onChange={() => setDeliveryMethod("pick-up")}
-                            checked={deliveryMethod === "pick-up"}
-                          />
-                        </div>
-                        {deliveryMethod === "pick-up" && (
-                          <div className="input-group vertical-margin spaced">
-                            <Select
-                              onSelect={value => handleChange("state", value)}
-                              value={formData.state}
-                              options={pickUpOptions}
-                              placeholder="Select a State"
-                              responsive
-                              dimmed
-                            />
-                          </div>
-                        )}
-                        {deliveryMethod === "pick-up" && (
+
+                        {formData.deliveryMethod === "delivery" &&
+                          formData.state && (
+                            <div className={styles["pickup-locations"]}>
+                              {deliveryLocationOptions.length > 0 && (
+                                <p className="primary-color align-icon normal-text bold margin-bottom">
+                                  <InfoRedIcon />
+                                  <span className="margin-left">
+                                    Delivery Locations
+                                  </span>
+                                </p>
+                              )}
+
+                              {deliveryLocationOptions.length === 0 && (
+                                <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                  <InfoRedIcon className="generic-icon xl" />
+                                  <span>
+                                    At the moment, we only deliver VIP Orders to
+                                    other states on request, by either
+                                    chartering a vehicle or by flight. Kindly
+                                    contact us on Phone/WhatsApp:
+                                    <br />
+                                    <a
+                                      href="tel:+2347011992888"
+                                      className="clickable neutral underline"
+                                    >
+                                      +234 7011992888
+                                    </a>
+                                    ,{" "}
+                                    <a
+                                      href="tel:+2347010006665"
+                                      className="clickable neutral underline"
+                                    >
+                                      +234 7010006665
+                                    </a>
+                                  </span>
+                                </div>
+                              )}
+
+                              {deliveryLocationOptions.map(locationOption => (
+                                <div
+                                  className="vertical-margin spaced"
+                                  key={locationOption.name}
+                                >
+                                  <Radio
+                                    label={locationOption.label}
+                                    onChange={() =>
+                                      handleChange(
+                                        "deliveryLocation",
+                                        locationOption
+                                      )
+                                    }
+                                    disabled={
+                                      locationOption.amount === 0 &&
+                                      (order?.amount || 0) <=
+                                        (["13-02", "14-02", "15-02"].includes(
+                                          formData.deliveryDate?.format(
+                                            "DD-MM"
+                                          ) || ""
+                                        )
+                                          ? freeDeliveryThresholdVals
+                                          : freeDeliveryThreshold)[
+                                          currency.name
+                                        ]
+                                    }
+                                    checked={
+                                      formData.deliveryLocation ===
+                                      locationOption
+                                    }
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                        {formData.deliveryMethod === "pick-up" && (
                           <div className={styles["pickup-locations"]}>
                             <p className="primary-color align-icon normal-text bold margin-bottom">
                               <InfoRedIcon />
@@ -1376,58 +1491,20 @@ const Checkout: FunctionComponent = () => {
                             </p>
                             <div>
                               <Radio
-                                label="Lagos, Ikoyi"
+                                label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
                                 onChange={() =>
-                                  handleChange("pickUpLocation", "ikoyi")
+                                  handleChange("pickUpLocation", "Ikoyi")
                                 }
-                                checked={formData.pickUpLocation === "ikoyi"}
+                                checked={formData.pickUpLocation === "Ikoyi"}
                               />
                             </div>
                             <div className="vertical-margin">
                               <Radio
-                                label="Lagos, Victoria Island"
+                                label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
                                 onChange={() =>
-                                  handleChange(
-                                    "pickUpLocation",
-                                    "victoria-island"
-                                  )
+                                  handleChange("pickUpLocation", "Abuja")
                                 }
-                                checked={
-                                  formData.pickUpLocation === "victoria-island"
-                                }
-                              />
-                            </div>
-
-                            <div className="vertical-margin">
-                              <Radio
-                                label="Lagos, Lagos Island"
-                                onChange={() =>
-                                  handleChange("pickUpLocation", "island")
-                                }
-                                checked={formData.pickUpLocation === "island"}
-                              />
-                            </div>
-                            <div className="vertical-margin">
-                              <Radio
-                                label="Lagos, Lekki Phase 1 only"
-                                onChange={() =>
-                                  handleChange("pickUpLocation", "lekki")
-                                }
-                                checked={formData.pickUpLocation === "lekki"}
-                              />
-                            </div>
-                            <div className="vertical-margin">
-                              <Radio
-                                label="Lagos, Bettween Lekki Phase 1 - Ikate/Chevron/Mega Chicken  B/Stop"
-                                onChange={() =>
-                                  handleChange(
-                                    "pickUpLocation",
-                                    "between-lekki"
-                                  )
-                                }
-                                checked={
-                                  formData.pickUpLocation === "between-lekki"
-                                }
+                                checked={formData.pickUpLocation === "Abuja"}
                               />
                             </div>
                           </div>
@@ -1443,7 +1520,7 @@ const Checkout: FunctionComponent = () => {
                       Continue
                     </Button>
                     <p className={styles.next}>
-                      Next: <strong>Receiver's Informatione</strong>
+                      Next: <strong>Receiver's Information</strong>
                     </p>
                   </>
                 )}
@@ -1646,7 +1723,7 @@ const Checkout: FunctionComponent = () => {
                     </div>
                     <div className={`${styles["sender-info"]}`}>
                       <p>{formData.recipientName}</p>
-                      <p className={styles.grayed}>Delivery Date</p>
+                      <p className={styles.grayed}>Pickup/Delivery Date</p>
                       <p>{formData.deliveryDate?.format("YYYY-MM-DD")}</p>
                       <p>{formData.recipientPhoneNumber}</p>
                       <p className={styles.grayed}>Alternative Number</p>
@@ -1747,7 +1824,7 @@ const Checkout: FunctionComponent = () => {
                       {getPriceDisplay(order?.amount || 0, currency)}
                     </span>
                   </div>
-                  {deliveryMethod === "pick-up" && (
+                  {formData.deliveryMethod === "pick-up" && (
                     <div className="flex between">
                       <span className="normal-text">Delivery</span>
                       <span className="normal-text bold">
