@@ -5,12 +5,13 @@ import React, {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { footerContent, links } from "../../utils/constants";
+import { allDesignOptions, footerContent, links } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -734,6 +735,15 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
+  const designCharges = useMemo(() => {
+    return cartItems.reduce((total, item) => {
+      const designOption = item.design
+        ? allDesignOptions.find(opt => opt.name === item.design)
+        : null;
+      return total + (designOption?.price || 0);
+    }, 0);
+  }, [cartItems]);
+
   return (
     <div
       className={[
@@ -826,7 +836,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
               <div className="flex between center-align margin-bottom spaced">
                 <span className="small-text">Total</span>
                 <strong className="small-text">
-                  {getPriceDisplay(total, currency)}
+                  {getPriceDisplay(total + designCharges, currency)}
                 </strong>
               </div>
             </>

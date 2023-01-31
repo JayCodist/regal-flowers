@@ -17,6 +17,7 @@ export type DesignOptionName =
   | "inVase"
   | "inLargeVase"
   | "box";
+
 export type DesignOptionsMap = Partial<
   Record<DesignOptionName, "default" | "option">
 >;
