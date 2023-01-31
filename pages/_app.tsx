@@ -48,15 +48,18 @@ const App: FunctionComponent<AppProps> = props => {
   const [user, setUser] = useState<User | null>(null);
 
   const initializeAppConfig = async () => {
+    const savedCartItems = AppStorage.get<CartItem[]>(
+      AppStorageConstants.CART_ITEMS
+    );
     const savedCurrency = AppStorage.get<AppCurrency>(
       AppStorageConstants.SAVED_CURRENCY
     );
-    if (savedCurrency) {
-      setSettings({
-        ...settings,
-        currency: savedCurrency
-      });
-    }
+
+    setSettings({
+      ...settings,
+      currency: savedCurrency || defaultSettings.currency,
+      cartItems: savedCartItems || []
+    });
     const { error, data } = await performHandshake();
     if (error || !data) {
       // Fail quietly and continue using the set constant values
@@ -82,6 +85,7 @@ const App: FunctionComponent<AppProps> = props => {
             currencyValueMap[currentCurrency.name] ||
             currentCurrency.conversionRate
         },
+        cartItems: savedCartItems || [],
         allCurrencies: settings.allCurrencies.map(currency => ({
           ...currency,
           conversionRate:
@@ -138,6 +142,7 @@ const App: FunctionComponent<AppProps> = props => {
     cartItems: settings.cartItems,
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
+      AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
     },
     allCurrencies: settings.allCurrencies,
     notify,
