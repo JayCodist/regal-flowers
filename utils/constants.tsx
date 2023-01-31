@@ -1,6 +1,9 @@
+import { Dayjs } from "dayjs";
 import React from "react";
 import { Option } from "../components/select/Select";
-import { AppCurrency, AppLink } from "./types/Core";
+import { getPriceDisplay } from "./helpers/type-conversions";
+import { BooleanFilter } from "./helpers/type-helpers";
+import { AppCurrency, AppCurrencyName, AppLink } from "./types/Core";
 import { PaymentMethod } from "./types/Order";
 import { Gift } from "./types/Product";
 import {
@@ -371,152 +374,8 @@ export const deliveryStates: Option[] = [
     value: "abuja"
   },
   {
-    label: "Port Harcourt",
-    value: "port-harcourt"
-  },
-  {
-    label: "Anambra",
-    value: "anambra"
-  },
-  {
-    label: "Adamawa",
-    value: "adamawa"
-  },
-  {
-    label: "Abia",
-    value: "abia"
-  },
-  {
-    label: "Akwa Ibom",
-    value: "akwa-ibom"
-  },
-  {
-    label: "Borno",
-    value: "borno"
-  },
-  {
-    label: "Bauchi",
-    value: "bauchi"
-  },
-  {
-    label: "Benue",
-    value: "benue"
-  },
-  {
-    label: "Bayelsa",
-    value: "bayelsa"
-  },
-  {
-    label: "Cross River",
-    value: "cross-river"
-  },
-  {
-    label: "Delta",
-    value: "delta"
-  },
-  {
-    label: "Enugu",
-    value: "enugu"
-  },
-  {
-    label: "Edo",
-    value: "edo"
-  },
-  {
-    label: "Ekiti",
-    value: "ekiti"
-  },
-  {
-    label: "Ebonyi",
-    value: "ebonyi"
-  },
-  {
-    label: "Gombe",
-    value: "gombe"
-  },
-  {
-    label: "Imo",
-    value: "imo"
-  },
-  {
-    label: "Jigawa",
-    value: "jigawa"
-  },
-  {
-    label: "Kebbi",
-    value: "kebbi"
-  },
-  {
-    label: "Kano",
-    value: "kano"
-  },
-  {
-    label: "Kaduna",
-    value: "kaduna"
-  },
-  {
-    label: "Katsina",
-    value: "katsina"
-  },
-  {
-    label: "Kwara",
-    value: "kwara"
-  },
-  {
-    label: "Kogi",
-    value: "kogi"
-  },
-  {
-    label: "Niger",
-    value: "niger"
-  },
-  {
-    label: "Nasarawa",
-    value: "nasarawa"
-  },
-  {
-    label: "Oyo",
-    value: "oyo"
-  },
-
-  {
-    label: "Ogun",
-    value: "ogun"
-  },
-  {
-    label: "Osun",
-    value: "osun"
-  },
-
-  {
-    label: "Ondo",
-    value: "ondo"
-  },
-
-  {
-    label: "Plateau",
-    value: "plateau"
-  },
-  {
-    label: "Rivers",
-    value: "rivers"
-  },
-  {
-    label: "Sokoto",
-    value: "sokoto"
-  },
-  {
-    label: "Taraba",
-    value: "taraba"
-  },
-  {
-    label: "Yobe",
-    value: "yobe"
-  },
-
-  {
-    label: "Zamfara",
-    value: "zamfara"
+    label: "Other states",
+    value: "other-locations"
   }
 ];
 
@@ -1554,4 +1413,147 @@ export const reviews: RegalContent<UserReview[]> = {
       }
     }
   ]
+};
+
+export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
+  USD: 185,
+  GBP: 150,
+  NGN: 85000
+};
+
+export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
+  USD: 255,
+  GBP: 210,
+  NGN: 115000
+};
+
+export interface DeliveryLocationOption {
+  name: string;
+  label: string;
+  amount: number;
+}
+
+export const allDeliveryLocationOptions: Record<
+  LocationName,
+  (currency: AppCurrency, deliveryDate: Dayjs) => DeliveryLocationOption[]
+> = {
+  lagos: (currency, deliveryDate) =>
+    [
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(
+          10000,
+          currency
+        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+        name: "highLagos",
+        amount: 10000
+      },
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(4000, currency)} - Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThreshold[
+          currency.name
+        ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
+        name: "mediumLagos",
+        amount: 4000
+      },
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
+          currency.sign
+        }${freeDeliveryThreshold[
+          currency.name
+        ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
+        name: "freeLagos",
+        amount: 0
+      },
+
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(15000, currency)} - Valentine Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (or please pickup instead)`,
+        name: "highLagosVals",
+        amount: 15000
+      },
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(0, currency)} - Valentine Orders ABOVE ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (FREE* Delivery Lagos)`,
+        name: "freeLagosVals",
+        amount: 0
+      }
+    ].filter(BooleanFilter) as DeliveryLocationOption[],
+
+  abuja: (currency, deliveryDate) =>
+    [
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(
+          6000,
+          currency
+        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
+        name: "highAbuja",
+        amount: 6000
+      },
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(3500, currency)} - Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThreshold[
+          currency.name
+        ].toLocaleString()} toWuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
+        name: "mediumAbuja",
+        amount: 3500
+      },
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
+          currency.sign
+        }${freeDeliveryThreshold[
+          currency.name
+        ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs`,
+        name: "freeAbuja",
+        amount: 0
+      },
+
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(15000, currency)} - Valentine Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (or please pickup instead)`,
+        name: "highAbujaVals",
+        amount: 15000
+      },
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(0, currency)} - Valentine Orders ABOVE ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (FREE* Delivery Abuja)`,
+        name: "freeAbujaVals",
+        amount: 0
+      }
+    ].filter(BooleanFilter) as DeliveryLocationOption[],
+  "other-locations": () => [],
+  general: () => []
 };

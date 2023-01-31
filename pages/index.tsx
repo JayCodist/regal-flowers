@@ -851,7 +851,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
           onChange={setDeliveryDate}
           format="D MMM YYYY"
           className={styles["occasion-date"]}
-          placeholder="Delivery Date"
+          placeholder="Pickup/Delivery Date"
           dropdownAlignment={deviceType === "mobile" ? "right" : "left"}
           iconAtLeft
         />

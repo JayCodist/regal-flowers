@@ -30,14 +30,14 @@ export const BitcoinGoldIcon = () => (
   </svg>
 );
 
-export const InfoRedIcon = () => (
+export const InfoRedIcon = ({ className = "" }) => (
   <svg
     width="20"
     height="20"
     viewBox="0 0 20 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className="generic-icon"
+    className={className || "generic-icon"}
   >
     <path
       d="M10 20C15.523 20 20 15.523 20 10C20 4.477 15.523 0 10 0C4.477 0 0 4.477 0 10C0 15.523 4.477 20 10 20ZM11 9V15H9V9H11ZM11 5V7H9V5H11Z"

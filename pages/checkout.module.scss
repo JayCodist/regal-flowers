@@ -45,8 +45,6 @@
   }
 
   .delivey-method {
-    // margin-top: 2rem;
-    cursor: pointer;
     .method-title {
       margin-bottom: 0.7rem;
       font-weight: bold;
@@ -59,6 +57,7 @@
       border: none;
       transition: 0.1s ease-out;
       border: 0.1rem solid transparent;
+      cursor: pointer;
       &:hover,
       &.active {
         background-color: white;
