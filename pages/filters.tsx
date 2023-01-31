@@ -422,7 +422,7 @@ const ProductsPage: FunctionComponent<{
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
                 : `${pageTitle} ${
-                    !giftMap[categorySlug || ""] ? "Flower" : ""
+                    !giftMap[categorySlug || ""] ? "Flowers" : ""
                   }`}
             </h1>
 
