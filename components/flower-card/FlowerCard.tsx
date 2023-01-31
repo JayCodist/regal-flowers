@@ -42,16 +42,17 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
 
     const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
+      if (!product) {
+        return;
+      }
 
-      const cartItem: CartItem = product
-        ? {
-            key: product?.key,
-            name: product?.name,
-            price: product?.price,
-            quantity: 1,
-            image: product?.images[0]
-          }
-        : ({} as CartItem);
+      const cartItem: CartItem = {
+        key: product.key,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        image: product.images[0]
+      };
 
       const _cartItem = cartItems.find(item => item.key === product?.key);
 
@@ -63,6 +64,7 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       }
       e.stopPropagation();
     };
+
     return (
       <Link href={url || "#"}>
         <a

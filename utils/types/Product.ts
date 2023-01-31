@@ -12,9 +12,13 @@ export interface ProductVariant {
   class: "regular" | "vip";
 }
 
-export type DesignOption = "wrappedBouquet" | "inVase" | "inLargeVase" | "box";
+export type DesignOptionName =
+  | "wrappedBouquet"
+  | "inVase"
+  | "inLargeVase"
+  | "box";
 export type DesignOptionsMap = Partial<
-  Record<DesignOption, "default" | "option">
+  Record<DesignOptionName, "default" | "option">
 >;
 
 export interface MinimalProduct {

@@ -2,7 +2,7 @@ import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
 import Product, {
-  DesignOption,
+  DesignOptionName,
   DesignOptionsMap
 } from "../../utils/types/Product";
 import styles from "./products.module.scss";
@@ -12,8 +12,8 @@ import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 
-interface Designs {
-  name: DesignOption | string;
+interface DesignOption {
+  name: DesignOptionName | string;
   price: number;
 }
 
@@ -22,13 +22,12 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [descriptionTab, setDescriptionTab] = useState("product description");
-  const [sizeType, setsizeType] = useState<string>("regular");
-  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [sizeType, setsizeType] = useState("regular");
+  const [selectedSize, setSelectedSize] = useState("");
   const [addonGroup, setAddonGroup] = useState("");
-  const [selectedDesign, setSelectedDesign] = useState<Designs>({
-    name: "",
-    price: 0
-  });
+  const [selectedDesign, setSelectedDesign] = useState<DesignOption | null>(
+    null
+  );
   const [productPrice, setProductPrice] = useState<number>(product.price);
   const [total, setTotal] = useState<number>(product.price);
 
@@ -57,7 +56,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       name: product.name,
       price: total,
       size: selectedSize,
-      design: selectedDesign.name,
+      design: selectedDesign?.name,
       quantity: 1,
       image: product.images[0]
     };
@@ -72,7 +71,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     }
   };
 
-  const designs: Designs[] = [
+  const designs: DesignOption[] = [
     {
       name: "wrappedBouquet",
       price: 0
@@ -103,15 +102,11 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     setActiveSlide(id);
   };
 
-  const handleTotal = () => {
-    setTotal(productPrice + selectedDesign?.price);
-  };
-
   const pickDefaultDesign = () => {
     for (const key in product.designOptions) {
       if (product?.designOptions[key as keyof DesignOptionsMap] === "default") {
         setSelectedDesign({
-          name: key as DesignOption,
+          name: key as DesignOptionName,
           price: designs.find(design => design.name === key)?.price || 0
         });
       }
@@ -125,9 +120,24 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   }, [product]);
 
   useEffect(() => {
-    handleTotal();
+    setTotal(productPrice + (selectedDesign?.price || 0));
+    const existingCartItem = cartItems.find(item => item.key === product.key);
+    if (existingCartItem) {
+      setCartItems(
+        cartItems.map(item =>
+          item === existingCartItem
+            ? { ...item, design: selectedDesign?.name, size: selectedSize }
+            : item
+        )
+      );
+      notify("info", "Item in cart updated successfully");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDesign, productPrice]);
+  }, [selectedDesign, selectedSize]);
+
+  const cannotBuy =
+    (product.type === "variable" && !selectedSize) ||
+    (product.designOptions && !selectedDesign);
 
   return (
     <section className={`${styles.product}`}>
@@ -470,12 +480,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           )}
 
           <div className={styles["menu-wrapper"]}>
-            <h3 className="bold vertical-margin spaced">
-              Awesome Gifts to Include
-            </h3>
+            {product.addonsGroups.length > 0 && (
+              <h3 className="bold vertical-margin spaced">
+                Awesome Gifts to Include
+              </h3>
+            )}
             {product.addonsGroups.map((group, index) => (
               <div key={index}>
-                {" "}
                 <div
                   className={`${styles["menu-btn"]} flex`}
                   onClick={() =>
@@ -530,19 +541,15 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           </div>
           <div className="flex spaced vertical-margin block">
             <Button
-              url="/checkout?orderId=008UOmFSK0aSPlZX19XK"
-              className={styles["buy-now"]}
-              type="accent"
-            >
-              <strong>Buy Now</strong>
-            </Button>
-            <Button
-              disabled={product.type === "variable" && !selectedSize}
-              className={styles["add-to-cart"]}
+              disabled={cannotBuy}
+              className="vertical-margin spaced"
+              responsive
               onClick={() => handleAddToCart()}
               tooltip={
-                product.type === "variable" && !selectedSize
-                  ? "You must select a budget first"
+                cannotBuy
+                  ? `You must select a budget${
+                      product.designOptions ? " and design" : ""
+                    } first`
                   : ""
               }
             >

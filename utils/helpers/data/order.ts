@@ -1,4 +1,5 @@
-import { OrderCreate, Order, CheckoutFormData } from "../../types/Order";
+import { CartItem } from "../../types/Core";
+import { Order, CheckoutFormData } from "../../types/Order";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 import { getKeyMap } from "../type-helpers";
@@ -14,9 +15,10 @@ const adaptCheckoutStateRecord = (
   const processedRecord: Record<string, any> = {
     shouldCreateAccount: record.freeAccount,
     shouldSaveAddress: record.shouldSaveAddress,
+    deliveryLocation: record.deliveryLocation,
     orderData: {
       deliveryDate: record.deliveryDate,
-      adminNotes: `TEST ${record.additionalInfo}`,
+      adminNotes: `TEST ${record.additionalInfo}`, // TODO: remove TEST
       deliveryMessage: record.message,
       despatchLocation: record.pickUpLocation,
       purpose: record.purpose,
@@ -74,13 +76,14 @@ export const getOrder: (
   }
 };
 
-export const createOrder: (
-  order: OrderCreate
-) => Promise<RequestResponse<Order>> = async order => {
+export const createOrder: (payload: {
+  cartItems: CartItem[];
+  deliveryDate: string;
+}) => Promise<RequestResponse<Order>> = async payload => {
   try {
     const response = await restAPIInstance.post(
       `/v1/firebase/order/create`,
-      order
+      payload
     );
     return {
       error: false,
