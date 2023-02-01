@@ -61,7 +61,7 @@ const initialData: CheckoutFormData = {
   senderPassword: "",
   freeAccount: true,
   coupon: "",
-  deliveryMethod: "delivery",
+  deliveryMethod: "pick-up",
   state: "",
   pickUpLocation: "",
   deliveryLocation: null,

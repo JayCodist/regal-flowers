@@ -79,12 +79,17 @@ export const getOrder: (
 export const createOrder: (payload: {
   cartItems: CartItem[];
   deliveryDate: string;
-}) => Promise<RequestResponse<Order>> = async payload => {
+}) => Promise<RequestResponse<Order>> = async ({ cartItems, deliveryDate }) => {
   try {
-    const response = await restAPIInstance.post(
-      `/v1/firebase/order/create`,
-      payload
-    );
+    const response = await restAPIInstance.post(`/v1/firebase/order/create`, {
+      deliveryDate,
+      cartItems: cartItems.map(item => ({
+        key: item.key,
+        design: item.design || "",
+        size: item.size || "",
+        quantity: item.quantity
+      }))
+    });
     return {
       error: false,
       data: response.data as Order
