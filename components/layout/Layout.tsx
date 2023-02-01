@@ -650,7 +650,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     setCartItems,
     deliveryDate,
     setDeliveryDate,
-    currency
+    currency,
+    notify
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -719,18 +720,17 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   const handleCreateOrder = async () => {
     setLoading(true);
 
-    const response = await createOrder({
+    const { data, error, message } = await createOrder({
       cartItems,
       deliveryDate: deliveryDate?.format("YYYY-MM-DD") || ""
     });
 
     setLoading(false);
-
-    if (response.data) {
-      setDeliveryDate(
-        response.data.deliveryDate ? dayjs(response.data?.deliveryDate) : null
-      );
-      router.push(`/checkout?orderId=${response.data.id}`);
+    if (error) {
+      notify("error", `Unable to create order: ${message}`);
+    } else if (data) {
+      setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
+      router.push(`/checkout?orderId=${data.id}`);
       setCartItems([]);
     }
   };
