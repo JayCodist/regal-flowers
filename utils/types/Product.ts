@@ -44,12 +44,12 @@ interface Product {
   images: ProductImage[];
   variants: ProductVariant[];
   addonsGroups: AddonGroup[];
-  productDescription: string;
+  longDescription: string;
   subtitle: string;
   sizes?: string[];
   designOptions?: DesignOptionsMap;
   temporaryNotes?: string[];
-  description?: string;
+  description: string;
   details: string;
   relatedProducts?: MinimalProduct[];
   class: "regular" | "vip";

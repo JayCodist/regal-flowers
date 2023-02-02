@@ -64,6 +64,7 @@ export const getAllProducts: () => Promise<
       data: response.data.data as Product[]
     };
   } catch (err) {
+    console.error("Unable to get all products: ", err);
     return {
       error: true,
       message: (err as Error).message,
@@ -84,7 +85,7 @@ export const getProductsBySlugs: (
       data: response.data as Product[]
     };
   } catch (err) {
-    console.trace(err);
+    console.error("Unable to get products by slugs", err);
     return {
       error: true,
       message: (err as Error).message,

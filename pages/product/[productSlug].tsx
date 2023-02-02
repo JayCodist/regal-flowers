@@ -208,7 +208,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             </button>
           </div>
           {descriptionTab === "product description" && (
-            <p>{product.productDescription}</p>
+            <p
+              dangerouslySetInnerHTML={{ __html: product.longDescription }}
+            ></p>
           )}
 
           {descriptionTab === "reviews" && <p>Coming Soon</p>}
@@ -274,7 +276,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             <>
               {" "}
               <h3 className="bold margin-bottom">Description</h3>
-              <p>{product.description}</p>
+              <p dangerouslySetInnerHTML={{ __html: product.description }}></p>
             </>
           )}
           {product.type === "variable" && (
