@@ -312,6 +312,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   </button>
                 )}
               </div>
+              {console.log({ vary: product.variants })}
               {sizeType === "regular" && (
                 <div className={styles["size-wrapper"]}>
                   {product.variants
@@ -329,8 +330,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name.slice(1)} |{" "}
-                        {getPriceDisplay(product.price, currency)}
+                        {variant.name} |{" "}
+                        {getPriceDisplay(variant.price, currency)}
                       </span>
                     ))}
                 </div>
