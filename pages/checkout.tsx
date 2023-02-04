@@ -655,119 +655,124 @@ const Checkout: FunctionComponent = () => {
                         )}
                       </div>
                     </div>
-                    <div className={styles.border}>
-                      <p className={styles["payment-info"]}>
-                        Receiver's Information
-                      </p>
-                      <div className={styles.padding}>
-                        <div className="input-group">
-                          <span className="question">
-                            Select A Past Recipient
-                          </span>
-
-                          <Select
-                            onSelect={phone =>
-                              setSelectedRecipient(
-                                user?.recipients.find(
-                                  recipient => recipient.phone === phone
-                                ) || null
-                              )
-                            }
-                            value={selectedRecipient?.phone || ""}
-                            options={pastRecipients}
-                            placeholder="Select Past Recipient"
-                            responsive
-                            dimmed
-                          />
-                        </div>
-                        <div className="flex center-align spaced vertical-margin">
-                          <span className={styles["line-through"]}></span>
-                          <span>OR</span>
-                          <span className={styles["line-through"]}></span>
-                        </div>
-                        <div className="flex spaced-xl margin-bottom">
-                          <div className="input-group">
-                            <span className="question">Full Name</span>
-                            <Input
-                              name="name"
-                              placeholder="Enter recipient name"
-                              value={formData.recipientName}
-                              onChange={value =>
-                                handleChange("recipientName", value)
-                              }
-                              dimmed
-                            />
-                          </div>
+                    {formData.deliveryMethod === "delivery" && (
+                      <div className={styles.border}>
+                        <p className={styles["payment-info"]}>
+                          Receiver's Information
+                        </p>
+                        <div className={styles.padding}>
                           <div className="input-group">
                             <span className="question">
-                              Receiver Phone number
+                              Select A Past Recipient
                             </span>
-                            <Input
-                              value={formData.recipientPhoneNumber}
-                              onChange={value =>
-                                handleChange("recipientPhoneNumber", value)
-                              }
-                              placeholder="Enter receiver phone"
-                              dimmed
-                              required
-                            />
-                          </div>
-                        </div>
-
-                        <div className="flex spaced-xl margin-bottom">
-                          <div className="input-group">
-                            <span className="question">
-                              Alternative Phone number
-                            </span>
-                            <Input
-                              value={formData.recipientPhoneNumberAlt}
-                              onChange={value =>
-                                handleChange("recipientPhoneNumberAlt", value)
-                              }
-                              placeholder="Enter alternative phone"
-                              dimmed
-                              required
-                            />
-                          </div>
-                          <div className="input-group">
-                            <span className="question">Residence Type</span>
 
                             <Select
-                              onSelect={value =>
-                                handleChange("residenceType", value)
+                              onSelect={phone =>
+                                setSelectedRecipient(
+                                  user?.recipients.find(
+                                    recipient => recipient.phone === phone
+                                  ) || null
+                                )
                               }
-                              value={formData.residenceType}
-                              options={getOptionsFromArray(["Home", "Office"])}
-                              placeholder="Select a residence type"
+                              value={selectedRecipient?.phone || ""}
+                              options={pastRecipients}
+                              placeholder="Select Past Recipient"
                               responsive
                               dimmed
                             />
                           </div>
-                        </div>
-                        <div className="input-group">
-                          <span className="question">
-                            Detailed Home Address
-                          </span>
+                          <div className="flex center-align spaced vertical-margin">
+                            <span className={styles["line-through"]}></span>
+                            <span>OR</span>
+                            <span className={styles["line-through"]}></span>
+                          </div>
+                          <div className="flex spaced-xl margin-bottom">
+                            <div className="input-group">
+                              <span className="question">Full Name</span>
+                              <Input
+                                name="name"
+                                placeholder="Enter recipient name"
+                                value={formData.recipientName}
+                                onChange={value =>
+                                  handleChange("recipientName", value)
+                                }
+                                dimmed
+                              />
+                            </div>
+                            <div className="input-group">
+                              <span className="question">
+                                Receiver Phone number
+                              </span>
+                              <Input
+                                value={formData.recipientPhoneNumber}
+                                onChange={value =>
+                                  handleChange("recipientPhoneNumber", value)
+                                }
+                                placeholder="Enter receiver phone"
+                                dimmed
+                                required
+                              />
+                            </div>
+                          </div>
 
-                          <TextArea
-                            value={formData.recipientHomeAddress}
-                            placeholder="To help us deliver better, please be detailed as possible"
+                          <div className="flex spaced-xl margin-bottom">
+                            <div className="input-group">
+                              <span className="question">
+                                Alternative Phone number
+                              </span>
+                              <Input
+                                value={formData.recipientPhoneNumberAlt}
+                                onChange={value =>
+                                  handleChange("recipientPhoneNumberAlt", value)
+                                }
+                                placeholder="Enter alternative phone"
+                                dimmed
+                                required
+                              />
+                            </div>
+                            <div className="input-group">
+                              <span className="question">Residence Type</span>
+
+                              <Select
+                                onSelect={value =>
+                                  handleChange("residenceType", value)
+                                }
+                                value={formData.residenceType}
+                                options={getOptionsFromArray([
+                                  "Home",
+                                  "Office"
+                                ])}
+                                placeholder="Select a residence type"
+                                responsive
+                                dimmed
+                              />
+                            </div>
+                          </div>
+                          <div className="input-group">
+                            <span className="question">
+                              Detailed Home Address
+                            </span>
+
+                            <TextArea
+                              value={formData.recipientHomeAddress}
+                              placeholder="To help us deliver better, please be detailed as possible"
+                              onChange={value =>
+                                handleChange("recipientHomeAddress", value)
+                              }
+                              dimmed
+                              rows={3}
+                            />
+                          </div>
+                          <Checkbox
+                            checked={formData.shouldSaveAddress}
                             onChange={value =>
-                              handleChange("recipientHomeAddress", value)
+                              handleChange("shouldSaveAddress", value)
                             }
-                            dimmed
-                            rows={3}
+                            text="Save Recipient"
                           />
                         </div>
-                        <Checkbox
-                          checked={formData.shouldSaveAddress}
-                          onChange={value =>
-                            handleChange("shouldSaveAddress", value)
-                          }
-                          text="Save Recipient"
-                        />
                       </div>
-                    </div>
+                    )}
                     <div className={styles.border}>
                       <p className={styles["payment-info"]}>Optional Message</p>
                       <div className={styles.padding}>
@@ -1556,128 +1561,130 @@ const Checkout: FunctionComponent = () => {
                       <p>Delivery</p>
                       <p>{formData.state}</p>
                     </div>
-                    <div>
-                      <p className={styles.title}>Receiver's Information</p>
-                      <div className={styles.padding}>
-                        <div className="input-group">
-                          <span className="question">
-                            Select A Past Recipient
-                          </span>
+                    {formData.deliveryMethod === "delivery" && (
+                      <div>
+                        <p className={styles.title}>Receiver's Information</p>
+                        <div className={styles.padding}>
+                          <div className="input-group">
+                            <span className="question">
+                              Select A Past Recipient
+                            </span>
 
-                          <Select
-                            onSelect={phone =>
-                              setSelectedRecipient(
-                                user?.recipients.find(
-                                  recipient => recipient.phone === phone
-                                ) || null
-                              )
-                            }
-                            value={selectedRecipient?.phone || ""}
-                            options={pastRecipients}
-                            placeholder="Select Past Recipient"
-                            responsive
-                            dimmed
-                          />
-                        </div>
-                        <div className="flex center-align spaced vertical-margin">
-                          <span className={styles["line-through"]}></span>
-                          <span>OR</span>
-                          <span className={styles["line-through"]}></span>
-                        </div>
+                            <Select
+                              onSelect={phone =>
+                                setSelectedRecipient(
+                                  user?.recipients.find(
+                                    recipient => recipient.phone === phone
+                                  ) || null
+                                )
+                              }
+                              value={selectedRecipient?.phone || ""}
+                              options={pastRecipients}
+                              placeholder="Select Past Recipient"
+                              responsive
+                              dimmed
+                            />
+                          </div>
+                          <div className="flex center-align spaced vertical-margin">
+                            <span className={styles["line-through"]}></span>
+                            <span>OR</span>
+                            <span className={styles["line-through"]}></span>
+                          </div>
 
-                        <div className="input-group">
-                          <span className="question">Full Name</span>
-                          <Input
-                            name="name"
-                            placeholder="Enter recipient name"
-                            value={formData.recipientName}
+                          <div className="input-group">
+                            <span className="question">Full Name</span>
+                            <Input
+                              name="name"
+                              placeholder="Enter recipient name"
+                              value={formData.recipientName}
+                              onChange={value =>
+                                handleChange("recipientName", value)
+                              }
+                              dimmed
+                              responsive
+                            />
+                          </div>
+
+                          <div className="input-group">
+                            <span className="question">Phone number</span>
+                            <Input
+                              value={formData.recipientPhoneNumber}
+                              onChange={value =>
+                                handleChange("recipientPhoneNumber", value)
+                              }
+                              placeholder="Enter recipient phone"
+                              dimmed
+                              responsive
+                              required
+                            />
+                          </div>
+
+                          <div className="input-group">
+                            <span className="question">
+                              Alternative Phone number
+                            </span>
+                            <Input
+                              value={formData.recipientPhoneNumberAlt}
+                              onChange={value =>
+                                handleChange("recipientPhoneNumberAlt", value)
+                              }
+                              placeholder="Enter alternative phone"
+                              dimmed
+                              responsive
+                              required
+                            />
+                          </div>
+                          <div className="input-group">
+                            <span className="question">Residence Type</span>
+
+                            <Select
+                              onSelect={value =>
+                                handleChange("residenceType", value)
+                              }
+                              value={formData.residenceType}
+                              options={getOptionsFromArray(["Home", "Office"])}
+                              placeholder="Select a residence type"
+                              responsive
+                              dimmed
+                            />
+                          </div>
+                          <div className="input-group">
+                            <span className="question">
+                              Detailed Home Address
+                            </span>
+
+                            <TextArea
+                              value={formData.recipientHomeAddress}
+                              placeholder="To help us deliver better, please be detailed as possible"
+                              onChange={value =>
+                                handleChange("recipientHomeAddress", value)
+                              }
+                              dimmed
+                              rows={3}
+                            />
+                          </div>
+                          <Checkbox
+                            checked={formData.shouldSaveAddress}
                             onChange={value =>
-                              handleChange("recipientName", value)
+                              handleChange("shouldSaveAddress", value)
                             }
-                            dimmed
-                            responsive
+                            text="Save Address"
                           />
                         </div>
-
-                        <div className="input-group">
-                          <span className="question">Phone number</span>
-                          <Input
-                            value={formData.recipientPhoneNumber}
-                            onChange={value =>
-                              handleChange("recipientPhoneNumber", value)
-                            }
-                            placeholder="Enter recipient phone"
-                            dimmed
-                            responsive
-                            required
-                          />
-                        </div>
-
-                        <div className="input-group">
-                          <span className="question">
-                            Alternative Phone number
-                          </span>
-                          <Input
-                            value={formData.recipientPhoneNumberAlt}
-                            onChange={value =>
-                              handleChange("recipientPhoneNumberAlt", value)
-                            }
-                            placeholder="Enter alternative phone"
-                            dimmed
-                            responsive
-                            required
-                          />
-                        </div>
-                        <div className="input-group">
-                          <span className="question">Residence Type</span>
-
-                          <Select
-                            onSelect={value =>
-                              handleChange("residenceType", value)
-                            }
-                            value={formData.residenceType}
-                            options={getOptionsFromArray(["Home", "Office"])}
-                            placeholder="Select a residence type"
-                            responsive
-                            dimmed
-                          />
-                        </div>
-                        <div className="input-group">
-                          <span className="question">
-                            Detailed Home Address
-                          </span>
-
-                          <TextArea
-                            value={formData.recipientHomeAddress}
-                            placeholder="To help us deliver better, please be detailed as possible"
-                            onChange={value =>
-                              handleChange("recipientHomeAddress", value)
-                            }
-                            dimmed
-                            rows={3}
-                          />
-                        </div>
-                        <Checkbox
-                          checked={formData.shouldSaveAddress}
-                          onChange={value =>
-                            handleChange("shouldSaveAddress", value)
+                        <Button
+                          onClick={() =>
+                            setDeliveryStage("customization-message")
                           }
-                          text="Save Address"
-                        />
+                          className="vertical-margin xl"
+                          responsive
+                        >
+                          Continue
+                        </Button>
+                        <p className={styles.next}>
+                          Next: <strong>Customize Message</strong>
+                        </p>
                       </div>
-                      <Button
-                        onClick={() =>
-                          setDeliveryStage("customization-message")
-                        }
-                        className="vertical-margin xl"
-                        responsive
-                      >
-                        Continue
-                      </Button>
-                      <p className={styles.next}>
-                        Next: <strong>Customize Message</strong>
-                      </p>
-                    </div>
+                    )}
                   </>
                 )}
 
@@ -1712,24 +1719,28 @@ const Checkout: FunctionComponent = () => {
                       <p>Delivery</p>
                       <p>{formData.state}</p>
                     </div>
-                    <div className="flex between">
-                      <p className={styles.title}>Receiver's Information</p>
-                      <strong
-                        onClick={() => setDeliveryStage("receiver")}
-                        className="primary-color underline"
-                      >
-                        Edit
-                      </strong>
-                    </div>
-                    <div className={`${styles["sender-info"]}`}>
-                      <p>{formData.recipientName}</p>
-                      <p className={styles.grayed}>Pickup/Delivery Date</p>
-                      <p>{formData.deliveryDate?.format("YYYY-MM-DD")}</p>
-                      <p>{formData.recipientPhoneNumber}</p>
-                      <p className={styles.grayed}>Alternative Number</p>
-                      <p>{formData.recipientPhoneNumberAlt}</p>
-                      <p>{formData.recipientHomeAddress}</p>
-                    </div>
+                    {formData.deliveryMethod === "delivery" && (
+                      <div className="flex between">
+                        <p className={styles.title}>Receiver's Information</p>
+                        <strong
+                          onClick={() => setDeliveryStage("receiver")}
+                          className="primary-color underline"
+                        >
+                          Edit
+                        </strong>
+                      </div>
+                    )}
+                    {formData.deliveryMethod === "delivery" && (
+                      <div className={`${styles["sender-info"]}`}>
+                        <p>{formData.recipientName}</p>
+                        <p className={styles.grayed}>Pickup/Delivery Date</p>
+                        <p>{formData.deliveryDate?.format("YYYY-MM-DD")}</p>
+                        <p>{formData.recipientPhoneNumber}</p>
+                        <p className={styles.grayed}>Alternative Number</p>
+                        <p>{formData.recipientPhoneNumberAlt}</p>
+                        <p>{formData.recipientHomeAddress}</p>
+                      </div>
+                    )}
                     <div>
                       <p className={styles.title}>Optional Message</p>
                       <div className="input-group">

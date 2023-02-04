@@ -312,7 +312,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   </button>
                 )}
               </div>
-              {console.log({ vary: product.variants })}
               {sizeType === "regular" && (
                 <div className={styles["size-wrapper"]}>
                   {product.variants
