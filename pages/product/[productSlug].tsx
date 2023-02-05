@@ -8,6 +8,7 @@ import FlowerCard from "../../components/flower-card/FlowerCard";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
+import useDeviceType from "../../utils/hooks/useDeviceType";
 import { allDesignOptions, DesignOption } from "../../utils/constants";
 
 const ProductPage: FunctionComponent<{ product: Product }> = props => {
@@ -27,6 +28,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const { setCartItems, cartItems, notify, currency } = useContext(
     SettingsContext
   );
+  const deviceType = useDeviceType();
 
   const shouldShowRegularTab = product.variants?.some(
     variant => variant.class === "regular"
@@ -115,7 +117,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   return (
     <section className={`${styles.product}`}>
-      <div className="margin-bottom spaced">
+      <div className={`margin-bottom spaced ${styles.padding}`}>
         <span className="margin-right align-icon">
           Home{" "}
           <img
@@ -136,7 +138,11 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           {product.name.split("–")[0]}
         </span>
       </div>
-      <div className={`${styles["product-content"]} flex between`}>
+      <div
+        className={`${
+          styles["product-content"]
+        } flex spaced-xl between ${deviceType === "mobile" && "column"}`}
+      >
         <div className={styles["slider-wrapper"]}>
           <div className={styles.slider}>
             <button
@@ -189,58 +195,67 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               />
             ))}
           </div>
-          <div className={`${styles["tab"]} flex spaced`}>
-            <button
-              onClick={() => setDescriptionTab("product description")}
-              className={`${styles["tab-title"]} ${
-                descriptionTab === "product description" ? styles.active : null
-              }`}
-            >
-              Product Description
-            </button>
-            <button
-              onClick={() => setDescriptionTab("reviews")}
-              className={`${styles["tab-title"]} ${
-                descriptionTab === "reviews" ? styles.active : null
-              }`}
-            >
-              Reviews
-            </button>
-          </div>
-          {descriptionTab === "product description" && (
-            <p
-              dangerouslySetInnerHTML={{ __html: product.longDescription }}
-            ></p>
-          )}
+          {deviceType === "desktop" && (
+            <>
+              <div className={`${styles["tab"]} flex spaced`}>
+                <button
+                  onClick={() => setDescriptionTab("product description")}
+                  className={`${styles["tab-title"]} ${
+                    descriptionTab === "product description"
+                      ? styles.active
+                      : null
+                  }`}
+                >
+                  Product Description
+                </button>
+                <button
+                  onClick={() => setDescriptionTab("reviews")}
+                  className={`${styles["tab-title"]} ${
+                    descriptionTab === "reviews" ? styles.active : null
+                  }`}
+                >
+                  Reviews
+                </button>
+              </div>
+              {descriptionTab === "product description" && (
+                <p
+                  dangerouslySetInnerHTML={{ __html: product.longDescription }}
+                ></p>
+              )}
 
-          {descriptionTab === "reviews" && <p>Coming Soon</p>}
-          <div className={`${styles.delivery} flex spaced`}>
-            <div className={styles.icon}>
-              <img
-                className={`generic-icon medium`}
-                src="/icons/truck.svg"
-                alt="truck"
-              />
-            </div>
-            <div>
-              <p className="smaller bold">Delivery</p>
-              <p>Estimated delivery time: 1 - 7 days</p>
-            </div>
-          </div>
-          <div className={`${styles["social-icons"]} flex spaced center-align`}>
-            <span>Share: </span>
-            <span className={`${styles["social-icon"]}`}>
-              <img src="/icons/twitter.svg" alt="twitter" />
-            </span>
-            <span className={`${styles["social-icon"]}`}>
-              <img src="/icons/whatsapp.svg" alt="whatsapp" />
-            </span>
-            <span className={`${styles["social-icon"]}`}>
-              <img src="/icons/facebook.svg" alt="facebook" />
-            </span>
-          </div>
+              {descriptionTab === "reviews" && <p>Coming Soon</p>}
+              <div className={`${styles.delivery} flex spaced`}>
+                <div className={styles.icon}>
+                  <img
+                    className={`generic-icon medium`}
+                    src="/icons/truck.svg"
+                    alt="truck"
+                  />
+                </div>
+                <div>
+                  <p className="smaller bold">Delivery</p>
+                  <p>Estimated delivery time: 1 - 7 days</p>
+                </div>
+              </div>
+              <div
+                className={`${styles["social-icons"]} flex spaced center-align`}
+              >
+                <span>Share: </span>
+                <span className={`${styles["social-icon"]}`}>
+                  <img src="/icons/twitter.svg" alt="twitter" />
+                </span>
+                <span className={`${styles["social-icon"]}`}>
+                  <img src="/icons/whatsapp.svg" alt="whatsapp" />
+                </span>
+                <span className={`${styles["social-icon"]}`}>
+                  <img src="/icons/facebook.svg" alt="facebook" />
+                </span>
+              </div>
+            </>
+          )}
         </div>
-        <div>
+
+        <div className={styles.padding}>
           <div className="flex center-align between">
             <div>
               <h1 className="title">{product.name.split("–")[0]}</h1>
@@ -271,12 +286,30 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 </p>
               ))}
           </div>
+          {deviceType === "mobile" && (
+            <div className={`${styles.delivery} flex spaced`}>
+              <div className={styles.icon}>
+                <img
+                  className={`generic-icon medium`}
+                  src="/icons/truck.svg"
+                  alt="truck"
+                />
+              </div>
+              <div>
+                <p className="smaller bold">Delivery</p>
+                <p>Estimated delivery time: 1 - 7 days</p>
+              </div>
+            </div>
+          )}
 
           {product.description && (
             <>
               {" "}
-              <h3 className="bold margin-bottom">Description</h3>
-              <p dangerouslySetInnerHTML={{ __html: product.description }}></p>
+              <h3 className="title small bold margin-bottom">Description</h3>
+              <p
+                className="normal-text"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              ></p>
             </>
           )}
           {product.type === "variable" && (
@@ -467,10 +500,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </div>
             ))}
           </div>
-          <div className="flex spaced vertical-margin block">
+          <div
+            className={`flex spaced  block ${deviceType == "desktop" &&
+              "vertical-margin"}`}
+          >
             <Button
               disabled={cannotBuy}
-              className="vertical-margin spaced"
+              className={` spaced ${deviceType == "desktop" &&
+                "vertical-margin"}`}
               responsive
               onClick={() => handleAddToCart()}
               tooltip={
@@ -486,18 +523,20 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           </div>
         </div>
       </div>
-      <p className="title bold margin-top spaced">Related Products</p>
-      <div className="flex between vertical-margin spaced wrap">
-        {product.relatedProducts?.map((item, index) => (
-          <FlowerCard
-            key={index}
-            name={item.name}
-            image={item.images.src}
-            price={item.price}
-            subTitle={item.subtitle}
-            url={`/product/${item.slug}`}
-          />
-        ))}
+      <div className={styles.padding}>
+        <p className="title bold margin-top spaced">Related Products</p>
+        <div className="flex between vertical-margin spaced wrap">
+          {product.relatedProducts?.map((item, index) => (
+            <FlowerCard
+              key={index}
+              name={item.name}
+              image={item.images.src}
+              price={item.price}
+              subTitle={item.subtitle}
+              url={`/product/${item.slug}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -205,7 +205,7 @@ const ProductsPage: FunctionComponent<{
         <div className={`hero-content flex column center center-align `}>
           {productCategory === "occasion" && (
             <div className={styles["occasion-wrapper"]}>
-              {(giftMap[categorySlug || "1"] ? gifts : occasions).map(
+              {(giftMap[categorySlug || ""] ? gifts : occasions).map(
                 (occasion, index) => {
                   return (
                     <Link href={occasion.url} key={index}>
