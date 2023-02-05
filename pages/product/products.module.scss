@@ -12,7 +12,6 @@
 
   .product-content {
     margin-bottom: 3rem;
-    // display: flex;
     & > div {
       flex-basis: 51%;
       &.slider-wrapper {
@@ -26,6 +25,7 @@
 
     @media (max-width: 650px) {
       flex-direction: column;
+      margin-bottom: 1rem;
       & > div {
         flex-basis: 100%;
         &.slider-wrapper {

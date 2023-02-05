@@ -11,11 +11,6 @@ import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import useDeviceType from "../../utils/hooks/useDeviceType";
 import { allDesignOptions, DesignOption } from "../../utils/constants";
 
-interface Designs {
-  name: DesignOption | string;
-  price: number;
-}
-
 const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const { product } = props;
 
@@ -310,8 +305,11 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           {product.description && (
             <>
               {" "}
-              <h3 className="bold margin-bottom">Description</h3>
-              <p dangerouslySetInnerHTML={{ __html: product.description }}></p>
+              <h3 className="title small bold margin-bottom">Description</h3>
+              <p
+                className="normal-text"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              ></p>
             </>
           )}
           {product.type === "variable" && (
@@ -502,10 +500,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </div>
             ))}
           </div>
-          <div className="flex spaced vertical-margin block">
+          <div
+            className={`flex spaced  block ${deviceType == "desktop" &&
+              "vertical-margin"}`}
+          >
             <Button
               disabled={cannotBuy}
-              className="vertical-margin spaced"
+              className={` spaced ${deviceType == "desktop" &&
+                "vertical-margin"}`}
               responsive
               onClick={() => handleAddToCart()}
               tooltip={
