@@ -5,12 +5,13 @@ import React, {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { footerContent, links } from "../../utils/constants";
+import { allDesignOptions, footerContent, links } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -649,7 +650,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     setCartItems,
     deliveryDate,
     setDeliveryDate,
-    currency
+    currency,
+    notify
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -717,69 +719,30 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   const handleCreateOrder = async () => {
     setLoading(true);
-    const products = cartItems.map(item => ({
-      name: item.name,
-      quantity: item.quantity
-    }));
 
-    const response = await createOrder({
-      orderProducts: products,
-      paymentStatus: "Not Paid (Website - Bank Transfer)",
-      cost: 0,
-      deliveryDate: "",
-      admin: "regalflowersnigeria@gmail.com",
-      adminNotes: "test regal-v2", // ""
-      amount: total,
-      anonymousClient: false,
-      arrangementTime: "",
-      client: {}, // Resolve on the backend
-      business: "Regal Flowers",
-      channel: "Regal Website",
-      contactDepsArray: [], // Resolve on the backend
-      costBreakdown: "",
-      deliveryMessage: "",
-      deliveryNotePrinted: false,
-      deliveryStatus: "Not Arranged",
-      deliveryZone: "WEB",
-      despatchFrom: "Unselected",
-      driver: {},
-      editingAdminsRevised: [],
-      feedback: {},
-      isClientRecipient: false, // Set later
-      isDuplicatedOrder: false,
-      lastDeliveryNotePrintedAdmin: "",
-      lastDeliveryNotePrintedTime: "",
-      lastDeliveryStatusAdmin: "",
-      lastDeliveryStatusTime: "",
-      lastMessagePrintedAdmin: "",
-      lastMessagePrintedTime: "",
-      lastPaymentStatusAdmin: "",
-      lastPaymentStatusTime: "",
-      line: "Unselected",
-      messagePrinted: false,
-      orderDetails: "", // Set later
-      profit: 0, // Resolve on the backend
-      purpose: "Unknown", // Set later
-      recipient: {}, // Resolve on the backend
-      recipientAddress: "", // Set later
-      receivedByName: "",
-      receivedByPhone: "",
-      sendReminders: false, // Set later
-      upsellProfit: 0, // Resolve on the backend
-      websiteOrderID: "",
-      driverAlerted: false
+    const { data, error, message } = await createOrder({
+      cartItems,
+      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || ""
     });
 
     setLoading(false);
-
-    if (response.data) {
-      setDeliveryDate(
-        response.data.deliveryDate ? dayjs(response.data?.deliveryDate) : null
-      );
-      router.push(`/checkout?orderId=${response.data.id}`);
+    if (error) {
+      notify("error", `Unable to create order: ${message}`);
+    } else if (data) {
+      setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
+      router.push(`/checkout?orderId=${data.id}`);
       setCartItems([]);
     }
   };
+
+  const designCharges = useMemo(() => {
+    return cartItems.reduce((total, item) => {
+      const designOption = item.design
+        ? allDesignOptions.find(opt => opt.name === item.design)
+        : null;
+      return total + (designOption?.price || 0);
+    }, 0);
+  }, [cartItems]);
 
   return (
     <div
@@ -873,7 +836,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
               <div className="flex between center-align margin-bottom spaced">
                 <span className="small-text">Total</span>
                 <strong className="small-text">
-                  {getPriceDisplay(total, currency)}
+                  {getPriceDisplay(total + designCharges, currency)}
                 </strong>
               </div>
             </>

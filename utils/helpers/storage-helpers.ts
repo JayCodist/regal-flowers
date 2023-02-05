@@ -1,7 +1,8 @@
 export const AppStorageConstants = {
   LOCAL_STORAGE_SYNC_VERSION: "LOCAL_STORAGE_SYNC_VERSION",
   SAVED_CURRENCY: "SAVED_CURRENCY",
-  USER_DATA: "userData"
+  USER_DATA: "userData",
+  CART_ITEMS: "CART_ITEMS"
 };
 
 const AppStorage = {

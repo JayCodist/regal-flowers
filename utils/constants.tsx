@@ -5,7 +5,7 @@ import { getPriceDisplay } from "./helpers/type-conversions";
 import { BooleanFilter } from "./helpers/type-helpers";
 import { AppCurrency, AppCurrencyName, AppLink } from "./types/Core";
 import { PaymentMethod } from "./types/Order";
-import { Gift } from "./types/Product";
+import { DesignOptionName, Gift } from "./types/Product";
 import {
   Service,
   Occasion,
@@ -1557,3 +1557,32 @@ export const allDeliveryLocationOptions: Record<
   "other-locations": () => [],
   general: () => []
 };
+
+export interface DesignOption {
+  name: DesignOptionName;
+  price: number;
+  title: string;
+}
+
+export const allDesignOptions: DesignOption[] = [
+  {
+    name: "wrappedBouquet",
+    title: "Wrapped Bouquet",
+    price: 0
+  },
+  {
+    name: "inVase",
+    title: "In Vase",
+    price: 15000
+  },
+  {
+    name: "inLargeVase",
+    title: "In Large Vase",
+    price: 30000
+  },
+  {
+    name: "box",
+    title: "Box",
+    price: 0
+  }
+];

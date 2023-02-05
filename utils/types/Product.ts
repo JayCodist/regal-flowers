@@ -12,9 +12,14 @@ export interface ProductVariant {
   class: "regular" | "vip";
 }
 
-export type DesignOption = "wrappedBouquet" | "inVase" | "inLargeVase" | "box";
+export type DesignOptionName =
+  | "wrappedBouquet"
+  | "inVase"
+  | "inLargeVase"
+  | "box";
+
 export type DesignOptionsMap = Partial<
-  Record<DesignOption, "default" | "option">
+  Record<DesignOptionName, "default" | "option">
 >;
 
 export interface MinimalProduct {
@@ -39,12 +44,12 @@ interface Product {
   images: ProductImage[];
   variants: ProductVariant[];
   addonsGroups: AddonGroup[];
-  productDescription: string;
+  longDescription: string;
   subtitle: string;
   sizes?: string[];
   designOptions?: DesignOptionsMap;
   temporaryNotes?: string[];
-  description?: string;
+  description: string;
   details: string;
   relatedProducts?: MinimalProduct[];
   class: "regular" | "vip";

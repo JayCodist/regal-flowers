@@ -1,10 +1,7 @@
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
-import Product, {
-  DesignOption,
-  DesignOptionsMap
-} from "../../utils/types/Product";
+import Product, { DesignOptionName } from "../../utils/types/Product";
 import styles from "./products.module.scss";
 import Button from "../../components/button/Button";
 import FlowerCard from "../../components/flower-card/FlowerCard";
@@ -12,6 +9,7 @@ import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import useDeviceType from "../../utils/hooks/useDeviceType";
+import { allDesignOptions, DesignOption } from "../../utils/constants";
 
 interface Designs {
   name: DesignOption | string;
@@ -23,13 +21,12 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [descriptionTab, setDescriptionTab] = useState("product description");
-  const [sizeType, setsizeType] = useState<string>("regular");
-  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [sizeType, setsizeType] = useState("regular");
+  const [selectedSize, setSelectedSize] = useState("");
   const [addonGroup, setAddonGroup] = useState("");
-  const [selectedDesign, setSelectedDesign] = useState<Designs>({
-    name: "",
-    price: 0
-  });
+  const [selectedDesign, setSelectedDesign] = useState<DesignOption | null>(
+    null
+  );
   const [productPrice, setProductPrice] = useState<number>(product.price);
   const [total, setTotal] = useState<number>(product.price);
 
@@ -59,7 +56,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       name: product.name,
       price: total,
       size: selectedSize,
-      design: selectedDesign.name,
+      design: selectedDesign?.name,
       quantity: 1,
       image: product.images[0]
     };
@@ -74,25 +71,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     }
   };
 
-  const designs: Designs[] = [
-    {
-      name: "wrappedBouquet",
-      price: 0
-    },
-    {
-      name: "inVase",
-      price: 15000
-    },
-    {
-      name: "inLargeVase",
-      price: 30000
-    },
-    {
-      name: "box",
-      price: 0
-    }
-  ];
-
   const handleNextCLick = () => {
     setActiveSlide(activeSlide + 1);
   };
@@ -105,17 +83,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     setActiveSlide(id);
   };
 
-  const handleTotal = () => {
-    setTotal(productPrice + selectedDesign?.price);
-  };
-
   const pickDefaultDesign = () => {
     for (const key in product.designOptions) {
-      if (product?.designOptions[key as keyof DesignOptionsMap] === "default") {
-        setSelectedDesign({
-          name: key as DesignOption,
-          price: designs.find(design => design.name === key)?.price || 0
-        });
+      if (product?.designOptions[key as DesignOptionName] === "default") {
+        const designOption = allDesignOptions.find(
+          option => option.name === key
+        );
+        setSelectedDesign(designOption || null);
       }
     }
   };
@@ -127,9 +101,24 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   }, [product]);
 
   useEffect(() => {
-    handleTotal();
+    setTotal(productPrice + (selectedDesign?.price || 0));
+    const existingCartItem = cartItems.find(item => item.key === product.key);
+    if (existingCartItem) {
+      setCartItems(
+        cartItems.map(item =>
+          item === existingCartItem
+            ? { ...item, design: selectedDesign?.name, size: selectedSize }
+            : item
+        )
+      );
+      notify("success", "Item in cart updated successfully");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDesign, productPrice]);
+  }, [selectedDesign, selectedSize]);
+
+  const cannotBuy =
+    (product.type === "variable" && !selectedSize) ||
+    (product.designOptions && !selectedDesign);
 
   return (
     <section className={`${styles.product}`}>
@@ -234,7 +223,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 </button>
               </div>
               {descriptionTab === "product description" && (
-                <p>{product.productDescription}</p>
+                <p
+                  dangerouslySetInnerHTML={{ __html: product.longDescription }}
+                ></p>
               )}
 
               {descriptionTab === "reviews" && <p>Coming Soon</p>}
@@ -320,7 +311,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             <>
               {" "}
               <h3 className="bold margin-bottom">Description</h3>
-              <p>{product.description}</p>
+              <p dangerouslySetInnerHTML={{ __html: product.description }}></p>
             </>
           )}
           {product.type === "variable" && (
@@ -373,8 +364,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name.slice(1)} |{" "}
-                        {getPriceDisplay(product.price, currency)}
+                        {variant.name} |{" "}
+                        {getPriceDisplay(variant.price, currency)}
                       </span>
                     ))}
                 </div>
@@ -417,95 +408,48 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 </div>
               )}
               <div className="flex spaced">
-                {product?.designOptions?.wrappedBouquet && (
-                  <div
-                    className={[
-                      styles.design,
-                      selectedDesign?.name === "wrappedBouquet" &&
-                        styles["selected-design"]
-                    ].join(" ")}
-                    onClick={() =>
-                      setSelectedDesign({ name: "wrappedBouquet", price: 0 })
-                    }
-                  >
-                    <img
-                      src="/icons/wrapped-bouquet.svg"
-                      alt="box"
-                      className="generic-icon xxl margin-bottom spaced"
-                    />
-                    <p className="vertical-margin bold">Wrapped Bouquet</p>
-                    <p>+{currency.sign}0</p>
-                  </div>
-                )}
-                {product?.designOptions?.inVase && (
-                  <div
-                    className={[
-                      styles.design,
-                      selectedDesign?.name === "inVase" &&
-                        styles["selected-design"]
-                    ].join(" ")}
-                    onClick={() =>
-                      setSelectedDesign({ name: "inVase", price: 15000 })
-                    }
-                  >
-                    <img
-                      src="/icons/invase.svg"
-                      alt="box"
-                      className="generic-icon xxl margin-bottom spaced"
-                    />
-                    <p className="vertical-margin bold">In a Vase</p>
-                    <p>+{getPriceDisplay(15000, currency)}</p>
-                  </div>
-                )}
-                {product.designOptions?.inLargeVase && (
-                  <div
-                    className={[
-                      styles.design,
-                      selectedDesign?.name === "inLargeVase" &&
-                        styles["selected-design"]
-                    ].join(" ")}
-                    onClick={() =>
-                      setSelectedDesign({ name: "inLargeVase", price: 30000 })
-                    }
-                  >
-                    <img
-                      src="/icons/large-vase.svg"
-                      alt="box"
-                      className="generic-icon xxl margin-bottom spaced"
-                    />
-                    <p className="vertical-margin bold">In Large Vase</p>
-                    <p>+{getPriceDisplay(30000, currency)}</p>
-                  </div>
-                )}
-                {product.designOptions?.box && (
-                  <div
-                    className={[
-                      styles.design,
-                      selectedDesign?.name === "box" &&
-                        styles["selected-design"]
-                    ].join(" ")}
-                    onClick={() => setSelectedDesign({ name: "box", price: 0 })}
-                  >
-                    <img
-                      src="/icons/box.svg"
-                      alt="box"
-                      className="generic-icon xxl margin-bottom spaced"
-                    />
-                    <p className="vertical-margin bold">Box Arrangement</p>
-                    <p>Complimentary</p>
-                  </div>
+                {allDesignOptions.map(
+                  designOption =>
+                    product.designOptions?.[designOption.name] && (
+                      <div
+                        key={designOption.name}
+                        className={[
+                          styles.design,
+                          selectedDesign?.name === designOption.name &&
+                            styles["selected-design"]
+                        ].join(" ")}
+                        onClick={() => setSelectedDesign(designOption)}
+                      >
+                        <img
+                          src="/icons/wrapped-bouquet.svg"
+                          alt="box"
+                          className="generic-icon xxl margin-bottom spaced"
+                        />
+                        <p className="vertical-margin bold">
+                          {designOption.title}
+                        </p>
+                        {designOption.price ? (
+                          <p>
+                            + {getPriceDisplay(designOption.price, currency)}
+                          </p>
+                        ) : (
+                          <p>Complimentary</p>
+                        )}
+                      </div>
+                    )
                 )}
               </div>
             </div>
           )}
 
           <div className={styles["menu-wrapper"]}>
-            <h3 className="bold vertical-margin spaced">
-              Awesome Gifts to Include
-            </h3>
+            {product.addonsGroups.length > 0 && (
+              <h3 className="bold vertical-margin spaced">
+                Awesome Gifts to Include
+              </h3>
+            )}
             {product.addonsGroups.map((group, index) => (
               <div key={index}>
-                {" "}
                 <div
                   className={`${styles["menu-btn"]} flex`}
                   onClick={() =>
@@ -560,19 +504,15 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           </div>
           <div className="flex spaced vertical-margin block">
             <Button
-              url="/checkout?orderId=008UOmFSK0aSPlZX19XK"
-              className={styles["buy-now"]}
-              type="accent"
-            >
-              <strong>Buy Now</strong>
-            </Button>
-            <Button
-              disabled={product.type === "variable" && !selectedSize}
-              className={styles["add-to-cart"]}
+              disabled={cannotBuy}
+              className="vertical-margin spaced"
+              responsive
               onClick={() => handleAddToCart()}
               tooltip={
-                product.type === "variable" && !selectedSize
-                  ? "You must select a budget first"
+                cannotBuy
+                  ? `You must select a budget${
+                      product.designOptions ? " and design" : ""
+                    } first`
                   : ""
               }
             >
