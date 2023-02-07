@@ -180,17 +180,20 @@ const ProductsPage: FunctionComponent<{
   }, [page]);
 
   useEffect(() => {
-    const flowerTitle = occasions.find(
-      item => item.url === `/product-category/${categorySlug}`
-    )?.title;
-    const giftTitle = gifts.find(
-      item => item.url === `/product-category/${categorySlug}`
-    )?.title;
-    const title = flowerTitle || giftTitle;
+    if (isReady) {
+      const flowerTitle = occasions.find(
+        item => item.url === `/product-category/${categorySlug}`
+      )?.title;
+      const giftTitle = gifts.find(
+        item => item.url === `/product-category/${categorySlug}`
+      )?.title;
+      const title = flowerTitle || giftTitle;
 
-    if (title) {
-      setPageTitle(title);
+      if (title) {
+        setPageTitle(title);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySlug]);
 
   return (

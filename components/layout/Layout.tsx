@@ -366,8 +366,23 @@ const Header: FunctionComponent = () => {
           >
             {links.map((link, index) => (
               <div className={styles.link} key={index}>
-                <Link href={link.url} key={link.title}>
-                  <a
+                {link.url ? (
+                  <Link href={link.url} key={link.title}>
+                    <a
+                      className={`flex center-align spaced ${styles.title}`}
+                      onClick={() => {
+                        setActiveNav(link.title);
+                        !link.children.length && setShowSidebar(false);
+                      }}
+                    >
+                      <strong>{link.title}</strong>
+                      {link.children.length > 0 && (
+                        <div className={[styles.arrow].join(" ")}></div>
+                      )}
+                    </a>
+                  </Link>
+                ) : (
+                  <div
                     className={`flex center-align spaced ${styles.title}`}
                     onClick={() => {
                       setActiveNav(link.title);
@@ -378,8 +393,9 @@ const Header: FunctionComponent = () => {
                     {link.children.length > 0 && (
                       <div className={[styles.arrow].join(" ")}></div>
                     )}
-                  </a>
-                </Link>
+                  </div>
+                )}
+
                 <div>
                   {link.children.length > 0 && (
                     <div
