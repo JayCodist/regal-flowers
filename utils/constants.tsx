@@ -613,11 +613,11 @@ export const filtersCatgories: {
     options: [
       {
         name: "Regular",
-        tag: "regular"
+        tag: "Regular"
       },
       {
         name: "VIP",
-        tag: "vip"
+        tag: "VIP"
       }
     ],
     limit: 2,
@@ -699,7 +699,7 @@ export const filtersCatgories: {
       },
       {
         name: "Million Stars",
-        tag: "millionstar"
+        tag: "Million Stars"
       }
     ],
     limit: 3,
