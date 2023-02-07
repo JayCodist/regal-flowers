@@ -55,22 +55,22 @@ export const footerContent: FooterContent = {
   socialIcons: [
     {
       name: "facebook",
-      src: "icons/footer/facebook.svg",
+      src: "/icons/footer/facebook.svg",
       url: ""
     },
     {
       name: "instagram",
-      src: "icons/footer/instagram.svg",
+      src: "/icons/footer/instagram.svg",
       url: ""
     },
     {
       name: "linkedIn",
-      src: "icons/footer/linkedin.svg",
+      src: "/icons/footer/linkedin.svg",
       url: ""
     },
     {
       name: "whatsapp",
-      src: "icons/footer/whatsapp.svg",
+      src: "/icons/footer/whatsapp.svg",
       url: ""
     }
   ],
