@@ -858,7 +858,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
       </div>
       <Button
         padded
-        url={`/filters?selectedOccasion=${occasion?.name || ""}`}
+        url={`/product-category/${occasion?.name || ""}`}
         className={styles["occasion-submit"]}
       >
         Send Flowers

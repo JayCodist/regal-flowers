@@ -16,18 +16,23 @@ import {
 } from "./types/Regal";
 
 export const allOccasionOptions: Option[] = [
-  { value: "ValentinDay", label: "Valentine's Day" },
   {
-    value: "Anniversary Flowers",
+    value:
+      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    label: "Valentine's Day"
+  },
+  {
+    value:
+      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
     label: "Romance, Birthdays & Anniversary"
   },
-  { value: "just-to-say", label: "Just To Say Hi, Sorry, Thank You" },
-  { value: "GetWellSoon", label: "Get Well Soon" },
+  { value: "just-to-say-bouquets", label: "Just To Say Hi, Sorry, Thank You" },
+  { value: "get-well-soon", label: "Get Well Soon" },
   { value: "bridal-bouquets", label: "Bridal" },
-  { value: "funeral-condolence", label: "Funeral & Condolence" },
-  { value: "selectedOccasion=all-occasions", label: "Events & Centerpiece" },
-  { value: "selectedOccasion=all-occasions", label: "Father's Day" },
-  { value: "selectedOccasion=all-occasions", label: "Mother's Day" }
+  { value: "funeral-amp-condolence", label: "Funeral & Condolence" },
+  { value: "event-amp-centerpiece", label: "Events & Centerpiece" },
+  { value: "fathers-day-flowers", label: "Father's Day" },
+  { value: "mothers-day-flowers", label: "Mother's Day" }
 ];
 
 export const defaultCurrency: AppCurrency = {
@@ -55,22 +60,22 @@ export const footerContent: FooterContent = {
   socialIcons: [
     {
       name: "facebook",
-      src: "icons/footer/facebook.svg",
+      src: "/icons/footer/facebook.svg",
       url: ""
     },
     {
       name: "instagram",
-      src: "icons/footer/instagram.svg",
+      src: "/icons/footer/instagram.svg",
       url: ""
     },
     {
       name: "linkedIn",
-      src: "icons/footer/linkedin.svg",
+      src: "/icons/footer/linkedin.svg",
       url: ""
     },
     {
       name: "whatsapp",
-      src: "icons/footer/whatsapp.svg",
+      src: "/icons/footer/whatsapp.svg",
       url: ""
     }
   ],
@@ -608,11 +613,11 @@ export const filtersCatgories: {
     options: [
       {
         name: "Regular",
-        tag: "regular"
+        tag: "Regular"
       },
       {
         name: "VIP",
-        tag: "vip"
+        tag: "VIP"
       }
     ],
     limit: 2,
@@ -694,7 +699,7 @@ export const filtersCatgories: {
       },
       {
         name: "Million Stars",
-        tag: "millionstar"
+        tag: "Million Stars"
       }
     ],
     limit: 3,

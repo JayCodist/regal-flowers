@@ -366,8 +366,23 @@ const Header: FunctionComponent = () => {
           >
             {links.map((link, index) => (
               <div className={styles.link} key={index}>
-                <Link href={link.url} key={link.title}>
-                  <a
+                {link.url ? (
+                  <Link href={link.url} key={link.title}>
+                    <a
+                      className={`flex center-align spaced ${styles.title}`}
+                      onClick={() => {
+                        setActiveNav(link.title);
+                        !link.children.length && setShowSidebar(false);
+                      }}
+                    >
+                      <strong>{link.title}</strong>
+                      {link.children.length > 0 && (
+                        <div className={[styles.arrow].join(" ")}></div>
+                      )}
+                    </a>
+                  </Link>
+                ) : (
+                  <div
                     className={`flex center-align spaced ${styles.title}`}
                     onClick={() => {
                       setActiveNav(link.title);
@@ -378,8 +393,9 @@ const Header: FunctionComponent = () => {
                     {link.children.length > 0 && (
                       <div className={[styles.arrow].join(" ")}></div>
                     )}
-                  </a>
-                </Link>
+                  </div>
+                )}
+
                 <div>
                   {link.children.length > 0 && (
                     <div
@@ -459,8 +475,13 @@ const Header: FunctionComponent = () => {
                     ></div>
                   )}
                 </div>
-                {activeNav === link.title && link.children.length > 0 && (
-                  <div className={styles["dropdown"]}>
+                {link.children.length > 0 && (
+                  <div
+                    className={[
+                      styles["dropdown"],
+                      activeNav === link.title && styles.active
+                    ].join(" ")}
+                  >
                     {link.subtitle && (
                       <p className={styles.subtitle}>{link.subtitle}</p>
                     )}
@@ -474,7 +495,7 @@ const Header: FunctionComponent = () => {
                         >
                           {child.url ? (
                             <Link href={child.url} key={index}>
-                              <a>
+                              <a onClick={() => setActiveNav("")}>
                                 {child.title && (
                                   <span
                                     className={[
@@ -501,7 +522,10 @@ const Header: FunctionComponent = () => {
                           )}
                           {child.children.map((grandChild, index) => (
                             <Link href={grandChild.url} key={index}>
-                              <a className={styles["grand-title"]}>
+                              <a
+                                className={styles["grand-title"]}
+                                onClick={() => setActiveNav("")}
+                              >
                                 {grandChild.title}
                               </a>
                             </Link>

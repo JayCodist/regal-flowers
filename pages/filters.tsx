@@ -67,7 +67,7 @@ const ProductsPage: FunctionComponent<{
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
-  const [pageTitle, setPageTitle] = useState("Flowers");
+  const [pageTitle, setPageTitle] = useState("");
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setproductsLoading] = useState(false);
@@ -180,17 +180,20 @@ const ProductsPage: FunctionComponent<{
   }, [page]);
 
   useEffect(() => {
-    const flowerTitle = occasions.find(
-      item => item.url === `/product-category/${categorySlug}`
-    )?.title;
-    const giftTitle = gifts.find(
-      item => item.url === `/product-category/${categorySlug}`
-    )?.title;
-    const title = flowerTitle || giftTitle;
+    if (isReady) {
+      const flowerTitle = occasions.find(
+        item => item.url === `/product-category/${categorySlug}`
+      )?.title;
+      const giftTitle = gifts.find(
+        item => item.url === `/product-category/${categorySlug}`
+      )?.title;
+      const title = flowerTitle || giftTitle;
 
-    if (title) {
-      setPageTitle(title);
+      if (title) {
+        setPageTitle(title);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySlug]);
 
   return (
@@ -282,7 +285,7 @@ const ProductsPage: FunctionComponent<{
                               )
                             : [...selectedFilter, child.tag];
                           router.push(
-                            `${router.pathname}?shopBy=${newFilters.join(",")}`
+                            `/filters?shopBy=${newFilters.join(",")}`
                           );
                         }}
                         text={child.name}
