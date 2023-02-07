@@ -140,7 +140,7 @@
 
     .dropdown {
       position: absolute;
-      top: 2rem;
+      top: -40rem;
       left: 0;
       background-color: white;
       width: max-content;
@@ -151,17 +151,19 @@
       max-width: 0;
       font-size: 1rem;
       min-width: fit-content;
+      transition: all 0.6s ease-out;
+
+      opacity: 0;
+      animation: slidein 0.6s ease-out forwards;
 
       &.active {
         opacity: 1;
         transform: translateY(0);
         max-width: 100vh;
         z-index: 10;
+        top: 2rem;
       }
-      transition: all 0.3s ease-out;
 
-      opacity: 0;
-      animation: slidein 0.3s ease-out forwards;
       .subtitle {
         color: #6b7280;
         font-weight: bold;

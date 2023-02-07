@@ -475,8 +475,13 @@ const Header: FunctionComponent = () => {
                     ></div>
                   )}
                 </div>
-                {activeNav === link.title && link.children.length > 0 && (
-                  <div className={styles["dropdown"]}>
+                {link.children.length > 0 && (
+                  <div
+                    className={[
+                      styles["dropdown"],
+                      activeNav === link.title && styles.active
+                    ].join(" ")}
+                  >
                     {link.subtitle && (
                       <p className={styles.subtitle}>{link.subtitle}</p>
                     )}
@@ -490,7 +495,7 @@ const Header: FunctionComponent = () => {
                         >
                           {child.url ? (
                             <Link href={child.url} key={index}>
-                              <a>
+                              <a onClick={() => setActiveNav("")}>
                                 {child.title && (
                                   <span
                                     className={[
@@ -517,7 +522,10 @@ const Header: FunctionComponent = () => {
                           )}
                           {child.children.map((grandChild, index) => (
                             <Link href={grandChild.url} key={index}>
-                              <a className={styles["grand-title"]}>
+                              <a
+                                className={styles["grand-title"]}
+                                onClick={() => setActiveNav("")}
+                              >
                                 {grandChild.title}
                               </a>
                             </Link>
