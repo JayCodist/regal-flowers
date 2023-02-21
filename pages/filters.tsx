@@ -221,7 +221,9 @@ const ProductsPage: FunctionComponent<{
                             styles["active"]
                         ].join(" ")}
                         onClick={() => {
-                          router.push(occasion.url);
+                          router.push(occasion.url, undefined, {
+                            scroll: false
+                          });
                         }}
                       >
                         <strong>
