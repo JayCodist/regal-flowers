@@ -647,7 +647,7 @@ export const filtersCatgories: {
     options: [
       {
         name: "Bouquets",
-        tag: "flower bouquet"
+        tag: "Bouquets"
       },
       {
         name: "Box Arrangements",

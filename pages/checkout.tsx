@@ -53,6 +53,7 @@ import {
   getPriceDisplay
 } from "../utils/helpers/type-conversions";
 import { Recipient } from "../utils/types/User";
+import { Stage } from "../utils/types/Core";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -81,7 +82,6 @@ const initialData: CheckoutFormData = {
   cardCVV: ""
 };
 
-type TabKey = "delivery" | "payment" | "done";
 type DeliverStage =
   | "sender-info"
   | "delivery-type"
@@ -91,21 +91,21 @@ type DeliverStage =
 
 interface Tab {
   tabTitle: string;
-  TabKey: TabKey;
+  TabKey: Stage;
 }
 
 const tabs: Tab[] = [
   {
     tabTitle: "Delivery",
-    TabKey: "delivery"
+    TabKey: 1
   },
   {
     tabTitle: "Payment",
-    TabKey: "payment"
+    TabKey: 2
   },
   {
     tabTitle: "Done",
-    TabKey: "done"
+    TabKey: 3
   }
 ];
 
@@ -122,7 +122,6 @@ const Checkout: FunctionComponent = () => {
   const [loading, setLoading] = useState(false);
   const [showPaypal, setShowPaypal] = useState(false);
 
-  const [activeTab, setActiveTab] = useState<TabKey>("delivery");
   const [deliveryStage, setDeliveryStage] = useState<DeliverStage>(
     "sender-info"
   );
@@ -263,7 +262,6 @@ const Checkout: FunctionComponent = () => {
     } else {
       setCurrentStage(2);
       setDeliveryStage("payment");
-      setActiveTab("payment");
     }
   };
 
@@ -303,16 +301,13 @@ const Checkout: FunctionComponent = () => {
       <div className={styles.loader}>
         <img src="/images/spinner.svg" alt="loader" className={styles.icon} />
         <span className={styles["load-intro"]}>
-          {activeTab === "delivery"
-            ? "Preparing your order. . ."
-            : "Loading. . ."}
+          {currentStage === 1 ? "Preparing your order. . ." : "Loading. . ."}
         </span>
       </div>
     );
   }
 
   const markAsPaid = () => {
-    setActiveTab("done");
     setIsPaid(true);
     setCurrentStage(3);
   };
@@ -1240,16 +1235,16 @@ const Checkout: FunctionComponent = () => {
                 key={index}
                 className={[
                   styles.tab,
-                  activeTab === tab.TabKey && styles.active
+                  currentStage === tab.TabKey && styles.active
                 ].join(" ")}
-                onClick={() => setActiveTab(tab.TabKey)}
+                // onClick={() => setActiveTab(tab.TabKey)}
               >
                 {tab.tabTitle}
               </div>
             ))}
           </div>
           <div className={styles.content}>
-            {activeTab === "delivery" && (
+            {currentStage === 1 && (
               <div>
                 {deliveryStage === "sender-info" && (
                   <div>
@@ -1826,7 +1821,7 @@ const Checkout: FunctionComponent = () => {
               </div>
             )}
 
-            {activeTab === "payment" && (
+            {currentStage === 2 && (
               <div className={styles["payment-tab"]}>
                 <div className={`${styles.border} padded`}>
                   <div className="flex between ">
@@ -1909,7 +1904,7 @@ const Checkout: FunctionComponent = () => {
                     ))}
                   </div>
                   <Button
-                    onClick={() => setActiveTab("done")}
+                    onClick={() => setCurrentStage(3)}
                     className="vertical-margin xl"
                     responsive
                   >
@@ -1931,7 +1926,7 @@ const Checkout: FunctionComponent = () => {
               </div>
             )}
 
-            {activeTab === "done" && (
+            {currentStage === 3 && (
               <div>
                 <div className="text-center">
                   <div className={styles["order-received"]}>

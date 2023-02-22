@@ -858,7 +858,8 @@ const FlowerDeliveryInput: FunctionComponent = () => {
       </div>
       <Button
         padded
-        url={`/product-category/${occasion?.name || ""}`}
+        url={`/product-category/${occasion?.name ||
+          "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"}`}
         className={styles["occasion-submit"]}
       >
         Send Flowers
