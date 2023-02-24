@@ -481,7 +481,7 @@ const ProductsPage: FunctionComponent<{
           <>
             <div className="flex between margin-bottom spaced">
               <span className={styles.title}>
-                Valentine Gifts to Include with Flowers
+                Gifts to Include with Flowers
               </span>
               {deviceType === "desktop" && (
                 <Button

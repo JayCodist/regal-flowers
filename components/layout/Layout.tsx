@@ -141,7 +141,8 @@ const Footer: FunctionComponent = () => {
             </div>
             <strong>Paypal</strong>
             <div className="flex spaced">
-              <span>Email:</span> <strong>regalflowerspaypal@gmail.com</strong>
+              <span>Email:</span>{" "}
+              <strong>paypalpayments@regalflowers.com.ng</strong>
             </div>
             <strong>Bitcoin</strong>
             <div className="">
@@ -150,29 +151,45 @@ const Footer: FunctionComponent = () => {
             </div>
           </div>
         </div>
+        <br />
         <div>
-          <strong className="normal-text">Our Locations</strong>
-          <br />
-
           <div className={styles.middle}>
             <div>
-              <strong>Lagos Head Office</strong>
-              <p>81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos.</p>
-              <p className={styles.grayed}>Open 24/7</p>
+              <strong className="normal-text">Lagos Locations</strong>
+              <div className={styles.branches}>
+                <div className={styles.branch}>
+                  <strong>Head Office</strong>
+                  <p>81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos.</p>
+                  <p className={styles.grayed}>Open 24/7</p>
+                </div>
+                <div className={styles.branch}>
+                  <strong>VI Branch</strong>
+                  <p>
+                    133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island,
+                    Lagos.
+                  </p>
+                  <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+                </div>
+                <div className={styles.branch}>
+                  <strong>Airport Branch</strong>
+                  <p>Muritala Muhammad Airport2, Ikeja, Lagos.</p>
+                  <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+                </div>
+              </div>
             </div>
             <div>
-              <strong>Lagos Branch</strong>
-              <p>
-                133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island,
-                Lagos.
-              </p>
-              <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+              <strong className="normal-text">Abuja Location</strong>
+              <div
+                className={deviceType === "mobile" ? "margin-left spaced" : ""}
+              >
+                <strong>Wuse 2 Branch</strong>
+                <p>
+                  5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja.
+                </p>
+                <p className={styles.grayed}>Open 24/7</p>
+              </div>
             </div>
-            <div>
-              <strong>Abuja</strong>
-              <p>5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja.</p>
-              <p className={styles.grayed}>Open 24/7</p>
-            </div>
+
             <div id={styles.newsletter}>
               <strong>Subscribe to Newsletter</strong>
               <div className="flex spaced">

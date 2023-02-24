@@ -53,8 +53,8 @@ const LandingPage: FunctionComponent<{
       >
         <div className="hero-content flex column center center-align">
           <h1 className={styles.title}>
-            They Deserve Regal Flowers. Premium Same Day Flower Delivery in
-            Lagos & Abuja, Nigeria
+            They Deserve Regal Flowers.
+            <br /> Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria
           </h1>
           <FlowerDeliveryInput />
         </div>
@@ -83,8 +83,8 @@ const LandingPage: FunctionComponent<{
               <FlowerCard
                 key={flower.key}
                 image={flower.images[0]?.src || ""}
-                name={flower.name}
-                subTitle={flower.details}
+                name={flower.name.split("–")[0]}
+                subTitle={flower.name.split("–")[1]}
                 price={flower.price}
                 url={`/product/${flower.slug}`}
               />
@@ -314,9 +314,7 @@ const LandingPage: FunctionComponent<{
           </div>
 
           <div className="flex between">
-            <h2 className="featured-title">
-              Valentine Gifts to Include with Flowers
-            </h2>
+            <h2 className="featured-title">Gifts to Include with Flowers</h2>
             {deviceType === "desktop" && (
               <Button
                 url="/filters?selectedOccasion=all-occasions"
@@ -655,7 +653,7 @@ const LandingPage: FunctionComponent<{
               An online flower shop that would precisely tick all the right
               boxes.
             </p>
-            <p className="title small bold vertical-margin">
+            <p className="title small bold vertical-margin xl margin-bottom spaced">
               {aboutUsContent.openingHour.title}
             </p>
             <p className="normal-text">
@@ -677,7 +675,7 @@ const LandingPage: FunctionComponent<{
             </p>
           </div>
           <div>
-            <p className="title small bold margin-bottom">
+            <p className="title small bold vertical-margin xl margin-bottom spaced">
               {aboutUsContent.reputation.title}
             </p>
             <p className="normal-text">
@@ -698,7 +696,7 @@ const LandingPage: FunctionComponent<{
               definitely say Regal flowers is your plug for reputable and
               premium fresh flowers in Nigeria.
             </p>
-            <p className="title small bold vertical-margin">
+            <p className="title small bold vertical-margin xl margin-bottom spaced">
               {aboutUsContent.deliveryTime.title}
             </p>
             <p className="normal-text">
@@ -720,7 +718,7 @@ const LandingPage: FunctionComponent<{
               <br /> <br />
               In essence, we deliver EVERYWHERE in Lagos and Abuja
             </p>
-            <p className="title small bold vertical-margin">
+            <p className="title small bold vertical-margin xl margin-bottom spaced">
               {aboutUsContent.budget.title}
             </p>
             <p className="normal-text">
@@ -851,7 +849,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
           onChange={setDeliveryDate}
           format="D MMM YYYY"
           className={styles["occasion-date"]}
-          placeholder="Pickup/Delivery Date"
+          placeholder="Delivery Date"
           dropdownAlignment={deviceType === "mobile" ? "right" : "left"}
           iconAtLeft
         />

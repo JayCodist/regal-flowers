@@ -61,17 +61,17 @@ export const footerContent: FooterContent = {
     {
       name: "facebook",
       src: "/icons/footer/facebook.svg",
-      url: ""
+      url: "http://facebook.com/RegalFlowersNG/"
     },
     {
       name: "instagram",
       src: "/icons/footer/instagram.svg",
-      url: ""
+      url: "https://instagram.com/regalflowers.com.ng"
     },
     {
       name: "linkedIn",
       src: "/icons/footer/linkedin.svg",
-      url: ""
+      url: "https://www.linkedin.com/company/regalflowers-com-ng/"
     },
     {
       name: "whatsapp",
@@ -829,29 +829,29 @@ export const links: AppLink[] = [
   //     }
   //   ]
   // },
-  {
-    title: "Valentine",
-    children: [
-      {
-        title: "Flowers",
-        children: [],
-        url:
-          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-      },
-      {
-        title: "Vip Flowers",
-        children: [],
-        url: "/vip"
-      },
-      {
-        title: "Gifts",
-        children: [],
-        url:
-          "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
-      }
-    ],
-    url: ""
-  },
+  // {
+  //   title: "Valentine",
+  //   children: [
+  //     {
+  //       title: "Flowers",
+  //       children: [],
+  //       url:
+  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+  //     },
+  //     {
+  //       title: "Vip Flowers",
+  //       children: [],
+  //       url: "/vip"
+  //     },
+  //     {
+  //       title: "Gifts",
+  //       children: [],
+  //       url:
+  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+  //     }
+  //   ],
+  //   url: ""
+  // },
   {
     url: "",
     title: "Occasions",
@@ -1092,7 +1092,7 @@ export const links: AppLink[] = [
   },
   {
     url: "/vip",
-    title: "VIP",
+    title: "VIP Section",
     children: []
   },
 
@@ -1159,7 +1159,7 @@ export const locationHeadlines: RegalContent = {
 };
 
 export const bestSellers: RegalContent = {
-  general: "Bestselling Valentine Flowers in Lagos & Abuja, Nigeria",
+  general: "Bestselling Flowers in Lagos & Abuja, Nigeria",
   lagos: "Bestselling Flowers in Lagos",
   abuja: "Bestselling Flowers in Abuja",
   "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"

@@ -595,6 +595,9 @@ button {
   background-attachment: fixed;
   background-size: 100vw 31rem;
   background-position: 0 6rem;
+  @media (max-width: 600px) {
+    background-size: 100vw 21rem;
+  }
 }
 .hero-content {
   position: relative;
@@ -613,6 +616,10 @@ button {
     position: relative;
     z-index: 1;
     min-height: 375rem;
+
+    @media (max-width: 600px) {
+      margin-top: -7rem;
+    }
 
     &:before {
       content: "";
@@ -640,7 +647,6 @@ button {
       font-size: 2rem;
 
       @media (max-width: 600px) {
-        font-size: 1.5rem;
         text-align: center;
         margin: 1rem auto;
       }
