@@ -999,7 +999,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Bouquets",
-            url: "/filters?shopBy=flower bouquet",
+            url: "/filters?shopBy=Bouquets",
             children: []
           },
           {
@@ -1009,7 +1009,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Others",
-            url: "/filters?shopBy=others",
+            url: "/filters?shopBy=Others",
             children: []
           }
         ]

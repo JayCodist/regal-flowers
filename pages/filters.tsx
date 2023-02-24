@@ -91,7 +91,7 @@ const ProductsPage: FunctionComponent<{
     setLastProductEleRef
   ] = useState<HTMLAnchorElement | null>(null);
 
-  const [page] = useScrollHandler({
+  const [page, setPage] = useScrollHandler({
     node: lastProductEleRef
   });
 
@@ -122,6 +122,7 @@ const ProductsPage: FunctionComponent<{
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
+    router.push("filters?shopBy=Regular");
   };
 
   const fetchProductCategory = async (shouldAppend?: boolean) => {
@@ -165,6 +166,7 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
+      setPage(1);
       fetchProductCategory();
     }
 
@@ -427,7 +429,7 @@ const ProductsPage: FunctionComponent<{
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
                 : `${pageTitle} ${
-                    !giftMap[categorySlug || ""] ? "Flowers" : ""
+                    !giftMap[categorySlug || ""] ? "All Ocassion Flowers" : ""
                   }`}
             </h1>
 
