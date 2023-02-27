@@ -737,6 +737,14 @@
       display: flex;
       justify-content: space-between;
 
+      & > div {
+        margin-right: 0.5rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
       @media (max-width: 650px) {
         flex-direction: column;
         margin-left: 1.2rem;
