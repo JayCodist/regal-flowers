@@ -82,7 +82,7 @@ export const footerContent: FooterContent = {
   quickLinks: [
     {
       title: "Occasions",
-      url: "/filters?selectedOccasion=Anniversary%20Flowers"
+      url: "/product-category/all"
     },
     { title: "VIP Section", url: "/" },
     { title: "Contact Us", url: "/" },
@@ -221,21 +221,18 @@ export const regalFeatures: Service[] = [
 export const regalOccasions: Occasion[] = [
   {
     title: "Love, Birthdays & Anniversary Flowers",
-    url: `/filters?selectedOcassion=${encodeURIComponent(
-      "Romance, Birthdays & Anniversary"
-    )}`,
+    url:
+      "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
     image: "/images/occasions-love-bday.png"
   },
   {
     title: "Flowers to say Hi, Sorry, Thank You etc",
-    url: `/filters?selectedOcassion=${encodeURIComponent(
-      "Just To Say Hi, Sorry, Thank You"
-    )}`,
+    url: "/product-category/just-to-say-bouquets",
     image: "/images/occasions-sorry-thanks.png"
   },
   {
     title: "Bridal Flowers",
-    url: `/filters?selectedOcassion=${encodeURIComponent("Bridal")}`,
+    url: "/product-category/bridal-bouquets",
     image: "/images/occasions-bridal.png"
   }
 ];
@@ -596,7 +593,7 @@ export const occasions: { title: string; url: string; category?: string }[] = [
   },
   {
     title: "All Occasions",
-    url: ""
+    url: "/product-category/all"
   }
 ];
 
@@ -896,7 +893,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/filters?selectedOccasion=Gift Packs",
+            url: "/product-category/gift-packs",
             children: []
           }
         ]
@@ -917,7 +914,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/filters?selectedOccasion=Gift Packs",
+            url: "/product-category/gift-packs",
             children: []
           }
         ]
@@ -999,17 +996,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Bouquets",
-            url: "/filters?shopBy=flower bouquet",
+            url: "/product-category/all?shopBy=bouquets",
             children: []
           },
           {
             title: "Box Arrangements",
-            url: "/filters?shopBy=Box Arrangements",
+            url: "/product-category/all?shopBy=box+arrangements",
             children: []
           },
           {
             title: "Others",
-            url: "/filters?shopBy=others",
+            url: "/product-category/all?shopBy=others",
             children: []
           }
         ]
@@ -1020,17 +1017,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Fresh Flowers",
-            url: "/filters?shopBy=Fresh Flowers",
+            url: "/product-category/all?shopBy=fresh+flowers",
             children: []
           },
           {
             title: "Forever Roses",
-            url: "/filters?shopBy=Forever Roses",
+            url: "/product-category/all?shopBy=forever+roses",
             children: []
           },
           {
             title: "Plants",
-            url: "/filters?shopBy=flowers",
+            url: "/product-category/all?shopBy=flowers",
             children: []
           }
         ]
@@ -1041,7 +1038,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "View Bundled Products",
-            url: "/filters?shopBy=Forever Roses - Preserved Roses",
+            url: "/product-category/all?shopBy=flowers",
             children: []
           }
         ]
@@ -1052,7 +1049,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Same Day Delivery",
-            url: "/filters?shopBy=Same Day Delivery",
+            url: "/product-category/all?shopBy=same+day+delivery",
             children: []
           }
         ]
@@ -1063,27 +1060,27 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Roses",
-            url: "/filters?shopBy=Roses",
+            url: "/product-category/all?shopBy=roses",
             children: []
           },
           {
             title: "Chrysanthemums",
-            url: "/filters?shopBy=chrysanthemums",
+            url: "/product-category/all?shopBy=chrysanthemums",
             children: []
           },
           {
             title: "Lilies",
-            url: "/filters?shopBy=flowers",
+            url: "/product-category/all?shopBy=lilies",
             children: []
           },
           {
             title: "Million Stars",
-            url: "/filters?shopBy=millionstar",
+            url: "/filters?shopBy=million+stars",
             children: []
           },
           {
             title: "See All",
-            url: "#",
+            url: "/product-category/all",
             children: []
           }
         ]

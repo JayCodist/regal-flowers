@@ -29,10 +29,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     console.error("Unable to fetch products by slugs: ", message);
   }
   return {
-    paths:
+    paths: (
       data?.map(category => ({
         params: { categorySlug: category.slug }
-      })) || [],
+      })) || []
+    ).concat({ params: { categorySlug: "all" } }),
     fallback: false // true or 'blocking'
   };
 };

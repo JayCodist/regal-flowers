@@ -1049,7 +1049,7 @@ const Checkout: FunctionComponent = () => {
                   )}
                   <Button
                     className={styles["shopping-btn"]}
-                    onClick={() => router.push("/filters")}
+                    onClick={() => router.push("/product-category/bouquets")}
                   >
                     Continue Shopping
                   </Button>
@@ -2034,7 +2034,7 @@ const Checkout: FunctionComponent = () => {
                   <Button
                     responsive
                     className={styles["shopping-btn"]}
-                    onClick={() => router.push("/filters")}
+                    onClick={() => router.push("/product-category/bouquets")}
                   >
                     Continue Shopping
                   </Button>

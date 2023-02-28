@@ -277,7 +277,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
         <div className={`margin-bottom spaced ${styles["flowers-wrapper"]}`}>
           <span className={styles.title}>Featured Flowers</span>
           <Button
-            url="/filters?selectedOccasion=all-occasions"
+            url="/product-category/all"
             className="flex spaced center center-align"
             type="transparent"
           >

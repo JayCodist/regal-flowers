@@ -257,8 +257,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
         <div className={styles.padding}>
           <div className="flex center-align between">
-            <div>
-              <h1 className="title">{product.name.split("–")[0]}</h1>
+            <div className="margin-right spaced">
+              <h1 className="title margin-bottom spaced">
+                {product.name.split("–")[0]}
+              </h1>
               <p>{product.name}</p>
             </div>
             <div className="bold primary-color center">
@@ -268,7 +270,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </p>
             </div>
           </div>
-          <div className="vertical-margin">
+          <div className={styles["temporary-notes"]}>
             {product.temporaryNotes &&
               product.temporaryNotes?.length > 0 &&
               product.temporaryNotes.map((note, index) => (

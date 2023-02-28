@@ -37,6 +37,7 @@ const giftMap: Record<string, string> = {
   "cakes-and-cupcakes": "cakes-and-cupcakes",
   "teddy-bears": "teddy-bears",
   "wine-and-champagne": "wine-and-champagne",
+  "gift-packs": "gift-packs",
   perfumes: "perfumes",
   balloon: "balloon"
 };
@@ -127,7 +128,7 @@ const ProductsPage: FunctionComponent<{
   const fetchProductCategory = async (shouldAppend?: boolean) => {
     products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
     const filterParams = {
-      category: [(categorySlug as string) || ""],
+      category: [categorySlug !== "all" ? categorySlug || "" : ""],
       tags: [(shopBy as string) || ""],
       productClass
     };
@@ -287,7 +288,9 @@ const ProductsPage: FunctionComponent<{
                               )
                             : [...selectedFilter, child.tag];
                           router.push(
-                            `/filters?shopBy=${newFilters.join(",")}`
+                            `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                              ","
+                            )}`
                           );
                         }}
                         text={child.name}
@@ -485,7 +488,7 @@ const ProductsPage: FunctionComponent<{
               </span>
               {deviceType === "desktop" && (
                 <Button
-                  url="/filters?selectedOccasion=all-occasions"
+                  url="/product-category/gift-packs"
                   className="flex spaced center center-align"
                   type="transparent"
                 >
@@ -512,7 +515,7 @@ const ProductsPage: FunctionComponent<{
             </div>
             {deviceType === "mobile" && (
               <Button
-                url="/filters?selectedOccasion=all-occasions"
+                url="/product-category/gift-packs"
                 type="accent"
                 minWidth
                 className={styles["see-all"]}
@@ -627,7 +630,7 @@ const ProductsPage: FunctionComponent<{
               </p>
               <p className="normal-text">
                 We offer fast and same-day delivery of{" "}
-                <Link href="/filters?selectedOccasion=just-to-say">
+                <Link href="/product-category/just-to-say-bouquets">
                   <a className={styles.red}>flower bouquets</a>
                 </Link>{" "}
                 and gifts everywhere in Lagos and Abuja. <br /> <br />
@@ -649,31 +652,31 @@ const ProductsPage: FunctionComponent<{
               </p>
               <p className="normal-text">
                 We stock flowers for various occasions such as{" "}
-                <Link href="/filters?selectedOccasion=just-to-say">
+                <Link href="/product-category/just-to-say-bouquets">
                   <a className={styles.red}> Birthday Flowers</a>
                 </Link>
                 ,
-                <Link href="/filters?selectedOccasion=just-to-say">
+                <Link href="/product-category/just-to-say-bouquets">
                   <a className={styles.red}> Romantic Flowers</a>
                 </Link>
                 ,{" "}
-                <Link href="/filters?selectedOccasion=Anniversary%20Flowers">
+                <Link href="/product-category/anniversary-flowers">
                   <a className={styles.red}> Anniversary Flowers</a>
                 </Link>
                 , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
-                <Link href="/filters?selectedOccasion=funeral-condolence">
+                <Link href="/product-category/funeral-amp-condolence">
                   <a className={styles.red}> Funeral Wreaths</a>
                 </Link>{" "}
                 ,{" "}
-                <Link href="/filters?selectedOccasion=funeral-condolence">
+                <Link href="/product-category/funeral-amp-condolence">
                   <a className={styles.red}> Condolence Flowers</a>
                 </Link>{" "}
                 ,{" "}
-                <Link href="/filters?selectedOccasion=bridal-bouquets">
+                <Link href="/product-category/bridal-bouquets">
                   <a className={styles.red}>Bridal Bouquets</a>
                 </Link>{" "}
                 , and of course,
-                <Link href="/filters?selectedOccasion=Anniversary%20Flowers">
+                <Link href="/product-category/anniversary-flowers">
                   <a className={styles.red}> Valentine’s Day flowers</a>
                 </Link>{" "}
                 available
