@@ -610,11 +610,11 @@ export const filtersCatgories: {
     options: [
       {
         name: "Regular",
-        tag: "Regular"
+        tag: "regular"
       },
       {
         name: "VIP",
-        tag: "VIP"
+        tag: "vip"
       }
     ],
     limit: 2,
@@ -625,11 +625,11 @@ export const filtersCatgories: {
     options: [
       {
         name: "Fresh Flowers",
-        tag: "Fresh Flowers"
+        tag: "fresh flowers"
       },
       {
         name: "Forever Roses",
-        tag: "Forever Roses"
+        tag: "forever roses"
       },
       {
         name: "Plants",
@@ -644,11 +644,11 @@ export const filtersCatgories: {
     options: [
       {
         name: "Bouquets",
-        tag: "Bouquets"
+        tag: "bouquets"
       },
       {
         name: "Box Arrangements",
-        tag: "Box Arrangements"
+        tag: "box arrangements"
       },
       {
         name: "Others",
@@ -662,7 +662,7 @@ export const filtersCatgories: {
     options: [
       {
         name: "Bundled Products",
-        tag: "flowers"
+        tag: "bundled"
       }
     ],
     limit: 3,
@@ -673,7 +673,7 @@ export const filtersCatgories: {
     options: [
       {
         name: "Same Day Delivery",
-        tag: "Same Day Delivery"
+        tag: "same day delivery"
       }
     ],
     limit: 3,
@@ -684,7 +684,7 @@ export const filtersCatgories: {
     options: [
       {
         name: "Roses",
-        tag: "Roses"
+        tag: "roses"
       },
       {
         name: "Chrysanthemums",
@@ -696,7 +696,7 @@ export const filtersCatgories: {
       },
       {
         name: "Million Stars",
-        tag: "Million Stars"
+        tag: "million stars"
       }
     ],
     limit: 3,

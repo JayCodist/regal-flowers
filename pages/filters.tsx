@@ -71,7 +71,7 @@ const ProductsPage: FunctionComponent<{
   const [pageTitle, setPageTitle] = useState("");
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
-  const [productsLoading, setproductsLoading] = useState(false);
+  const [productsLoading, setProductsLoading] = useState(false);
   const [todayDate, setTodayDate] = useState<Dayjs | null>(null);
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
@@ -123,10 +123,17 @@ const ProductsPage: FunctionComponent<{
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
+    router.push(`/product-category/${categorySlug}`, undefined, {
+      scroll: false
+    });
   };
 
   const fetchProductCategory = async (shouldAppend?: boolean) => {
-    products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
+    if (shouldAppend) {
+      setInfiniteLoading(true);
+    } else {
+      setProductsLoading(true);
+    }
     const filterParams = {
       category: [categorySlug !== "all" ? categorySlug || "" : ""],
       tags: [(shopBy as string) || ""],
@@ -138,6 +145,8 @@ const ProductsPage: FunctionComponent<{
     };
 
     const response = await getProductsByCategory(params);
+    setProductsLoading(false);
+    setInfiniteLoading(false);
     if (response.error) {
       notify("error", `Unable to fetch product category: ${response.message}`);
     } else {
@@ -149,9 +158,6 @@ const ProductsPage: FunctionComponent<{
           : (response.data as Product[])
       );
     }
-    products.length === 0
-      ? setproductsLoading(false)
-      : setInfiniteLoading(false);
   };
 
   useEffect(() => {
@@ -170,7 +176,7 @@ const ProductsPage: FunctionComponent<{
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedFilter, selectedOccasion, router]);
+  }, [categorySlug, selectedOccasion, router]);
 
   useEffect(() => {
     if (isReady) {
@@ -287,10 +293,16 @@ const ProductsPage: FunctionComponent<{
                                 _filter => _filter !== child.tag
                               )
                             : [...selectedFilter, child.tag];
+                          setSelectedFilter(
+                            newFilters.filter(Boolean) as string[]
+                          );
+                          setProductsLoading(true);
                           router.push(
                             `/product-category/${categorySlug}?shopBy=${newFilters.join(
                               ","
-                            )}`
+                            )}`,
+                            undefined,
+                            { scroll: false }
                           );
                         }}
                         text={child.name}
@@ -387,10 +399,16 @@ const ProductsPage: FunctionComponent<{
                                     _filter => _filter !== child.tag
                                   )
                                 : [...selectedFilter, child.tag];
+                              setSelectedFilter(
+                                newFilters.filter(Boolean) as string[]
+                              );
+                              setProductsLoading(true);
                               router.push(
                                 `${router.pathname}?shopBy=${newFilters.join(
                                   ","
-                                )}`
+                                )}`,
+                                undefined,
+                                { scroll: false }
                               );
                             }}
                             text={child.name}
@@ -434,13 +452,11 @@ const ProductsPage: FunctionComponent<{
                   }`}
             </h1>
 
-            <div className={`${styles.products}`}>
+            <div className={styles.products}>
               {productsLoading && (
-                <img
-                  src="/images/spinner.svg"
-                  alt="spinner"
-                  className="generic-icon xxl spinner"
-                />
+                <div className={styles.spinner}>
+                  <img src="/images/spinner.svg" alt="spinner" />
+                </div>
               )}
               {products?.map((product, index, arr) => (
                 <FlowerCard
