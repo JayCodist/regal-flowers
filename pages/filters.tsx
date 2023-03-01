@@ -217,9 +217,10 @@ const ProductsPage: FunctionComponent<{
                       <a
                         className={[
                           styles["occasion"],
-                          categorySlug !==
-                            "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears" &&
-                            categorySlug === occasion.url.split("/")[2] &&
+                          giftMap[categorySlug || ""] &&
+                            styles["gift-occasion"],
+
+                          categorySlug === occasion.url.split("/")[2] &&
                             styles["active"]
                         ].join(" ")}
                         onClick={() => {
@@ -259,71 +260,73 @@ const ProductsPage: FunctionComponent<{
         className={`${styles["content"]} flex ${deviceType === "desktop" &&
           "spaced-xl"}`}
       >
-        <div className={styles["left-side"]}>
-          <div className="vertical-margin spaced">
-            <span className={`bold margin-right ${styles["sub-title"]}`}>
-              Filters ({selectedFilter.length})
-            </span>
-            <button className="primary-color" onClick={handleClearFIlter}>
-              Clear Filters
-            </button>
-          </div>
+        {!giftMap[categorySlug || ""] && (
+          <div className={styles["left-side"]}>
+            <div className="vertical-margin spaced">
+              <span className={`bold margin-right ${styles["sub-title"]}`}>
+                Filters ({selectedFilter.length})
+              </span>
+              <button className="primary-color" onClick={handleClearFIlter}>
+                Clear Filters
+              </button>
+            </div>
 
-          <div className={styles["filters-sidebar"]}>
-            {filterCategories.map((filter, index) => (
-              <div key={index} className="vertical-margin spaced">
-                <p className="bold vertical-margin spaced">{filter.name}</p>
-                <div>
-                  {(filter.viewMore
-                    ? filter.options
-                    : filter.options.slice(0, filter.limit)
-                  ).map((child, i) => (
-                    <div key={i} className="margin-bottom">
-                      <Checkbox
-                        onChange={() => {
-                          const newFilters = selectedFilter.includes(
-                            child.tag || ""
-                          )
-                            ? selectedFilter.filter(
-                                _filter => _filter !== child.tag
-                              )
-                            : [...selectedFilter, child.tag];
-                          router.push(
-                            `/filters?shopBy=${newFilters.join(",")}`
-                          );
-                        }}
-                        text={child.name}
-                        checked={selectedFilter.includes(child.tag || "")}
-                      />
-                    </div>
-                  ))}
+            <div className={styles["filters-sidebar"]}>
+              {filterCategories.map((filter, index) => (
+                <div key={index} className="vertical-margin spaced">
+                  <p className="bold vertical-margin spaced">{filter.name}</p>
+                  <div>
+                    {(filter.viewMore
+                      ? filter.options
+                      : filter.options.slice(0, filter.limit)
+                    ).map((child, i) => (
+                      <div key={i} className="margin-bottom">
+                        <Checkbox
+                          onChange={() => {
+                            const newFilters = selectedFilter.includes(
+                              child.tag || ""
+                            )
+                              ? selectedFilter.filter(
+                                  _filter => _filter !== child.tag
+                                )
+                              : [...selectedFilter, child.tag];
+                            router.push(
+                              `/filters?shopBy=${newFilters.join(",")}`
+                            );
+                          }}
+                          text={child.name}
+                          checked={selectedFilter.includes(child.tag || "")}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  {filter.limit < filter.options.length && (
+                    <button
+                      className={styles["btn-view"]}
+                      onClick={() => {
+                        setFilterCategories(prev =>
+                          prev.map((item, _index) => {
+                            if (index === _index) {
+                              return {
+                                ...item,
+                                viewMore: !item.viewMore
+                              };
+                            }
+                            return item;
+                          })
+                        );
+                      }}
+                    >
+                      {!filter.viewMore ? "View More" : "View Less"}
+                    </button>
+                  )}
                 </div>
-                {filter.limit < filter.options.length && (
-                  <button
-                    className={styles["btn-view"]}
-                    onClick={() => {
-                      setFilterCategories(prev =>
-                        prev.map((item, _index) => {
-                          if (index === _index) {
-                            return {
-                              ...item,
-                              viewMore: !item.viewMore
-                            };
-                          }
-                          return item;
-                        })
-                      );
-                    }}
-                  >
-                    {!filter.viewMore ? "View More" : "View Less"}
-                  </button>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
         <div className={styles["product-wrapper"]}>
-          <div className="flex between">
+          <div className="flex between block">
             <div className={styles["date-wrapper"]}>
               <div>
                 <span>Delivery Date: </span>
@@ -337,18 +340,21 @@ const ProductsPage: FunctionComponent<{
                 />
               </div>
 
-              <div>
+              <div className="input-group half-width">
                 <span>Sort: </span>
                 <Select
                   options={sortOptions}
                   value={sort}
                   onSelect={value => setSort(value as string)}
                   placeholder="Default"
+                  className={styles["sort"]}
+                  // responsive
                 />
               </div>
             </div>
 
             <div className={styles["filter-mobile"]} ref={filterDropdownRef}>
+              <span>Filter: </span>
               <button
                 className={styles.btn}
                 onClick={() => setShouldShowFilter(!shouldShowFilter)}
@@ -429,7 +435,7 @@ const ProductsPage: FunctionComponent<{
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
                 : `${pageTitle} ${
-                    !giftMap[categorySlug || ""] ? "All Ocassion Flowers" : ""
+                    !giftMap[categorySlug || ""] ? "All Occasion Flowers" : ""
                   }`}
             </h1>
 
@@ -452,7 +458,11 @@ const ProductsPage: FunctionComponent<{
                   url={`/product/${product.slug}`}
                   // mode="three-x-grid"
                   mode={`${
-                    deviceType === "desktop" ? "three-x-grid" : "two-x-grid"
+                    deviceType === "desktop"
+                      ? giftMap[categorySlug || ""]
+                        ? "four-x-grid"
+                        : "three-x-grid"
+                      : "two-x-grid"
                   }`}
                   ref={
                     index === arr.length - 1

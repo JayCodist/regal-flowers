@@ -209,9 +209,13 @@ const Footer: FunctionComponent = () => {
         </div>
       </div>
       <div className={styles.bottom}>
-        <p>© 2022 Regal Flowers.</p>
+        <p>© 2023 Regal Flowers.</p>
 
-        <div className={`flex between spaced-xl ${styles["payment-icon"]}`}>
+        <div
+          className={`flex between ${
+            deviceType === "desktop" ? "spaced-xl" : "spaced"
+          } ${styles["payment-icon"]}`}
+        >
           <img
             src="/icons/visa.svg"
             alt="visa"

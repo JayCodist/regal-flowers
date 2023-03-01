@@ -15,6 +15,7 @@ import {
   aboutUsContent,
   featuredSlugs,
   bestSellers,
+  bestSellers2,
   popularSections,
   mostLoved,
   allOccasionOptions,
@@ -63,6 +64,45 @@ const LandingPage: FunctionComponent<{
         <div className="featured-content">
           <div className="flex between">
             <h2 className="featured-title">{bestSellers[locationName]}</h2>
+            {deviceType === "desktop" && (
+              <Button
+                url="/filters?selectedOccasion=all-occasions"
+                className="flex spaced center center-align"
+                type="transparent"
+              >
+                <h3 className="red margin-right">See All</h3>
+                <img
+                  alt="arrow"
+                  className="generic-icon xsmall"
+                  src="/icons/arrow-right.svg"
+                />
+              </Button>
+            )}
+          </div>
+          <div className={[styles.section, styles.wrap].join(" ")}>
+            {featuredFlowers.map(flower => (
+              <FlowerCard
+                key={flower.key}
+                image={flower.images[0]?.src || ""}
+                name={flower.name.split("–")[0]}
+                subTitle={flower.name.split("–")[1]}
+                price={flower.price}
+                url={`/product/${flower.slug}`}
+              />
+            ))}
+          </div>
+          {deviceType === "mobile" && (
+            <Button
+              url="/filters?selectedOccasion=all-occasions"
+              type="accent"
+              minWidth
+              className={styles["see-all"]}
+            >
+              <h3 className="red margin-right">See All</h3>
+            </Button>
+          )}
+          <div className="flex between">
+            <h2 className="featured-title">{bestSellers2[locationName]}</h2>
             {deviceType === "desktop" && (
               <Button
                 url="/filters?selectedOccasion=all-occasions"

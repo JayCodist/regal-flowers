@@ -221,21 +221,21 @@ export const regalFeatures: Service[] = [
 export const regalOccasions: Occasion[] = [
   {
     title: "Love, Birthdays & Anniversary Flowers",
-    url: `/filters?selectedOcassion=${encodeURIComponent(
+    url: `/filters?selectedOccasion=${encodeURIComponent(
       "Romance, Birthdays & Anniversary"
     )}`,
     image: "/images/occasions-love-bday.png"
   },
   {
     title: "Flowers to say Hi, Sorry, Thank You etc",
-    url: `/filters?selectedOcassion=${encodeURIComponent(
+    url: `/filters?selectedOccasion=${encodeURIComponent(
       "Just To Say Hi, Sorry, Thank You"
     )}`,
     image: "/images/occasions-sorry-thanks.png"
   },
   {
     title: "Bridal Flowers",
-    url: `/filters?selectedOcassion=${encodeURIComponent("Bridal")}`,
+    url: `/filters?selectedOccasion=${encodeURIComponent("Bridal")}`,
     image: "/images/occasions-bridal.png"
   }
 ];
@@ -554,6 +554,11 @@ export const gifts: { title: string; url: string; category?: string }[] = [
     category: "Teddy Bears"
   },
   {
+    title: "Balloons",
+    url: "/product-category/balloon",
+    category: "Balloons"
+  },
+  {
     title: "Wine and Champagne",
     url: "/product-category/wine-and-champagne",
     category: "Wine and Champagne"
@@ -563,11 +568,16 @@ export const gifts: { title: string; url: string; category?: string }[] = [
     url: "/product-category/perfumes",
     category: "perfumes"
   },
-
   {
-    title: "Balloons",
-    url: "/product-category/balloon",
-    category: "Balloons"
+    title: "Giftsets",
+    url: "/product-category/gift-packs",
+    category: "Giftsets"
+  },
+  {
+    title: "All Gifts",
+    url:
+      "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
+    category: "All Gifts"
   }
 ];
 
@@ -1116,6 +1126,11 @@ export const links: AppLink[] = [
         children: []
       },
       {
+        url: "/product-category/balloon",
+        title: "Balloons",
+        children: []
+      },
+      {
         url: "/product-category/wine-and-champagne",
         title: "Wine and Champagne",
         children: []
@@ -1129,11 +1144,6 @@ export const links: AppLink[] = [
         url:
           "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
         title: "Giftsets",
-        children: []
-      },
-      {
-        url: "/product-category/balloon",
-        title: "Balloons",
         children: []
       }
     ]
@@ -1159,7 +1169,14 @@ export const locationHeadlines: RegalContent = {
 };
 
 export const bestSellers: RegalContent = {
-  general: "Bestselling Flowers in Lagos & Abuja, Nigeria",
+  general: "Bestselling Birthday & Anniversary Flowers in Lagos & Abuja",
+  lagos: "Bestselling Flowers in Lagos",
+  abuja: "Bestselling Flowers in Abuja",
+  "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"
+};
+
+export const bestSellers2: RegalContent = {
+  general: "Bestselling Romance or Just to Say Flowers in Lagos & Abuja",
   lagos: "Bestselling Flowers in Lagos",
   abuja: "Bestselling Flowers in Abuja",
   "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"

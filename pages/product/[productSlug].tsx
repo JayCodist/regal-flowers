@@ -362,7 +362,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name} |{" "}
+                        {variant.name.slice(1)} |{" "}
                         {getPriceDisplay(variant.price, currency)}
                       </span>
                     ))}
@@ -373,23 +373,25 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 <div className={styles["size-wrapper"]}>
                   {product.variants
                     ?.filter(variant => variant.class === "vip")
-                    .map((variant, index) => (
-                      <span
-                        key={index}
-                        className={[
-                          styles.size,
-                          selectedSize === variant.name &&
-                            styles["selected-size"]
-                        ].join(" ")}
-                        onClick={() => {
-                          setSelectedSize(variant.name);
-                          setProductPrice(variant.price);
-                        }}
-                      >
-                        {variant.name.slice(1)} |
-                        {getPriceDisplay(variant.price, currency)}
-                      </span>
-                    ))}
+                    .map((variant, index) => {
+                      return (
+                        <span
+                          key={index}
+                          className={[
+                            styles.size,
+                            selectedSize === variant.name &&
+                              styles["selected-size"]
+                          ].join(" ")}
+                          onClick={() => {
+                            setSelectedSize(variant.name);
+                            setProductPrice(variant.price);
+                          }}
+                        >
+                          {variant.name.slice(1).replace(/Vip/i, "VIP")} |
+                          {getPriceDisplay(variant.price, currency)}
+                        </span>
+                      );
+                    })}
                 </div>
               )}
 

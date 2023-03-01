@@ -37,6 +37,10 @@
     @media (max-width: 650px) {
       width: 47%;
     }
+
+    @media (max-width: 400px) {
+      min-width: 11rem;
+    }
   }
   &.three-x-grid {
     width: 30%;
@@ -64,6 +68,9 @@
   &.two-x-grid {
     width: 47%;
     min-width: 12rem;
+    @media (max-width: 400px) {
+      min-width: 11rem;
+    }
     .img-wrapper {
       height: 15rem;
       .flower-image {

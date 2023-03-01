@@ -710,6 +710,10 @@
           margin-bottom: 0;
         }
       }
+
+      .wrap {
+        word-wrap: break-word;
+      }
     }
 
     @media (max-width: 650px) {
