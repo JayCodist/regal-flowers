@@ -215,14 +215,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 >
                   Product Description
                 </button>
-                <button
+                {/* <button
                   onClick={() => setDescriptionTab("reviews")}
                   className={`${styles["tab-title"]} ${
                     descriptionTab === "reviews" ? styles.active : null
                   }`}
                 >
                   Reviews
-                </button>
+                </button> */}
               </div>
               {descriptionTab === "product description" && (
                 <p
