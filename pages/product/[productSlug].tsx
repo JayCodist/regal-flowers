@@ -62,7 +62,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       setCartItems([...cartItems, cartItem]);
       notify("success", "Item Added To Cart");
     } else {
-      notify("info", "Item Already In Cart");
+      setCartItems(
+        cartItems.map(item =>
+          item === _cartItem
+            ? { ..._cartItem, quantity: _cartItem.quantity + 1 }
+            : item
+        )
+      );
+      notify("success", `Item quantity increased to ${_cartItem.quantity + 1}`);
     }
   };
 
@@ -388,7 +395,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           setProductPrice(variant.price);
                         }}
                       >
-                        {variant.name.slice(1)} |
+                        {variant.name} |
                         {getPriceDisplay(variant.price, currency)}
                       </span>
                     ))}

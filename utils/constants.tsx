@@ -836,7 +836,7 @@ export const links: AppLink[] = [
           "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
       },
       {
-        title: "Vip Flowers",
+        title: "VIP Flowers",
         children: [],
         url: "/vip"
       },
