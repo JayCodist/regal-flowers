@@ -1175,7 +1175,7 @@ export const bestSellers: RegalContent = {
   "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"
 };
 
-export const bestSellers2: RegalContent = {
+export const bestSellersRomance: RegalContent = {
   general: "Bestselling Romance or Just to Say Flowers in Lagos & Abuja",
   lagos: "Bestselling Flowers in Lagos",
   abuja: "Bestselling Flowers in Abuja",
@@ -1213,22 +1213,22 @@ export const popularSections: Occasion[] = [
   {
     title: "Fresh Flowers",
     url: `/filters?filter=${encodeURIComponent("Fresh Flowers")}`,
-    image: "/images/popular-fresh.png"
+    image: "/images/popular-fresh.jpg"
   },
   {
     title: "Forever Roses",
     url: `/filters?filter=${encodeURIComponent("Forever Roses")}`,
-    image: "/images/popular-forever.png"
+    image: "/images/popular-forever.jpg"
   },
   {
     title: "VIP Section",
     url: "/vip",
-    image: "/images/popular-vip.png"
+    image: "/images/popular-vip.jpg"
   },
   {
     title: "Bundled Products",
     url: `/filters?filter=${encodeURIComponent("Bundled Products")}`,
-    image: "/images/popular-bundled.png"
+    image: "/images/popular-bundled.jpg"
   }
   // {
   //   title: "Lagos Delivery",

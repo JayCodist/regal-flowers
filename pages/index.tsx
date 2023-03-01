@@ -15,11 +15,11 @@ import {
   aboutUsContent,
   featuredSlugs,
   bestSellers,
-  bestSellers2,
   popularSections,
   mostLoved,
   allOccasionOptions,
-  giftItems
+  giftItems,
+  bestSellersRomance
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -102,7 +102,9 @@ const LandingPage: FunctionComponent<{
             </Button>
           )}
           <div className="flex between">
-            <h2 className="featured-title">{bestSellers2[locationName]}</h2>
+            <h2 className="featured-title">
+              {bestSellersRomance[locationName]}
+            </h2>
             {deviceType === "desktop" && (
               <Button
                 url="/filters?selectedOccasion=all-occasions"
