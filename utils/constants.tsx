@@ -1183,11 +1183,17 @@ export const bestSellersRomance: RegalContent = {
 };
 
 export const featuredSlugs: Record<LocationName, string[]> = {
-  general: [
+  "featured-birthday": [
     "cool-and-classic",
     "ferrero-rocher-roses-003-exquisite-combination",
     "bellissimo-beautiful-luxurious-mix-of-red-white-pink-roses",
     "mon-coeur-my-heart-roses-in-heart-shape"
+  ],
+  "featured-romance": [
+    "belleza-regal-two-colors-rose-red-yellow-white-pink-orange",
+    "calligraphy-by-regal-red-roses-white-roses-lilies",
+    "classic-roses-are-red-box-arrangement-red-roses-and-million-stars",
+    "roses-and-mixed-chrysanthemums-roses-and-mixed-chrysanthemums"
   ],
   lagos: [
     "cool-and-classic",

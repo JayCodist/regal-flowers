@@ -39,8 +39,10 @@ import Link from "next/dist/client/link";
 
 const LandingPage: FunctionComponent<{
   locationName: LocationName;
-  featuredFlowers: Product[];
-}> = ({ featuredFlowers, locationName }) => {
+  featuredBirthday?: Product[];
+  featuredRomance?: Product[];
+  featuredFlowers?: Product[];
+}> = ({ featuredBirthday, locationName, featuredRomance }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   const deviceType = useDeviceType();
@@ -80,7 +82,7 @@ const LandingPage: FunctionComponent<{
             )}
           </div>
           <div className={[styles.section, styles.wrap].join(" ")}>
-            {featuredFlowers.map(flower => (
+            {featuredBirthday?.map(flower => (
               <FlowerCard
                 key={flower.key}
                 image={flower.images[0]?.src || ""}
@@ -121,7 +123,7 @@ const LandingPage: FunctionComponent<{
             )}
           </div>
           <div className={[styles.section, styles.wrap].join(" ")}>
-            {featuredFlowers.map(flower => (
+            {featuredRomance?.map(flower => (
               <FlowerCard
                 key={flower.key}
                 image={flower.images[0]?.src || ""}
@@ -909,7 +911,10 @@ const FlowerDeliveryInput: FunctionComponent = () => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const locationName = "general";
+  const locationName = "featured-birthday";
+  const featuredRomance = await getProductsBySlugs(
+    featuredSlugs["featured-romance"]
+  );
   const { data, error, message } = await getProductsBySlugs(
     featuredSlugs[locationName]
   );
@@ -920,8 +925,9 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      locationName,
-      featuredFlowers: data || []
+      locationName: "general",
+      featuredBirthday: data || [],
+      featuredRomance: featuredRomance.data || []
     }
   };
 };
