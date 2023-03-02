@@ -62,7 +62,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       setCartItems([...cartItems, cartItem]);
       notify("success", "Item Added To Cart");
     } else {
-      notify("info", "Item Already In Cart");
+      setCartItems(
+        cartItems.map(item =>
+          item === _cartItem
+            ? { ..._cartItem, quantity: _cartItem.quantity + 1 }
+            : item
+        )
+      );
+      notify("success", `Item quantity increased to ${_cartItem.quantity + 1}`);
     }
   };
 
@@ -208,14 +215,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 >
                   Product Description
                 </button>
-                <button
+                {/* <button
                   onClick={() => setDescriptionTab("reviews")}
                   className={`${styles["tab-title"]} ${
                     descriptionTab === "reviews" ? styles.active : null
                   }`}
                 >
                   Reviews
-                </button>
+                </button> */}
               </div>
               {descriptionTab === "product description" && (
                 <p
@@ -257,8 +264,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
         <div className={styles.padding}>
           <div className="flex center-align between">
-            <div>
-              <h1 className="title">{product.name.split("–")[0]}</h1>
+            <div className="margin-right spaced">
+              <h1 className="title margin-bottom spaced">
+                {product.name.split("–")[0]}
+              </h1>
               <p>{product.name}</p>
             </div>
             <div className="bold primary-color center">
@@ -268,7 +277,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </p>
             </div>
           </div>
-          <div className="vertical-margin">
+          <div className={styles["temporary-notes"]}>
             {product.temporaryNotes &&
               product.temporaryNotes?.length > 0 &&
               product.temporaryNotes.map((note, index) => (

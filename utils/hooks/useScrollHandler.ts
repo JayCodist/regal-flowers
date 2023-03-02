@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 interface UseScrollHandlerProps {
@@ -21,6 +22,8 @@ const useScrollHandler: (
   node
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
+
+  const router = useRouter();
 
   const observer: MutableRefObject<IntersectionObserver | null> = useRef(null);
   useEffect(() => {
@@ -51,6 +54,10 @@ const useScrollHandler: (
 
     return () => observer.current?.disconnect();
   }, [node, root, rootMargin, threshold]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [router.asPath]);
 
   return [currentPage, setCurrentPage];
 };

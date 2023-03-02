@@ -1,5 +1,8 @@
 .product {
   padding: 2rem 4rem;
+  .temporary-notes {
+    min-height: 3rem;
+  }
 
   @media (max-width: 650px) {
     // padding: 1rem 3rem;

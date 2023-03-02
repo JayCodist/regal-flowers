@@ -37,6 +37,7 @@ const giftMap: Record<string, string> = {
   "cakes-and-cupcakes": "cakes-and-cupcakes",
   "teddy-bears": "teddy-bears",
   "wine-and-champagne": "wine-and-champagne",
+  "gift-packs": "gift-packs",
   perfumes: "perfumes",
   balloon: "balloon"
 };
@@ -70,7 +71,7 @@ const ProductsPage: FunctionComponent<{
   const [pageTitle, setPageTitle] = useState("");
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
-  const [productsLoading, setproductsLoading] = useState(false);
+  const [productsLoading, setProductsLoading] = useState(false);
   const [todayDate, setTodayDate] = useState<Dayjs | null>(null);
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
@@ -122,13 +123,19 @@ const ProductsPage: FunctionComponent<{
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
-    router.push("filters?shopBy=Regular");
+    router.push(`/product-category/${categorySlug}`, undefined, {
+      scroll: false
+    });
   };
 
   const fetchProductCategory = async (shouldAppend?: boolean) => {
-    products.length === 0 ? setproductsLoading(true) : setInfiniteLoading(true);
+    if (shouldAppend) {
+      setInfiniteLoading(true);
+    } else {
+      setProductsLoading(true);
+    }
     const filterParams = {
-      category: [(categorySlug as string) || ""],
+      category: [categorySlug !== "all" ? categorySlug || "" : ""],
       tags: [(shopBy as string) || ""],
       productClass
     };
@@ -138,6 +145,8 @@ const ProductsPage: FunctionComponent<{
     };
 
     const response = await getProductsByCategory(params);
+    setProductsLoading(false);
+    setInfiniteLoading(false);
     if (response.error) {
       notify("error", `Unable to fetch product category: ${response.message}`);
     } else {
@@ -149,9 +158,6 @@ const ProductsPage: FunctionComponent<{
           : (response.data as Product[])
       );
     }
-    products.length === 0
-      ? setproductsLoading(false)
-      : setInfiniteLoading(false);
   };
 
   useEffect(() => {
@@ -171,7 +177,7 @@ const ProductsPage: FunctionComponent<{
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedFilter, selectedOccasion, router]);
+  }, [categorySlug, selectedOccasion, router]);
 
   useEffect(() => {
     if (isReady) {
@@ -290,8 +296,16 @@ const ProductsPage: FunctionComponent<{
                                   _filter => _filter !== child.tag
                                 )
                               : [...selectedFilter, child.tag];
+                            setSelectedFilter(
+                              newFilters.filter(Boolean) as string[]
+                            );
+                            setProductsLoading(true);
                             router.push(
-                              `/filters?shopBy=${newFilters.join(",")}`
+                              `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                ","
+                              )}`,
+                              undefined,
+                              { scroll: false }
                             );
                           }}
                           text={child.name}
@@ -392,10 +406,16 @@ const ProductsPage: FunctionComponent<{
                                     _filter => _filter !== child.tag
                                   )
                                 : [...selectedFilter, child.tag];
+                              setSelectedFilter(
+                                newFilters.filter(Boolean) as string[]
+                              );
+                              setProductsLoading(true);
                               router.push(
                                 `${router.pathname}?shopBy=${newFilters.join(
                                   ","
-                                )}`
+                                )}`,
+                                undefined,
+                                { scroll: false }
                               );
                             }}
                             text={child.name}
@@ -439,13 +459,11 @@ const ProductsPage: FunctionComponent<{
                   }`}
             </h1>
 
-            <div className={`${styles.products}`}>
+            <div className={styles.products}>
               {productsLoading && (
-                <img
-                  src="/images/spinner.svg"
-                  alt="spinner"
-                  className="generic-icon xxl spinner"
-                />
+                <div className={styles.spinner}>
+                  <img src="/images/spinner.svg" alt="spinner" />
+                </div>
               )}
               {products?.map((product, index, arr) => (
                 <FlowerCard
@@ -497,7 +515,7 @@ const ProductsPage: FunctionComponent<{
               </span>
               {deviceType === "desktop" && (
                 <Button
-                  url="/filters?selectedOccasion=all-occasions"
+                  url="/product-category/gift-packs"
                   className="flex spaced center center-align"
                   type="transparent"
                 >
@@ -524,7 +542,7 @@ const ProductsPage: FunctionComponent<{
             </div>
             {deviceType === "mobile" && (
               <Button
-                url="/filters?selectedOccasion=all-occasions"
+                url="/product-category/gift-packs"
                 type="accent"
                 minWidth
                 className={styles["see-all"]}
@@ -639,7 +657,7 @@ const ProductsPage: FunctionComponent<{
               </p>
               <p className="normal-text">
                 We offer fast and same-day delivery of{" "}
-                <Link href="/filters?selectedOccasion=just-to-say">
+                <Link href="/product-category/just-to-say-bouquets">
                   <a className={styles.red}>flower bouquets</a>
                 </Link>{" "}
                 and gifts everywhere in Lagos and Abuja. <br /> <br />
@@ -661,31 +679,31 @@ const ProductsPage: FunctionComponent<{
               </p>
               <p className="normal-text">
                 We stock flowers for various occasions such as{" "}
-                <Link href="/filters?selectedOccasion=just-to-say">
+                <Link href="/product-category/just-to-say-bouquets">
                   <a className={styles.red}> Birthday Flowers</a>
                 </Link>
                 ,
-                <Link href="/filters?selectedOccasion=just-to-say">
+                <Link href="/product-category/just-to-say-bouquets">
                   <a className={styles.red}> Romantic Flowers</a>
                 </Link>
                 ,{" "}
-                <Link href="/filters?selectedOccasion=Anniversary%20Flowers">
+                <Link href="/product-category/anniversary-flowers">
                   <a className={styles.red}> Anniversary Flowers</a>
                 </Link>
                 , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
-                <Link href="/filters?selectedOccasion=funeral-condolence">
+                <Link href="/product-category/funeral-amp-condolence">
                   <a className={styles.red}> Funeral Wreaths</a>
                 </Link>{" "}
                 ,{" "}
-                <Link href="/filters?selectedOccasion=funeral-condolence">
+                <Link href="/product-category/funeral-amp-condolence">
                   <a className={styles.red}> Condolence Flowers</a>
                 </Link>{" "}
                 ,{" "}
-                <Link href="/filters?selectedOccasion=bridal-bouquets">
+                <Link href="/product-category/bridal-bouquets">
                   <a className={styles.red}>Bridal Bouquets</a>
                 </Link>{" "}
                 , and of course,
-                <Link href="/filters?selectedOccasion=Anniversary%20Flowers">
+                <Link href="/product-category/anniversary-flowers">
                   <a className={styles.red}> Valentine’s Day flowers</a>
                 </Link>{" "}
                 available

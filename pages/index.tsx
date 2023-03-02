@@ -68,7 +68,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">{bestSellers[locationName]}</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/filters?selectedOccasion=all-occasions"
+                url="/product-category/all"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -136,7 +136,7 @@ const LandingPage: FunctionComponent<{
           </div>
           {deviceType === "mobile" && (
             <Button
-              url="/filters?selectedOccasion=all-occasions"
+              url="/product-category/all"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -161,7 +161,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">Featured Occasions</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/filters?selectedOccasion=all-occasions"
+                url="/product-category/all"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -186,7 +186,7 @@ const LandingPage: FunctionComponent<{
           </div>
           {deviceType === "mobile" && (
             <Button
-              url="/filters?selectedOccasion=all-occasions"
+              url="/product-category/all"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -361,7 +361,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">Gifts to Include with Flowers</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/filters?selectedOccasion=all-occasions"
+                url="/product-category/gift-packs"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -389,7 +389,7 @@ const LandingPage: FunctionComponent<{
 
           {deviceType === "mobile" && (
             <Button
-              url="/filters?selectedOccasion=all-occasions"
+              url="/product-category/gift-packs"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -429,7 +429,7 @@ const LandingPage: FunctionComponent<{
               every flower and gift delivery a special experience. We didn't say
               so, the various recipients of our flowers did.
             </span>
-            <Button padded url="/filters">
+            <Button padded url="/product-category/all">
               Send Flowers
             </Button>
           </div>
@@ -451,7 +451,7 @@ const LandingPage: FunctionComponent<{
               every flower and gift delivery a special experience. We didn't say
               so, the various recipients of our flowers did.
             </span>
-            <Button padded url="/filters">
+            <Button padded url="/product-category/all">
               Send Flowers
             </Button>
           </div>
@@ -745,7 +745,7 @@ const LandingPage: FunctionComponent<{
             </p>
             <p className="normal-text">
               We offer fast and same-day delivery of{" "}
-              <Link href="/filters?selectedOccasion=just-to-say">
+              <Link href="/product-category/just-to-say-bouquets">
                 <a className={styles.red}>flower bouquets</a>
               </Link>{" "}
               and gifts everywhere in Lagos and Abuja. <br /> <br />
@@ -767,31 +767,31 @@ const LandingPage: FunctionComponent<{
             </p>
             <p className="normal-text">
               We stock flowers for various occasions such as{" "}
-              <Link href="/filters?selectedOccasion=just-to-say">
+              <Link href="/product-category/just-to-say-bouquets">
                 <a className={styles.red}> Birthday Flowers</a>
               </Link>
               ,
-              <Link href="/filters?selectedOccasion=just-to-say">
+              <Link href="/product-category/just-to-say-bouquets">
                 <a className={styles.red}> Romantic Flowers</a>
               </Link>
               ,{" "}
-              <Link href="/filters?selectedOccasion=Anniversary%20Flowers">
+              <Link href="/product-category/anniversary-flowers">
                 <a className={styles.red}> Anniversary Flowers</a>
               </Link>
               , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
-              <Link href="/filters?selectedOccasion=funeral-condolence">
+              <Link href="/product-category/funeral-amp-condolence">
                 <a className={styles.red}> Funeral Wreaths</a>
               </Link>{" "}
               ,{" "}
-              <Link href="/filters?selectedOccasion=funeral-condolence">
+              <Link href="/product-category/funeral-amp-condolence">
                 <a className={styles.red}> Condolence Flowers</a>
               </Link>{" "}
               ,{" "}
-              <Link href="/filters?selectedOccasion=bridal-bouquets">
+              <Link href="/product-category/bridal-bouquets">
                 <a className={styles.red}>Bridal Bouquets</a>
               </Link>{" "}
               , and of course,
-              <Link href="/filters?selectedOccasion=Anniversary%20Flowers">
+              <Link href="/product-category/anniversary-flowers">
                 <a className={styles.red}> Valentine’s Day flowers</a>
               </Link>{" "}
               available
