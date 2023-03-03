@@ -51,7 +51,7 @@ const Footer: FunctionComponent = () => {
   const deviceType = useDeviceType();
 
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} id="footer">
       <div className={styles["footer-wrapper"]}>
         <div className={styles.top}>
           <div>
@@ -329,6 +329,9 @@ const Header: FunctionComponent = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const deviceType = useDeviceType();
+
+  const { pathname } = useRouter();
+  const _pathname = pathname.split("/")[1];
 
   const { currency, setCurrency, cartItems, user, allCurrencies } = useContext(
     SettingsContext
@@ -663,7 +666,10 @@ const Header: FunctionComponent = () => {
                 <span>Cart ({cartItems.length})</span>
               )}
             </button>
-            <a className="flex column center-align" href="#contactSection">
+            <a
+              className="flex column center-align"
+              href={`${_pathname === "" ? "#contactSection" : "#footer"}`}
+            >
               <img
                 alt="phone"
                 src="/icons/phone.svg"
