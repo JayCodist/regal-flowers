@@ -137,7 +137,9 @@ const Checkout: FunctionComponent = () => {
     currency,
     setCurrency,
     allCurrencies,
-    notify
+    notify,
+    deliveryDate,
+    setDeliveryDate
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -251,10 +253,10 @@ const Checkout: FunctionComponent = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error, message } = await updateCheckoutState(
-      orderId as string,
-      formData
-    );
+    const { error, message } = await updateCheckoutState(orderId as string, {
+      ...formData,
+      deliveryDate
+    });
     setLoading(false);
 
     if (error) {
@@ -291,10 +293,10 @@ const Checkout: FunctionComponent = () => {
     return (
       allDeliveryLocationOptions[formData.state]?.(
         currency,
-        formData.deliveryDate || dayjs()
+        deliveryDate || dayjs()
       ) || []
     );
-  }, [currency, formData.deliveryDate, formData.state]);
+  }, [currency, deliveryDate, formData.state]);
 
   if (pageLoading) {
     return (
@@ -447,6 +449,7 @@ const Checkout: FunctionComponent = () => {
                                 dimmed
                                 autoComplete="new-password"
                                 required={formData.freeAccount}
+                                showPasswordIcon
                               />
                             </div>
                           )}
@@ -455,10 +458,8 @@ const Checkout: FunctionComponent = () => {
                               Pickup/Delivery Date
                             </span>
                             <DatePicker
-                              value={formData.deliveryDate}
-                              onChange={value =>
-                                handleChange("deliveryDate", value)
-                              }
+                              value={deliveryDate}
+                              onChange={setDeliveryDate}
                               format="D MMMM YYYY"
                               responsive
                             />
@@ -485,7 +486,7 @@ const Checkout: FunctionComponent = () => {
                         <div className="margin-top">
                           <em>
                             {["13-02", "14-02", "15-02"].includes(
-                              formData.deliveryDate?.format("DD-MM") || ""
+                              deliveryDate?.format("DD-MM") || ""
                             )
                               ? `Free Valentine (Feb 13th, 14th, 15th) Delivery across Lagos and Abuja on orders above ${
                                   currency.sign
@@ -601,9 +602,7 @@ const Checkout: FunctionComponent = () => {
                                       locationOption.amount === 0 &&
                                       (order?.amount || 0) <=
                                         (["13-02", "14-02", "15-02"].includes(
-                                          formData.deliveryDate?.format(
-                                            "DD-MM"
-                                          ) || ""
+                                          deliveryDate?.format("DD-MM") || ""
                                         )
                                           ? freeDeliveryThresholdVals
                                           : freeDeliveryThreshold)[
@@ -1305,6 +1304,7 @@ const Checkout: FunctionComponent = () => {
                           responsive
                           autoComplete="new-password"
                           required
+                          showPasswordIcon
                         />
                       </div>
                     )}
@@ -1312,8 +1312,8 @@ const Checkout: FunctionComponent = () => {
                     <div className="input-group">
                       <span className="question">Pickup/Delivery Date</span>
                       <DatePicker
-                        value={formData.deliveryDate}
-                        onChange={value => handleChange("deliveryDate", value)}
+                        value={deliveryDate}
+                        onChange={setDeliveryDate}
                         format="D MMMM YYYY"
                         responsive
                       />
@@ -1364,7 +1364,7 @@ const Checkout: FunctionComponent = () => {
                         <div className="margin-top">
                           <em>
                             {["13-02", "14-02", "15-02"].includes(
-                              formData.deliveryDate?.format("DD-MM") || ""
+                              deliveryDate?.format("DD-MM") || ""
                             )
                               ? `Free Valentine (Feb 13th, 14th, 15th) Delivery across Lagos and Abuja on orders above ${
                                   currency.sign
@@ -1462,9 +1462,7 @@ const Checkout: FunctionComponent = () => {
                                       locationOption.amount === 0 &&
                                       (order?.amount || 0) <=
                                         (["13-02", "14-02", "15-02"].includes(
-                                          formData.deliveryDate?.format(
-                                            "DD-MM"
-                                          ) || ""
+                                          deliveryDate?.format("DD-MM") || ""
                                         )
                                           ? freeDeliveryThresholdVals
                                           : freeDeliveryThreshold)[
@@ -1729,7 +1727,7 @@ const Checkout: FunctionComponent = () => {
                       <div className={`${styles["sender-info"]}`}>
                         <p>{formData.recipientName}</p>
                         <p className={styles.grayed}>Pickup/Delivery Date</p>
-                        <p>{formData.deliveryDate?.format("YYYY-MM-DD")}</p>
+                        <p>{deliveryDate?.format("YYYY-MM-DD")}</p>
                         <p>{formData.recipientPhoneNumber}</p>
                         <p className={styles.grayed}>Alternative Number</p>
                         <p>{formData.recipientPhoneNumberAlt}</p>

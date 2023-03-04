@@ -82,7 +82,7 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
-  const { notify } = useContext(SettingsContext);
+  const { notify, deliveryDate, setDeliveryDate } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 
@@ -345,10 +345,8 @@ const ProductsPage: FunctionComponent<{
               <div>
                 <span>Delivery Date: </span>
                 <DatePicker
-                  onChange={date => {
-                    setTodayDate(date);
-                  }}
-                  value={todayDate}
+                  value={deliveryDate}
+                  onChange={setDeliveryDate}
                   format="D MMM YYYY"
                   placeholder="Select Date"
                 />
