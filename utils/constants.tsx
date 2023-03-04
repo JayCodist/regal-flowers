@@ -19,11 +19,6 @@ export const allOccasionOptions: Option[] = [
   {
     value:
       "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
-    label: "Valentine's Day"
-  },
-  {
-    value:
-      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
     label: "Romance, Birthdays & Anniversary"
   },
   { value: "just-to-say-bouquets", label: "Just To Say Hi, Sorry, Thank You" },
@@ -32,7 +27,12 @@ export const allOccasionOptions: Option[] = [
   { value: "funeral-amp-condolence", label: "Funeral & Condolence" },
   { value: "event-amp-centerpiece", label: "Events & Centerpiece" },
   { value: "fathers-day-flowers", label: "Father's Day" },
-  { value: "mothers-day-flowers", label: "Mother's Day" }
+  { value: "mothers-day-flowers", label: "Mother's Day" },
+  {
+    value:
+      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    label: "Valentine's Day"
+  }
 ];
 
 export const defaultCurrency: AppCurrency = {
@@ -76,7 +76,7 @@ export const footerContent: FooterContent = {
     {
       name: "whatsapp",
       src: "/icons/footer/whatsapp.svg",
-      url: ""
+      url: "https://wa.me/+2348188787788"
     }
   ],
   quickLinks: [
@@ -653,7 +653,7 @@ export const filtersCatgories: {
     name: "Design",
     options: [
       {
-        name: "Bouquets",
+        name: "Wrapped Bouquets",
         tag: "bouquets"
       },
       {
@@ -1028,7 +1028,7 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Bouquets",
+            title: "Wrapped Bouquets",
             url: "/filters?shopBy=flower bouquet",
             children: []
           },

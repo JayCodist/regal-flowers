@@ -537,7 +537,17 @@ const LandingPage: FunctionComponent<{
                 </span>
               </div>
 
-              <Button type="accent" className="margin-top" padded>
+              <Button
+                type="accent"
+                className={styles["hello-btn"]}
+                padded
+                url="https://wa.me/+2348188787788"
+              >
+                <img
+                  src="/icons/whatsapp-green.svg"
+                  alt="whatsapp"
+                  className="margin-right"
+                />
                 Say Hello
               </Button>
             </div>

@@ -108,11 +108,15 @@ const Footer: FunctionComponent = () => {
                   src="/icons/footer/phone.svg"
                   alt="phone"
                 />
-                <img
-                  className="generic-icon medium"
-                  src="/icons/footer/whatsapp.svg"
-                  alt="whtasapp"
-                />
+                <Link href="https://wa.me/+2348188787788">
+                  <a>
+                    <img
+                      className="generic-icon medium"
+                      src="/icons/footer/whatsapp.svg"
+                      alt="whtasapp"
+                    />
+                  </a>
+                </Link>
               </div>
               {footerContent.phoneNumbers.map(number => (
                 <p key={number}>{number}</p>
@@ -202,7 +206,7 @@ const Footer: FunctionComponent = () => {
                 <Button className={styles["subsribe-btn"]}>Subscribe</Button>
               </div>
               <p className={`margin-top ${styles.grayed}`}>
-                We care about your data in our privacy policy
+                We care about your data
               </p>
             </div>
           </div>

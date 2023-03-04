@@ -454,8 +454,10 @@ const ProductsPage: FunctionComponent<{
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : `${pageTitle} ${
-                    !giftMap[categorySlug || ""] ? "All Occasion Flowers" : ""
+                : `${pageTitle} Flowers ${
+                    !giftMap[categorySlug || ""] && !pageTitle
+                      ? "All Occasion Flowers"
+                      : ""
                   }`}
             </h1>
 
