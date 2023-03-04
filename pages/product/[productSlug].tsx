@@ -545,6 +545,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               price={item.price}
               subTitle={item.subtitle}
               url={`/product/${item.slug}`}
+              buttonText="Add to Cart"
             />
           ))}
         </div>

@@ -298,6 +298,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
               subTitle={flower.details}
               price={flower.price}
               url={`/product/${flower.slug}`}
+              buttonText="Add to Cart"
             />
           ))}
         </div>
@@ -308,7 +309,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data, error, message } = await getProductsBySlugs(
-    featuredSlugs.general
+    featuredSlugs["featured-birthday"]
   );
   if (error) {
     console.error("Unable to fetch products by slugs: ", message);

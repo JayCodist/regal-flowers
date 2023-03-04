@@ -7,7 +7,6 @@ import {
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Dayjs } from "dayjs";
 import { getProductsByCategory } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import Checkbox from "../components/checkbox/Checkbox";
@@ -72,7 +71,6 @@ const ProductsPage: FunctionComponent<{
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
-  const [todayDate, setTodayDate] = useState<Dayjs | null>(null);
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
   const [sort, setSort] = useState<string>("");
   const [hasMore, setHasMore] = useState(false);
@@ -452,7 +450,9 @@ const ProductsPage: FunctionComponent<{
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : `${pageTitle} Flowers ${
+                : ` ${pageTitle} ${
+                    !giftMap[categorySlug || ""] ? "Flowers" : ""
+                  } ${
                     !giftMap[categorySlug || ""] && !pageTitle
                       ? "All Occasion Flowers"
                       : ""
