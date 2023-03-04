@@ -51,7 +51,7 @@ const Footer: FunctionComponent = () => {
   const deviceType = useDeviceType();
 
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} id="footer">
       <div className={styles["footer-wrapper"]}>
         <div className={styles.top}>
           <div>
@@ -108,11 +108,15 @@ const Footer: FunctionComponent = () => {
                   src="/icons/footer/phone.svg"
                   alt="phone"
                 />
-                <img
-                  className="generic-icon medium"
-                  src="/icons/footer/whatsapp.svg"
-                  alt="whtasapp"
-                />
+                <Link href="https://wa.me/+2348188787788">
+                  <a>
+                    <img
+                      className="generic-icon medium"
+                      src="/icons/footer/whatsapp.svg"
+                      alt="whtasapp"
+                    />
+                  </a>
+                </Link>
               </div>
               {footerContent.phoneNumbers.map(number => (
                 <p key={number}>{number}</p>
@@ -141,7 +145,8 @@ const Footer: FunctionComponent = () => {
             </div>
             <strong>Paypal</strong>
             <div className="flex spaced">
-              <span>Email:</span> <strong>regalflowerspaypal@gmail.com</strong>
+              <span>Email:</span>{" "}
+              <strong>paypalpayments@regalflowers.com.ng</strong>
             </div>
             <strong>Bitcoin</strong>
             <div className="">
@@ -150,29 +155,45 @@ const Footer: FunctionComponent = () => {
             </div>
           </div>
         </div>
+        <br />
         <div>
-          <strong className="normal-text">Our Locations</strong>
-          <br />
-
           <div className={styles.middle}>
             <div>
-              <strong>Lagos Head Office</strong>
-              <p>81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos.</p>
-              <p className={styles.grayed}>Open 24/7</p>
+              <strong className="normal-text">Lagos Locations</strong>
+              <div className={styles.branches}>
+                <div className={styles.branch}>
+                  <strong>Head Office</strong>
+                  <p>81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos.</p>
+                  <p className={styles.grayed}>Open 24/7</p>
+                </div>
+                <div className={styles.branch}>
+                  <strong>VI Branch</strong>
+                  <p>
+                    133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island,
+                    Lagos.
+                  </p>
+                  <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+                </div>
+                <div className={styles.branch}>
+                  <strong>Airport Branch</strong>
+                  <p>Muritala Muhammad Airport2, Ikeja, Lagos.</p>
+                  <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+                </div>
+              </div>
             </div>
             <div>
-              <strong>Lagos Branch</strong>
-              <p>
-                133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island,
-                Lagos.
-              </p>
-              <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+              <strong className="normal-text">Abuja Location</strong>
+              <div
+                className={deviceType === "mobile" ? "margin-left spaced" : ""}
+              >
+                <strong>Wuse 2 Branch</strong>
+                <p>
+                  5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja.
+                </p>
+                <p className={styles.grayed}>Open 24/7</p>
+              </div>
             </div>
-            <div>
-              <strong>Abuja</strong>
-              <p>5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja.</p>
-              <p className={styles.grayed}>Open 24/7</p>
-            </div>
+
             <div id={styles.newsletter}>
               <strong>Subscribe to Newsletter</strong>
               <div className="flex spaced">
@@ -185,16 +206,20 @@ const Footer: FunctionComponent = () => {
                 <Button className={styles["subsribe-btn"]}>Subscribe</Button>
               </div>
               <p className={`margin-top ${styles.grayed}`}>
-                We care about your data in our privacy policy
+                We care about your data
               </p>
             </div>
           </div>
         </div>
       </div>
       <div className={styles.bottom}>
-        <p>© 2022 Regal Flowers.</p>
+        <p>© 2023 Regal Flowers.</p>
 
-        <div className={`flex between spaced-xl ${styles["payment-icon"]}`}>
+        <div
+          className={`flex between ${
+            deviceType === "desktop" ? "spaced-xl" : "spaced"
+          } ${styles["payment-icon"]}`}
+        >
           <img
             src="/icons/visa.svg"
             alt="visa"
@@ -308,6 +333,9 @@ const Header: FunctionComponent = () => {
   const [showSidebar, setShowSidebar] = useState(false);
 
   const deviceType = useDeviceType();
+
+  const { pathname } = useRouter();
+  const _pathname = pathname.split("/")[1];
 
   const { currency, setCurrency, cartItems, user, allCurrencies } = useContext(
     SettingsContext
@@ -642,7 +670,10 @@ const Header: FunctionComponent = () => {
                 <span>Cart ({cartItems.length})</span>
               )}
             </button>
-            <a className="flex column center-align" href="#contactSection">
+            <a
+              className="flex column center-align"
+              href={`${_pathname === "" ? "#contactSection" : "#footer"}`}
+            >
               <img
                 alt="phone"
                 src="/icons/phone.svg"

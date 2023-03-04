@@ -92,6 +92,19 @@
           font-size: 1.3rem;
           border: 0.2rem solid transparent;
 
+          &.gift-occasion {
+            width: 10rem;
+            height: 10rem;
+            font-size: 1.2rem;
+
+            @media (max-width: 650px) {
+              height: 10rem;
+              width: 10rem;
+              font-size: 1rem;
+              min-width: 10rem;
+            }
+          }
+
           &.active {
             border-color: #9b0000;
           }
@@ -178,6 +191,10 @@
           gap: 1rem;
           align-items: flex-start;
         }
+      }
+
+      .sort {
+        width: 12rem;
       }
     }
 

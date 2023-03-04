@@ -277,6 +277,11 @@
           }
         }
       }
+
+      .hello-btn {
+        color: #2fd56d;
+        border-color: #2fd56d;
+      }
     }
   }
 }
@@ -364,6 +369,7 @@
     padding: 1rem;
     height: auto;
     width: 80%;
+    box-shadow: 3px 10px 13px 0px rgb(0 0 0 / 16%);
   }
 
   @media (max-width: 500px) {

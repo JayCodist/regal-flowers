@@ -18,7 +18,8 @@ import {
   popularSections,
   mostLoved,
   allOccasionOptions,
-  giftItems
+  giftItems,
+  bestSellersRomance
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -38,8 +39,10 @@ import Link from "next/dist/client/link";
 
 const LandingPage: FunctionComponent<{
   locationName: LocationName;
-  featuredFlowers: Product[];
-}> = ({ featuredFlowers, locationName }) => {
+  featuredBirthday?: Product[];
+  featuredRomance?: Product[];
+  featuredFlowers?: Product[];
+}> = ({ featuredBirthday, locationName, featuredRomance }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   const deviceType = useDeviceType();
@@ -53,8 +56,8 @@ const LandingPage: FunctionComponent<{
       >
         <div className="hero-content flex column center center-align">
           <h1 className={styles.title}>
-            They Deserve Regal Flowers. Premium Same Day Flower Delivery in
-            Lagos & Abuja, Nigeria
+            They Deserve Regal Flowers.
+            <br /> Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria
           </h1>
           <FlowerDeliveryInput />
         </div>
@@ -79,12 +82,53 @@ const LandingPage: FunctionComponent<{
             )}
           </div>
           <div className={[styles.section, styles.wrap].join(" ")}>
-            {featuredFlowers.map(flower => (
+            {featuredBirthday?.map(flower => (
               <FlowerCard
                 key={flower.key}
                 image={flower.images[0]?.src || ""}
-                name={flower.name}
-                subTitle={flower.details}
+                name={flower.name.split("–")[0]}
+                subTitle={flower.name.split("–")[1]}
+                price={flower.price}
+                url={`/product/${flower.slug}`}
+              />
+            ))}
+          </div>
+          {deviceType === "mobile" && (
+            <Button
+              url="/filters?selectedOccasion=all-occasions"
+              type="accent"
+              minWidth
+              className={styles["see-all"]}
+            >
+              <h3 className="red margin-right">See All</h3>
+            </Button>
+          )}
+          <div className="flex between">
+            <h2 className="featured-title">
+              {bestSellersRomance[locationName]}
+            </h2>
+            {deviceType === "desktop" && (
+              <Button
+                url="/filters?selectedOccasion=all-occasions"
+                className="flex spaced center center-align"
+                type="transparent"
+              >
+                <h3 className="red margin-right">See All</h3>
+                <img
+                  alt="arrow"
+                  className="generic-icon xsmall"
+                  src="/icons/arrow-right.svg"
+                />
+              </Button>
+            )}
+          </div>
+          <div className={[styles.section, styles.wrap].join(" ")}>
+            {featuredRomance?.map(flower => (
+              <FlowerCard
+                key={flower.key}
+                image={flower.images[0]?.src || ""}
+                name={flower.name.split("–")[0]}
+                subTitle={flower.name.split("–")[1]}
                 price={flower.price}
                 url={`/product/${flower.slug}`}
               />
@@ -314,9 +358,7 @@ const LandingPage: FunctionComponent<{
           </div>
 
           <div className="flex between">
-            <h2 className="featured-title">
-              Valentine Gifts to Include with Flowers
-            </h2>
+            <h2 className="featured-title">Gifts to Include with Flowers</h2>
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/gift-packs"
@@ -495,7 +537,17 @@ const LandingPage: FunctionComponent<{
                 </span>
               </div>
 
-              <Button type="accent" className="margin-top" padded>
+              <Button
+                type="accent"
+                className={styles["hello-btn"]}
+                padded
+                url="https://wa.me/+2348188787788"
+              >
+                <img
+                  src="/icons/whatsapp-green.svg"
+                  alt="whatsapp"
+                  className="margin-right"
+                />
                 Say Hello
               </Button>
             </div>
@@ -655,7 +707,7 @@ const LandingPage: FunctionComponent<{
               An online flower shop that would precisely tick all the right
               boxes.
             </p>
-            <p className="title small bold vertical-margin">
+            <p className="title small bold vertical-margin xl margin-bottom spaced">
               {aboutUsContent.openingHour.title}
             </p>
             <p className="normal-text">
@@ -677,7 +729,7 @@ const LandingPage: FunctionComponent<{
             </p>
           </div>
           <div>
-            <p className="title small bold margin-bottom">
+            <p className="title small bold vertical-margin xl margin-bottom spaced">
               {aboutUsContent.reputation.title}
             </p>
             <p className="normal-text">
@@ -698,7 +750,7 @@ const LandingPage: FunctionComponent<{
               definitely say Regal flowers is your plug for reputable and
               premium fresh flowers in Nigeria.
             </p>
-            <p className="title small bold vertical-margin">
+            <p className="title small bold vertical-margin xl margin-bottom spaced">
               {aboutUsContent.deliveryTime.title}
             </p>
             <p className="normal-text">
@@ -720,7 +772,7 @@ const LandingPage: FunctionComponent<{
               <br /> <br />
               In essence, we deliver EVERYWHERE in Lagos and Abuja
             </p>
-            <p className="title small bold vertical-margin">
+            <p className="title small bold vertical-margin xl margin-bottom spaced">
               {aboutUsContent.budget.title}
             </p>
             <p className="normal-text">
@@ -851,7 +903,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
           onChange={setDeliveryDate}
           format="D MMM YYYY"
           className={styles["occasion-date"]}
-          placeholder="Pickup/Delivery Date"
+          placeholder="Delivery Date"
           dropdownAlignment={deviceType === "mobile" ? "right" : "left"}
           iconAtLeft
         />
@@ -869,7 +921,10 @@ const FlowerDeliveryInput: FunctionComponent = () => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const locationName = "general";
+  const locationName = "featured-birthday";
+  const featuredRomance = await getProductsBySlugs(
+    featuredSlugs["featured-romance"]
+  );
   const { data, error, message } = await getProductsBySlugs(
     featuredSlugs[locationName]
   );
@@ -880,8 +935,9 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      locationName,
-      featuredFlowers: data || []
+      locationName: "general",
+      featuredBirthday: data || [],
+      featuredRomance: featuredRomance.data || []
     }
   };
 };

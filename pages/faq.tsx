@@ -120,10 +120,8 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   Paypal to email{" "}
                 </strong>
                 <p className="normal-text">
-                  Email Address: <strong> regalpaypal@gmail.com</strong>
-                </p>
-                <p className="normal-text">
-                  Account Name: <strong> REGAL FLOWERS LTD</strong>
+                  Email Address:{" "}
+                  <strong> paypalpayments@regalflowers.com.ng</strong>
                 </p>
               </div>
               <p className="margin-buttton flex align-center spaced normal-text">

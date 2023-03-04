@@ -81,7 +81,13 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
             />
           </div>
           <div className={styles.detail}>
-            <strong className={styles.name}>{name}</strong>
+            <strong
+              className={[styles.name, onlyTitle && styles["only-name"]].join(
+                " "
+              )}
+            >
+              {name}
+            </strong>
             {subTitle && <p className={styles.subtitle}>{subTitle}</p>}
             {!onlyTitle && (
               <div

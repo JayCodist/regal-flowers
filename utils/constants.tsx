@@ -19,11 +19,6 @@ export const allOccasionOptions: Option[] = [
   {
     value:
       "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
-    label: "Valentine's Day"
-  },
-  {
-    value:
-      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
     label: "Romance, Birthdays & Anniversary"
   },
   { value: "just-to-say-bouquets", label: "Just To Say Hi, Sorry, Thank You" },
@@ -32,7 +27,12 @@ export const allOccasionOptions: Option[] = [
   { value: "funeral-amp-condolence", label: "Funeral & Condolence" },
   { value: "event-amp-centerpiece", label: "Events & Centerpiece" },
   { value: "fathers-day-flowers", label: "Father's Day" },
-  { value: "mothers-day-flowers", label: "Mother's Day" }
+  { value: "mothers-day-flowers", label: "Mother's Day" },
+  {
+    value:
+      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    label: "Valentine's Day"
+  }
 ];
 
 export const defaultCurrency: AppCurrency = {
@@ -61,22 +61,22 @@ export const footerContent: FooterContent = {
     {
       name: "facebook",
       src: "/icons/footer/facebook.svg",
-      url: ""
+      url: "http://facebook.com/RegalFlowersNG/"
     },
     {
       name: "instagram",
       src: "/icons/footer/instagram.svg",
-      url: ""
+      url: "https://instagram.com/regalflowers.com.ng"
     },
     {
       name: "linkedIn",
       src: "/icons/footer/linkedin.svg",
-      url: ""
+      url: "https://www.linkedin.com/company/regalflowers-com-ng/"
     },
     {
       name: "whatsapp",
       src: "/icons/footer/whatsapp.svg",
-      url: ""
+      url: "https://wa.me/+2348188787788"
     }
   ],
   quickLinks: [
@@ -551,6 +551,11 @@ export const gifts: { title: string; url: string; category?: string }[] = [
     category: "Teddy Bears"
   },
   {
+    title: "Balloons",
+    url: "/product-category/balloon",
+    category: "Balloons"
+  },
+  {
     title: "Wine and Champagne",
     url: "/product-category/wine-and-champagne",
     category: "Wine and Champagne"
@@ -560,11 +565,16 @@ export const gifts: { title: string; url: string; category?: string }[] = [
     url: "/product-category/perfumes",
     category: "perfumes"
   },
-
   {
-    title: "Balloons",
-    url: "/product-category/balloon",
-    category: "Balloons"
+    title: "Giftsets",
+    url: "/product-category/gift-packs",
+    category: "Giftsets"
+  },
+  {
+    title: "All Gifts",
+    url:
+      "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
+    category: "All Gifts"
   }
 ];
 
@@ -643,7 +653,7 @@ export const filtersCatgories: {
     name: "Design",
     options: [
       {
-        name: "Bouquets",
+        name: "Wrapped Bouquets",
         tag: "bouquets"
       },
       {
@@ -826,29 +836,52 @@ export const links: AppLink[] = [
   //     }
   //   ]
   // },
-  {
-    title: "Valentine",
-    children: [
-      {
-        title: "Flowers",
-        children: [],
-        url:
-          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-      },
-      {
-        title: "VIP Flowers",
-        children: [],
-        url: "/vip"
-      },
-      {
-        title: "Gifts",
-        children: [],
-        url:
-          "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
-      }
-    ],
-    url: ""
-  },
+  // {
+  //   title: "Valentine",
+  //   children: [
+  //     {
+  //       title: "Flowers",
+  //       children: [],
+  //       url:
+  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+  //     },
+  //     {
+  //       title: "Vip Flowers",
+  //       children: [],
+  //       url: "/vip"
+  //     },
+  //     {
+  //       title: "Gifts",
+  //       children: [],
+  //       url:
+  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+  //     }
+  //   ],
+  //   url: ""
+  // },
+  // {
+  //   title: "Valentine",
+  //   children: [
+  //     {
+  //       title: "Flowers",
+  //       children: [],
+  //       url:
+  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+  //     },
+  //     {
+  //       title: "Vip Flowers",
+  //       children: [],
+  //       url: "/vip"
+  //     },
+  //     {
+  //       title: "Gifts",
+  //       children: [],
+  //       url:
+  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+  //     }
+  //   ],
+  //   url: ""
+  // },
   {
     url: "",
     title: "Occasions",
@@ -995,8 +1028,8 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Bouquets",
-            url: "/product-category/all?shopBy=bouquets",
+            title: "Wrapped Bouquets",
+            url: "/filters?shopBy=flower bouquet",
             children: []
           },
           {
@@ -1006,7 +1039,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Others",
-            url: "/product-category/all?shopBy=others",
+            url: "/filters?shopBy=others",
             children: []
           }
         ]
@@ -1089,7 +1122,7 @@ export const links: AppLink[] = [
   },
   {
     url: "/vip",
-    title: "VIP",
+    title: "VIP Section",
     children: []
   },
 
@@ -1113,6 +1146,11 @@ export const links: AppLink[] = [
         children: []
       },
       {
+        url: "/product-category/balloon",
+        title: "Balloons",
+        children: []
+      },
+      {
         url: "/product-category/wine-and-champagne",
         title: "Wine and Champagne",
         children: []
@@ -1126,11 +1164,6 @@ export const links: AppLink[] = [
         url:
           "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
         title: "Giftsets",
-        children: []
-      },
-      {
-        url: "/product-category/balloon",
-        title: "Balloons",
         children: []
       }
     ]
@@ -1156,18 +1189,31 @@ export const locationHeadlines: RegalContent = {
 };
 
 export const bestSellers: RegalContent = {
-  general: "Bestselling Valentine Flowers in Lagos & Abuja, Nigeria",
+  general: "Bestselling Birthday & Anniversary Flowers in Lagos & Abuja",
+  lagos: "Bestselling Flowers in Lagos",
+  abuja: "Bestselling Flowers in Abuja",
+  "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"
+};
+
+export const bestSellersRomance: RegalContent = {
+  general: "Bestselling Romance or Just to Say Flowers in Lagos & Abuja",
   lagos: "Bestselling Flowers in Lagos",
   abuja: "Bestselling Flowers in Abuja",
   "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"
 };
 
 export const featuredSlugs: Record<LocationName, string[]> = {
-  general: [
+  "featured-birthday": [
     "cool-and-classic",
     "ferrero-rocher-roses-003-exquisite-combination",
     "bellissimo-beautiful-luxurious-mix-of-red-white-pink-roses",
     "mon-coeur-my-heart-roses-in-heart-shape"
+  ],
+  "featured-romance": [
+    "belleza-regal-two-colors-rose-red-yellow-white-pink-orange",
+    "calligraphy-by-regal-red-roses-white-roses-lilies",
+    "classic-roses-are-red-box-arrangement-red-roses-and-million-stars",
+    "roses-and-mixed-chrysanthemums-roses-and-mixed-chrysanthemums"
   ],
   lagos: [
     "cool-and-classic",
@@ -1193,22 +1239,22 @@ export const popularSections: Occasion[] = [
   {
     title: "Fresh Flowers",
     url: `/filters?filter=${encodeURIComponent("Fresh Flowers")}`,
-    image: "/images/popular-fresh.png"
+    image: "/images/popular-fresh.jpg"
   },
   {
     title: "Forever Roses",
     url: `/filters?filter=${encodeURIComponent("Forever Roses")}`,
-    image: "/images/popular-forever.png"
+    image: "/images/popular-forever.jpg"
   },
   {
     title: "VIP Section",
     url: "/vip",
-    image: "/images/popular-vip.png"
+    image: "/images/popular-vip.jpg"
   },
   {
     title: "Bundled Products",
     url: `/filters?filter=${encodeURIComponent("Bundled Products")}`,
-    image: "/images/popular-bundled.png"
+    image: "/images/popular-bundled.jpg"
   }
   // {
   //   title: "Lagos Delivery",

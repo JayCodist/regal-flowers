@@ -10,6 +10,7 @@ const LocationLandingPage: FunctionComponent<{
   locationName: LocationName;
   featuredFlowers: Product[];
 }> = ({ locationName, featuredFlowers }) => {
+  console.log({ locationName, featuredFlowers, location: "location" });
   return (
     <LandingPage
       locationName={locationName}

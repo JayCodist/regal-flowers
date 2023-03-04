@@ -82,7 +82,7 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
-  const { notify } = useContext(SettingsContext);
+  const { notify, deliveryDate, setDeliveryDate } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 
@@ -92,7 +92,7 @@ const ProductsPage: FunctionComponent<{
     setLastProductEleRef
   ] = useState<HTMLAnchorElement | null>(null);
 
-  const [page] = useScrollHandler({
+  const [page, setPage] = useScrollHandler({
     node: lastProductEleRef
   });
 
@@ -172,6 +172,7 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
+      setPage(1);
       fetchProductCategory();
     }
 
@@ -222,9 +223,10 @@ const ProductsPage: FunctionComponent<{
                       <a
                         className={[
                           styles["occasion"],
-                          categorySlug !==
-                            "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears" &&
-                            categorySlug === occasion.url.split("/")[2] &&
+                          giftMap[categorySlug || ""] &&
+                            styles["gift-occasion"],
+
+                          categorySlug === occasion.url.split("/")[2] &&
                             styles["active"]
                         ].join(" ")}
                         onClick={() => {
@@ -264,104 +266,107 @@ const ProductsPage: FunctionComponent<{
         className={`${styles["content"]} flex ${deviceType === "desktop" &&
           "spaced-xl"}`}
       >
-        <div className={styles["left-side"]}>
-          <div className="vertical-margin spaced">
-            <span className={`bold margin-right ${styles["sub-title"]}`}>
-              Filters ({selectedFilter.length})
-            </span>
-            <button className="primary-color" onClick={handleClearFIlter}>
-              Clear Filters
-            </button>
-          </div>
+        {!giftMap[categorySlug || ""] && (
+          <div className={styles["left-side"]}>
+            <div className="vertical-margin spaced">
+              <span className={`bold margin-right ${styles["sub-title"]}`}>
+                Filters ({selectedFilter.length})
+              </span>
+              <button className="primary-color" onClick={handleClearFIlter}>
+                Clear Filters
+              </button>
+            </div>
 
-          <div className={styles["filters-sidebar"]}>
-            {filterCategories.map((filter, index) => (
-              <div key={index} className="vertical-margin spaced">
-                <p className="bold vertical-margin spaced">{filter.name}</p>
-                <div>
-                  {(filter.viewMore
-                    ? filter.options
-                    : filter.options.slice(0, filter.limit)
-                  ).map((child, i) => (
-                    <div key={i} className="margin-bottom">
-                      <Checkbox
-                        onChange={() => {
-                          const newFilters = selectedFilter.includes(
-                            child.tag || ""
-                          )
-                            ? selectedFilter.filter(
-                                _filter => _filter !== child.tag
-                              )
-                            : [...selectedFilter, child.tag];
-                          setSelectedFilter(
-                            newFilters.filter(Boolean) as string[]
-                          );
-                          setProductsLoading(true);
-                          router.push(
-                            `/product-category/${categorySlug}?shopBy=${newFilters.join(
-                              ","
-                            )}`,
-                            undefined,
-                            { scroll: false }
-                          );
-                        }}
-                        text={child.name}
-                        checked={selectedFilter.includes(child.tag || "")}
-                      />
-                    </div>
-                  ))}
+            <div className={styles["filters-sidebar"]}>
+              {filterCategories.map((filter, index) => (
+                <div key={index} className="vertical-margin spaced">
+                  <p className="bold vertical-margin spaced">{filter.name}</p>
+                  <div>
+                    {(filter.viewMore
+                      ? filter.options
+                      : filter.options.slice(0, filter.limit)
+                    ).map((child, i) => (
+                      <div key={i} className="margin-bottom">
+                        <Checkbox
+                          onChange={() => {
+                            const newFilters = selectedFilter.includes(
+                              child.tag || ""
+                            )
+                              ? selectedFilter.filter(
+                                  _filter => _filter !== child.tag
+                                )
+                              : [...selectedFilter, child.tag];
+                            setSelectedFilter(
+                              newFilters.filter(Boolean) as string[]
+                            );
+                            setProductsLoading(true);
+                            router.push(
+                              `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                ","
+                              )}`,
+                              undefined,
+                              { scroll: false }
+                            );
+                          }}
+                          text={child.name}
+                          checked={selectedFilter.includes(child.tag || "")}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  {filter.limit < filter.options.length && (
+                    <button
+                      className={styles["btn-view"]}
+                      onClick={() => {
+                        setFilterCategories(prev =>
+                          prev.map((item, _index) => {
+                            if (index === _index) {
+                              return {
+                                ...item,
+                                viewMore: !item.viewMore
+                              };
+                            }
+                            return item;
+                          })
+                        );
+                      }}
+                    >
+                      {!filter.viewMore ? "View More" : "View Less"}
+                    </button>
+                  )}
                 </div>
-                {filter.limit < filter.options.length && (
-                  <button
-                    className={styles["btn-view"]}
-                    onClick={() => {
-                      setFilterCategories(prev =>
-                        prev.map((item, _index) => {
-                          if (index === _index) {
-                            return {
-                              ...item,
-                              viewMore: !item.viewMore
-                            };
-                          }
-                          return item;
-                        })
-                      );
-                    }}
-                  >
-                    {!filter.viewMore ? "View More" : "View Less"}
-                  </button>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
         <div className={styles["product-wrapper"]}>
-          <div className="flex between">
+          <div className="flex between block">
             <div className={styles["date-wrapper"]}>
               <div>
                 <span>Delivery Date: </span>
                 <DatePicker
-                  onChange={date => {
-                    setTodayDate(date);
-                  }}
-                  value={todayDate}
+                  value={deliveryDate}
+                  onChange={setDeliveryDate}
                   format="D MMM YYYY"
                   placeholder="Select Date"
                 />
               </div>
 
-              <div>
+              <div className="input-group half-width">
                 <span>Sort: </span>
                 <Select
                   options={sortOptions}
                   value={sort}
                   onSelect={value => setSort(value as string)}
                   placeholder="Default"
+                  className={styles["sort"]}
+                  // responsive
                 />
               </div>
             </div>
 
             <div className={styles["filter-mobile"]} ref={filterDropdownRef}>
+              <span>Filter: </span>
               <button
                 className={styles.btn}
                 onClick={() => setShouldShowFilter(!shouldShowFilter)}
@@ -447,8 +452,10 @@ const ProductsPage: FunctionComponent<{
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : `${pageTitle} ${
-                    !giftMap[categorySlug || ""] ? "Flowers" : ""
+                : `${pageTitle} Flowers ${
+                    !giftMap[categorySlug || ""] && !pageTitle
+                      ? "All Occasion Flowers"
+                      : ""
                   }`}
             </h1>
 
@@ -469,7 +476,11 @@ const ProductsPage: FunctionComponent<{
                   url={`/product/${product.slug}`}
                   // mode="three-x-grid"
                   mode={`${
-                    deviceType === "desktop" ? "three-x-grid" : "two-x-grid"
+                    deviceType === "desktop"
+                      ? giftMap[categorySlug || ""]
+                        ? "four-x-grid"
+                        : "three-x-grid"
+                      : "two-x-grid"
                   }`}
                   ref={
                     index === arr.length - 1
@@ -500,7 +511,7 @@ const ProductsPage: FunctionComponent<{
           <>
             <div className="flex between margin-bottom spaced">
               <span className={styles.title}>
-                Valentine Gifts to Include with Flowers
+                Gifts to Include with Flowers
               </span>
               {deviceType === "desktop" && (
                 <Button
