@@ -213,7 +213,12 @@ const ProductsPage: FunctionComponent<{
       >
         <div className={`hero-content flex column center center-align `}>
           {productCategory === "occasion" && deviceType === "desktop" && (
-            <div className={styles["occasion-wrapper"]}>
+            <div
+              className={[
+                styles["occasion-wrapper"],
+                giftMap[categorySlug || ""] && styles["gifts-wrapper"]
+              ].join(" ")}
+            >
               {(giftMap[categorySlug || ""] ? gifts : occasions).map(
                 (occasion, index) => {
                   return (
