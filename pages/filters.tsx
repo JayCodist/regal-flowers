@@ -212,7 +212,7 @@ const ProductsPage: FunctionComponent<{
         ].join(" ")}
       >
         <div className={`hero-content flex column center center-align `}>
-          {productCategory === "occasion" && (
+          {productCategory === "occasion" && deviceType === "desktop" && (
             <div className={styles["occasion-wrapper"]}>
               {(giftMap[categorySlug || ""] ? gifts : occasions).map(
                 (occasion, index) => {
@@ -245,6 +245,85 @@ const ProductsPage: FunctionComponent<{
                   );
                 }
               )}
+            </div>
+          )}
+          {productCategory === "occasion" && deviceType === "mobile" && (
+            <div className={styles["occasions-mobile"]}>
+              <div
+                className={`margin-bottom spaced ${styles.occasions} ${giftMap[
+                  categorySlug || ""
+                ] && styles["gifts-category"]}`}
+              >
+                {(giftMap[categorySlug || ""] ? gifts : occasions)
+                  .slice(0, giftMap[categorySlug || ""] ? 4 : 3)
+                  .map((occasion, index) => {
+                    return (
+                      <Link href={occasion.url} key={index}>
+                        <a
+                          className={[
+                            styles["occasion"],
+                            giftMap[categorySlug || ""] &&
+                              styles["gift-occasion"],
+
+                            categorySlug === occasion.url.split("/")[2] &&
+                              styles["active"]
+                          ].join(" ")}
+                          onClick={() => {
+                            router.push(occasion.url, undefined, {
+                              scroll: false
+                            });
+                          }}
+                        >
+                          <strong>
+                            {occasion.title}
+                            <br />
+                            {occasion.title === "Just to Say" && (
+                              <span>{JustToSayText}</span>
+                            )}{" "}
+                          </strong>
+                        </a>
+                      </Link>
+                    );
+                  })}
+              </div>
+              <div
+                className={[
+                  styles.occasions,
+                  giftMap[categorySlug || ""] && styles["gifts-categor"]
+                ].join(" ")}
+              >
+                {(giftMap[categorySlug || ""] ? gifts : occasions)
+                  .slice(giftMap[categorySlug || ""] ? 4 : 3)
+                  .map((occasion, index) => {
+                    return (
+                      <Link href={occasion.url} key={index}>
+                        <a
+                          className={[
+                            styles["occasion"],
+                            giftMap[categorySlug || ""] &&
+                              styles["gift-occasion"],
+
+                            categorySlug === occasion.url.split("/")[2] &&
+                              styles["active"]
+                          ].join(" ")}
+                          onClick={() => {
+                            router.push(occasion.url, undefined, {
+                              scroll: false
+                            });
+                          }}
+                        >
+                          <strong>
+                            {occasion.title}
+                            <br />
+                            {occasion.title === "Just to Say" && (
+                              <span>{JustToSayText}</span>
+                            )}{" "}
+                          </strong>
+                        </a>
+                      </Link>
+                    );
+                  })}
+              </div>
             </div>
           )}
           {productCategory === "vip" && (
@@ -350,7 +429,7 @@ const ProductsPage: FunctionComponent<{
                 />
               </div>
 
-              <div className="input-group half-width">
+              <div>
                 <span>Sort: </span>
                 <Select
                   options={sortOptions}
