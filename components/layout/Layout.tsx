@@ -144,7 +144,11 @@ const Footer: FunctionComponent = () => {
               <span>Account Name: </span> <strong>Regal Flowers Ltd</strong>
             </div>
             <strong>Paypal</strong>
-            <div className="flex spaced">
+            <div
+              className={`flex spaced ${
+                deviceType === "mobile" ? "column" : ""
+              }`}
+            >
               <span>Email:</span>{" "}
               <strong>paypalpayments@regalflowers.com.ng</strong>
             </div>

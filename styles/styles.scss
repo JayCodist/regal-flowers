@@ -30,6 +30,9 @@ html {
   @media (max-width: 650px) {
     font-size: 80%;
   }
+  @media (max-width: 320px) {
+    font-size: 60%;
+  }
 
   @media (min-width: 1500px) {
     font-size: 95%;

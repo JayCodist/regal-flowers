@@ -91,9 +91,9 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
             {subTitle && <p className={styles.subtitle}>{subTitle}</p>}
             {!onlyTitle && (
               <div
-                className={`flex margin-top spaced ${
-                  price ? "between" : "center"
-                }`}
+                className={` ${price ? "between" : "center"} ${
+                  styles["price-btn-wrapper"]
+                } ${price ? styles.price : ""}`}
               >
                 {price && (
                   <div>
