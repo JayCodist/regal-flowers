@@ -436,15 +436,17 @@ const ProductsPage: FunctionComponent<{
         <div className={styles["product-wrapper"]}>
           <div className="flex between block">
             <div className={styles["date-wrapper"]}>
-              <div>
-                <span>Delivery Date: </span>
-                <DatePicker
-                  value={deliveryDate}
-                  onChange={setDeliveryDate}
-                  format="D MMM YYYY"
-                  placeholder="Select Date"
-                />
-              </div>
+              {deviceType === "desktop" && (
+                <div>
+                  <span>Delivery Date: </span>
+                  <DatePicker
+                    value={deliveryDate}
+                    onChange={setDeliveryDate}
+                    format="D MMM YYYY"
+                    placeholder="Select Date"
+                  />
+                </div>
+              )}
 
               <div>
                 <span>Sort: </span>
