@@ -21,7 +21,10 @@ import {
 } from "../utils/constants";
 import DatePicker from "../components/date-picker/DatePicker";
 import Select from "../components/select/Select";
-import { FetchResourceParams } from "../utils/types/FetchResourceParams";
+import {
+  FetchResourceParams,
+  SortLogic
+} from "../utils/types/FetchResourceParams";
 import useScrollHandler from "../utils/hooks/useScrollHandler";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import Button from "../components/button/Button";
@@ -53,6 +56,8 @@ const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
 type ProductCategory = "vip" | "occasion";
 
+type Sort = "name-asc" | "name-desc" | "price-asc" | "price-desc";
+
 const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
   categorySlug?: string;
@@ -72,9 +77,11 @@ const ProductsPage: FunctionComponent<{
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
-  const [sort, setSort] = useState<string>("");
+  const [sort, setSort] = useState<Sort>("name-asc");
   const [hasMore, setHasMore] = useState(false);
   const [shouldShowFilter, setShouldShowFilter] = useState(false);
+
+  console.log(sort);
 
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
@@ -137,9 +144,14 @@ const ProductsPage: FunctionComponent<{
       tags: [(shopBy as string) || ""],
       productClass
     };
+    const sortParams: SortLogic = {
+      sortField: sort.split("-")[0],
+      sortType: sort.split("-")[1] as "asc" | "desc"
+    };
     const params: FetchResourceParams<ProductFilterLogic> = {
       pageNumber: page,
-      filter: filterParams
+      filter: filterParams,
+      sortLogic: sortParams
     };
 
     const response = await getProductsByCategory(params);
@@ -175,7 +187,7 @@ const ProductsPage: FunctionComponent<{
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedOccasion, router]);
+  }, [categorySlug, selectedOccasion, router, sort]);
 
   useEffect(() => {
     if (isReady) {
@@ -439,7 +451,7 @@ const ProductsPage: FunctionComponent<{
                 <Select
                   options={sortOptions}
                   value={sort}
-                  onSelect={value => setSort(value as string)}
+                  onSelect={value => setSort(value as Sort)}
                   placeholder="Default"
                   className={styles["sort"]}
                   // responsive

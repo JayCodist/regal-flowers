@@ -5,8 +5,8 @@ export interface FilterLogic {
 }
 
 export interface SortLogic {
-  field: string;
-  sortType: "asc" | "dsc";
+  sortField: string;
+  sortType: "asc" | "desc";
 }
 
 export interface FetchResourceParams<F = FilterLogic> {

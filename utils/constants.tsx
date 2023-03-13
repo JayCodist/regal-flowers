@@ -518,19 +518,19 @@ export const _countryCodes = [
 export const sortOptions: Option[] = [
   {
     label: "Alphabetically Descending",
-    value: 1
+    value: "name-desc"
   },
   {
     label: "Alphabetically Ascending",
-    value: 2
+    value: "name-asc"
   },
   {
     label: "Lowest Prices First",
-    value: 3
+    value: "price-asc"
   },
   {
     label: "Highest Prices First",
-    value: 4
+    value: "price-desc"
   }
 ];
 
