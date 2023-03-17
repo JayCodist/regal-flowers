@@ -228,6 +228,10 @@
       align-items: center;
       margin-left: 0.5rem;
       width: 12rem;
+
+      @media (max-width: 650px) {
+        width: 47%;
+      }
     }
 
     .product-wrapper {
@@ -247,7 +251,11 @@
       }
 
       .sort {
-        width: 12rem;
+        min-width: 12rem;
+
+        @media (max-width: 650px) {
+          width: 12rem;
+        }
       }
     }
 
@@ -287,9 +295,13 @@
 }
 
 .see-all {
-  width: fit-content;
+  width: 12rem;
   margin: 1.5rem auto;
   padding: 0.5rem 1rem;
+
+  h3 {
+    font-size: 1.3rem;
+  }
 }
 
 .spinner {

@@ -344,7 +344,7 @@ const LandingPage: FunctionComponent<{
           )}
         </div>
 
-        <div className="featured-content">
+        <div className="featured-content white-bg">
           <h2 className="featured-title text-center">
             Why Send with Regal Flowers
           </h2>
@@ -664,7 +664,7 @@ const LandingPage: FunctionComponent<{
         <h2 className="featured-title text-center margin-bottom spaced">
           About Us
         </h2>
-        <div className={[styles["about-section"]].join(" ")}>
+        <div className={[styles["about-section"], "white-bg"].join(" ")}>
           <div>
             <p className="title small bold margin-bottom">
               {aboutUsContent.howItBegan.title}

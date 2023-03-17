@@ -456,7 +456,6 @@ const ProductsPage: FunctionComponent<{
                   onSelect={value => setSort(value as Sort)}
                   placeholder="Default"
                   className={styles["sort"]}
-                  // responsive
                 />
               </div>
             </div>

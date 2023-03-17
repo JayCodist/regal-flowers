@@ -88,6 +88,7 @@ const Footer: FunctionComponent = () => {
               className={`${
                 deviceType === "mobile" ? "flex between spaced column" : ""
               }`}
+              style={deviceType === "mobile" ? { width: "30%" } : {}}
             >
               <strong>Quick Links</strong>
               {footerContent.quickLinks.map(link => (
@@ -100,6 +101,7 @@ const Footer: FunctionComponent = () => {
               className={`${
                 deviceType === "mobile" ? "flex between spaced column" : ""
               }`}
+              style={deviceType === "mobile" ? { width: "65%" } : {}}
             >
               <strong>Get In Touch</strong>
               <div className="flex spaced-xl">

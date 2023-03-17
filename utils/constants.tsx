@@ -932,7 +932,7 @@ export const links: AppLink[] = [
         ]
       },
       {
-        title: "Get well soon",
+        title: "Get Well Soon",
         url: "/product-category/get-well-soon",
         children: [
           {
