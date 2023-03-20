@@ -39,6 +39,19 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   );
 
   useEffect(() => {
+    const longDescription = document.getElementById("long-description");
+    const description = document.getElementById("description");
+    if (longDescription) {
+      longDescription.innerHTML = product.longDescription;
+    }
+
+    if (description) {
+      description.innerHTML = product.description;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (!shouldShowRegularTab) {
       setsizeType("vip");
     }
@@ -226,6 +239,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </div>
               {descriptionTab === "product description" && (
                 <p
+                  id="long-description"
                   dangerouslySetInnerHTML={{ __html: product.longDescription }}
                 ></p>
               )}
@@ -316,6 +330,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               {" "}
               <h3 className="title small bold margin-bottom">Description</h3>
               <p
+                id="description"
                 className="normal-text"
                 dangerouslySetInnerHTML={{ __html: product.description }}
               ></p>
