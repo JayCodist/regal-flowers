@@ -16,11 +16,10 @@ import {
   filtersCatgories,
   giftItems,
   gifts,
-  occasions,
-  sortOptions
+  occasions
 } from "../utils/constants";
 import DatePicker from "../components/date-picker/DatePicker";
-import Select from "../components/select/Select";
+import Select, { Option } from "../components/select/Select";
 import {
   FetchResourceParams,
   SortLogic
@@ -90,6 +89,27 @@ const ProductsPage: FunctionComponent<{
   const { notify, deliveryDate, setDeliveryDate } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
+
+  const sortOptions: Option[] = [
+    {
+      label: `Alphabetically ${
+        deviceType === "desktop" ? "Descending" : "Z-A"
+      }`,
+      value: "name-desc"
+    },
+    {
+      label: `Alphabetically ${deviceType === "desktop" ? "Ascending" : "A-Z"}`,
+      value: "name-asc"
+    },
+    {
+      label: "Lowest Prices First",
+      value: "price-asc"
+    },
+    {
+      label: "Highest Prices First",
+      value: "price-desc"
+    }
+  ];
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [
@@ -434,7 +454,7 @@ const ProductsPage: FunctionComponent<{
           </div>
         )}
         <div className={styles["product-wrapper"]}>
-          <div className="flex between block">
+          <div className="flex between block center-align">
             <div className={styles["date-wrapper"]}>
               {deviceType === "desktop" && (
                 <div>
@@ -448,7 +468,7 @@ const ProductsPage: FunctionComponent<{
                 </div>
               )}
 
-              <div>
+              <div className="flex column">
                 <span>Sort: </span>
                 <Select
                   options={sortOptions}

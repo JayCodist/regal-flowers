@@ -515,25 +515,6 @@ export const _countryCodes = [
   { value: "+44", label: "+44" }
 ];
 
-export const sortOptions: Option[] = [
-  {
-    label: "Alphabetically Descending",
-    value: "name-desc"
-  },
-  {
-    label: "Alphabetically Ascending",
-    value: "name-asc"
-  },
-  {
-    label: "Lowest Prices First",
-    value: "price-asc"
-  },
-  {
-    label: "Highest Prices First",
-    value: "price-desc"
-  }
-];
-
 export const gifts: { title: string; url: string; category?: string }[] = [
   {
     title: "Chocolates and Biscuits",
