@@ -39,7 +39,7 @@ export interface PaymentMethod {
 }
 
 export interface CartItem {
-  key: number;
+  key: string;
   name: string;
   price: number;
   description?: string;

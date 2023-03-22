@@ -18,6 +18,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const [descriptionTab] = useState("product description");
   const [sizeType, setsizeType] = useState("regular");
   const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [addonGroup, setAddonGroup] = useState("");
   const [selectedDesign, setSelectedDesign] = useState<DesignOption | null>(
     null
@@ -33,8 +34,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
   );
-
-  console.log(product);
 
   const shouldShowVipSizes = product.variants?.some(
     variant => variant.class === "vip"
@@ -65,7 +64,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   const handleAddToCart = () => {
     const cartItem: CartItem = {
-      key: product.key,
+      key: product.key + selectedSize,
       name: product.name,
       price: total,
       size: selectedSize,
@@ -74,20 +73,21 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       image: product.images[0]
     };
 
-    const _cartItem = cartItems.find(item => item.key === product.key);
+    const existingCartItem = cartItems.find(
+      item => item.key === product.key + selectedSize
+    );
+    const existingSize = existingCartItem?.size;
+    console.log({ existingSize, existingCartItem, selectedSize });
 
-    if (!_cartItem) {
+    if (!existingCartItem) {
       setCartItems([...cartItems, cartItem]);
       notify("success", "Item Added To Cart");
-    } else {
-      setCartItems(
-        cartItems.map(item =>
-          item === _cartItem
-            ? { ..._cartItem, quantity: _cartItem.quantity + 1 }
-            : item
-        )
-      );
-      notify("success", `Item quantity increased to ${_cartItem.quantity + 1}`);
+    } else if (existingCartItem && existingSize !== selectedSize) {
+      setCartItems([
+        ...cartItems,
+        { ...existingCartItem, size: selectedSize, price: total }
+      ]);
+      notify("success", "Item Added To Cart");
     }
   };
 
@@ -122,19 +122,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   useEffect(() => {
     setTotal(productPrice + (selectedDesign?.price || 0));
-    const existingCartItem = cartItems.find(item => item.key === product.key);
-    if (existingCartItem) {
-      setCartItems(
-        cartItems.map(item =>
-          item === existingCartItem
-            ? { ...item, design: selectedDesign?.name, size: selectedSize }
-            : item
-        )
-      );
-      notify("success", "Item in cart updated successfully");
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDesign, selectedSize]);
+  }, [selectedDesign]);
 
   const cannotBuy =
     (product.type === "variable" && !selectedSize) ||
@@ -343,6 +332,12 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           onClick={() => {
                             setSelectedSize(variant.name);
                             setProductPrice(variant.price);
+                            if (!selectedSizes.includes(variant.name)) {
+                              setSelectedSizes([
+                                ...selectedSizes,
+                                variant.name
+                              ]);
+                            }
                           }}
                         >
                           {variant.name.slice(1)} |{" "}
