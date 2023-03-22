@@ -16,10 +16,11 @@ import {
   filtersCatgories,
   giftItems,
   gifts,
-  occasions
+  occasions,
+  sortOptions
 } from "../utils/constants";
 import DatePicker from "../components/date-picker/DatePicker";
-import Select, { Option } from "../components/select/Select";
+import Select from "../components/select/Select";
 import {
   FetchResourceParams,
   SortLogic
@@ -80,8 +81,6 @@ const ProductsPage: FunctionComponent<{
   const [hasMore, setHasMore] = useState(false);
   const [shouldShowFilter, setShouldShowFilter] = useState(false);
 
-  console.log(sort);
-
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
   });
@@ -89,27 +88,6 @@ const ProductsPage: FunctionComponent<{
   const { notify, deliveryDate, setDeliveryDate } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
-
-  const sortOptions: Option[] = [
-    {
-      label: `Alphabetically ${
-        deviceType === "desktop" ? "Descending" : "Z-A"
-      }`,
-      value: "name-desc"
-    },
-    {
-      label: `Alphabetically ${deviceType === "desktop" ? "Ascending" : "A-Z"}`,
-      value: "name-asc"
-    },
-    {
-      label: "Lowest Prices First",
-      value: "price-asc"
-    },
-    {
-      label: "Highest Prices First",
-      value: "price-desc"
-    }
-  ];
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [

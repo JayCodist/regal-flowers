@@ -15,7 +15,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const { product } = props;
 
   const [activeSlide, setActiveSlide] = useState<number>(0);
-  const [descriptionTab, setDescriptionTab] = useState("product description");
+  const [descriptionTab] = useState("product description");
   const [sizeType, setsizeType] = useState("regular");
   const [selectedSize, setSelectedSize] = useState("");
   const [addonGroup, setAddonGroup] = useState("");
@@ -30,11 +30,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   );
   const deviceType = useDeviceType();
 
-  const shouldShowRegularTab = product.variants?.some(
+  const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
   );
 
-  const shouldShowVipTab = product.variants?.some(
+  console.log(product);
+
+  const shouldShowVipSizes = product.variants?.some(
     variant => variant.class === "vip"
   );
 
@@ -42,17 +44,20 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     const longDescription = document.getElementById("long-description");
     const description = document.getElementById("description");
     if (longDescription) {
-      longDescription.innerHTML = product.longDescription;
+      longDescription.innerHTML = product.longDescription.replace(
+        "<p>&nbsp;</p>",
+        ""
+      );
     }
 
     if (description) {
-      description.innerHTML = product.description;
+      description.innerHTML = product.description.replace("<p>&nbsp;</p>", "");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!shouldShowRegularTab) {
+    if (!shouldShowRegularSizes) {
       setsizeType("vip");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -217,34 +222,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           </div>
           {deviceType === "desktop" && (
             <>
-              <div className={`${styles["tab"]} flex spaced`}>
-                <button
-                  onClick={() => setDescriptionTab("product description")}
-                  className={`${styles["tab-title"]} ${
-                    descriptionTab === "product description"
-                      ? styles.active
-                      : null
-                  }`}
-                >
-                  Product Description
-                </button>
-                {/* <button
-                  onClick={() => setDescriptionTab("reviews")}
-                  className={`${styles["tab-title"]} ${
-                    descriptionTab === "reviews" ? styles.active : null
-                  }`}
-                >
-                  Reviews
-                </button> */}
-              </div>
-              {descriptionTab === "product description" && (
-                <p
-                  id="long-description"
-                  dangerouslySetInnerHTML={{ __html: product.longDescription }}
-                ></p>
-              )}
+              <br />
 
               {descriptionTab === "reviews" && <p>Coming Soon</p>}
+
               <div className={`${styles.delivery} flex spaced`}>
                 <div className={styles.icon}>
                   <img
@@ -253,6 +234,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                     alt="truck"
                   />
                 </div>
+
                 <div>
                   <p className="smaller bold">Delivery</p>
                   <p>Estimated delivery time: 1 - 7 days</p>
@@ -282,7 +264,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               <h1 className="title margin-bottom spaced">
                 {product.name.split("–")[0]}
               </h1>
-              <p>{product.name}</p>
+              <p className="normal-text margin-bottom xl">
+                {product.name.split("–")[1]}
+              </p>
             </div>
             <div className="bold primary-color center">
               <p>FROM</p>
@@ -291,24 +275,26 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </p>
             </div>
           </div>
-          <div className={styles["temporary-notes"]}>
-            {product.temporaryNotes &&
-              product.temporaryNotes?.length > 0 &&
-              product.temporaryNotes.map((note, index) => (
-                <p
-                  className={`${styles["product-info"]} center-align flex spaced`}
-                  key={index}
-                >
-                  <img
-                    src="/icons/info.svg"
-                    alt="information"
-                    className="generic-icon"
-                  />
+          {product.temporaryNotes && (
+            <div className={styles["temporary-notes"]}>
+              {product.temporaryNotes &&
+                product.temporaryNotes?.length > 0 &&
+                product.temporaryNotes.map((note, index) => (
+                  <p
+                    className={`${styles["product-info"]} center-align flex spaced`}
+                    key={index}
+                  >
+                    <img
+                      src="/icons/info.svg"
+                      alt="information"
+                      className="generic-icon"
+                    />
 
-                  <span key={index}>{note}</span>
-                </p>
-              ))}
-          </div>
+                    <span key={index}>{note}</span>
+                  </p>
+                ))}
+            </div>
+          )}
           {deviceType === "mobile" && (
             <div className={`${styles.delivery} flex spaced`}>
               <div className={styles.icon}>
@@ -327,78 +313,26 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
           {product.description && (
             <>
-              {" "}
-              <h3 className="title small bold margin-bottom">Description</h3>
-              <p
-                id="description"
-                className="normal-text"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              ></p>
+              <h3 className="title small bold">Description</h3>
+              <p id="description" className={`normal-text description`}></p>
             </>
           )}
           {product.type === "variable" && (
             <div>
-              <div className="align-icon margin-top">
-                <h3 className="bold margin-right">Select Budget</h3>
-                <img
-                  src="/icons/info.svg"
-                  alt="information"
-                  className="generic-icon"
-                />{" "}
-              </div>
               <br />
-              <div className={`${styles["tab"]} flex spaced`}>
-                {shouldShowRegularTab && (
+              {shouldShowRegularSizes && (
+                <>
                   <button
                     onClick={() => setsizeType("regular")}
-                    className={`${styles["tab-title"]} ${
-                      sizeType === "regular" ? styles.active : null
-                    }`}
+                    className={`${styles["tab-title"]}`}
                   >
-                    Regular Sizes
+                    {!shouldShowVipSizes ? "Sizes" : "Regular Sizes"}
                   </button>
-                )}
-                {shouldShowVipTab && (
-                  <button
-                    onClick={() => setsizeType("vip")}
-                    className={`${styles["tab-title"]} ${
-                      sizeType === "vip" ? styles.active : null
-                    }`}
-                  >
-                    VIP Sizes
-                  </button>
-                )}
-              </div>
-              {sizeType === "regular" && (
-                <div className={styles["size-wrapper"]}>
-                  {product.variants
-                    ?.filter(variant => variant.class === "regular")
-                    .map((variant, index) => (
-                      <span
-                        key={index}
-                        className={[
-                          styles.size,
-                          selectedSize === variant.name &&
-                            styles["selected-size"]
-                        ].join(" ")}
-                        onClick={() => {
-                          setSelectedSize(variant.name);
-                          setProductPrice(variant.price);
-                        }}
-                      >
-                        {variant.name.slice(1)} |{" "}
-                        {getPriceDisplay(variant.price, currency)}
-                      </span>
-                    ))}
-                </div>
-              )}
 
-              {sizeType === "vip" && (
-                <div className={styles["size-wrapper"]}>
-                  {product.variants
-                    ?.filter(variant => variant.class === "vip")
-                    .map((variant, index) => {
-                      return (
+                  <div className={styles["size-wrapper"]}>
+                    {product.variants
+                      ?.filter(variant => variant.class === "regular")
+                      .map((variant, index) => (
                         <span
                           key={index}
                           className={[
@@ -411,15 +345,50 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                             setProductPrice(variant.price);
                           }}
                         >
-                          {variant.name.slice(1).replace(/Vip/i, "VIP")} |
+                          {variant.name.slice(1)} |{" "}
                           {getPriceDisplay(variant.price, currency)}
                         </span>
-                      );
-                    })}
-                </div>
+                      ))}
+                  </div>
+                </>
               )}
+              {shouldShowVipSizes && (
+                <>
+                  <button
+                    onClick={() => setsizeType("vip")}
+                    className={`${styles["tab-title"]} ${
+                      sizeType === "vip" ? styles.active : null
+                    }`}
+                  >
+                    VIP Sizes
+                  </button>
 
-              <br />
+                  <div className={styles["size-wrapper"]}>
+                    {product.variants
+                      ?.filter(variant => variant.class === "vip")
+                      .map((variant, index) => {
+                        return (
+                          <span
+                            key={index}
+                            className={[
+                              styles.size,
+                              selectedSize === variant.name &&
+                                styles["selected-size"]
+                            ].join(" ")}
+                            onClick={() => {
+                              setSelectedSize(variant.name);
+                              setProductPrice(variant.price);
+                            }}
+                          >
+                            {variant.name.slice(1).replace(/Vip/i, "VIP")} |
+                            {getPriceDisplay(variant.price, currency)}
+                          </span>
+                        );
+                      })}
+                  </div>
+                  <br />
+                </>
+              )}
 
               {product.designOptions && (
                 <div className="align-icon vertical-margin">
@@ -445,9 +414,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                         onClick={() => setSelectedDesign(designOption)}
                       >
                         <img
-                          src="/icons/wrapped-bouquet.svg"
+                          src={`/icons/${designOption.name}.svg`}
                           alt="box"
-                          className="generic-icon xxl margin-bottom spaced"
+                          className={`generic-icon xxl margin-bottom spaced ${designOption.name ===
+                            "inLargeVase" && styles["inLargeVase"]}`}
                         />
                         <p className="vertical-margin bold">
                           {designOption.title}
@@ -564,6 +534,16 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             />
           ))}
         </div>
+
+        {deviceType === "mobile" && (
+          <>
+            <button className={`title small bold`}>Product Description</button>
+
+            {descriptionTab === "product description" && (
+              <p id="long-description" className="description normal-text"></p>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

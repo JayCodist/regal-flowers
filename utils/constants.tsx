@@ -1444,6 +1444,25 @@ export const reviews: RegalContent<UserReview[]> = {
   ]
 };
 
+export const sortOptions: Option[] = [
+  {
+    label: `Alphabetically Z-A`,
+    value: "name-desc"
+  },
+  {
+    label: `Alphabetically A-Z`,
+    value: "name-asc"
+  },
+  {
+    label: "Lowest Prices First",
+    value: "price-asc"
+  },
+  {
+    label: "Highest Prices First",
+    value: "price-desc"
+  }
+];
+
 export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
   USD: 185,
   GBP: 150,

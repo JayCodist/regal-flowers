@@ -264,6 +264,10 @@ button {
   &.spaced {
     margin-bottom: 1.2rem;
   }
+
+  &.xl {
+    margin-bottom: 2rem;
+  }
 }
 .margin-top {
   margin-top: 0.6rem;
@@ -723,4 +727,13 @@ button {
 .spinner {
   display: block;
   margin: 0 auto;
+}
+
+.description {
+  margin-top: 1rem;
+  line-height: 2em;
+
+  a {
+    color: #9b0000;
+  }
 }
