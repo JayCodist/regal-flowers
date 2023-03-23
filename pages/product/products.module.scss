@@ -236,6 +236,12 @@
         color: white;
         background-color: #9b0000;
       }
+
+      &.not-selected {
+        border-color: #d1d5db;
+        color: black;
+        background-color: #f9fafb;
+      }
     }
   }
 

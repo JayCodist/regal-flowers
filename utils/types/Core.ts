@@ -47,4 +47,5 @@ export interface CartItem {
   image: ProductImage;
   size?: string;
   design?: string;
+  designPrice?: number;
 }

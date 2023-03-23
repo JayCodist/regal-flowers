@@ -729,7 +729,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
-  const handleRemoveItemQuantity = (key: number) => {
+  const handleRemoveItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.key === key);
     if (item) {
       if (item.quantity > 1) {
@@ -745,7 +745,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
-  const handleAddItemQuantity = (key: number) => {
+  const handleAddItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.key === key);
     if (item) {
       setCartItems(
@@ -764,7 +764,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     0
   );
 
-  const handleRemoveItem = (key: number) => {
+  const handleRemoveItem = (key: string) => {
     setCartItems(cartItems.filter(item => item.key !== key));
   };
 
@@ -877,7 +877,19 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                     </div>
                     {item.size && <p>Size: {item.size}</p>}
                     {item.design && (
-                      <p className="vertical-margin">Design: {item.design}</p>
+                      <p className="vertical-margin">
+                        Design: {`${item.design}`} {"  "}
+                        {item.designPrice ? (
+                          <span>
+                            {`+ ${getPriceDisplay(
+                              item.designPrice,
+                              currency
+                            )} x ${item.quantity}`}
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </p>
                     )}
                   </div>
                 </div>

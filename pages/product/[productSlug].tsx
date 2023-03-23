@@ -18,7 +18,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const [descriptionTab] = useState("product description");
   const [sizeType, setsizeType] = useState("regular");
   const [selectedSize, setSelectedSize] = useState("");
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [addonGroup, setAddonGroup] = useState("");
   const [selectedDesign, setSelectedDesign] = useState<DesignOption | null>(
     null
@@ -38,6 +37,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const shouldShowVipSizes = product.variants?.some(
     variant => variant.class === "vip"
   );
+
+  const selectedSizes = cartItems.map(item => item.size);
 
   useEffect(() => {
     const longDescription = document.getElementById("long-description");
@@ -70,7 +71,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       size: selectedSize,
       design: selectedDesign?.name,
       quantity: 1,
-      image: product.images[0]
+      image: product.images[0],
+      designPrice: selectedDesign?.price
     };
 
     const existingCartItem = cartItems.find(
@@ -327,17 +329,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           className={[
                             styles.size,
                             selectedSize === variant.name &&
+                              styles["selected-size"],
+                            selectedSizes.includes(variant.name) &&
                               styles["selected-size"]
                           ].join(" ")}
                           onClick={() => {
                             setSelectedSize(variant.name);
                             setProductPrice(variant.price);
-                            if (!selectedSizes.includes(variant.name)) {
-                              setSelectedSizes([
-                                ...selectedSizes,
-                                variant.name
-                              ]);
-                            }
                           }}
                         >
                           {variant.name.slice(1)} |{" "}
