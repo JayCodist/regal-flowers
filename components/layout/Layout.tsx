@@ -2,6 +2,7 @@ import React, {
   FunctionComponent,
   LegacyRef,
   MouseEvent as ReactMouseEvent,
+  ReactElement,
   ReactNode,
   useContext,
   useEffect,
@@ -26,6 +27,7 @@ import useOutsideClick from "../../utils/hooks/useOutsideClick";
 import Input from "../input/Input";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import { Design } from "../../utils/types/Core";
+import DatePicker from "../date-picker/DatePicker";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -867,7 +869,19 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             <div className={styles["delivery-status"]}>
               <span>Pickup/Delivery date</span>
               <span>{deliveryDate?.format("D MMM YYYY") || "Not set yet"}</span>
-              <span className="underline primary-color">Edit</span>
+              {/* <span className="underline primary-color">Edit</span> */}
+              {!deliveryDate && (
+                <DatePicker
+                  value={deliveryDate}
+                  onChange={setDeliveryDate}
+                  format="D MMM YYYY"
+                  className={styles["delivery-date"]}
+                  placeholder="Edit"
+                  iconAtLeft
+                  content={<p className="underline primary-color">Edit</p>}
+                  dropdownAlignment="right"
+                />
+              )}
             </div>
           ) : (
             ""

@@ -17,6 +17,7 @@ interface DatePickerProps {
    */
   dropdownAlignment?: "left" | "right";
   placeholder?: string;
+  content?: React.ReactNode;
 }
 
 const DatePicker = (props: DatePickerProps) => {
@@ -31,7 +32,8 @@ const DatePicker = (props: DatePickerProps) => {
     className,
     iconAtLeft,
     placeholder,
-    dropdownAlignment = "left"
+    dropdownAlignment = "left",
+    content
   } = props;
 
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -101,26 +103,32 @@ const DatePicker = (props: DatePickerProps) => {
         ].join(" ")}
         ref={selectRef}
       >
-        {iconAtLeft && (
-          <img
-            alt="calendar"
-            className={styles.icon}
-            src="/icons/calender.svg"
-          />
-        )}
-        {shownValue ? (
-          <span className={styles["main-text"]}>{shownValue}</span>
+        {content ? (
+          <div>{content}</div>
         ) : (
-          <span className={styles.placeholder}>
-            {placeholder || "Select date"}
-          </span>
-        )}
-        {!iconAtLeft && (
-          <img
-            alt="calendar"
-            className={styles.icon}
-            src="/icons/calender.svg"
-          />
+          <>
+            {iconAtLeft && (
+              <img
+                alt="calendar"
+                className={styles.icon}
+                src="/icons/calender.svg"
+              />
+            )}
+            {shownValue ? (
+              <span className={styles["main-text"]}>{shownValue}</span>
+            ) : (
+              <span className={styles.placeholder}>
+                {placeholder || "Select date"}
+              </span>
+            )}
+            {!iconAtLeft && (
+              <img
+                alt="calendar"
+                className={styles.icon}
+                src="/icons/calender.svg"
+              />
+            )}
+          </>
         )}
       </div>
       <div
