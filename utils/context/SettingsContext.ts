@@ -13,9 +13,11 @@ export interface SettingsControls extends Settings {
   setDeliveryDate: (deliveryDate: Dayjs | null) => void;
   setCartItems: (cartItems: CartItem[]) => void;
   cartItems: CartItem[];
-  notify: (type: NotifyType, message: string, duration?: number) => void;
+  notify: (type: NotifyType, message: any, duration?: number) => void;
   user: User | null;
   setUser: (user: User | null) => void;
+  setShouldShowCart: (shouldShowCart: boolean) => void;
+  shouldShowCart: boolean;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -30,7 +32,9 @@ const SettingsContext = createContext<SettingsControls>({
   setCartItems: () => {},
   notify: () => {},
   user: null,
-  setUser: () => {}
+  setUser: () => {},
+  setShouldShowCart: () => {},
+  shouldShowCart: false
 });
 
 export default SettingsContext;

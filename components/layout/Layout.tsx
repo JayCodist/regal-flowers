@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { allDesignOptions, footerContent, links } from "../../utils/constants";
+import { footerContent, links } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -25,6 +25,7 @@ import useDeviceType from "../../utils/hooks/useDeviceType";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 import Input from "../input/Input";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
+import { Design } from "../../utils/types/Core";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -334,7 +335,6 @@ const CurrencyController = () => {
 };
 
 const Header: FunctionComponent = () => {
-  const [shouldShowCart, setShouldShowCart] = useState(false);
   const [activeNav, setActiveNav] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -343,9 +343,20 @@ const Header: FunctionComponent = () => {
   const { pathname } = useRouter();
   const _pathname = pathname.split("/")[1];
 
-  const { currency, setCurrency, cartItems, user, allCurrencies } = useContext(
-    SettingsContext
-  );
+  const {
+    currency,
+    setCurrency,
+    cartItems,
+    user,
+    allCurrencies,
+    setShouldShowCart,
+    shouldShowCart
+  } = useContext(SettingsContext);
+
+  const totalCartItems = useMemo(() => {
+    if (!cartItems.length) return 0;
+    return cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  }, [cartItems]);
 
   const handleActiveNav = (title: string, e: ReactMouseEvent) => {
     setActiveNav(title === activeNav ? "" : title);
@@ -670,10 +681,10 @@ const Header: FunctionComponent = () => {
                 />
               </svg>
 
-              {cartItems.length ? (
-                <strong>Cart ({cartItems.length})</strong>
+              {totalCartItems ? (
+                <strong>Cart ({totalCartItems})</strong>
               ) : (
-                <span>Cart ({cartItems.length})</span>
+                <span>Cart ({totalCartItems})</span>
               )}
             </button>
             <a
@@ -716,6 +727,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
+  const totalCartItems = useMemo(() => {
+    if (!cartItems.length) return 0;
+    return cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  }, [cartItems]);
+
   const cartRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
 
@@ -736,7 +752,14 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         setCartItems(
           cartItems.map(item => {
             if (item.key === key) {
-              return { ...item, quantity: item.quantity - 1 };
+              return {
+                ...item,
+                quantity: item.quantity - 1,
+                design: item.design && {
+                  ...item.design,
+                  quantity: (item.design?.quantity as number) - 1
+                }
+              };
             }
             return item;
           })
@@ -751,7 +774,16 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       setCartItems(
         cartItems.map(item => {
           if (item.key === key) {
-            return { ...item, quantity: item.quantity + 1 };
+            return {
+              ...item,
+              quantity: item.quantity + 1,
+              design:
+                item.design &&
+                ({
+                  ...item.design,
+                  quantity: (item.design?.quantity as number) + 1
+                } as Design)
+            };
           }
           return item;
         })
@@ -798,10 +830,9 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   const designCharges = useMemo(() => {
     return cartItems.reduce((total, item) => {
-      const designOption = item.design
-        ? allDesignOptions.find(opt => opt.name === item.design)
-        : null;
-      return total + (designOption?.price || 0);
+      const designTotal =
+        item.design && item?.design.price * item.design.quantity;
+      return total + (designTotal || 0);
     }, 0);
   }, [cartItems]);
 
@@ -823,7 +854,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         ].join(" ")}
       >
         <div className={styles["cart-header"]}>
-          <h3 className="sub-heading bold">My Cart ({cartItems.length})</h3>
+          <h3 className="sub-heading bold">My Cart ({totalCartItems})</h3>
           <img
             src="/icons/cancel-cart.svg"
             className="generic-icon medium clickable"
@@ -875,16 +906,18 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                         ></div>
                       </div>
                     </div>
-                    {item.size && <p>Size: {item.size}</p>}
+                    {item.size && (
+                      <p className="capitalize">Size: {item.size}</p>
+                    )}
                     {item.design && (
-                      <p className="vertical-margin">
-                        Design: {`${item.design}`} {"  "}
-                        {item.designPrice ? (
+                      <p className="vertical-margin capitalize">
+                        Design: {`${item.design.title}`} {"  "}
+                        {item.design.price ? (
                           <span>
                             {`+ ${getPriceDisplay(
-                              item.designPrice,
+                              item.design.price,
                               currency
-                            )} x ${item.quantity}`}
+                            )} x ${item.design.quantity}`}
                           </span>
                         ) : (
                           ""
@@ -907,6 +940,12 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                 </strong>
               </div>
               <div className="flex between center-align margin-bottom spaced">
+                <span className="small-text">Add-ons</span>
+                <strong className="small-text">
+                  {getPriceDisplay(designCharges, currency)}
+                </strong>
+              </div>
+              <div className="flex between center-align margin-bottom spaced">
                 <span className="small-text">Total</span>
                 <strong className="small-text">
                   {getPriceDisplay(total + designCharges, currency)}
@@ -918,12 +957,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           )}
           <Button
             responsive
-            className="margin-top spaced"
+            className="margin-top spaced capitalize"
             onClick={handleCreateOrder}
             loading={loading}
             disabled={!cartItems.length}
           >
-            Proceed to checkout ({getPriceDisplay(total, currency)})
+            Proceed to checkout (
+            {getPriceDisplay(total + designCharges, currency)})
           </Button>
         </div>
       </div>
@@ -932,7 +972,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 };
 
 export const CheckoutHeader: FunctionComponent = () => {
-  // const [stage, setCurrentStage] = useState<number>(3);
   const { currentStage } = useContext(SettingsContext);
 
   const stages = [
