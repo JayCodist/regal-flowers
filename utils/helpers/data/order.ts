@@ -85,7 +85,7 @@ export const createOrder: (payload: {
       deliveryDate,
       cartItems: cartItems.map(item => ({
         key: item.key,
-        design: item.design || "",
+        design: item.design?.name || "",
         size: item.size || "",
         quantity: item.quantity
       }))

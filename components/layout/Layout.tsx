@@ -2,7 +2,6 @@ import React, {
   FunctionComponent,
   LegacyRef,
   MouseEvent as ReactMouseEvent,
-  ReactElement,
   ReactNode,
   useContext,
   useEffect,

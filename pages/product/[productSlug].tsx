@@ -72,11 +72,11 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   }, []);
 
   const handleAddToCart = () => {
+    const productKey = `${
+      product.key
+    }${selectedSize?.name as string}${selectedDesign?.name as string}`;
     const cartItem: CartItem = {
-      key:
-        product.key +
-        (selectedSize?.name as string) +
-        (selectedDesign?.name as string),
+      key: productKey,
       name: product.name,
       price: productPrice,
       size: selectedSize?.name,
@@ -92,13 +92,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       image: product.images[0]
     };
 
-    const existingCartItem = cartItems.find(
-      item =>
-        item.key ===
-        product.key +
-          (selectedSize?.name as string) +
-          (selectedDesign?.name as string)
-    );
+    const existingCartItem = cartItems.find(item => item.key === productKey);
     const existingSize = existingCartItem?.size;
     const existingDesign = existingCartItem?.design;
 
