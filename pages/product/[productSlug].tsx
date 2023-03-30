@@ -93,7 +93,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     };
 
     const existingCartItem = cartItems.find(item => item.cartId === productKey);
-    const existingSize = existingCartItem?.size;
     const existingDesign = existingCartItem?.design;
 
     if (!existingCartItem) {
@@ -111,7 +110,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         </p>
       );
     } else {
-      if (existingSize !== selectedSize?.name) {
+      if (existingCartItem.name !== selectedSize?.name) {
         setCartItems([...cartItems, cartItem]);
         notify(
           "success",
@@ -125,7 +124,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             </span>
           </p>
         );
-      } else if (existingSize === selectedSize?.name) {
+      } else if (existingCartItem.name === selectedSize?.name) {
         const newCartItem = cartItems.map(item => {
           if (item.key === existingCartItem?.key) {
             return {
@@ -498,13 +497,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               {selectedSize && (
                 <>
                   {product.designOptions && (
-                    <div className="align-icon vertical-margin">
+                    <div className="align-icon vertical-margin tooltip">
                       <h3 className="bold margin-right">Select Design</h3>
                       <img
                         src="/icons/info.svg"
                         alt="information"
                         className="generic-icon"
                       />{" "}
+                      <span className="tooltiptext">{product.designNote}</span>
                     </div>
                   )}
                   <div className="flex spaced">

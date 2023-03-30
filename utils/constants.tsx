@@ -594,7 +594,7 @@ export const otherOccasions: {
   category?: string;
 }[] = [
   {
-    title: "Cascading Flowers",
+    title: "Cascading",
     url: "/product-category/cascadingdropping-bouquets"
   },
   {
@@ -955,8 +955,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Flowers",
-            url:
-              "/product-category/bridal-bouquets,accessories-boutonnieres-bridesmaids-flowers-amp-corsages,cascadingdropping-bouquets",
+            url: "/product-category/bridal-bouquets",
             children: []
           },
           {
