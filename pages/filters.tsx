@@ -7,7 +7,6 @@ import {
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Dayjs } from "dayjs";
 import { getProductsByCategory } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import Checkbox from "../components/checkbox/Checkbox";
@@ -22,7 +21,10 @@ import {
 } from "../utils/constants";
 import DatePicker from "../components/date-picker/DatePicker";
 import Select from "../components/select/Select";
-import { FetchResourceParams } from "../utils/types/FetchResourceParams";
+import {
+  FetchResourceParams,
+  SortLogic
+} from "../utils/types/FetchResourceParams";
 import useScrollHandler from "../utils/hooks/useScrollHandler";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import Button from "../components/button/Button";
@@ -54,6 +56,8 @@ const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
 
 type ProductCategory = "vip" | "occasion";
 
+type Sort = "name-asc" | "name-desc" | "price-asc" | "price-desc";
+
 const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
   categorySlug?: string;
@@ -72,9 +76,8 @@ const ProductsPage: FunctionComponent<{
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
-  const [todayDate, setTodayDate] = useState<Dayjs | null>(null);
   const [filterCategories, setFilterCategories] = useState(filtersCatgories);
-  const [sort, setSort] = useState<string>("");
+  const [sort, setSort] = useState<Sort>("name-asc");
   const [hasMore, setHasMore] = useState(false);
   const [shouldShowFilter, setShouldShowFilter] = useState(false);
 
@@ -139,9 +142,14 @@ const ProductsPage: FunctionComponent<{
       tags: [(shopBy as string) || ""],
       productClass
     };
+    const sortParams: SortLogic = {
+      sortField: sort.split("-")[0],
+      sortType: sort.split("-")[1] as "asc" | "desc"
+    };
     const params: FetchResourceParams<ProductFilterLogic> = {
       pageNumber: page,
-      filter: filterParams
+      filter: filterParams,
+      sortLogic: sortParams
     };
 
     const response = await getProductsByCategory(params);
@@ -177,7 +185,7 @@ const ProductsPage: FunctionComponent<{
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedOccasion, router]);
+  }, [categorySlug, selectedOccasion, router, sort]);
 
   useEffect(() => {
     if (isReady) {
@@ -214,8 +222,13 @@ const ProductsPage: FunctionComponent<{
         ].join(" ")}
       >
         <div className={`hero-content flex column center center-align `}>
-          {productCategory === "occasion" && (
-            <div className={styles["occasion-wrapper"]}>
+          {productCategory === "occasion" && deviceType === "desktop" && (
+            <div
+              className={[
+                styles["occasion-wrapper"],
+                giftMap[categorySlug || ""] && styles["gifts-wrapper"]
+              ].join(" ")}
+            >
               {(giftMap[categorySlug || ""] ? gifts : occasions).map(
                 (occasion, index) => {
                   return (
@@ -247,6 +260,85 @@ const ProductsPage: FunctionComponent<{
                   );
                 }
               )}
+            </div>
+          )}
+          {productCategory === "occasion" && deviceType === "mobile" && (
+            <div className={styles["occasions-mobile"]}>
+              <div
+                className={`margin-bottom spaced ${styles.occasions} ${giftMap[
+                  categorySlug || ""
+                ] && styles["gifts-category"]}`}
+              >
+                {(giftMap[categorySlug || ""] ? gifts : occasions)
+                  .slice(0, giftMap[categorySlug || ""] ? 4 : 3)
+                  .map((occasion, index) => {
+                    return (
+                      <Link href={occasion.url} key={index}>
+                        <a
+                          className={[
+                            styles["occasion"],
+                            giftMap[categorySlug || ""] &&
+                              styles["gift-occasion"],
+
+                            categorySlug === occasion.url.split("/")[2] &&
+                              styles["active"]
+                          ].join(" ")}
+                          onClick={() => {
+                            router.push(occasion.url, undefined, {
+                              scroll: false
+                            });
+                          }}
+                        >
+                          <strong>
+                            {occasion.title}
+                            <br />
+                            {occasion.title === "Just to Say" && (
+                              <span>{JustToSayText}</span>
+                            )}{" "}
+                          </strong>
+                        </a>
+                      </Link>
+                    );
+                  })}
+              </div>
+              <div
+                className={[
+                  styles.occasions,
+                  giftMap[categorySlug || ""] && styles["gifts-categor"]
+                ].join(" ")}
+              >
+                {(giftMap[categorySlug || ""] ? gifts : occasions)
+                  .slice(giftMap[categorySlug || ""] ? 4 : 3)
+                  .map((occasion, index) => {
+                    return (
+                      <Link href={occasion.url} key={index}>
+                        <a
+                          className={[
+                            styles["occasion"],
+                            giftMap[categorySlug || ""] &&
+                              styles["gift-occasion"],
+
+                            categorySlug === occasion.url.split("/")[2] &&
+                              styles["active"]
+                          ].join(" ")}
+                          onClick={() => {
+                            router.push(occasion.url, undefined, {
+                              scroll: false
+                            });
+                          }}
+                        >
+                          <strong>
+                            {occasion.title}
+                            <br />
+                            {occasion.title === "Just to Say" && (
+                              <span>{JustToSayText}</span>
+                            )}{" "}
+                          </strong>
+                        </a>
+                      </Link>
+                    );
+                  })}
+              </div>
             </div>
           )}
           {productCategory === "vip" && (
@@ -340,27 +432,28 @@ const ProductsPage: FunctionComponent<{
           </div>
         )}
         <div className={styles["product-wrapper"]}>
-          <div className="flex between block">
+          <div className="flex between block center-align">
             <div className={styles["date-wrapper"]}>
-              <div>
-                <span>Delivery Date: </span>
-                <DatePicker
-                  value={deliveryDate}
-                  onChange={setDeliveryDate}
-                  format="D MMM YYYY"
-                  placeholder="Select Date"
-                />
-              </div>
+              {deviceType === "desktop" && (
+                <div>
+                  <span>Delivery Date: </span>
+                  <DatePicker
+                    value={deliveryDate}
+                    onChange={setDeliveryDate}
+                    format="D MMM YYYY"
+                    placeholder="Select Date"
+                  />
+                </div>
+              )}
 
-              <div className="input-group half-width">
+              <div className="flex column">
                 <span>Sort: </span>
                 <Select
                   options={sortOptions}
                   value={sort}
-                  onSelect={value => setSort(value as string)}
+                  onSelect={value => setSort(value as Sort)}
                   placeholder="Default"
                   className={styles["sort"]}
-                  // responsive
                 />
               </div>
             </div>
@@ -452,7 +545,9 @@ const ProductsPage: FunctionComponent<{
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : `${pageTitle} Flowers ${
+                : ` ${pageTitle} ${
+                    !giftMap[categorySlug || ""] ? "Flowers" : ""
+                  } ${
                     !giftMap[categorySlug || ""] && !pageTitle
                       ? "All Occasion Flowers"
                       : ""

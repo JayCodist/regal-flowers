@@ -68,7 +68,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">{bestSellers[locationName]}</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/product-category/all"
+                url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -90,12 +90,13 @@ const LandingPage: FunctionComponent<{
                 subTitle={flower.name.split("–")[1]}
                 price={flower.price}
                 url={`/product/${flower.slug}`}
+                buttonText="Add to Cart"
               />
             ))}
           </div>
           {deviceType === "mobile" && (
             <Button
-              url="/filters?selectedOccasion=all-occasions"
+              url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -109,7 +110,7 @@ const LandingPage: FunctionComponent<{
             </h2>
             {deviceType === "desktop" && (
               <Button
-                url="/filters?selectedOccasion=all-occasions"
+                url="/product-category/just-to-say-bouquets"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -131,12 +132,13 @@ const LandingPage: FunctionComponent<{
                 subTitle={flower.name.split("–")[1]}
                 price={flower.price}
                 url={`/product/${flower.slug}`}
+                buttonText="Add to Cart"
               />
             ))}
           </div>
           {deviceType === "mobile" && (
             <Button
-              url="/product-category/all"
+              url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -206,6 +208,7 @@ const LandingPage: FunctionComponent<{
                 url={section.url}
                 mode="four-x-grid"
                 onlyTitle
+                buttonText="Add to Cart"
               />
             ))}
           </div>
@@ -341,7 +344,7 @@ const LandingPage: FunctionComponent<{
           )}
         </div>
 
-        <div className="featured-content">
+        <div className="featured-content white-bg">
           <h2 className="featured-title text-center">
             Why Send with Regal Flowers
           </h2>
@@ -361,7 +364,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">Gifts to Include with Flowers</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/product-category/gift-packs"
+                url="/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -382,14 +385,14 @@ const LandingPage: FunctionComponent<{
                 name={gift.name}
                 subTitle={gift.description}
                 url={gift.slug}
-                buttonText="See more"
+                buttonText="See More"
               />
             ))}
           </div>
 
           {deviceType === "mobile" && (
             <Button
-              url="/product-category/gift-packs"
+              url="/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -429,7 +432,10 @@ const LandingPage: FunctionComponent<{
               every flower and gift delivery a special experience. We didn't say
               so, the various recipients of our flowers did.
             </span>
-            <Button padded url="/product-category/all">
+            <Button
+              padded
+              url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+            >
               Send Flowers
             </Button>
           </div>
@@ -451,7 +457,10 @@ const LandingPage: FunctionComponent<{
               every flower and gift delivery a special experience. We didn't say
               so, the various recipients of our flowers did.
             </span>
-            <Button padded url="/product-category/all">
+            <Button
+              padded
+              url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+            >
               Send Flowers
             </Button>
           </div>
@@ -655,7 +664,7 @@ const LandingPage: FunctionComponent<{
         <h2 className="featured-title text-center margin-bottom spaced">
           About Us
         </h2>
-        <div className={[styles["about-section"]].join(" ")}>
+        <div className={[styles["about-section"], "white-bg"].join(" ")}>
           <div>
             <p className="title small bold margin-bottom">
               {aboutUsContent.howItBegan.title}

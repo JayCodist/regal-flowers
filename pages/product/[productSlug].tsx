@@ -15,7 +15,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const { product } = props;
 
   const [activeSlide, setActiveSlide] = useState<number>(0);
-  const [descriptionTab, setDescriptionTab] = useState("product description");
+  const [descriptionTab] = useState("product description");
   const [sizeType, setsizeType] = useState("regular");
   const [selectedSize, setSelectedSize] = useState("");
   const [addonGroup, setAddonGroup] = useState("");
@@ -30,16 +30,34 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   );
   const deviceType = useDeviceType();
 
-  const shouldShowRegularTab = product.variants?.some(
+  const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
   );
 
-  const shouldShowVipTab = product.variants?.some(
+  const shouldShowVipSizes = product.variants?.some(
     variant => variant.class === "vip"
   );
 
+  const selectedSizes = cartItems.map(item => item.size);
+
   useEffect(() => {
-    if (!shouldShowRegularTab) {
+    const longDescription = document.getElementById("long-description");
+    const description = document.getElementById("description");
+    if (longDescription) {
+      longDescription.innerHTML = product.longDescription.replace(
+        "<p>&nbsp;</p>",
+        ""
+      );
+    }
+
+    if (description) {
+      description.innerHTML = product.description.replace("<p>&nbsp;</p>", "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!shouldShowRegularSizes) {
       setsizeType("vip");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -47,29 +65,31 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   const handleAddToCart = () => {
     const cartItem: CartItem = {
-      key: product.key,
+      key: product.key + selectedSize,
       name: product.name,
       price: total,
       size: selectedSize,
       design: selectedDesign?.name,
       quantity: 1,
-      image: product.images[0]
+      image: product.images[0],
+      designPrice: selectedDesign?.price
     };
 
-    const _cartItem = cartItems.find(item => item.key === product.key);
+    const existingCartItem = cartItems.find(
+      item => item.key === product.key + selectedSize
+    );
+    const existingSize = existingCartItem?.size;
+    console.log({ existingSize, existingCartItem, selectedSize });
 
-    if (!_cartItem) {
+    if (!existingCartItem) {
       setCartItems([...cartItems, cartItem]);
       notify("success", "Item Added To Cart");
-    } else {
-      setCartItems(
-        cartItems.map(item =>
-          item === _cartItem
-            ? { ..._cartItem, quantity: _cartItem.quantity + 1 }
-            : item
-        )
-      );
-      notify("success", `Item quantity increased to ${_cartItem.quantity + 1}`);
+    } else if (existingCartItem && existingSize !== selectedSize) {
+      setCartItems([
+        ...cartItems,
+        { ...existingCartItem, size: selectedSize, price: total }
+      ]);
+      notify("success", "Item Added To Cart");
     }
   };
 
@@ -104,19 +124,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   useEffect(() => {
     setTotal(productPrice + (selectedDesign?.price || 0));
-    const existingCartItem = cartItems.find(item => item.key === product.key);
-    if (existingCartItem) {
-      setCartItems(
-        cartItems.map(item =>
-          item === existingCartItem
-            ? { ...item, design: selectedDesign?.name, size: selectedSize }
-            : item
-        )
-      );
-      notify("success", "Item in cart updated successfully");
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDesign, selectedSize]);
+  }, [selectedDesign]);
 
   const cannotBuy =
     (product.type === "variable" && !selectedSize) ||
@@ -204,33 +213,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           </div>
           {deviceType === "desktop" && (
             <>
-              <div className={`${styles["tab"]} flex spaced`}>
-                <button
-                  onClick={() => setDescriptionTab("product description")}
-                  className={`${styles["tab-title"]} ${
-                    descriptionTab === "product description"
-                      ? styles.active
-                      : null
-                  }`}
-                >
-                  Product Description
-                </button>
-                {/* <button
-                  onClick={() => setDescriptionTab("reviews")}
-                  className={`${styles["tab-title"]} ${
-                    descriptionTab === "reviews" ? styles.active : null
-                  }`}
-                >
-                  Reviews
-                </button> */}
-              </div>
-              {descriptionTab === "product description" && (
-                <p
-                  dangerouslySetInnerHTML={{ __html: product.longDescription }}
-                ></p>
-              )}
+              <br />
 
               {descriptionTab === "reviews" && <p>Coming Soon</p>}
+
               <div className={`${styles.delivery} flex spaced`}>
                 <div className={styles.icon}>
                   <img
@@ -239,6 +225,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                     alt="truck"
                   />
                 </div>
+
                 <div>
                   <p className="smaller bold">Delivery</p>
                   <p>Estimated delivery time: 1 - 7 days</p>
@@ -268,7 +255,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               <h1 className="title margin-bottom spaced">
                 {product.name.split("–")[0]}
               </h1>
-              <p>{product.name}</p>
+              <p className="normal-text margin-bottom xl">
+                {product.name.split("–")[1]}
+              </p>
             </div>
             <div className="bold primary-color center">
               <p>FROM</p>
@@ -277,24 +266,26 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </p>
             </div>
           </div>
-          <div className={styles["temporary-notes"]}>
-            {product.temporaryNotes &&
-              product.temporaryNotes?.length > 0 &&
-              product.temporaryNotes.map((note, index) => (
-                <p
-                  className={`${styles["product-info"]} center-align flex spaced`}
-                  key={index}
-                >
-                  <img
-                    src="/icons/info.svg"
-                    alt="information"
-                    className="generic-icon"
-                  />
+          {product.temporaryNotes && (
+            <div className={styles["temporary-notes"]}>
+              {product.temporaryNotes &&
+                product.temporaryNotes?.length > 0 &&
+                product.temporaryNotes.map((note, index) => (
+                  <p
+                    className={`${styles["product-info"]} center-align flex spaced`}
+                    key={index}
+                  >
+                    <img
+                      src="/icons/info.svg"
+                      alt="information"
+                      className="generic-icon"
+                    />
 
-                  <span key={index}>{note}</span>
-                </p>
-              ))}
-          </div>
+                    <span key={index}>{note}</span>
+                  </p>
+                ))}
+            </div>
+          )}
           {deviceType === "mobile" && (
             <div className={`${styles.delivery} flex spaced`}>
               <div className={styles.icon}>
@@ -313,37 +304,49 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
           {product.description && (
             <>
-              {" "}
-              <h3 className="title small bold margin-bottom">Description</h3>
-              <p
-                className="normal-text"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              ></p>
+              <h3 className="title small bold">Description</h3>
+              <p id="description" className={`normal-text description`}></p>
             </>
           )}
           {product.type === "variable" && (
             <div>
-              <div className="align-icon margin-top">
-                <h3 className="bold margin-right">Select Budget</h3>
-                <img
-                  src="/icons/info.svg"
-                  alt="information"
-                  className="generic-icon"
-                />{" "}
-              </div>
               <br />
-              <div className={`${styles["tab"]} flex spaced`}>
-                {shouldShowRegularTab && (
+              {shouldShowRegularSizes && (
+                <>
                   <button
                     onClick={() => setsizeType("regular")}
-                    className={`${styles["tab-title"]} ${
-                      sizeType === "regular" ? styles.active : null
-                    }`}
+                    className={`${styles["tab-title"]}`}
                   >
-                    Regular Sizes
+                    {!shouldShowVipSizes ? "Sizes" : "Regular Sizes"}
                   </button>
-                )}
-                {shouldShowVipTab && (
+
+                  <div className={styles["size-wrapper"]}>
+                    {product.variants
+                      ?.filter(variant => variant.class === "regular")
+                      .map((variant, index) => (
+                        <span
+                          key={index}
+                          className={[
+                            styles.size,
+                            selectedSize === variant.name &&
+                              styles["selected-size"],
+                            selectedSizes.includes(variant.name) &&
+                              styles["selected-size"]
+                          ].join(" ")}
+                          onClick={() => {
+                            setSelectedSize(variant.name);
+                            setProductPrice(variant.price);
+                          }}
+                        >
+                          {variant.name.slice(1)} |{" "}
+                          {getPriceDisplay(variant.price, currency)}
+                        </span>
+                      ))}
+                  </div>
+                </>
+              )}
+              {shouldShowVipSizes && (
+                <>
                   <button
                     onClick={() => setsizeType("vip")}
                     className={`${styles["tab-title"]} ${
@@ -352,59 +355,33 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   >
                     VIP Sizes
                   </button>
-                )}
-              </div>
-              {sizeType === "regular" && (
-                <div className={styles["size-wrapper"]}>
-                  {product.variants
-                    ?.filter(variant => variant.class === "regular")
-                    .map((variant, index) => (
-                      <span
-                        key={index}
-                        className={[
-                          styles.size,
-                          selectedSize === variant.name &&
-                            styles["selected-size"]
-                        ].join(" ")}
-                        onClick={() => {
-                          setSelectedSize(variant.name);
-                          setProductPrice(variant.price);
-                        }}
-                      >
-                        {variant.name.slice(1)} |{" "}
-                        {getPriceDisplay(variant.price, currency)}
-                      </span>
-                    ))}
-                </div>
-              )}
 
-              {sizeType === "vip" && (
-                <div className={styles["size-wrapper"]}>
-                  {product.variants
-                    ?.filter(variant => variant.class === "vip")
-                    .map((variant, index) => {
-                      return (
-                        <span
-                          key={index}
-                          className={[
-                            styles.size,
-                            selectedSize === variant.name &&
-                              styles["selected-size"]
-                          ].join(" ")}
-                          onClick={() => {
-                            setSelectedSize(variant.name);
-                            setProductPrice(variant.price);
-                          }}
-                        >
-                          {variant.name.slice(1).replace(/Vip/i, "VIP")} |
-                          {getPriceDisplay(variant.price, currency)}
-                        </span>
-                      );
-                    })}
-                </div>
+                  <div className={styles["size-wrapper"]}>
+                    {product.variants
+                      ?.filter(variant => variant.class === "vip")
+                      .map((variant, index) => {
+                        return (
+                          <span
+                            key={index}
+                            className={[
+                              styles.size,
+                              selectedSize === variant.name &&
+                                styles["selected-size"]
+                            ].join(" ")}
+                            onClick={() => {
+                              setSelectedSize(variant.name);
+                              setProductPrice(variant.price);
+                            }}
+                          >
+                            {variant.name.slice(1).replace(/Vip/i, "VIP")} |
+                            {getPriceDisplay(variant.price, currency)}
+                          </span>
+                        );
+                      })}
+                  </div>
+                  <br />
+                </>
               )}
-
-              <br />
 
               {product.designOptions && (
                 <div className="align-icon vertical-margin">
@@ -430,9 +407,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                         onClick={() => setSelectedDesign(designOption)}
                       >
                         <img
-                          src="/icons/wrapped-bouquet.svg"
+                          src={`/icons/${designOption.name}.svg`}
                           alt="box"
-                          className="generic-icon xxl margin-bottom spaced"
+                          className={`generic-icon xxl margin-bottom spaced ${designOption.name ===
+                            "inLargeVase" && styles["inLargeVase"]}`}
                         />
                         <p className="vertical-margin bold">
                           {designOption.title}
@@ -545,9 +523,20 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               price={item.price}
               subTitle={item.subtitle}
               url={`/product/${item.slug}`}
+              buttonText="Add to Cart"
             />
           ))}
         </div>
+
+        {deviceType === "mobile" && (
+          <>
+            <button className={`title small bold`}>Product Description</button>
+
+            {descriptionTab === "product description" && (
+              <p id="long-description" className="description normal-text"></p>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

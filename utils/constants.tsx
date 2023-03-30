@@ -515,25 +515,6 @@ export const _countryCodes = [
   { value: "+44", label: "+44" }
 ];
 
-export const sortOptions: Option[] = [
-  {
-    label: "Alphabetically Descending",
-    value: 1
-  },
-  {
-    label: "Alphabetically Ascending",
-    value: 2
-  },
-  {
-    label: "Lowest Prices First",
-    value: 3
-  },
-  {
-    label: "Highest Prices First",
-    value: 4
-  }
-];
-
 export const gifts: { title: string; url: string; category?: string }[] = [
   {
     title: "Chocolates and Biscuits",
@@ -932,7 +913,7 @@ export const links: AppLink[] = [
         ]
       },
       {
-        title: "Get well soon",
+        title: "Get Well Soon",
         url: "/product-category/get-well-soon",
         children: [
           {
@@ -1462,6 +1443,25 @@ export const reviews: RegalContent<UserReview[]> = {
     }
   ]
 };
+
+export const sortOptions: Option[] = [
+  {
+    label: `Alphabetically Z-A`,
+    value: "name-desc"
+  },
+  {
+    label: `Alphabetically A-Z`,
+    value: "name-asc"
+  },
+  {
+    label: "Lowest Prices First",
+    value: "price-asc"
+  },
+  {
+    label: "Highest Prices First",
+    value: "price-desc"
+  }
+];
 
 export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
   USD: 185,

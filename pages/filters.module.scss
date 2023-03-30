@@ -4,6 +4,10 @@
     width: 100%;
     background-attachment: fixed;
 
+    @media (max-width: 650px) {
+      height: 25rem;
+    }
+
     &.vip-bg {
       background-image: url("/images/vip-bg.png");
       display: flex;
@@ -36,10 +40,6 @@
       background-position: center center;
       background-size: cover;
 
-      @media (max-width: 650px) {
-        height: 20rem;
-      }
-
       .occasion-wrapper {
         width: 100%;
         display: flex;
@@ -60,64 +60,117 @@
         }
 
         @media (max-width: 650px) {
-          overflow-x: scroll;
-          overflow-y: hidden;
+          display: none;
+        }
+      }
 
-          &::-webkit-scrollbar {
-            display: none;
-          }
+      .gifts-wrapper {
+        @media (max-width: 1400px) {
+          padding: 0 2rem;
+        }
+      }
 
-          & > * {
-            margin-right: 1rem;
+      .occasion {
+        background-color: #fdf0f0;
+        position: relative;
+        height: 14rem;
+        width: 14rem;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 0.5rem;
+        color: #9b0000;
+        cursor: pointer;
+        font-size: 1.3rem;
+        border: 0.2rem solid transparent;
 
-            &:last-child {
-              margin-right: 0;
-            }
-          }
+        &.active {
+          border-color: #9b0000;
         }
 
-        .occasion {
-          background-color: #fdf0f0;
-          position: relative;
-          height: 14rem;
-          width: 14rem;
-          border-radius: 50%;
-          display: inline-flex;
+        &:hover {
+          border-color: #9b0000;
+        }
+
+        @media (max-width: 650px) {
+          height: 10rem;
+          width: 10rem;
+          font-size: 1rem;
+        }
+
+        @media (max-width: 450px) {
+          height: 8rem;
+          width: 8rem;
+        }
+
+        &.gift-occasion {
+          height: 10rem;
+          width: 10rem;
+          @media (max-width: 1150px) {
+            width: 9rem;
+            height: 9rem;
+          }
+
+          @media (max-width: 580px) {
+            width: 8rem;
+            height: 8rem;
+          }
+
+          @media (max-width: 500px) {
+            width: 7rem;
+            height: 7rem;
+            font-size: 0.8rem;
+          }
+
+          @media (max-width: 380px) {
+            width: 6rem;
+            height: 6rem;
+            font-size: 0.8rem;
+          }
+        }
+      }
+
+      .occasions-mobile {
+        width: 90%;
+
+        .occasions {
+          display: flex;
           justify-content: center;
           align-items: center;
-          text-align: center;
-          padding: 0 1rem;
-          color: #9b0000;
-          cursor: pointer;
-          font-size: 1.3rem;
-          border: 0.2rem solid transparent;
-
-          &.gift-occasion {
-            width: 10rem;
-            height: 10rem;
-            font-size: 1.2rem;
-
-            @media (max-width: 650px) {
-              height: 10rem;
-              width: 10rem;
-              font-size: 1rem;
-              min-width: 10rem;
+          & > * {
+            margin-left: 2.4rem;
+            &:first-child {
+              margin-left: 0;
             }
           }
 
-          &.active {
-            border-color: #9b0000;
+          @media (max-width: 500px) {
+            & > * {
+              margin-left: 1.2rem;
+              &:first-child {
+                margin-left: 0;
+              }
+            }
           }
 
-          &:hover {
-            border-color: #9b0000;
-          }
+          &.gifts-category {
+            & > * {
+              margin-left: 1.5rem;
+              &:first-child {
+                margin-left: 0;
+              }
+            }
 
-          @media (max-width: 650px) {
-            height: 10rem;
-            width: 10rem;
-            font-size: 1rem;
-            min-width: 10rem;
+            @media (max-width: 500px) {
+              & > * {
+                margin-left: 0.5rem;
+                &:first-child {
+                  margin-left: 0;
+                }
+              }
+            }
           }
         }
       }
@@ -175,6 +228,10 @@
       align-items: center;
       margin-left: 0.5rem;
       width: 12rem;
+
+      @media (max-width: 650px) {
+        width: 47%;
+      }
     }
 
     .product-wrapper {
@@ -194,7 +251,11 @@
       }
 
       .sort {
-        width: 12rem;
+        min-width: 12rem;
+
+        @media (max-width: 650px) {
+          width: 12rem;
+        }
       }
     }
 
@@ -234,9 +295,13 @@
 }
 
 .see-all {
-  width: fit-content;
+  width: 12rem;
   margin: 1.5rem auto;
   padding: 0.5rem 1rem;
+
+  h3 {
+    font-size: 1.3rem;
+  }
 }
 
 .spinner {

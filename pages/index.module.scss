@@ -401,9 +401,13 @@
 }
 
 .see-all {
-  width: fit-content;
+  width: 12rem;
   margin: 1.5rem auto;
   padding: 0.5rem 1rem;
+
+  h3 {
+    font-size: 1.3rem;
+  }
 }
 
 .occasion-card {

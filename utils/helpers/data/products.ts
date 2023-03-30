@@ -38,6 +38,8 @@ export const getProductsByCategory: (
         params?.pageNumber
       }&tags=${tags?.join(",")}&categories=${category?.join(",")}&${
         productClass ? `productClass=${productClass}` : ""
+      }&sortField=${params?.sortLogic?.sortField}&sortType=${
+        params?.sortLogic?.sortType
       }`
     );
     return {

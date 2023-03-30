@@ -47,14 +47,14 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       }
 
       const cartItem: CartItem = {
-        key: product.key,
+        key: `${product.key}`,
         name: product.name,
         price: product.price,
         quantity: 1,
         image: product.images[0]
       };
 
-      const _cartItem = cartItems.find(item => item.key === product?.key);
+      const _cartItem = cartItems.find(item => item.key === `${product?.key}`);
 
       if (!_cartItem) {
         setCartItems([...cartItems, cartItem]);
@@ -91,9 +91,9 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
             {subTitle && <p className={styles.subtitle}>{subTitle}</p>}
             {!onlyTitle && (
               <div
-                className={`flex margin-top spaced ${
-                  price ? "between" : "center"
-                }`}
+                className={` ${price ? "between" : "center"} ${
+                  styles["price-btn-wrapper"]
+                } ${price ? styles.price : ""}`}
               >
                 {price && (
                   <div>

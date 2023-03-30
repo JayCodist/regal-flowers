@@ -30,6 +30,9 @@ html {
   @media (max-width: 650px) {
     font-size: 80%;
   }
+  @media (max-width: 320px) {
+    font-size: 60%;
+  }
 
   @media (min-width: 1500px) {
     font-size: 95%;
@@ -260,6 +263,10 @@ button {
   margin-bottom: 0.6rem;
   &.spaced {
     margin-bottom: 1.2rem;
+  }
+
+  &.xl {
+    margin-bottom: 2rem;
   }
 }
 .margin-top {
@@ -661,6 +668,10 @@ button {
       }
     }
   }
+
+  .white-bg {
+    background-color: #fff;
+  }
 }
 
 .mobile-margin {
@@ -716,4 +727,13 @@ button {
 .spinner {
   display: block;
   margin: 0 auto;
+}
+
+.description {
+  margin-top: 1rem;
+  line-height: 2em;
+
+  a {
+    color: #9b0000;
+  }
 }

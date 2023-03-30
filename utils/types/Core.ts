@@ -39,7 +39,7 @@ export interface PaymentMethod {
 }
 
 export interface CartItem {
-  key: number;
+  key: string;
   name: string;
   price: number;
   description?: string;
@@ -47,4 +47,5 @@ export interface CartItem {
   image: ProductImage;
   size?: string;
   design?: string;
+  designPrice?: number;
 }
