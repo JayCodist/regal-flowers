@@ -17,6 +17,7 @@ import {
   giftItems,
   gifts,
   occasions,
+  otherOccasions,
   sortOptions
 } from "../utils/constants";
 import DatePicker from "../components/date-picker/DatePicker";
@@ -197,13 +198,16 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
-      const flowerTitle = occasions.find(
+      const occasionTitle = occasions.find(
         item => item.url === `/product-category/${categorySlug}`
       )?.title;
       const giftTitle = gifts.find(
         item => item.url === `/product-category/${categorySlug}`
       )?.title;
-      const title = flowerTitle || giftTitle;
+      const otherTitle = otherOccasions.find(
+        item => item.url === `/product-category/${categorySlug}`
+      )?.title;
+      const title = occasionTitle || giftTitle || otherTitle;
 
       if (title) {
         setPageTitle(title);
@@ -567,7 +571,7 @@ const ProductsPage: FunctionComponent<{
                   image={product.images[0].src}
                   price={product.price}
                   buttonText="Add to Cart"
-                  subTitle={product.name.split("–")[1]}
+                  subTitle={product.subtitle || product.name.split("–")[1]}
                   url={`/product/${product.slug}`}
                   // mode="three-x-grid"
                   mode={`${
@@ -587,7 +591,7 @@ const ProductsPage: FunctionComponent<{
                       : null
                   }
                   product={product}
-                  cart
+                  cart={product.variants?.length ? false : true}
                 />
               ))}
             </div>

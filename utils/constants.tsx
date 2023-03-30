@@ -588,6 +588,22 @@ export const occasions: { title: string; url: string; category?: string }[] = [
   }
 ];
 
+export const otherOccasions: {
+  title: string;
+  url: string;
+  category?: string;
+}[] = [
+  {
+    title: "Cascading Flowers",
+    url: "/product-category/cascadingdropping-bouquets"
+  },
+  {
+    title: "Accessories & Boutonnieres",
+    url:
+      "/product-category/accessories-boutonnieres-bridesmaids-flowers-amp-corsages"
+  }
+];
+
 export const placeholderEmail = "placeholder@regalflowers.com";
 
 export const filtersCatgories: {
@@ -939,12 +955,13 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Flowers",
-            url: "/product-category/bridal-bouquets",
+            url:
+              "/product-category/bridal-bouquets,accessories-boutonnieres-bridesmaids-flowers-amp-corsages,cascadingdropping-bouquets",
             children: []
           },
           {
             title: "Cascading Flowers",
-            url: "cascadingdropping-bouquets",
+            url: "/product-category/cascadingdropping-bouquets",
             children: []
           },
           {

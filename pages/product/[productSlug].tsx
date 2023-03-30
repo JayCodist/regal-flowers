@@ -72,11 +72,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   }, []);
 
   const handleAddToCart = () => {
-    const productKey = `${
-      product.key
-    }${selectedSize?.name as string}${selectedDesign?.name as string}`;
+    const productKey = `${product.key}${selectedSize?.name ||
+      ""}${selectedDesign?.name || ""}`.replace(/\s/g, "");
     const cartItem: CartItem = {
-      key: productKey,
+      key: product.key,
       name: product.name,
       price: productPrice,
       size: selectedSize?.name,
@@ -89,10 +88,11 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           }
         : null,
       quantity: 1,
-      image: product.images[0]
+      image: product.images[0],
+      cartId: productKey
     };
 
-    const existingCartItem = cartItems.find(item => item.key === productKey);
+    const existingCartItem = cartItems.find(item => item.cartId === productKey);
     const existingSize = existingCartItem?.size;
     const existingDesign = existingCartItem?.design;
 
@@ -113,6 +113,31 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     } else {
       if (existingSize !== selectedSize?.name) {
         setCartItems([...cartItems, cartItem]);
+        notify(
+          "success",
+          <p>
+            Item Added To Cart{" "}
+            <span
+              className="view-cart"
+              onClick={() => setShouldShowCart(!shouldShowCart)}
+            >
+              View Cart
+            </span>
+          </p>
+        );
+      } else if (existingSize === selectedSize?.name) {
+        const newCartItem = cartItems.map(item => {
+          if (item.key === existingCartItem?.key) {
+            return {
+              ...item,
+              quantity: item.quantity + 1
+            };
+          } else {
+            return item;
+          }
+        }) as CartItem[];
+
+        setCartItems(newCartItem);
         notify(
           "success",
           <p>
@@ -336,15 +361,15 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         <div className={styles.padding}>
           <div className="flex center-align between">
             <div className="margin-right spaced">
-              <h1 className="title margin-bottom spaced">
+              <p className="title margin-bottom spaced bold">
                 {product.name.split("–")[0]}
-              </h1>
-              <p className="normal-text margin-bottom xl">
-                {product.name.split("–")[1]}
               </p>
+              <h1 className={` margin-bottom xl ${styles.subTitle}`}>
+                {product.subtitle || product.name.split("–")[1]}
+              </h1>
             </div>
             <div className="bold primary-color center">
-              <p>FROM</p>
+              {product.variants.length ? <p>FROM</p> : null}
               <p className="larger">
                 {getPriceDisplay(product.price, currency)}
               </p>
@@ -504,7 +529,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                             <p className="vertical-margin bold">
                               {designOption.title}
                             </p>
-                            {designOption.price ? (
+                            {product.designOptions?.[designOption.name] ===
+                            "default" ? (
+                              <p>Default</p>
+                            ) : designOption.price ? (
                               <p>
                                 +{" "}
                                 {getPriceDisplay(designOption.price, currency)}
@@ -610,25 +638,23 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           {product.relatedProducts?.map((item, index) => (
             <FlowerCard
               key={index}
-              name={item.name}
+              name={item.name.split("–")[0]}
               image={item.images.src}
               price={item.price}
-              subTitle={item.subtitle}
+              subTitle={item.subtitle || item.name.split("–")[1]}
               url={`/product/${item.slug}`}
               buttonText="Add to Cart"
             />
           ))}
         </div>
 
-        {deviceType === "mobile" && (
-          <>
-            <button className={`title small bold`}>Product Description</button>
+        <>
+          <button className={`title small bold`}>Product Description</button>
 
-            {descriptionTab === "product description" && (
-              <p id="long-description" className="description normal-text"></p>
-            )}
-          </>
-        )}
+          {descriptionTab === "product description" && (
+            <p id="long-description" className="description normal-text"></p>
+          )}
+        </>
       </div>
     </section>
   );

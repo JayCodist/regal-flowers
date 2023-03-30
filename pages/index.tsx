@@ -87,10 +87,11 @@ const LandingPage: FunctionComponent<{
                 key={flower.key}
                 image={flower.images[0]?.src || ""}
                 name={flower.name.split("–")[0]}
-                subTitle={flower.name.split("–")[1]}
+                subTitle={flower.subtitle || flower.name.split("–")[1]}
                 price={flower.price}
                 url={`/product/${flower.slug}`}
                 buttonText="Add to Cart"
+                cart={flower.variants?.length ? false : true}
               />
             ))}
           </div>
@@ -129,10 +130,11 @@ const LandingPage: FunctionComponent<{
                 key={flower.key}
                 image={flower.images[0]?.src || ""}
                 name={flower.name.split("–")[0]}
-                subTitle={flower.name.split("–")[1]}
+                subTitle={flower.subtitle || flower.name.split("–")[1]}
                 price={flower.price}
                 url={`/product/${flower.slug}`}
                 buttonText="Add to Cart"
+                cart={flower.variants?.length ? false : true}
               />
             ))}
           </div>

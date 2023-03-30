@@ -747,12 +747,12 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const handleRemoveItemQuantity = (key: string) => {
-    const item = cartItems.find(item => item.key === key);
+    const item = cartItems.find(item => item.cartId === key);
     if (item) {
       if (item.quantity > 1) {
         setCartItems(
           cartItems.map(item => {
-            if (item.key === key) {
+            if (item.cartId === key) {
               return {
                 ...item,
                 quantity: item.quantity - 1,
@@ -770,11 +770,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const handleAddItemQuantity = (key: string) => {
-    const item = cartItems.find(item => item.key === key);
+    const item = cartItems.find(item => item.cartId === key);
     if (item) {
       setCartItems(
         cartItems.map(item => {
-          if (item.key === key) {
+          if (item.cartId === key) {
             return {
               ...item,
               quantity: item.quantity + 1,
@@ -798,7 +798,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   );
 
   const handleRemoveItem = (key: string) => {
-    setCartItems(cartItems.filter(item => item.key !== key));
+    setCartItems(cartItems.filter(item => item.cartId !== key));
   };
 
   useEffect(() => {
@@ -892,7 +892,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                   src="/icons/delete-cart.svg"
                   alt="delete"
                   className="generic-icon large margin-top spaced clickable"
-                  onClick={() => handleRemoveItem(item.key)}
+                  onClick={() => handleRemoveItem(item.cartId)}
                 />
                 <div className="flex spaced align-center block">
                   <img
@@ -910,12 +910,12 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                       <div className="flex center-align spaced-lg">
                         <div
                           className={styles.minus}
-                          onClick={() => handleRemoveItemQuantity(item.key)}
+                          onClick={() => handleRemoveItemQuantity(item.cartId)}
                         ></div>
                         <span className="small-text">{item.quantity}</span>
                         <div
                           className={styles.plus}
-                          onClick={() => handleAddItemQuantity(item.key)}
+                          onClick={() => handleAddItemQuantity(item.cartId)}
                         ></div>
                       </div>
                     </div>

@@ -47,7 +47,7 @@ export interface Design {
 }
 
 export interface CartItem {
-  key: string;
+  key: number;
   name: string;
   price: number;
   description?: string;
@@ -56,4 +56,5 @@ export interface CartItem {
   size?: string;
   design?: Design | null;
   addonsTotal?: number;
+  cartId: string;
 }
