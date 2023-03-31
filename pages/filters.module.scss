@@ -219,6 +219,13 @@
         text-decoration: underline;
         color: #9b0000;
       }
+
+      .filter-link {
+        &:hover {
+          text-decoration: underline;
+          color: #9b0000;
+        }
+      }
     }
     .date {
       border: 0.1rem solid #d1d5db;

@@ -13,6 +13,8 @@ import Checkbox from "../components/checkbox/Checkbox";
 import FlowerCard from "../components/flower-card/FlowerCard";
 import {
   aboutUsContent,
+  bridalFilters,
+  bridalOccasionFilters,
   filtersCatgories,
   giftItems,
   gifts,
@@ -66,6 +68,18 @@ const ProductsPage: FunctionComponent<{
 }> = props => {
   const { productCategory = "occasion", categorySlug, productClass } = props;
 
+  const bridalCategories = [
+    "cascadingdropping-bouquets",
+    "accessories-boutonnieres-bridesmaids-flowers-amp-corsages"
+  ];
+
+  const _filterCategories =
+    categorySlug === "bridal-bouquets"
+      ? bridalFilters
+      : bridalCategories.includes(categorySlug as string)
+      ? bridalOccasionFilters
+      : filtersCatgories;
+
   const router = useRouter();
   const { query, isReady } = router;
   const { selectedOccasion, shopBy } = query;
@@ -77,7 +91,7 @@ const ProductsPage: FunctionComponent<{
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
-  const [filterCategories, setFilterCategories] = useState(filtersCatgories);
+  const [filterCategories, setFilterCategories] = useState(_filterCategories);
   const [sort, setSort] = useState<Sort>("name-asc");
   const [hasMore, setHasMore] = useState(false);
   const [shouldShowFilter, setShouldShowFilter] = useState(false);
@@ -170,6 +184,18 @@ const ProductsPage: FunctionComponent<{
   };
 
   useEffect(() => {
+    if (isReady) {
+      if (page === 1) {
+        fetchProductCategory();
+      } else {
+        fetchProductCategory(true);
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  useEffect(() => {
     if (productCategory === "vip") {
       const filteredCategory = filterCategories.filter(
         item => item.name.toLowerCase() !== "budget"
@@ -190,14 +216,6 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
-      fetchProductCategory(true);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  useEffect(() => {
-    if (isReady) {
       const occasionTitle = occasions.find(
         item => item.url === `/product-category/${categorySlug}`
       )?.title;
@@ -212,6 +230,8 @@ const ProductsPage: FunctionComponent<{
       if (title) {
         setPageTitle(title);
       }
+
+      setFilterCategories(_filterCategories);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySlug]);
@@ -383,30 +403,38 @@ const ProductsPage: FunctionComponent<{
                       : filter.options.slice(0, filter.limit)
                     ).map((child, i) => (
                       <div key={i} className="margin-bottom">
-                        <Checkbox
-                          onChange={() => {
-                            const newFilters = selectedFilter.includes(
-                              child.tag || ""
-                            )
-                              ? selectedFilter.filter(
-                                  _filter => _filter !== child.tag
-                                )
-                              : [...selectedFilter, child.tag];
-                            setSelectedFilter(
-                              newFilters.filter(Boolean) as string[]
-                            );
-                            setProductsLoading(true);
-                            router.push(
-                              `/product-category/${categorySlug}?shopBy=${newFilters.join(
-                                ","
-                              )}`,
-                              undefined,
-                              { scroll: false }
-                            );
-                          }}
-                          text={child.name}
-                          checked={selectedFilter.includes(child.tag || "")}
-                        />
+                        {child.link ? (
+                          <Link href={child.link}>
+                            <a className={styles["filter-link"]}>
+                              {child.name}
+                            </a>
+                          </Link>
+                        ) : (
+                          <Checkbox
+                            onChange={() => {
+                              const newFilters = selectedFilter.includes(
+                                child.tag || ""
+                              )
+                                ? selectedFilter.filter(
+                                    _filter => _filter !== child.tag
+                                  )
+                                : [...selectedFilter, child.tag];
+                              setSelectedFilter(
+                                newFilters.filter(Boolean) as string[]
+                              );
+                              setProductsLoading(true);
+                              router.push(
+                                `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                  ","
+                                )}`,
+                                undefined,
+                                { scroll: false }
+                              );
+                            }}
+                            text={child.name}
+                            checked={selectedFilter.includes(child.tag || "")}
+                          />
+                        )}
                       </div>
                     ))}
                   </div>
@@ -492,30 +520,38 @@ const ProductsPage: FunctionComponent<{
                         : filter.options.slice(0, filter.limit)
                       ).map((child, index) => (
                         <div key={index} className="margin-bottom">
-                          <Checkbox
-                            onChange={() => {
-                              const newFilters = selectedFilter.includes(
-                                child.tag || ""
-                              )
-                                ? selectedFilter.filter(
-                                    _filter => _filter !== child.tag
-                                  )
-                                : [...selectedFilter, child.tag];
-                              setSelectedFilter(
-                                newFilters.filter(Boolean) as string[]
-                              );
-                              setProductsLoading(true);
-                              router.push(
-                                `${router.pathname}?shopBy=${newFilters.join(
-                                  ","
-                                )}`,
-                                undefined,
-                                { scroll: false }
-                              );
-                            }}
-                            text={child.name}
-                            checked={selectedFilter.includes(child.name)}
-                          />
+                          {child.link ? (
+                            <Link href={child.link}>
+                              <a className={styles["filter-link"]}>
+                                {child.name}
+                              </a>
+                            </Link>
+                          ) : (
+                            <Checkbox
+                              onChange={() => {
+                                const newFilters = selectedFilter.includes(
+                                  child.tag || ""
+                                )
+                                  ? selectedFilter.filter(
+                                      _filter => _filter !== child.tag
+                                    )
+                                  : [...selectedFilter, child.tag];
+                                setSelectedFilter(
+                                  newFilters.filter(Boolean) as string[]
+                                );
+                                setProductsLoading(true);
+                                router.push(
+                                  `${router.pathname}?shopBy=${newFilters.join(
+                                    ","
+                                  )}`,
+                                  undefined,
+                                  { scroll: false }
+                                );
+                              }}
+                              text={child.name}
+                              checked={selectedFilter.includes(child.name)}
+                            />
+                          )}
                         </div>
                       ))}
                     </div>
