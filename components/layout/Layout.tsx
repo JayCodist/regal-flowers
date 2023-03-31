@@ -825,7 +825,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     } else if (data) {
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
       router.push(`/checkout?orderId=${data.id}`);
-      setCartItems([]);
     }
   };
 

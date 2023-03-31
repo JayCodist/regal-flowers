@@ -572,7 +572,7 @@ export const occasions: { title: string; url: string; category?: string }[] = [
     category: "Just to Say Bouquets"
   },
   {
-    title: "Bridal Bouquets",
+    title: "Bridal Bouquets &",
     url: "/product-category/bridal-bouquets",
     category:
       "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
@@ -594,7 +594,7 @@ export const otherOccasions: {
   category?: string;
 }[] = [
   {
-    title: "Cascading",
+    title: "Cascading Bouquets & ",
     url: "/product-category/cascadingdropping-bouquets"
   },
   {
@@ -606,12 +606,60 @@ export const otherOccasions: {
 
 export const placeholderEmail = "placeholder@regalflowers.com";
 
-export const filtersCatgories: {
+interface Filter {
   name: string;
-  options: { name: string; category?: string; tag?: string }[];
+  options: { name: string; category?: string; tag?: string; link?: string }[];
   limit: number;
   viewMore?: boolean;
-}[] = [
+}
+
+export const bridalFilters: Filter[] = [
+  {
+    name: "Bridal Bouquets",
+    options: [
+      {
+        name: "Bouquets",
+        tag: "bridal bouquets"
+      },
+      {
+        name: "Cascading Bouquets",
+        tag: "cascading bridal bouquets"
+      },
+      {
+        name: "Accessories & Boutonnieres",
+        tag: "bridal accessories"
+      }
+    ],
+    limit: 3
+  }
+];
+
+export const bridalOccasionFilters: Filter[] = [
+  {
+    name: "Bridal Bouquets",
+    options: [
+      {
+        name: "Bouquets",
+        tag: "bridal bouquets",
+        link: "/product-category/bridal-bouquets"
+      },
+      {
+        name: "Cascading Bouquets",
+        tag: "cascading bridal bouquets",
+        link: "/product-category/cascadingdropping-bouquets"
+      },
+      {
+        name: "Accessories & Boutonnieres",
+        tag: "bridal accessories",
+        link:
+          "/product-category/accessories-boutonnieres-bridesmaids-flowers-amp-corsages"
+      }
+    ],
+    limit: 3
+  }
+];
+
+export const filtersCatgories: Filter[] = [
   {
     name: "Budget",
     options: [
@@ -959,7 +1007,7 @@ export const links: AppLink[] = [
             children: []
           },
           {
-            title: "Cascading Flowers",
+            title: "Cascading Bouquets & Flowers",
             url: "/product-category/cascadingdropping-bouquets",
             children: []
           },

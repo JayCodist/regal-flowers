@@ -53,6 +53,7 @@ interface Product {
   details: string;
   relatedProducts?: MinimalProduct[];
   class: "regular" | "vip";
+  designNote: string;
 }
 
 export interface Gift {
