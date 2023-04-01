@@ -1,6 +1,6 @@
 import { Dayjs } from "dayjs";
 import { ReactNode } from "react";
-import { ProductImage } from "./Product";
+import { DesignOptionName, ProductImage } from "./Product";
 
 export interface AppLink {
   url: string;
@@ -23,6 +23,7 @@ export interface Settings {
   deliveryDate: Dayjs | null;
   cartItems: CartItem[];
   allCurrencies: AppCurrency[];
+  shouldShowCart: boolean;
 }
 
 export enum Stage {
@@ -38,14 +39,22 @@ export interface PaymentMethod {
   other?: { icon: ReactNode }[];
 }
 
+export interface Design {
+  quantity: number;
+  name: DesignOptionName;
+  price: number;
+  title: string;
+}
+
 export interface CartItem {
-  key: string;
+  key: number;
   name: string;
   price: number;
   description?: string;
   quantity: number;
   image: ProductImage;
   size?: string;
-  design?: string;
-  designPrice?: number;
+  design?: Design | null;
+  addonsTotal?: number;
+  cartId: string;
 }

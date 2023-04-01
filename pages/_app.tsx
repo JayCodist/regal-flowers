@@ -27,7 +27,8 @@ const defaultSettings: Settings = {
   allCurrencies: currencyOptions,
   currentStage: 1,
   deliveryDate: null,
-  cartItems: []
+  cartItems: [],
+  shouldShowCart: false
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -46,6 +47,7 @@ const App: FunctionComponent<AppProps> = props => {
     type?: NotifyType;
   }>({});
   const [user, setUser] = useState<User | null>(null);
+  const [shouldShowCart, setShouldShowCart] = useState(false);
 
   const initializeAppConfig = async () => {
     const savedCartItems = AppStorage.get<CartItem[]>(
@@ -145,6 +147,8 @@ const App: FunctionComponent<AppProps> = props => {
       AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
     },
     allCurrencies: settings.allCurrencies,
+    shouldShowCart,
+    setShouldShowCart,
     notify,
     user,
     setUser

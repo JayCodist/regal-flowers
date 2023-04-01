@@ -31,16 +31,30 @@ export const getProduct: (
 export const getProductsByCategory: (
   params?: FetchResourceParams<ProductFilterLogic>
 ) => Promise<RequestResponse<Product[]>> = async params => {
-  const { category, tags, productClass } = params?.filter as ProductFilterLogic;
+  const {
+    category,
+    productClass,
+    budget = [],
+    delivery = [],
+    design = [],
+    flowerName = [],
+    flowerType = [],
+    packages = []
+  } = params?.filter as ProductFilterLogic;
+  console.log("params", params);
   try {
     const response = await restAPIInstance.get(
       `/v1/wordpress/product/paginate?pageNumber=${
         params?.pageNumber
-      }&tags=${tags?.join(",")}&categories=${category?.join(",")}&${
+      }&categories=${category?.join(",")}&${
         productClass ? `productClass=${productClass}` : ""
       }&sortField=${params?.sortLogic?.sortField}&sortType=${
         params?.sortLogic?.sortType
-      }`
+      }&budget=${budget?.join(",")}&delivery=${delivery?.join(
+        ","
+      )}&design=${design?.join(",")}&flowerName=${flowerName?.join(
+        ","
+      )}&flowerType=${flowerType?.join(",")}&packages=${packages?.join(",")}`
     );
     return {
       error: false,

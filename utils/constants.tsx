@@ -572,7 +572,7 @@ export const occasions: { title: string; url: string; category?: string }[] = [
     category: "Just to Say Bouquets"
   },
   {
-    title: "Bridal Bouquets",
+    title: "Bridal Bouquets &",
     url: "/product-category/bridal-bouquets",
     category:
       "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
@@ -588,14 +588,78 @@ export const occasions: { title: string; url: string; category?: string }[] = [
   }
 ];
 
+export const otherOccasions: {
+  title: string;
+  url: string;
+  category?: string;
+}[] = [
+  {
+    title: "Cascading Bouquets & ",
+    url: "/product-category/cascadingdropping-bouquets"
+  },
+  {
+    title: "Accessories & Boutonnieres",
+    url:
+      "/product-category/accessories-boutonnieres-bridesmaids-flowers-amp-corsages"
+  }
+];
+
 export const placeholderEmail = "placeholder@regalflowers.com";
 
-export const filtersCatgories: {
+interface Filter {
   name: string;
-  options: { name: string; category?: string; tag?: string }[];
+  options: { name: string; category?: string; tag?: string; link?: string }[];
   limit: number;
   viewMore?: boolean;
-}[] = [
+}
+
+export const bridalFilters: Filter[] = [
+  {
+    name: "Bridal Bouquets",
+    options: [
+      {
+        name: "Bouquets",
+        tag: "bridal bouquets"
+      },
+      {
+        name: "Cascading Bouquets",
+        tag: "cascading bridal bouquets"
+      },
+      {
+        name: "Accessories & Boutonnieres",
+        tag: "bridal accessories"
+      }
+    ],
+    limit: 3
+  }
+];
+
+export const bridalOccasionFilters: Filter[] = [
+  {
+    name: "Bridal Bouquets",
+    options: [
+      {
+        name: "Bouquets",
+        tag: "bridal bouquets",
+        link: "/product-category/bridal-bouquets"
+      },
+      {
+        name: "Cascading Bouquets",
+        tag: "cascading bridal bouquets",
+        link: "/product-category/cascadingdropping-bouquets"
+      },
+      {
+        name: "Accessories & Boutonnieres",
+        tag: "bridal accessories",
+        link:
+          "/product-category/accessories-boutonnieres-bridesmaids-flowers-amp-corsages"
+      }
+    ],
+    limit: 3
+  }
+];
+
+export const filtersCatgories: Filter[] = [
   {
     name: "Budget",
     options: [
@@ -624,7 +688,7 @@ export const filtersCatgories: {
       },
       {
         name: "Plants",
-        tag: "flowers"
+        tag: "plants"
       }
     ],
     limit: 3,
@@ -635,7 +699,7 @@ export const filtersCatgories: {
     options: [
       {
         name: "Wrapped Bouquets",
-        tag: "bouquets"
+        tag: "wrapped bouquet"
       },
       {
         name: "Box Arrangements",
@@ -653,7 +717,7 @@ export const filtersCatgories: {
     options: [
       {
         name: "Bundled Products",
-        tag: "bundled"
+        tag: "bundled products"
       }
     ],
     limit: 3,
@@ -943,8 +1007,8 @@ export const links: AppLink[] = [
             children: []
           },
           {
-            title: "Cascading Flowers",
-            url: "cascadingdropping-bouquets",
+            title: "Cascading Bouquets & Flowers",
+            url: "/product-category/cascadingdropping-bouquets",
             children: []
           },
           {
@@ -1010,7 +1074,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Wrapped Bouquets",
-            url: "/filters?shopBy=flower bouquet",
+            url: "/filters?shopBy=wrapped bouquet",
             children: []
           },
           {
@@ -1155,6 +1219,15 @@ export const links: AppLink[] = [
     children: []
   }
 ];
+
+export const tagsMap: Record<string, string[]> = {
+  budget: ["vip", "regular"],
+  flowerType: ["forever roses", "fresh flowers", "plants"],
+  design: ["box arrangements", "bouquets", "others", "wrapped bouquet"],
+  packages: ["bundled products"],
+  delivery: ["same day delivery"],
+  flowerName: ["roses", "chrysanthemums", "lilies", "million stars"]
+};
 
 type RegalContent<T = string> = Record<LocationName, T>;
 

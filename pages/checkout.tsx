@@ -487,17 +487,19 @@ const Checkout: FunctionComponent = () => {
                           <em>
                             {["13-02", "14-02", "15-02"].includes(
                               deliveryDate?.format("DD-MM") || ""
-                            )
+                            ) && formData.deliveryMethod === "delivery"
                               ? `Free Valentine (Feb 13th, 14th, 15th) Delivery across Lagos and Abuja on orders above ${
                                   currency.sign
                                 }${freeDeliveryThresholdVals[
                                   currency.name
                                 ].toLocaleString()}`
-                              : `Free Delivery across Lagos and Abuja on orders above ${
+                              : formData.deliveryMethod === "delivery"
+                              ? `Free Delivery across Lagos and Abuja on orders above ${
                                   currency.sign
                                 }${freeDeliveryThreshold[
                                   currency.name
-                                ].toLocaleString()}`}
+                                ].toLocaleString()}`
+                              : ""}
                           </em>
                         </div>
                         <div className="flex between center-align">
@@ -939,7 +941,7 @@ const Checkout: FunctionComponent = () => {
                         {getPriceDisplay(0, currency)}
                       </span>
                     </div>
-                    {formData.deliveryMethod === "pick-up" && (
+                    {formData.deliveryMethod === "delivery" && (
                       <div className="flex between">
                         <span className="normal-text">Delivery Charge</span>
                         <span className="normal-text bold">
@@ -1371,11 +1373,13 @@ const Checkout: FunctionComponent = () => {
                                 }${freeDeliveryThresholdVals[
                                   currency.name
                                 ].toLocaleString()}`
-                              : `Free Delivery across Lagos and Abuja on orders above ${
+                              : formData.deliveryMethod === "delivery"
+                              ? `Free Delivery across Lagos and Abuja on orders above ${
                                   currency.sign
                                 }${freeDeliveryThreshold[
                                   currency.name
-                                ].toLocaleString()}`}
+                                ].toLocaleString()}`
+                              : ""}
                           </em>
                         </div>
                         <div className="vertical-margin spaced">

@@ -36,9 +36,14 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       onlyTitle
     } = props;
 
-    const { cartItems, setCartItems, notify, currency } = useContext(
-      SettingsContext
-    );
+    const {
+      cartItems,
+      setCartItems,
+      notify,
+      currency,
+      shouldShowCart,
+      setShouldShowCart
+    } = useContext(SettingsContext);
 
     const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -47,18 +52,30 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       }
 
       const cartItem: CartItem = {
-        key: `${product.key}`,
+        key: product.key,
         name: product.name,
         price: product.price,
         quantity: 1,
-        image: product.images[0]
+        image: product.images[0],
+        cartId: `${product.key}`
       };
 
-      const _cartItem = cartItems.find(item => item.key === `${product?.key}`);
+      const _cartItem = cartItems.find(item => item.key === product?.key);
 
       if (!_cartItem) {
         setCartItems([...cartItems, cartItem]);
-        notify("success", "Item Added To Cart");
+        notify(
+          "success",
+          <p>
+            Item Added To Cart{" "}
+            <span
+              className="view-cart"
+              onClick={() => setShouldShowCart(!shouldShowCart)}
+            >
+              View Cart
+            </span>
+          </p>
+        );
       } else {
         notify("info", "Item Already In Cart");
       }
@@ -97,7 +114,11 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
               >
                 {price && (
                   <div>
-                    <p className="smaller text-secondary">From</p>
+                    {product?.variants.length ? (
+                      <p className="smaller text-secondary">From</p>
+                    ) : (
+                      ""
+                    )}
                     <p className="bold">{getPriceDisplay(price, currency)}</p>
                   </div>
                 )}

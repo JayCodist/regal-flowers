@@ -737,3 +737,35 @@ button {
     color: #9b0000;
   }
 }
+
+.view-cart {
+  color: #9b0000;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 1rem;
+}
+
+.tooltip {
+  position: relative;
+
+  .tooltiptext {
+    visibility: hidden;
+    width: max-content;
+    max-width: 40rem;
+    background-color: rgba(0, 0, 0, 0.766);
+    color: #fff;
+    padding: 0.5rem;
+    top: 1.5rem;
+    left: 10%;
+    position: absolute;
+    z-index: 1;
+
+    @media (max-width: 650px) {
+      width: 20rem;
+    }
+  }
+
+  &:hover .tooltiptext {
+    visibility: visible;
+  }
+}
