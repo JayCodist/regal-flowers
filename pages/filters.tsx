@@ -20,7 +20,8 @@ import {
   gifts,
   occasions,
   otherOccasions,
-  sortOptions
+  sortOptions,
+  tagsMap
 } from "../utils/constants";
 import DatePicker from "../components/date-picker/DatePicker";
 import Select from "../components/select/Select";
@@ -51,11 +52,16 @@ type ProductClass = "vip" | "regular";
 
 export interface ProductFilterLogic {
   category: string[];
-  tags: string[];
   productClass?: ProductClass;
+  budget?: string[];
+  design?: string[];
+  flowerType?: string[];
+  flowerName?: string[];
+  packages?: string[];
+  delivery?: string[];
 }
 
-const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
+const JustToSayTexts = ["Sorry", "Hi", "Thank You", "Congrats", "Etc"];
 
 type ProductCategory = "vip" | "occasion";
 
@@ -152,10 +158,26 @@ const ProductsPage: FunctionComponent<{
     } else {
       setProductsLoading(true);
     }
+
+    const shopByArray = shopBy ? String(shopBy).split(",") : [];
+
+    const tagFilters: Record<string, string[]> = shopByArray.reduce(
+      (map: Record<string, string[]>, tag) => {
+        const tagKey = Object.keys(tagsMap).find(key => {
+          return tagsMap[key].includes(tag);
+        });
+        if (tagKey) {
+          map[tagKey] = [...(map[tagKey] || []), tag];
+        }
+        return map;
+      },
+      {}
+    );
+
     const filterParams = {
       category: [categorySlug !== "all" ? categorySlug || "" : ""],
-      tags: [(shopBy as string) || ""],
-      productClass
+      productClass,
+      ...tagFilters
     };
     const sortParams: SortLogic = {
       sortField: sort.split("-")[0],

@@ -688,7 +688,7 @@ export const filtersCatgories: Filter[] = [
       },
       {
         name: "Plants",
-        tag: "flowers"
+        tag: "plants"
       }
     ],
     limit: 3,
@@ -699,7 +699,7 @@ export const filtersCatgories: Filter[] = [
     options: [
       {
         name: "Wrapped Bouquets",
-        tag: "bouquets"
+        tag: "wrapped bouquet"
       },
       {
         name: "Box Arrangements",
@@ -717,7 +717,7 @@ export const filtersCatgories: Filter[] = [
     options: [
       {
         name: "Bundled Products",
-        tag: "bundled"
+        tag: "bundled products"
       }
     ],
     limit: 3,
@@ -1074,7 +1074,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Wrapped Bouquets",
-            url: "/filters?shopBy=flower bouquet",
+            url: "/filters?shopBy=wrapped bouquet",
             children: []
           },
           {
@@ -1219,6 +1219,15 @@ export const links: AppLink[] = [
     children: []
   }
 ];
+
+export const tagsMap: Record<string, string[]> = {
+  budget: ["vip", "regular"],
+  flowerType: ["forever roses", "fresh flowers", "plants"],
+  design: ["box arrangements", "bouquets", "others", "wrapped bouquet"],
+  packages: ["bundled products"],
+  delivery: ["same day delivery"],
+  flowerName: ["roses", "chrysanthemums", "lilies", "million stars"]
+};
 
 type RegalContent<T = string> = Record<LocationName, T>;
 
