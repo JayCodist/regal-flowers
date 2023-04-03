@@ -12,8 +12,8 @@ import Product from "../utils/types/Product";
 import Checkbox from "../components/checkbox/Checkbox";
 import FlowerCard from "../components/flower-card/FlowerCard";
 import {
+  FilterOption,
   aboutUsContent,
-  bridalFilters,
   bridalOccasionFilters,
   filtersCatgories,
   giftItems,
@@ -76,15 +76,13 @@ const ProductsPage: FunctionComponent<{
 
   const bridalCategories = [
     "cascadingdropping-bouquets",
-    "accessories-boutonnieres-bridesmaids-flowers-amp-corsages"
+    "accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
+    "bridal-bouquets"
   ];
 
-  const _filterCategories =
-    categorySlug === "bridal-bouquets"
-      ? bridalFilters
-      : bridalCategories.includes(categorySlug as string)
-      ? bridalOccasionFilters
-      : filtersCatgories;
+  const _filterCategories = bridalCategories.includes(categorySlug as string)
+    ? bridalOccasionFilters
+    : filtersCatgories;
 
   const router = useRouter();
   const { query, isReady } = router;
@@ -203,6 +201,22 @@ const ProductsPage: FunctionComponent<{
           : (response.data as Product[])
       );
     }
+  };
+
+  const handleFilterChange = (filter: FilterOption) => {
+    const newFilters = selectedFilter.includes(filter.tag || "")
+      ? selectedFilter.filter(_filter => _filter !== filter.tag)
+      : [...selectedFilter, filter.tag];
+    setSelectedFilter(newFilters.filter(Boolean) as string[]);
+    setProductsLoading(true);
+
+    const url =
+      filter.tag === "vip"
+        ? "/filters?shopBy=vip"
+        : categorySlug
+        ? `/product-category/${categorySlug}?shopBy=${newFilters.join(",")}`
+        : `/filters?shopBy=${newFilters.join(",")}`;
+    router.push(url, undefined, { scroll: false });
   };
 
   useEffect(() => {
@@ -427,32 +441,20 @@ const ProductsPage: FunctionComponent<{
                       <div key={i} className="margin-bottom">
                         {child.link ? (
                           <Link href={child.link}>
-                            <a className={styles["filter-link"]}>
+                            <a
+                              className={[
+                                styles["filter-link"],
+                                child.link.includes(categorySlug as string)
+                                  ? styles.active
+                                  : ""
+                              ].join(" ")}
+                            >
                               {child.name}
                             </a>
                           </Link>
                         ) : (
                           <Checkbox
-                            onChange={() => {
-                              const newFilters = selectedFilter.includes(
-                                child.tag || ""
-                              )
-                                ? selectedFilter.filter(
-                                    _filter => _filter !== child.tag
-                                  )
-                                : [...selectedFilter, child.tag];
-                              setSelectedFilter(
-                                newFilters.filter(Boolean) as string[]
-                              );
-                              setProductsLoading(true);
-                              router.push(
-                                `/product-category/${categorySlug}?shopBy=${newFilters.join(
-                                  ","
-                                )}`,
-                                undefined,
-                                { scroll: false }
-                              );
-                            }}
+                            onChange={() => handleFilterChange(child)}
                             text={child.name}
                             checked={selectedFilter.includes(child.tag || "")}
                           />

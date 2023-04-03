@@ -257,6 +257,10 @@
     align-items: center;
     font-size: 0.8rem;
 
+    .currency-control {
+      color: #9b0000;
+    }
+
     .currency {
       border: none;
       outline: none;
@@ -264,6 +268,7 @@
       &.active {
         text-decoration: underline;
       }
+      color: #9b0000;
     }
     .control-icon {
       height: 1rem;

@@ -606,33 +606,19 @@ export const otherOccasions: {
 
 export const placeholderEmail = "placeholder@regalflowers.com";
 
-interface Filter {
+export interface Filter {
   name: string;
-  options: { name: string; category?: string; tag?: string; link?: string }[];
+  options: FilterOption[];
   limit: number;
   viewMore?: boolean;
 }
 
-export const bridalFilters: Filter[] = [
-  {
-    name: "Bridal Bouquets",
-    options: [
-      {
-        name: "Bouquets",
-        tag: "bridal bouquets"
-      },
-      {
-        name: "Cascading Bouquets",
-        tag: "cascading bridal bouquets"
-      },
-      {
-        name: "Accessories & Boutonnieres",
-        tag: "bridal accessories"
-      }
-    ],
-    limit: 3
-  }
-];
+export interface FilterOption {
+  name: string;
+  category?: string;
+  tag?: string;
+  link?: string;
+}
 
 export const bridalOccasionFilters: Filter[] = [
   {
@@ -1079,7 +1065,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Box Arrangements",
-            url: "/product-category/all?shopBy=box+arrangements",
+            url: "/filters?shopBy=box+arrangements",
             children: []
           },
           {
@@ -1095,17 +1081,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Fresh Flowers",
-            url: "/product-category/all?shopBy=fresh+flowers",
+            url: "/filters?shopBy=fresh+flowers",
             children: []
           },
           {
             title: "Forever Roses",
-            url: "/product-category/all?shopBy=forever+roses",
+            url: "/filters?shopBy=forever+roses",
             children: []
           },
           {
             title: "Plants",
-            url: "/product-category/all?shopBy=flowers",
+            url: "/filters?shopBy=flowers",
             children: []
           }
         ]
@@ -1116,7 +1102,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "View Bundled Products",
-            url: "/product-category/all?shopBy=flowers",
+            url: "/filters?shopBy=flowers",
             children: []
           }
         ]
@@ -1127,7 +1113,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Same Day Delivery",
-            url: "/product-category/all?shopBy=same+day+delivery",
+            url: "/filters?shopBy=same+day+delivery",
             children: []
           }
         ]
@@ -1138,17 +1124,17 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Roses",
-            url: "/product-category/all?shopBy=roses",
+            url: "/filters?shopBy=roses",
             children: []
           },
           {
             title: "Chrysanthemums",
-            url: "/product-category/all?shopBy=chrysanthemums",
+            url: "/filters?shopBy=chrysanthemums",
             children: []
           },
           {
             title: "Lilies",
-            url: "/product-category/all?shopBy=lilies",
+            url: "/filters?shopBy=lilies",
             children: []
           },
           {
