@@ -632,7 +632,9 @@ const Header: FunctionComponent = () => {
           </button>
         </div>
         <div className={styles["controls-area"]}>
-          <div className="flex spaced">
+          <div
+            className={["flex", "spaced", styles["currency-control"]].join(" ")}
+          >
             <span>Currency:</span>
             {allCurrencies.map(_currency => (
               <button
@@ -660,7 +662,7 @@ const Header: FunctionComponent = () => {
                 "center-align",
                 shouldShowCart && "primary-color"
               ].join(" ")}
-              onClick={e => {
+              onMouseOver={e => {
                 setShouldShowCart(!shouldShowCart);
                 e.stopPropagation();
               }}
@@ -890,7 +892,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                 <img
                   src="/icons/delete-cart.svg"
                   alt="delete"
-                  className="generic-icon large margin-top spaced clickable"
+                  className="generic-icon medium margin-top spaced clickable"
                   onClick={() => handleRemoveItem(item.cartId)}
                 />
                 <div className="flex spaced align-center block">

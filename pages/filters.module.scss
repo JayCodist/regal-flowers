@@ -225,6 +225,11 @@
           text-decoration: underline;
           color: #9b0000;
         }
+
+        &.active {
+          text-decoration: underline;
+          color: #9b0000;
+        }
       }
     }
     .date {
