@@ -552,28 +552,9 @@ const ProductsPage: FunctionComponent<{
                             </Link>
                           ) : (
                             <Checkbox
-                              onChange={() => {
-                                const newFilters = selectedFilter.includes(
-                                  child.tag || ""
-                                )
-                                  ? selectedFilter.filter(
-                                      _filter => _filter !== child.tag
-                                    )
-                                  : [...selectedFilter, child.tag];
-                                setSelectedFilter(
-                                  newFilters.filter(Boolean) as string[]
-                                );
-                                setProductsLoading(true);
-                                router.push(
-                                  `${router.pathname}?shopBy=${newFilters.join(
-                                    ","
-                                  )}`,
-                                  undefined,
-                                  { scroll: false }
-                                );
-                              }}
+                              onChange={() => handleFilterChange(child)}
                               text={child.name}
-                              checked={selectedFilter.includes(child.name)}
+                              checked={selectedFilter.includes(child.tag || "")}
                             />
                           )}
                         </div>

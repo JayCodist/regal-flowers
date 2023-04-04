@@ -41,7 +41,6 @@ export const getProductsByCategory: (
     flowerType = [],
     packages = []
   } = params?.filter as ProductFilterLogic;
-  console.log("params", params);
   try {
     const response = await restAPIInstance.get(
       `/v1/wordpress/product/paginate?pageNumber=${
