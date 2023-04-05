@@ -256,19 +256,19 @@
     flex-direction: column;
     align-items: center;
     font-size: 0.8rem;
-
-    .currency-control {
-      color: #9b0000;
-    }
+    justify-content: center;
 
     .currency {
       border: none;
       outline: none;
       background-color: transparent;
+      padding: 0.2rem;
       &.active {
-        text-decoration: underline;
+        color: white;
+        background-color: #9b0000;
+        border-radius: 1rem;
+        padding: 0.2rem;
       }
-      color: #9b0000;
     }
     .control-icon {
       height: 1rem;

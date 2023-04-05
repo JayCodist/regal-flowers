@@ -572,7 +572,7 @@ export const occasions: { title: string; url: string; category?: string }[] = [
     category: "Just to Say Bouquets"
   },
   {
-    title: "Bridal Bouquets &",
+    title: "Bridal Bouquets & Accessories",
     url: "/product-category/bridal-bouquets",
     category:
       "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
@@ -622,15 +622,15 @@ export interface FilterOption {
 
 export const bridalOccasionFilters: Filter[] = [
   {
-    name: "Bridal Bouquets",
+    name: "Bridal Section",
     options: [
       {
-        name: "Bouquets",
+        name: "Bridal Bouquets",
         tag: "bridal bouquets",
         link: "/product-category/bridal-bouquets"
       },
       {
-        name: "Cascading Bouquets",
+        name: "Cascading Bridal Bouquets",
         tag: "cascading bridal bouquets",
         link: "/product-category/cascadingdropping-bouquets"
       },
@@ -645,6 +645,25 @@ export const bridalOccasionFilters: Filter[] = [
   }
 ];
 
+export const funeralOccasion: Filter[] = [
+  {
+    name: "Funeral & Condolence",
+    options: [
+      {
+        name: "Wreaths & Flowers",
+        tag: "",
+        link: "/product-category/funeral-amp-condolence"
+      },
+      {
+        name: "VIP Section",
+        tag: "",
+        link: "/vip"
+      }
+    ],
+    limit: 3
+  }
+];
+
 export const filtersCatgories: Filter[] = [
   {
     name: "Budget",
@@ -652,10 +671,6 @@ export const filtersCatgories: Filter[] = [
       {
         name: "Regular",
         tag: "regular"
-      },
-      {
-        name: "VIP",
-        tag: "vip"
       }
     ],
     limit: 2,
@@ -984,16 +999,16 @@ export const links: AppLink[] = [
         ]
       },
       {
-        title: "Bridal",
+        title: "Bridal Bouquets & Accessories",
         url: "/product-category/bridal-bouquets",
         children: [
           {
-            title: "Flowers",
+            title: "Bridal Bouquets",
             url: "/product-category/bridal-bouquets",
             children: []
           },
           {
-            title: "Cascading Bouquets & Flowers",
+            title: "Cascading Bridal Bouquets",
             url: "/product-category/cascadingdropping-bouquets",
             children: []
           },
@@ -1172,7 +1187,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/teddy-bear",
+        url: "/product-category/teddy-bears",
         title: "Teddy Bears",
         children: []
       },
@@ -1192,8 +1207,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url:
-          "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
+        url: "/product-category/gift-packs",
         title: "Giftsets",
         children: []
       }
@@ -1693,3 +1707,62 @@ export const allDesignOptions: DesignOption[] = [
     price: 0
   }
 ];
+
+// [
+//   {
+//       "name": "Entry",
+//       "price": 30900,
+//       "class": "regular",
+//       "sku": "R021170FL02",
+//       "design": "in a vase",
+//       "_id": "642c33d4f3a1fb276e427ae2"
+//   },
+//   {
+//       "name": "Extra small",
+//       "price": 45900,
+//       "class": "regular",
+//       "sku": "R05120FL01",
+//       "design": "in a vase",
+//       "_id": "642c33d4f3a1fb276e427ae3"
+//   },
+//   {
+//       "name": "Small",
+//       "price": 67500,
+//       "class": "regular",
+//       "sku": "R05120FL02",
+//       "design": "in a vase",
+//       "_id": "642c33d4f3a1fb276e427ae4"
+//   },
+//   {
+//       "name": "Medium",
+//       "price": 99900,
+//       "class": "regular",
+//       "sku": "R05120FL03",
+//       "design": "in a vase",
+//       "_id": "642c33d4f3a1fb276e427ae5"
+//   },
+//   {
+//       "name": "Standard",
+//       "price": 109900,
+//       "class": "regular",
+//       "sku": "R05120FL04",
+//       "design": "in large vase",
+//       "_id": "642c33d4f3a1fb276e427ae6"
+//   },
+//   {
+//       "name": "F standard plus",
+//       "price": 140900,
+//       "class": "regular",
+//       "sku": "R05120FL05",
+//       "design": "in large vase",
+//       "_id": "642c33d4f3a1fb276e427ae7"
+//   },
+//   {
+//       "name": "G standard premium",
+//       "price": 194900,
+//       "class": "regular",
+//       "sku": "R05120FL0595498",
+//       "design": "in large vase",
+//       "_id": "642c33d4f3a1fb276e427ae8"
+//   }
+// ]
