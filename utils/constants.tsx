@@ -1683,6 +1683,7 @@ export interface DesignOption {
   name: DesignOptionName;
   price: number;
   title: string;
+  default?: boolean;
 }
 
 export const allDesignOptions: DesignOption[] = [
@@ -1707,62 +1708,3 @@ export const allDesignOptions: DesignOption[] = [
     price: 0
   }
 ];
-
-// [
-//   {
-//       "name": "Entry",
-//       "price": 30900,
-//       "class": "regular",
-//       "sku": "R021170FL02",
-//       "design": "in a vase",
-//       "_id": "642c33d4f3a1fb276e427ae2"
-//   },
-//   {
-//       "name": "Extra small",
-//       "price": 45900,
-//       "class": "regular",
-//       "sku": "R05120FL01",
-//       "design": "in a vase",
-//       "_id": "642c33d4f3a1fb276e427ae3"
-//   },
-//   {
-//       "name": "Small",
-//       "price": 67500,
-//       "class": "regular",
-//       "sku": "R05120FL02",
-//       "design": "in a vase",
-//       "_id": "642c33d4f3a1fb276e427ae4"
-//   },
-//   {
-//       "name": "Medium",
-//       "price": 99900,
-//       "class": "regular",
-//       "sku": "R05120FL03",
-//       "design": "in a vase",
-//       "_id": "642c33d4f3a1fb276e427ae5"
-//   },
-//   {
-//       "name": "Standard",
-//       "price": 109900,
-//       "class": "regular",
-//       "sku": "R05120FL04",
-//       "design": "in large vase",
-//       "_id": "642c33d4f3a1fb276e427ae6"
-//   },
-//   {
-//       "name": "F standard plus",
-//       "price": 140900,
-//       "class": "regular",
-//       "sku": "R05120FL05",
-//       "design": "in large vase",
-//       "_id": "642c33d4f3a1fb276e427ae7"
-//   },
-//   {
-//       "name": "G standard premium",
-//       "price": 194900,
-//       "class": "regular",
-//       "sku": "R05120FL0595498",
-//       "design": "in large vase",
-//       "_id": "642c33d4f3a1fb276e427ae8"
-//   }
-// ]

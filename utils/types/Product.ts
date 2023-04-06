@@ -1,3 +1,4 @@
+import { DesignOption } from "../constants";
 import AddonGroup from "./AddonGroup";
 
 export interface ProductImage {
@@ -10,6 +11,7 @@ export interface ProductVariant {
   name: string;
   price: number;
   class: "regular" | "vip";
+  design: DesignOption[];
 }
 
 export type DesignOptionName =
@@ -54,6 +56,7 @@ interface Product {
   relatedProducts?: MinimalProduct[];
   class: "regular" | "vip";
   designNote: string;
+  design: string;
 }
 
 export interface Gift {
