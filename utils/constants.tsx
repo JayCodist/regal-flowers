@@ -1563,24 +1563,15 @@ export const allDeliveryLocationOptions: Record<
       !["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
-        label: `${getPriceDisplay(
-          10000,
-          currency
-        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
-        name: "highLagos",
-        amount: 10000
-      },
-      !["13-02", "14-02", "15-02"].includes(
-        deliveryDate?.format("DD-MM") || ""
-      ) && {
-        label: `${getPriceDisplay(4000, currency)} - Orders BELOW ${
+        label: `${getPriceDisplay(4500, currency)} - Orders BELOW ${
           currency.sign
         }${freeDeliveryThreshold[
           currency.name
         ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
         name: "mediumLagos",
-        amount: 4000
+        amount: 4500
       },
+
       !["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
@@ -1591,6 +1582,17 @@ export const allDeliveryLocationOptions: Record<
         ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
         name: "freeLagos",
         amount: 0
+      },
+
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(
+          10000,
+          currency
+        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+        name: "highLagos",
+        amount: 10000
       },
 
       ["13-02", "14-02", "15-02"].includes(
@@ -1619,16 +1621,6 @@ export const allDeliveryLocationOptions: Record<
 
   abuja: (currency, deliveryDate) =>
     [
-      !["13-02", "14-02", "15-02"].includes(
-        deliveryDate?.format("DD-MM") || ""
-      ) && {
-        label: `${getPriceDisplay(
-          6000,
-          currency
-        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
-        name: "highAbuja",
-        amount: 6000
-      },
       !["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
@@ -1673,6 +1665,16 @@ export const allDeliveryLocationOptions: Record<
         ].toLocaleString()} (FREE* Delivery Abuja)`,
         name: "freeAbujaVals",
         amount: 0
+      },
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(
+          6000,
+          currency
+        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
+        name: "highAbuja",
+        amount: 6000
       }
     ].filter(BooleanFilter) as DeliveryLocationOption[],
   "other-locations": () => [],

@@ -3,16 +3,18 @@ import { _countryCodes } from "../../utils/constants";
 import Input from "../input/Input";
 import Select from "../select/Select";
 import styles from "./PhoneInput.module.scss";
+import { phoneValidator } from "../../utils/helpers/validators";
 
 type ValueType = string | number | string[] | number[];
 
 type PhoneInputProps = {
-  phoneNumber: number;
+  phoneNumber: string;
   countryCode: string;
-  onChangeCountryCode: (value: ValueType) => void;
+  onChangeCountryCode: (value: string) => void;
   onChangePhoneNumber: (value: string) => void;
   question?: string;
   required?: boolean;
+  className?: string;
 };
 
 const PhoneInput = (props: PhoneInputProps) => {
@@ -22,7 +24,8 @@ const PhoneInput = (props: PhoneInputProps) => {
     onChangeCountryCode,
     onChangePhoneNumber,
     question,
-    required
+    required,
+    className
   } = props;
 
   const [countryCodes, setCountryCodes] = useState(_countryCodes);
@@ -34,11 +37,11 @@ const PhoneInput = (props: PhoneInputProps) => {
   };
 
   return (
-    <div className="input-group">
+    <div className={["input-group", className].join(" ")}>
       <span className="question">{question || "Phone Number"}</span>
       <div className={styles["input-wrapper"]}>
         <Select
-          onSelect={onChangeCountryCode}
+          onSelect={onChangeCountryCode as (value: ValueType) => void}
           value={countryCode}
           options={countryCodes}
           placeholder="+234"
@@ -56,6 +59,7 @@ const PhoneInput = (props: PhoneInputProps) => {
           className={styles["phone-number"]}
           autoComplete="tel"
           required={required}
+          onBlurValidation={() => phoneValidator(phoneNumber)}
         />
       </div>
     </div>
