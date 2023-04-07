@@ -233,6 +233,17 @@ const Checkout: FunctionComponent = () => {
     }
   };
 
+  const completedSenderInfo = useMemo(() => {
+    const { senderName, senderEmail, senderPhoneNumber } = formData;
+    return senderName && senderEmail && senderPhoneNumber;
+  }, [formData]);
+
+  const completedDeliveryType = useMemo(() => {
+    const { deliveryMethod } = formData;
+    return deliveryMethod && deliveryDate;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData]);
+
   useEffect(() => {
     if (isReady) {
       if (orderId) {
@@ -474,191 +485,200 @@ const Checkout: FunctionComponent = () => {
                         )}
                       </div>
                     </div>
-                    <div
-                      className={[styles.border, styles["delivey-method"]].join(
-                        " "
-                      )}
-                    >
-                      <p className={styles["payment-info"]}>Delivery Method</p>
-                      <div className={styles.padding}>
-                        <div className="input-group half-width compact">
-                          <span className="question">Pickup/Delivery Date</span>
-                          <DatePicker
-                            value={deliveryDate}
-                            onChange={setDeliveryDate}
-                            format="D MMMM YYYY"
-                            responsive
-                          />
-                        </div>
-
-                        <div className="flex between center-align">
-                          <div
-                            className={[
-                              styles.method,
-                              formData.deliveryMethod === "pick-up" &&
-                                styles.active
-                            ].join(" ")}
-                            onClick={() =>
-                              handleChange("deliveryMethod", "pick-up")
-                            }
-                          >
-                            <p className={`${styles["method-title"]}`}>
-                              Pick Up
-                            </p>
-                            <p>Pick up from our stores</p>
-                          </div>
-                          <div
-                            className={[
-                              styles.method,
-                              formData.deliveryMethod === "delivery" &&
-                                styles.active
-                            ].join(" ")}
-                            onClick={() =>
-                              handleChange("deliveryMethod", "delivery")
-                            }
-                          >
-                            <p className={`${styles["method-title"]}`}>
-                              Delivery
-                            </p>
-                            <p>Get it delivered to the recipient's location</p>
-                          </div>
-                        </div>
-                        <div className="margin-top primary-color">
-                          <em>
-                            {["13-02", "14-02", "15-02"].includes(
-                              deliveryDate?.format("DD-MM") || ""
-                            ) && formData.deliveryMethod === "delivery"
-                              ? `Free Valentine (Feb 13th, 14th, 15th) Delivery in selected zones across Lagos and Abuja on orders above ${
-                                  currency.sign
-                                }${freeDeliveryThresholdVals[
-                                  currency.name
-                                ].toLocaleString()}`
-                              : formData.deliveryMethod === "delivery"
-                              ? `Free Delivery in selected zones across Lagos and Abuja on orders above ${
-                                  currency.sign
-                                }${freeDeliveryThreshold[
-                                  currency.name
-                                ].toLocaleString()}`
-                              : ""}
-                          </em>
-                        </div>
-
-                        {formData.deliveryMethod === "delivery" && (
-                          <div className="input-group half-width">
-                            <span className="question">Delivery State</span>
-                            <Select
-                              onSelect={value => handleChange("state", value)}
-                              value={formData.state}
-                              options={deliveryStates}
-                              placeholder="Select a state"
+                    {completedSenderInfo && (
+                      <div
+                        className={[
+                          styles.border,
+                          styles["delivey-method"]
+                        ].join(" ")}
+                      >
+                        <p className={styles["payment-info"]}>
+                          Delivery Method
+                        </p>
+                        <div className={styles.padding}>
+                          <div className="input-group half-width compact">
+                            <span className="question">
+                              Pickup/Delivery Date
+                            </span>
+                            <DatePicker
+                              value={deliveryDate}
+                              onChange={setDeliveryDate}
+                              format="D MMMM YYYY"
                               responsive
-                              dimmed
                             />
                           </div>
-                        )}
 
-                        {formData.deliveryMethod === "delivery" &&
-                          formData.state && (
-                            <div className={styles["pickup-locations"]}>
-                              {deliveryLocationOptions.length > 0 && (
-                                <p className="primary-color align-icon normal-text bold margin-bottom">
-                                  <InfoRedIcon />
-                                  <span className="margin-left">
-                                    Delivery Locations
-                                  </span>
-                                </p>
-                              )}
+                          <div className="flex between center-align">
+                            <div
+                              className={[
+                                styles.method,
+                                formData.deliveryMethod === "pick-up" &&
+                                  styles.active
+                              ].join(" ")}
+                              onClick={() =>
+                                handleChange("deliveryMethod", "pick-up")
+                              }
+                            >
+                              <p className={`${styles["method-title"]}`}>
+                                Pick Up
+                              </p>
+                              <p>Pick up from our stores</p>
+                            </div>
+                            <div
+                              className={[
+                                styles.method,
+                                formData.deliveryMethod === "delivery" &&
+                                  styles.active
+                              ].join(" ")}
+                              onClick={() =>
+                                handleChange("deliveryMethod", "delivery")
+                              }
+                            >
+                              <p className={`${styles["method-title"]}`}>
+                                Delivery
+                              </p>
+                              <p>
+                                Get it delivered to the recipient's location
+                              </p>
+                            </div>
+                          </div>
+                          <div className="margin-top primary-color">
+                            <em>
+                              {["13-02", "14-02", "15-02"].includes(
+                                deliveryDate?.format("DD-MM") || ""
+                              ) && formData.deliveryMethod === "delivery"
+                                ? `Free Valentine (Feb 13th, 14th, 15th) Delivery in selected zones across Lagos and Abuja on orders above ${
+                                    currency.sign
+                                  }${freeDeliveryThresholdVals[
+                                    currency.name
+                                  ].toLocaleString()}`
+                                : formData.deliveryMethod === "delivery"
+                                ? `Free Delivery in selected zones across Lagos and Abuja on orders above ${
+                                    currency.sign
+                                  }${freeDeliveryThreshold[
+                                    currency.name
+                                  ].toLocaleString()}`
+                                : ""}
+                            </em>
+                          </div>
 
-                              {deliveryLocationOptions.length === 0 && (
-                                <div className="flex center-align primary-color normal-text margin-bottom spaced">
-                                  <InfoRedIcon className="generic-icon xl" />
-                                  <span>
-                                    At the moment, we only deliver VIP Orders to
-                                    other states on request, by either
-                                    chartering a vehicle or by flight. Kindly
-                                    contact us on Phone/WhatsApp:
-                                    <br />
-                                    <a
-                                      href="tel:+2347011992888"
-                                      className="clickable neutral underline"
-                                    >
-                                      +234 7011992888
-                                    </a>
-                                    ,{" "}
-                                    <a
-                                      href="tel:+2347010006665"
-                                      className="clickable neutral underline"
-                                    >
-                                      +234 7010006665
-                                    </a>
-                                  </span>
-                                </div>
-                              )}
-
-                              {deliveryLocationOptions.map(locationOption => (
-                                <div
-                                  className="vertical-margin spaced"
-                                  key={locationOption.name}
-                                >
-                                  <Radio
-                                    label={locationOption.label}
-                                    onChange={() =>
-                                      handleChange(
-                                        "deliveryLocation",
-                                        locationOption
-                                      )
-                                    }
-                                    disabled={
-                                      locationOption.amount === 0 &&
-                                      (order?.amount || 0) <=
-                                        (["13-02", "14-02", "15-02"].includes(
-                                          deliveryDate?.format("DD-MM") || ""
-                                        )
-                                          ? freeDeliveryThresholdVals
-                                          : freeDeliveryThreshold)[
-                                          currency.name
-                                        ]
-                                    }
-                                    checked={
-                                      formData.deliveryLocation ===
-                                      locationOption
-                                    }
-                                  />
-                                </div>
-                              ))}
+                          {formData.deliveryMethod === "delivery" && (
+                            <div className="input-group half-width">
+                              <span className="question">Delivery State</span>
+                              <Select
+                                onSelect={value => handleChange("state", value)}
+                                value={formData.state}
+                                options={deliveryStates}
+                                placeholder="Select a state"
+                                responsive
+                                dimmed
+                              />
                             </div>
                           )}
 
-                        {formData.deliveryMethod === "pick-up" && (
-                          <div className={styles["pickup-locations"]}>
-                            <p className="primary-color align-icon normal-text bold margin-bottom">
-                              <InfoRedIcon />
-                              <span className="margin-left">
-                                Pick Up Locations
-                              </span>
-                            </p>
-                            <div>
-                              <Radio
-                                label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
-                                onChange={() =>
-                                  handleChange("pickUpLocation", "Ikoyi")
-                                }
-                                checked={formData.pickUpLocation === "Ikoyi"}
-                              />
+                          {formData.deliveryMethod === "delivery" &&
+                            formData.state && (
+                              <div className={styles["pickup-locations"]}>
+                                {deliveryLocationOptions.length > 0 && (
+                                  <p className="primary-color align-icon normal-text bold margin-bottom">
+                                    <InfoRedIcon />
+                                    <span className="margin-left">
+                                      Delivery Locations
+                                    </span>
+                                  </p>
+                                )}
+
+                                {deliveryLocationOptions.length === 0 && (
+                                  <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                    <InfoRedIcon className="generic-icon xl" />
+                                    <span>
+                                      At the moment, we only deliver VIP Orders
+                                      to other states on request, by either
+                                      chartering a vehicle or by flight. Kindly
+                                      contact us on Phone/WhatsApp:
+                                      <br />
+                                      <a
+                                        href="tel:+2347011992888"
+                                        className="clickable neutral underline"
+                                      >
+                                        +234 7011992888
+                                      </a>
+                                      ,{" "}
+                                      <a
+                                        href="tel:+2347010006665"
+                                        className="clickable neutral underline"
+                                      >
+                                        +234 7010006665
+                                      </a>
+                                    </span>
+                                  </div>
+                                )}
+
+                                {deliveryLocationOptions.map(locationOption => (
+                                  <div
+                                    className="vertical-margin spaced"
+                                    key={locationOption.name}
+                                  >
+                                    <Radio
+                                      label={locationOption.label}
+                                      onChange={() =>
+                                        handleChange(
+                                          "deliveryLocation",
+                                          locationOption
+                                        )
+                                      }
+                                      disabled={
+                                        locationOption.amount === 0 &&
+                                        (order?.amount || 0) <=
+                                          (["13-02", "14-02", "15-02"].includes(
+                                            deliveryDate?.format("DD-MM") || ""
+                                          )
+                                            ? freeDeliveryThresholdVals
+                                            : freeDeliveryThreshold)[
+                                            currency.name
+                                          ]
+                                      }
+                                      checked={
+                                        formData.deliveryLocation ===
+                                        locationOption
+                                      }
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                          {formData.deliveryMethod === "pick-up" && (
+                            <div className={styles["pickup-locations"]}>
+                              <p className="primary-color align-icon normal-text bold margin-bottom">
+                                <InfoRedIcon />
+                                <span className="margin-left">
+                                  Pick Up Locations
+                                </span>
+                              </p>
+                              <div>
+                                <Radio
+                                  label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+                                  onChange={() =>
+                                    handleChange("pickUpLocation", "Ikoyi")
+                                  }
+                                  checked={formData.pickUpLocation === "Ikoyi"}
+                                />
+                              </div>
+                              <div className="vertical-margin">
+                                <Radio
+                                  label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+                                  onChange={() =>
+                                    handleChange("pickUpLocation", "Abuja")
+                                  }
+                                  checked={formData.pickUpLocation === "Abuja"}
+                                />
+                              </div>
                             </div>
-                            <div className="vertical-margin">
-                              <Radio
-                                label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
-                                onChange={() =>
-                                  handleChange("pickUpLocation", "Abuja")
-                                }
-                                checked={formData.pickUpLocation === "Abuja"}
-                              />
-                            </div>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
                     {formData.deliveryMethod === "delivery" && (
                       <div className={styles.border}>
                         <p className={styles["payment-info"]}>
@@ -775,50 +795,54 @@ const Checkout: FunctionComponent = () => {
                         </div>
                       </div>
                     )}
-                    <div className={styles.border}>
-                      <p className={styles["payment-info"]}>Optional Message</p>
-                      <div className={styles.padding}>
-                        <div className="input-group">
-                          <span className="question">Message to include</span>
+                    {completedDeliveryType && (
+                      <div className={styles.border}>
+                        <p className={styles["payment-info"]}>
+                          Optional Message
+                        </p>
+                        <div className={styles.padding}>
+                          <div className="input-group">
+                            <span className="question">Message to include</span>
 
-                          <TextArea
-                            value={formData.message}
-                            placeholder="Eg: I love you"
-                            onChange={value => handleChange("message", value)}
-                            dimmed
-                            rows={3}
-                          />
-                        </div>
-                        <div className="input-group">
-                          <span className="question">
-                            Additional Information for Us
-                          </span>
+                            <TextArea
+                              value={formData.message}
+                              placeholder="Eg: I love you"
+                              onChange={value => handleChange("message", value)}
+                              dimmed
+                              rows={3}
+                            />
+                          </div>
+                          <div className="input-group">
+                            <span className="question">
+                              Additional Information for Us
+                            </span>
 
-                          <TextArea
-                            value={formData.additionalInfo}
-                            placeholder="E.g Drop it with the waiter"
-                            onChange={value =>
-                              handleChange("additionalInfo", value)
-                            }
-                            dimmed
-                            rows={3}
-                          />
-                        </div>
-                        <div className="input-group half-width">
-                          <span className="question">Purpose</span>
+                            <TextArea
+                              value={formData.additionalInfo}
+                              placeholder="E.g Drop it with the waiter"
+                              onChange={value =>
+                                handleChange("additionalInfo", value)
+                              }
+                              dimmed
+                              rows={3}
+                            />
+                          </div>
+                          <div className="input-group half-width">
+                            <span className="question">Purpose</span>
 
-                          <Select
-                            onSelect={value => handleChange("purpose", value)}
-                            value={formData.purpose}
-                            options={allPurposes}
-                            placeholder="Select Purpose"
-                            responsive
-                            dropdownOnTop
-                            dimmed
-                          />
+                            <Select
+                              onSelect={value => handleChange("purpose", value)}
+                              value={formData.purpose}
+                              options={allPurposes}
+                              placeholder="Select Purpose"
+                              responsive
+                              dropdownOnTop
+                              dimmed
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     <Button
                       className="half-width"
