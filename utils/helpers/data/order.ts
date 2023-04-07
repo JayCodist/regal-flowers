@@ -24,8 +24,9 @@ const adaptCheckoutStateRecord = (
       purpose: record.purpose,
       recipient: {
         name: record.recipientName,
-        phone: record.recipientPhoneNumber,
-        phoneAlt: record.recipientPhoneNumberAlt,
+        phone: record.recipientCountryCode + record.recipientPhoneNumber,
+        phoneAlt:
+          record.recipientCountryCodeAlt + record.recipientPhoneNumberAlt,
         address: record.recipientHomeAddress,
         state: record.state,
         residenceType: record.residenceType,
@@ -35,7 +36,7 @@ const adaptCheckoutStateRecord = (
     userData: {
       name: record.senderName,
       email: record.senderEmail,
-      phone: record.senderPhoneNumber,
+      phone: record.senderCountryCode + record.senderPhoneNumber,
       password: record.senderPassword || undefined
     }
   };

@@ -9,11 +9,12 @@ import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import useDeviceType from "../../utils/hooks/useDeviceType";
-import { allDesignOptions, DesignOption } from "../../utils/constants";
+import { DesignOption } from "../../utils/constants";
 
 interface Size {
   name: string;
   price: number;
+  designOptions: DesignOption[] | null;
 }
 
 const ProductPage: FunctionComponent<{ product: Product }> = props => {
@@ -214,18 +215,22 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   };
 
   const pickDefaultDesign = () => {
-    for (const key in product.designOptions) {
-      if (product?.designOptions[key as DesignOptionName] === "default") {
-        const designOption = allDesignOptions.find(
-          option => option.name === key
-        );
-        setSelectedDesign(designOption || null);
-      }
+    if (selectedSize?.designOptions) {
+      const defaultDesign = selectedSize.designOptions.find(
+        design => design.default
+      );
+      setSelectedDesign(defaultDesign || null);
     }
   };
 
+  console.log("product", product);
+
   useEffect(() => {
     pickDefaultDesign();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSize]);
+
+  useEffect(() => {
     setActiveSlide(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
@@ -442,7 +447,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           onClick={() => {
                             setSelectedSize({
                               name: variant.name,
-                              price: variant.price
+                              price: variant.price,
+                              designOptions: variant.design
                             });
                             setProductPrice(variant.price);
                           }}
@@ -480,7 +486,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                             onClick={() => {
                               setSelectedSize({
                                 name: variant.name,
-                                price: variant.price
+                                price: variant.price,
+                                designOptions: variant.design
                               });
                               setProductPrice(variant.price);
                             }}
@@ -494,7 +501,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   <br />
                 </>
               )}
-              {selectedSize && (
+              {selectedSize?.designOptions && (
                 <>
                   {product.designOptions && (
                     <div className="align-icon vertical-margin tooltip">
@@ -504,45 +511,44 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                         alt="information"
                         className="generic-icon"
                       />{" "}
-                      <span className="tooltiptext">{product.designNote}</span>
+                      {product.designNote && (
+                        <span className="tooltiptext">
+                          {product.designNote}
+                        </span>
+                      )}
                     </div>
                   )}
-                  <div className="flex spaced">
-                    {allDesignOptions.map(
-                      designOption =>
-                        product.designOptions?.[designOption.name] && (
-                          <div
-                            key={designOption.name}
-                            className={[
-                              styles.design,
-                              selectedDesign?.name === designOption.name &&
-                                styles["selected-design"]
-                            ].join(" ")}
-                            onClick={() => setSelectedDesign(designOption)}
-                          >
-                            <img
-                              src={`/icons/${designOption.name}.svg`}
-                              alt="box"
-                              className={`generic-icon xxl margin-bottom spaced ${designOption.name ===
-                                "inLargeVase" && styles["inLargeVase"]}`}
-                            />
-                            <p className="vertical-margin bold">
-                              {designOption.title}
-                            </p>
-                            {product.designOptions?.[designOption.name] ===
-                            "default" ? (
-                              <p>Default</p>
-                            ) : designOption.price ? (
-                              <p>
-                                +{" "}
-                                {getPriceDisplay(designOption.price, currency)}
-                              </p>
-                            ) : (
-                              <p>Complimentary</p>
-                            )}
-                          </div>
-                        )
-                    )}
+                  <div className="flex spaced margin-bottom">
+                    {selectedSize.designOptions.map(designOption => (
+                      <div
+                        key={designOption.name}
+                        className={[
+                          styles.design,
+                          selectedDesign?.name === designOption.name &&
+                            styles["selected-design"]
+                        ].join(" ")}
+                        onClick={() => setSelectedDesign(designOption)}
+                      >
+                        <img
+                          src={`/icons/${designOption.name}.svg`}
+                          alt="box"
+                          className={`generic-icon xxl margin-bottom spaced ${designOption.name ===
+                            "inLargeVase" && styles["inLargeVase"]}`}
+                        />
+                        <p className="vertical-margin bold">
+                          {designOption.title}
+                        </p>
+                        {designOption.default ? (
+                          <p>Default</p>
+                        ) : designOption.price ? (
+                          <p>
+                            + {getPriceDisplay(designOption.price, currency)}
+                          </p>
+                        ) : (
+                          <p>Complimentary</p>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </>
               )}

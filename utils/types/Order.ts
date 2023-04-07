@@ -228,6 +228,7 @@ export interface CheckoutFormData {
   senderName: string;
   senderEmail: string;
   senderPhoneNumber: string;
+  senderCountryCode: string;
   senderPassword: string;
   freeAccount: boolean;
   coupon: string;
@@ -237,7 +238,9 @@ export interface CheckoutFormData {
   recipientName: string;
   deliveryDate: Dayjs | null;
   recipientPhoneNumber: string;
+  recipientCountryCode: string;
   recipientPhoneNumberAlt: string;
+  recipientCountryCodeAlt: string;
   residenceType: string;
   recipientHomeAddress: string;
   shouldSaveAddress: boolean;

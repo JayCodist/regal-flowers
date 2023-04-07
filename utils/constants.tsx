@@ -572,7 +572,7 @@ export const occasions: { title: string; url: string; category?: string }[] = [
     category: "Just to Say Bouquets"
   },
   {
-    title: "Bridal Bouquets &",
+    title: "Bridal Bouquets & Accessories",
     url: "/product-category/bridal-bouquets",
     category:
       "Birthday Flowers, Anniversary Flowers, Love %26amp; Romance flowers, Valentine Flowers, Mother's Day Flowers"
@@ -622,15 +622,15 @@ export interface FilterOption {
 
 export const bridalOccasionFilters: Filter[] = [
   {
-    name: "Bridal Bouquets",
+    name: "Bridal Section",
     options: [
       {
-        name: "Bouquets",
+        name: "Bridal Bouquets",
         tag: "bridal bouquets",
         link: "/product-category/bridal-bouquets"
       },
       {
-        name: "Cascading Bouquets",
+        name: "Cascading Bridal Bouquets",
         tag: "cascading bridal bouquets",
         link: "/product-category/cascadingdropping-bouquets"
       },
@@ -645,6 +645,25 @@ export const bridalOccasionFilters: Filter[] = [
   }
 ];
 
+export const funeralOccasion: Filter[] = [
+  {
+    name: "Funeral & Condolence",
+    options: [
+      {
+        name: "Wreaths & Flowers",
+        tag: "",
+        link: "/product-category/funeral-amp-condolence"
+      },
+      {
+        name: "VIP Section",
+        tag: "",
+        link: "/vip"
+      }
+    ],
+    limit: 3
+  }
+];
+
 export const filtersCatgories: Filter[] = [
   {
     name: "Budget",
@@ -652,10 +671,6 @@ export const filtersCatgories: Filter[] = [
       {
         name: "Regular",
         tag: "regular"
-      },
-      {
-        name: "VIP",
-        tag: "vip"
       }
     ],
     limit: 2,
@@ -984,16 +999,16 @@ export const links: AppLink[] = [
         ]
       },
       {
-        title: "Bridal",
+        title: "Bridal Bouquets & Accessories",
         url: "/product-category/bridal-bouquets",
         children: [
           {
-            title: "Flowers",
+            title: "Bridal Bouquets",
             url: "/product-category/bridal-bouquets",
             children: []
           },
           {
-            title: "Cascading Bouquets & Flowers",
+            title: "Cascading Bridal Bouquets",
             url: "/product-category/cascadingdropping-bouquets",
             children: []
           },
@@ -1172,7 +1187,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/teddy-bear",
+        url: "/product-category/teddy-bears",
         title: "Teddy Bears",
         children: []
       },
@@ -1192,8 +1207,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url:
-          "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
+        url: "/product-category/gift-packs",
         title: "Giftsets",
         children: []
       }
@@ -1549,24 +1563,15 @@ export const allDeliveryLocationOptions: Record<
       !["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
-        label: `${getPriceDisplay(
-          10000,
-          currency
-        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
-        name: "highLagos",
-        amount: 10000
-      },
-      !["13-02", "14-02", "15-02"].includes(
-        deliveryDate?.format("DD-MM") || ""
-      ) && {
-        label: `${getPriceDisplay(4000, currency)} - Orders BELOW ${
+        label: `${getPriceDisplay(4500, currency)} - Orders BELOW ${
           currency.sign
         }${freeDeliveryThreshold[
           currency.name
         ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
         name: "mediumLagos",
-        amount: 4000
+        amount: 4500
       },
+
       !["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
@@ -1577,6 +1582,17 @@ export const allDeliveryLocationOptions: Record<
         ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
         name: "freeLagos",
         amount: 0
+      },
+
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(
+          10000,
+          currency
+        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+        name: "highLagos",
+        amount: 10000
       },
 
       ["13-02", "14-02", "15-02"].includes(
@@ -1605,16 +1621,6 @@ export const allDeliveryLocationOptions: Record<
 
   abuja: (currency, deliveryDate) =>
     [
-      !["13-02", "14-02", "15-02"].includes(
-        deliveryDate?.format("DD-MM") || ""
-      ) && {
-        label: `${getPriceDisplay(
-          6000,
-          currency
-        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
-        name: "highAbuja",
-        amount: 6000
-      },
       !["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
@@ -1659,6 +1665,16 @@ export const allDeliveryLocationOptions: Record<
         ].toLocaleString()} (FREE* Delivery Abuja)`,
         name: "freeAbujaVals",
         amount: 0
+      },
+      !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(
+          6000,
+          currency
+        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
+        name: "highAbuja",
+        amount: 6000
       }
     ].filter(BooleanFilter) as DeliveryLocationOption[],
   "other-locations": () => [],
@@ -1669,6 +1685,7 @@ export interface DesignOption {
   name: DesignOptionName;
   price: number;
   title: string;
+  default?: boolean;
 }
 
 export const allDesignOptions: DesignOption[] = [

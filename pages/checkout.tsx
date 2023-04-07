@@ -54,6 +54,8 @@ import {
 } from "../utils/helpers/type-conversions";
 import { Recipient } from "../utils/types/User";
 import { Stage } from "../utils/types/Core";
+import PhoneInput from "../components/phone-input/PhoneInput";
+import { emailValidator } from "../utils/helpers/validators";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -79,7 +81,10 @@ const initialData: CheckoutFormData = {
   cardName: "",
   cardExpiry: "",
   cardNumber: "",
-  cardCVV: ""
+  cardCVV: "",
+  recipientCountryCode: "+234",
+  senderCountryCode: "+234",
+  recipientCountryCodeAlt: "+234"
 };
 
 type DeliverStage =
@@ -139,7 +144,8 @@ const Checkout: FunctionComponent = () => {
     allCurrencies,
     notify,
     deliveryDate,
-    setDeliveryDate
+    setDeliveryDate,
+    setShouldShowCart
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -252,6 +258,10 @@ const Checkout: FunctionComponent = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (emailValidator(formData.senderEmail)) {
+      notify("error", "Please enter a valid email address");
+      return;
+    }
     setLoading(true);
     const { error, message } = await updateCheckoutState(orderId as string, {
       ...formData,
@@ -421,22 +431,21 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
                         </div>
-                        <div className="flex spaced-even-xl wrap">
-                          <div className="input-group half-width compact">
-                            <span className="question">Phone number</span>
-                            <Input
-                              value={formData.senderPhoneNumber}
-                              onChange={value =>
-                                handleChange("senderPhoneNumber", value)
-                              }
-                              placeholder="Enter phone number"
-                              name="phone"
-                              required
-                              dimmed
-                            />
-                          </div>
+                        <div className="flex spaced-xl">
+                          <PhoneInput
+                            phoneNumber={formData.senderPhoneNumber}
+                            countryCode={formData.senderCountryCode}
+                            onChangePhoneNumber={value =>
+                              handleChange("senderPhoneNumber", value)
+                            }
+                            onChangeCountryCode={value =>
+                              handleChange("senderCountryCode", value)
+                            }
+                            className="input-group"
+                          />
+
                           {!user && (
-                            <div className="input-group half-width compact">
+                            <div className="input-group">
                               <span className="question">Create Password</span>
                               <Input
                                 name="password"
@@ -453,17 +462,6 @@ const Checkout: FunctionComponent = () => {
                               />
                             </div>
                           )}
-                          <div className="input-group half-width compact">
-                            <span className="question">
-                              Pickup/Delivery Date
-                            </span>
-                            <DatePicker
-                              value={deliveryDate}
-                              onChange={setDeliveryDate}
-                              format="D MMMM YYYY"
-                              responsive
-                            />
-                          </div>
                         </div>
                         {!user && (
                           <Checkbox
@@ -483,25 +481,16 @@ const Checkout: FunctionComponent = () => {
                     >
                       <p className={styles["payment-info"]}>Delivery Method</p>
                       <div className={styles.padding}>
-                        <div className="margin-top">
-                          <em>
-                            {["13-02", "14-02", "15-02"].includes(
-                              deliveryDate?.format("DD-MM") || ""
-                            ) && formData.deliveryMethod === "delivery"
-                              ? `Free Valentine (Feb 13th, 14th, 15th) Delivery across Lagos and Abuja on orders above ${
-                                  currency.sign
-                                }${freeDeliveryThresholdVals[
-                                  currency.name
-                                ].toLocaleString()}`
-                              : formData.deliveryMethod === "delivery"
-                              ? `Free Delivery across Lagos and Abuja on orders above ${
-                                  currency.sign
-                                }${freeDeliveryThreshold[
-                                  currency.name
-                                ].toLocaleString()}`
-                              : ""}
-                          </em>
+                        <div className="input-group half-width compact">
+                          <span className="question">Pickup/Delivery Date</span>
+                          <DatePicker
+                            value={deliveryDate}
+                            onChange={setDeliveryDate}
+                            format="D MMMM YYYY"
+                            responsive
+                          />
                         </div>
+
                         <div className="flex between center-align">
                           <div
                             className={[
@@ -516,7 +505,7 @@ const Checkout: FunctionComponent = () => {
                             <p className={`${styles["method-title"]}`}>
                               Pick Up
                             </p>
-                            <p>Pick up from any of our stores nation wide</p>
+                            <p>Pick up from our stores</p>
                           </div>
                           <div
                             className={[
@@ -533,6 +522,25 @@ const Checkout: FunctionComponent = () => {
                             </p>
                             <p>Get it delivered to the recipient's location</p>
                           </div>
+                        </div>
+                        <div className="margin-top primary-color">
+                          <em>
+                            {["13-02", "14-02", "15-02"].includes(
+                              deliveryDate?.format("DD-MM") || ""
+                            ) && formData.deliveryMethod === "delivery"
+                              ? `Free Valentine (Feb 13th, 14th, 15th) Delivery in selected zones across Lagos and Abuja on orders above ${
+                                  currency.sign
+                                }${freeDeliveryThresholdVals[
+                                  currency.name
+                                ].toLocaleString()}`
+                              : formData.deliveryMethod === "delivery"
+                              ? `Free Delivery in selected zones across Lagos and Abuja on orders above ${
+                                  currency.sign
+                                }${freeDeliveryThreshold[
+                                  currency.name
+                                ].toLocaleString()}`
+                              : ""}
+                          </em>
                         </div>
 
                         {formData.deliveryMethod === "delivery" && (
@@ -659,7 +667,8 @@ const Checkout: FunctionComponent = () => {
                         <div className={styles.padding}>
                           <div className="input-group">
                             <span className="question">
-                              Select A Past Recipient
+                              Select A Past Recipient{" "}
+                              <em className="normal">(for logged in users)</em>
                             </span>
 
                             <Select
@@ -695,37 +704,34 @@ const Checkout: FunctionComponent = () => {
                                 dimmed
                               />
                             </div>
-                            <div className="input-group">
-                              <span className="question">
-                                Receiver Phone number
-                              </span>
-                              <Input
-                                value={formData.recipientPhoneNumber}
-                                onChange={value =>
-                                  handleChange("recipientPhoneNumber", value)
-                                }
-                                placeholder="Enter receiver phone"
-                                dimmed
-                                required
-                              />
-                            </div>
+
+                            <PhoneInput
+                              phoneNumber={formData.recipientPhoneNumber}
+                              countryCode={formData.recipientCountryCode}
+                              onChangePhoneNumber={value =>
+                                handleChange("recipientPhoneNumber", value)
+                              }
+                              onChangeCountryCode={value =>
+                                handleChange("recipientCountryCode", value)
+                              }
+                              className="input-group"
+                              question="Receiver Phone number"
+                            />
                           </div>
 
                           <div className="flex spaced-xl margin-bottom">
-                            <div className="input-group">
-                              <span className="question">
-                                Alternative Phone number
-                              </span>
-                              <Input
-                                value={formData.recipientPhoneNumberAlt}
-                                onChange={value =>
-                                  handleChange("recipientPhoneNumberAlt", value)
-                                }
-                                placeholder="Enter alternative phone"
-                                dimmed
-                                required
-                              />
-                            </div>
+                            <PhoneInput
+                              phoneNumber={formData.recipientPhoneNumberAlt}
+                              countryCode={formData.recipientCountryCodeAlt}
+                              onChangePhoneNumber={value =>
+                                handleChange("recipientPhoneNumberAlt", value)
+                              }
+                              onChangeCountryCode={value =>
+                                handleChange("recipientCountryCodeAlt", value)
+                              }
+                              className="input-group"
+                              question="Enter alternative phone"
+                            />
                             <div className="input-group">
                               <span className="question">Residence Type</span>
 
@@ -825,6 +831,12 @@ const Checkout: FunctionComponent = () => {
                 )}
                 {currentStage === 2 && (
                   <>
+                    <button
+                      onClick={() => setCurrentStage(1)}
+                      className="margin-bottom"
+                    >
+                      {"<< Previous Page"}
+                    </button>
                     <div className={styles.border}>
                       <p className={styles["payment-info"]}>Payment Method</p>
                       <div className={styles.padding}>
@@ -924,7 +936,10 @@ const Checkout: FunctionComponent = () => {
                 <div className={styles.right}>
                   <div className="flex between margin-bottom spaced">
                     <p className="sub-heading bold">Cart Summary</p>
-                    <p className="sub-heading bold primary-color underline">
+                    <p
+                      className="sub-heading bold primary-color underline clickable"
+                      onClick={() => setShouldShowCart(true)}
+                    >
                       View Cart
                     </p>
                   </div>
@@ -1275,22 +1290,22 @@ const Checkout: FunctionComponent = () => {
                         dimmed
                         responsive
                         required={formData.freeAccount}
-                      />
-                    </div>
-                    <div className="input-group">
-                      <span className="question">Phone number</span>
-                      <Input
-                        value={formData.senderPhoneNumber}
-                        onChange={value =>
-                          handleChange("senderPhoneNumber", value)
+                        onBlurValidation={() =>
+                          emailValidator(formData.senderEmail)
                         }
-                        placeholder="Enter phone"
-                        dimmed
-                        responsive
-                        autoComplete="tel"
-                        required
                       />
                     </div>
+                    <PhoneInput
+                      phoneNumber={formData.senderPhoneNumber}
+                      countryCode={formData.senderCountryCode}
+                      onChangePhoneNumber={value =>
+                        handleChange("senderPhoneNumber", value)
+                      }
+                      onChangeCountryCode={value =>
+                        handleChange("senderCountryCode", value)
+                      }
+                      className="input-group"
+                    />
                     {!user && (
                       <div className="input-group">
                         <span className="question">Create Password</span>
@@ -1368,13 +1383,13 @@ const Checkout: FunctionComponent = () => {
                             {["13-02", "14-02", "15-02"].includes(
                               deliveryDate?.format("DD-MM") || ""
                             )
-                              ? `Free Valentine (Feb 13th, 14th, 15th) Delivery across Lagos and Abuja on orders above ${
+                              ? `Free Valentine (Feb 13th, 14th, 15th) Delivery in selected zone in Lagos and Abuja on orders above ${
                                   currency.sign
                                 }${freeDeliveryThresholdVals[
                                   currency.name
                                 ].toLocaleString()}`
                               : formData.deliveryMethod === "delivery"
-                              ? `Free Delivery across Lagos and Abuja on orders above ${
+                              ? `Free Delivery in selected in Lagos and Abuja on orders above ${
                                   currency.sign
                                 }${freeDeliveryThreshold[
                                   currency.name
@@ -1564,7 +1579,8 @@ const Checkout: FunctionComponent = () => {
                         <div className={styles.padding}>
                           <div className="input-group">
                             <span className="question">
-                              Select A Past Recipient
+                              Select A Past Recipient{" "}
+                              <em className="normal">(for logged in users)</em>
                             </span>
 
                             <Select
@@ -1602,35 +1618,31 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
 
-                          <div className="input-group">
-                            <span className="question">Phone number</span>
-                            <Input
-                              value={formData.recipientPhoneNumber}
-                              onChange={value =>
-                                handleChange("recipientPhoneNumber", value)
-                              }
-                              placeholder="Enter recipient phone"
-                              dimmed
-                              responsive
-                              required
-                            />
-                          </div>
+                          <PhoneInput
+                            phoneNumber={formData.recipientPhoneNumber}
+                            countryCode={formData.recipientCountryCode}
+                            onChangePhoneNumber={value =>
+                              handleChange("recipientPhoneNumber", value)
+                            }
+                            onChangeCountryCode={value =>
+                              handleChange("recipientCountryCode", value)
+                            }
+                            className="input-group"
+                            question="Receiver Phone number"
+                          />
 
-                          <div className="input-group">
-                            <span className="question">
-                              Alternative Phone number
-                            </span>
-                            <Input
-                              value={formData.recipientPhoneNumberAlt}
-                              onChange={value =>
-                                handleChange("recipientPhoneNumberAlt", value)
-                              }
-                              placeholder="Enter alternative phone"
-                              dimmed
-                              responsive
-                              required
-                            />
-                          </div>
+                          <PhoneInput
+                            phoneNumber={formData.recipientPhoneNumberAlt}
+                            countryCode={formData.recipientCountryCodeAlt}
+                            onChangePhoneNumber={value =>
+                              handleChange("recipientPhoneNumberAlt", value)
+                            }
+                            onChangeCountryCode={value =>
+                              handleChange("recipientCountryCodeAlt", value)
+                            }
+                            className="input-group"
+                            question="Enter alternative phone"
+                          />
                           <div className="input-group">
                             <span className="question">Residence Type</span>
 
