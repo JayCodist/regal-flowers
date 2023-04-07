@@ -223,13 +223,19 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     }
   };
 
+  console.log("product", product);
+
+  useEffect(() => {
+    pickDefaultDesign();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedSize]);
+
   useEffect(() => {
     setActiveSlide(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
 
   useEffect(() => {
-    pickDefaultDesign();
     setTotal((selectedDesign?.price || 0) + (selectedSize?.price || 0));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDesign, selectedSize]);
@@ -505,10 +511,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                         alt="information"
                         className="generic-icon"
                       />{" "}
-                      <span className="tooltiptext">{product.designNote}</span>
+                      {product.designNote && (
+                        <span className="tooltiptext">
+                          {product.designNote}
+                        </span>
+                      )}
                     </div>
                   )}
-                  <div className="flex spaced">
+                  <div className="flex spaced margin-bottom">
                     {selectedSize.designOptions.map(designOption => (
                       <div
                         key={designOption.name}
