@@ -14,7 +14,7 @@ import { DesignOption } from "../../utils/constants";
 interface Size {
   name: string;
   price: number;
-  designOptions: DesignOption[] | null;
+  designOptions?: DesignOption[];
 }
 
 const ProductPage: FunctionComponent<{ product: Product }> = props => {
@@ -242,7 +242,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   const cannotBuy =
     (product.type === "variable" && !selectedSize?.name) ||
-    (product.designOptions && !selectedDesign);
+    (selectedSize?.designOptions && !selectedDesign);
 
   return (
     <section className={`${styles.product}`}>
