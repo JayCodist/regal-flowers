@@ -18,8 +18,6 @@ export interface SettingsControls extends Settings {
   setUser: (user: User | null) => void;
   setShouldShowCart: (shouldShowCart: boolean) => void;
   shouldShowCart: boolean;
-  setRedirectTo: (redirectTo: string) => void;
-  redirectTo: string;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -36,9 +34,7 @@ const SettingsContext = createContext<SettingsControls>({
   user: null,
   setUser: () => {},
   setShouldShowCart: () => {},
-  shouldShowCart: false,
-  setRedirectTo: () => {},
-  redirectTo: ""
+  shouldShowCart: false
 });
 
 export default SettingsContext;
