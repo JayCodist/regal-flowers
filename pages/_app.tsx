@@ -28,7 +28,8 @@ const defaultSettings: Settings = {
   currentStage: 1,
   deliveryDate: null,
   cartItems: [],
-  shouldShowCart: false
+  shouldShowCart: false,
+  redirectTo: ""
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -151,7 +152,9 @@ const App: FunctionComponent<AppProps> = props => {
     setShouldShowCart,
     notify,
     user,
-    setUser
+    setUser,
+    setRedirectTo: redirectTo => setSettings({ ...settings, redirectTo }),
+    redirectTo: settings.redirectTo
   };
 
   const headTags = (

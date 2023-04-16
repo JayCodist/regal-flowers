@@ -113,7 +113,9 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
-  const { notify, deliveryDate, setDeliveryDate } = useContext(SettingsContext);
+  const { notify, deliveryDate, setDeliveryDate, setRedirectTo } = useContext(
+    SettingsContext
+  );
 
   const deviceType = useDeviceType();
 
@@ -295,6 +297,13 @@ const ProductsPage: FunctionComponent<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySlug]);
+
+  useEffect(() => {
+    if (isReady) {
+      setRedirectTo(router.asPath);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath]);
 
   return (
     <section className={styles.filters} ref={rootRef}>

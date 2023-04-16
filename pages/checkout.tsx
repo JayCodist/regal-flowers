@@ -145,7 +145,8 @@ const Checkout: FunctionComponent = () => {
     notify,
     deliveryDate,
     setDeliveryDate,
-    setShouldShowCart
+    setShouldShowCart,
+    redirectTo
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -407,7 +408,13 @@ const Checkout: FunctionComponent = () => {
               <div className={`${styles.left}`}>
                 {currentStage === 1 && (
                   <>
-                    <div className={styles.border}>
+                    {redirectTo && (
+                      <Link href={redirectTo}>
+                        <a className="margin-bottom">{"<< Previous Page"}</a>
+                      </Link>
+                    )}
+
+                    <div className={`${styles.border} margin-top`}>
                       <p className={styles["payment-info"]}>
                         Sender's Information
                       </p>
@@ -563,17 +570,21 @@ const Checkout: FunctionComponent = () => {
                           </div>
 
                           {formData.deliveryMethod === "delivery" && (
-                            <div className="input-group half-width">
-                              <span className="question">Delivery State</span>
-                              <Select
-                                onSelect={value => handleChange("state", value)}
-                                value={formData.state}
-                                options={deliveryStates}
-                                placeholder="Select a state"
-                                responsive
-                                dimmed
-                              />
-                            </div>
+                            <>
+                              <div className="input-group half-width">
+                                <span className="question">Delivery State</span>
+                                <Select
+                                  onSelect={value =>
+                                    handleChange("state", value)
+                                  }
+                                  value={formData.state}
+                                  options={deliveryStates}
+                                  placeholder="Select a state"
+                                  responsive
+                                  dimmed
+                                />
+                              </div>
+                            </>
                           )}
 
                           {formData.deliveryMethod === "delivery" &&
