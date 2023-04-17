@@ -663,7 +663,7 @@ const Header: FunctionComponent = () => {
                 shouldShowCart && "primary-color"
               ].join(" ")}
               onMouseOver={e => {
-                setShouldShowCart(!shouldShowCart);
+                setShouldShowCart(true);
                 e.stopPropagation();
               }}
             >
@@ -986,7 +986,9 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 };
 
 export const CheckoutHeader: FunctionComponent = () => {
-  const { currentStage } = useContext(SettingsContext);
+  const { currentStage, setShouldShowCart, shouldShowCart } = useContext(
+    SettingsContext
+  );
 
   const stages = [
     {
@@ -1004,61 +1006,67 @@ export const CheckoutHeader: FunctionComponent = () => {
   ];
 
   return (
-    <header className={styles.header}>
-      <Link href="/">
-        <a>
-          <img
-            alt="regal flowers logo"
-            src="/icons/logo.png"
-            className={styles.logo}
-          />
-        </a>
-      </Link>
+    <>
+      <header className={styles.header}>
+        <Link href="/">
+          <a>
+            <img
+              alt="regal flowers logo"
+              src="/icons/logo.png"
+              className={styles.logo}
+            />
+          </a>
+        </Link>
 
-      <div className={styles["stage-wrapper"]}>
-        <div className="flex center margin-bottom">
-          {stages.map((_stage, index) => (
-            <div
-              key={index}
-              className={[
-                styles.progress,
-                currentStage === _stage.stage && styles.active
-              ].join(" ")}
-            >
-              {_stage.stage > 1 && (
-                <hr
-                  className={[
-                    styles["progress-bar"],
-                    currentStage >= _stage.stage && styles.active
-                  ].join(" ")}
-                />
-              )}
-              <span
+        <div className={styles["stage-wrapper"]}>
+          <div className="flex center margin-bottom">
+            {stages.map((_stage, index) => (
+              <div
+                key={index}
                 className={[
-                  styles.circle,
-                  currentStage > _stage.stage && styles.completed,
+                  styles.progress,
                   currentStage === _stage.stage && styles.active
                 ].join(" ")}
-              ></span>
-            </div>
-          ))}
+              >
+                {_stage.stage > 1 && (
+                  <hr
+                    className={[
+                      styles["progress-bar"],
+                      currentStage >= _stage.stage && styles.active
+                    ].join(" ")}
+                  />
+                )}
+                <span
+                  className={[
+                    styles.circle,
+                    currentStage > _stage.stage && styles.completed,
+                    currentStage === _stage.stage && styles.active
+                  ].join(" ")}
+                ></span>
+              </div>
+            ))}
+          </div>
+          <div className="flex around">
+            {stages.map((_stage, index) => (
+              <span
+                key={index}
+                className={[
+                  styles["stage-name"],
+                  currentStage === _stage.stage && styles.active,
+                  currentStage > _stage.stage && styles.completed
+                ].join(" ")}
+              >
+                {_stage.name}
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="flex around">
-          {stages.map((_stage, index) => (
-            <span
-              key={index}
-              className={[
-                styles["stage-name"],
-                currentStage === _stage.stage && styles.active,
-                currentStage > _stage.stage && styles.completed
-              ].join(" ")}
-            >
-              {_stage.name}
-            </span>
-          ))}
-        </div>
-      </div>
-    </header>
+      </header>
+      <CartContext
+        visible={shouldShowCart}
+        cancel={() => setShouldShowCart(false)}
+      />
+    </>
   );
 };
 
