@@ -510,7 +510,7 @@ export const paymentMethods: PaymentMethod[] = [
   }
 ];
 
-export const _countryCodes = [
+export const countryCodes = [
   { value: "+234", label: "+234" },
   { value: "+44", label: "+44" }
 ];
