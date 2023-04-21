@@ -252,6 +252,8 @@ export interface CheckoutFormData {
   cardNumber: string;
   cardCVV: string;
   state: LocationName;
+  zone: string;
+  deliveryCharge: number;
 }
 
 export type PaymentName =
