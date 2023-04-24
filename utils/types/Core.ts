@@ -24,6 +24,7 @@ export interface Settings {
   cartItems: CartItem[];
   allCurrencies: AppCurrency[];
   shouldShowCart: boolean;
+  redirectUrl: string;
 }
 
 export enum Stage {

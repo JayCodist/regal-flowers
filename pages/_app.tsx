@@ -28,7 +28,9 @@ const defaultSettings: Settings = {
   currentStage: 1,
   deliveryDate: null,
   cartItems: [],
-  shouldShowCart: false
+  shouldShowCart: false,
+  redirectUrl:
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -151,7 +153,11 @@ const App: FunctionComponent<AppProps> = props => {
     setShouldShowCart,
     notify,
     user,
-    setUser
+    setUser,
+    redirectUrl: settings.redirectUrl,
+    setRedirectUrl: (redirectUrl: string) => {
+      setSettings({ ...settings, redirectUrl });
+    }
   };
 
   const headTags = (

@@ -57,9 +57,6 @@ import { Recipient } from "../utils/types/User";
 import { Stage } from "../utils/types/Core";
 import PhoneInput from "../components/phone-input/PhoneInput";
 import { emailValidator } from "../utils/helpers/validators";
-import AppStorage, {
-  AppStorageConstants
-} from "../utils/helpers/storage-helpers";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -140,7 +137,6 @@ const Checkout: FunctionComponent = () => {
   const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(
     null
   );
-  const [savedRedirectTo, setSavedRedirectTo] = useState("");
 
   const {
     user,
@@ -152,7 +148,8 @@ const Checkout: FunctionComponent = () => {
     notify,
     deliveryDate,
     setDeliveryDate,
-    setShouldShowCart
+    setShouldShowCart,
+    redirectUrl
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -306,9 +303,6 @@ const Checkout: FunctionComponent = () => {
   useEffect(() => {
     fetchPurposes();
 
-    setSavedRedirectTo(
-      AppStorage.getSession<string>(AppStorageConstants.REDIRECT_TO) || ""
-    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -484,8 +478,8 @@ const Checkout: FunctionComponent = () => {
               <div className={`${styles.left}`}>
                 {currentStage === 1 && (
                   <>
-                    {savedRedirectTo && (
-                      <Link href={savedRedirectTo}>
+                    {redirectUrl && (
+                      <Link href={redirectUrl}>
                         <a className="margin-bottom">{"<< Previous Page"}</a>
                       </Link>
                     )}

@@ -37,9 +37,6 @@ import useOutsideClick from "../utils/hooks/useOutsideClick";
 import styles from "./filters.module.scss";
 import SettingsContext from "../utils/context/SettingsContext";
 import Radio from "../components/radio/Radio";
-import AppStorage, {
-  AppStorageConstants
-} from "../utils/helpers/storage-helpers";
 
 const giftMap: Record<string, string> = {
   "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears":
@@ -116,7 +113,9 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
-  const { notify, deliveryDate, setDeliveryDate } = useContext(SettingsContext);
+  const { notify, deliveryDate, setDeliveryDate, setRedirectUrl } = useContext(
+    SettingsContext
+  );
 
   const deviceType = useDeviceType();
 
@@ -301,7 +300,7 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
-      AppStorage.saveSession(AppStorageConstants.REDIRECT_TO, router.asPath);
+      setRedirectUrl(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath]);

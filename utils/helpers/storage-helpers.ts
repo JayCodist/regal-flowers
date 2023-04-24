@@ -43,31 +43,6 @@ const AppStorage = {
       return;
     }
     localStorage.clear();
-  },
-  saveSession: (key: string, value: any) => {
-    try {
-      if (typeof window === "undefined") {
-        return;
-      }
-      sessionStorage.setItem(
-        key,
-        typeof value === "object" ? JSON.stringify(value) : String(value)
-      );
-    } catch (error) {
-      console.error("Unable to save to sessionStorage: ", error);
-    }
-  },
-  getSession: <T = any>(key: string): T | null => {
-    if (typeof window === "undefined") {
-      return null;
-    }
-    const str = sessionStorage.getItem(key);
-    try {
-      const output = str ? JSON.parse(str) : null;
-      return output;
-    } catch (error) {
-      return str as any;
-    }
   }
 };
 
