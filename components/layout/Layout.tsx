@@ -715,10 +715,11 @@ const Header: FunctionComponent = () => {
 interface CartContextProps {
   visible: boolean;
   cancel: () => void;
+  header?: "checkout" | "main";
 }
 
 const CartContext: FunctionComponent<CartContextProps> = props => {
-  const { visible, cancel } = props;
+  const { visible, cancel, header = "main" } = props;
 
   const {
     cartItems,
@@ -976,7 +977,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             loading={loading}
             disabled={!cartItems.length}
           >
-            Proceed to checkout (
+            {header === "main" ? "Proceed to checkout" : "Update Cart"} (
             {getPriceDisplay(total + designCharges, currency)})
           </Button>
         </div>
@@ -1065,6 +1066,7 @@ export const CheckoutHeader: FunctionComponent = () => {
       <CartContext
         visible={shouldShowCart}
         cancel={() => setShouldShowCart(false)}
+        header="checkout"
       />
     </>
   );
