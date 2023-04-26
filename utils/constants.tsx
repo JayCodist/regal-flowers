@@ -512,6 +512,22 @@ export const paymentMethods: PaymentMethod[] = [
 
 export const countryCodes = [
   {
+    value: "+234",
+    label: "Nigeria"
+  },
+  {
+    value: "+44",
+    label: "United Kingdom"
+  },
+  {
+    value: "+1",
+    label: "United States"
+  },
+  {
+    value: "+1",
+    label: "Canada"
+  },
+  {
     value: "+7 840",
     label: "Abkhazia"
   },
@@ -671,10 +687,7 @@ export const countryCodes = [
     value: "+237",
     label: "Cameroon"
   },
-  {
-    value: "+1",
-    label: "Canada"
-  },
+
   {
     value: "+238",
     label: "Cape Verde"
@@ -1151,10 +1164,7 @@ export const countryCodes = [
     value: "+227",
     label: "Niger"
   },
-  {
-    value: "+234",
-    label: "Nigeria"
-  },
+
   {
     value: "+683",
     label: "Niue"
@@ -1403,14 +1413,7 @@ export const countryCodes = [
     value: "+971",
     label: "United Arab Emirates"
   },
-  {
-    value: "+44",
-    label: "United Kingdom"
-  },
-  {
-    value: "+1",
-    label: "United States"
-  },
+
   {
     value: "+598",
     label: "Uruguay"

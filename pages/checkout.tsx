@@ -868,7 +868,7 @@ const Checkout: FunctionComponent = () => {
                                   handleChange("recipientCountryCodeAlt", value)
                                 }
                                 className="input-group"
-                                question="Enter alternative phone"
+                                question="Enter alternative phone (if available)"
                               />
                               <div className="input-group">
                                 <span className="question">Residence Type</span>
@@ -1820,7 +1820,7 @@ const Checkout: FunctionComponent = () => {
                               handleChange("recipientCountryCodeAlt", value)
                             }
                             className="input-group"
-                            question="Enter alternative phone"
+                            question="Enter alternative phone (if available)"
                           />
                           <div className="input-group">
                             <span className="question">Residence Type</span>
