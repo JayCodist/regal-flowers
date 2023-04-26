@@ -40,6 +40,8 @@ const PhoneInput = (props: PhoneInputProps) => {
           responsive
           dimmed
           className={styles["country-code"]}
+          display="value"
+          dropdownClassName={styles["country-code-dropdown"]}
         />
         <Input
           placeholder=""
