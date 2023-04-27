@@ -582,6 +582,7 @@ const Checkout: FunctionComponent = () => {
                               onChange={setDeliveryDate}
                               format="D MMMM YYYY"
                               responsive
+                              disablePastDays
                             />
                           </div>
 
@@ -1479,6 +1480,7 @@ const Checkout: FunctionComponent = () => {
                         onChange={setDeliveryDate}
                         format="D MMMM YYYY"
                         responsive
+                        disablePastDays
                       />
                     </div>
 

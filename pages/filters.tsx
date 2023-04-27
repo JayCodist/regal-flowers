@@ -575,6 +575,7 @@ const ProductsPage: FunctionComponent<{
                     onChange={setDeliveryDate}
                     format="D MMM YYYY"
                     placeholder="Select Date"
+                    disablePastDays
                   />
                 </div>
               )}

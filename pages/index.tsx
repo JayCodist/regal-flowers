@@ -917,6 +917,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
           placeholder="Delivery Date"
           dropdownAlignment={deviceType === "mobile" ? "right" : "left"}
           iconAtLeft
+          disablePastDays
         />
       </div>
       <Button

@@ -881,6 +881,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                   iconAtLeft
                   content={<p className="underline primary-color">Edit</p>}
                   dropdownAlignment="right"
+                  disablePastDays
                 />
               )}
             </div>
