@@ -147,6 +147,10 @@ const DatePicker = (props: DatePickerProps) => {
           selected={jsDateValue}
           onDayClick={handleDateSelect}
           disabled={disablePastDays ? isPastDay : undefined}
+          modifiersClassNames={{
+            today: styles.today,
+            selected: styles.selected
+          }}
         />
       </div>
     </div>

@@ -95,3 +95,12 @@
     background-color: inherit;
   }
 }
+
+.selected {
+  background-color: #9b0000;
+  color: white;
+
+  &:hover {
+    background-color: #9b00007a;
+  }
+}
