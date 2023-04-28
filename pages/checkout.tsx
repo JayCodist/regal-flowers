@@ -86,8 +86,7 @@ const initialData: CheckoutFormData = {
   recipientCountryCode: "+234",
   senderCountryCode: "+234",
   recipientCountryCodeAlt: "+234",
-  zone: "",
-  deliveryCharge: 0
+  zone: ""
 };
 
 type DeliverStage =
@@ -154,10 +153,18 @@ const Checkout: FunctionComponent = () => {
 
   const deviceType = useDeviceType();
 
+  const total = useMemo(
+    () =>
+      formData.deliveryLocation?.amount
+        ? (order?.amount || 0) + formData.deliveryLocation?.amount
+        : order?.amount || 0,
+    [order, formData.deliveryLocation]
+  );
+
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
     email: formData.senderEmail || placeholderEmail,
-    amount: ((order?.amount || 0) * 100) / currency.conversionRate,
+    amount: ((total || 0) * 100) / currency.conversionRate,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
@@ -186,11 +193,7 @@ const Checkout: FunctionComponent = () => {
         deliveryLocation:
           deliveryLocationOptions.find(
             option => option.name === (value as string).split("-")[0]
-          ) || null,
-        deliveryCharge:
-          deliveryLocationOptions.find(
-            option => option.name === (value as string).split("-")[0]
-          )?.amount || 0
+          ) || null
       });
       return;
     }
@@ -302,7 +305,7 @@ const Checkout: FunctionComponent = () => {
 
   useEffect(() => {
     fetchPurposes();
-
+    setCurrentStage(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -1105,7 +1108,10 @@ const Checkout: FunctionComponent = () => {
                       <div className="flex between">
                         <span className="normal-text">Delivery Charge</span>
                         <span className="normal-text bold">
-                          {getPriceDisplay(formData.deliveryCharge, currency)}
+                          {getPriceDisplay(
+                            formData.deliveryLocation?.amount || 0,
+                            currency
+                          )}
                         </span>
                       </div>
                     )}
@@ -1125,7 +1131,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between margin-bottom">
                       <span className="normal-text">Total</span>
                       <span className="normal-text bold">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total, currency)}
                       </span>
                     </div>
                     {currentStage === 1 && (
@@ -1365,7 +1371,10 @@ const Checkout: FunctionComponent = () => {
                       <p className={`${styles["light-gray"]}`}>Lagos</p>
                     </div>
                     <span className="bold">
-                      {getPriceDisplay(formData.deliveryCharge, currency)}
+                      {getPriceDisplay(
+                        formData.deliveryLocation?.amount || 0,
+                        currency
+                      )}
                     </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
@@ -1382,7 +1391,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between sub-heading margin-bottom spaced">
                     <span>Total</span>
                     <span className="bold primary-color">
-                      {getPriceDisplay(order?.amount || 0, currency)}
+                      {getPriceDisplay(total, currency)}
                     </span>
                   </div>
                 </div>
@@ -1711,14 +1720,25 @@ const Checkout: FunctionComponent = () => {
                     </div>
 
                     <Button
-                      onClick={() => setDeliveryStage("receiver")}
+                      onClick={() =>
+                        setDeliveryStage(
+                          formData.deliveryMethod === "delivery"
+                            ? "receiver"
+                            : "customization-message"
+                        )
+                      }
                       className="vertical-margin xl"
                       responsive
                     >
                       Continue
                     </Button>
                     <p className={styles.next}>
-                      Next: <strong>Receiver's Information</strong>
+                      Next:{" "}
+                      <strong>
+                        {formData.deliveryMethod === "delivery"
+                          ? "Receiver's Information"
+                          : "Customization Message"}
+                      </strong>
                     </p>
                   </>
                 )}
@@ -1974,6 +1994,7 @@ const Checkout: FunctionComponent = () => {
                       <Button
                         buttonType="submit"
                         className="vertical-margin xl"
+                        loading={loading}
                         responsive
                       >
                         Continue
@@ -2022,14 +2043,14 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between ">
                     <span className="normal-text">Order Total</span>
                     <span className="normal-text bold">
-                      {getPriceDisplay(order?.amount || 0, currency)}
+                      {getPriceDisplay(total, currency)}
                     </span>
                   </div>
                   {formData.deliveryMethod === "pick-up" && (
                     <div className="flex between">
                       <span className="normal-text">Delivery</span>
                       <span className="normal-text bold">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total || 0, currency)}
                       </span>
                     </div>
                   )}
@@ -2038,7 +2059,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between vertical-margin">
                     <span className="normal-text">Sum Total</span>
                     <span className="normal-text bold">
-                      {getPriceDisplay(order?.amount || 0, currency)}
+                      {getPriceDisplay(total || 0, currency)}
                     </span>
                   </div>
                 </div>
@@ -2189,7 +2210,10 @@ const Checkout: FunctionComponent = () => {
                         </strong>
                       </div>
                       <span className="bold">
-                        {getPriceDisplay(formData.deliveryCharge, currency)}
+                        {getPriceDisplay(
+                          formData.deliveryLocation?.amount || 0,
+                          currency
+                        )}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
@@ -2208,7 +2232,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between sub-heading margin-bottom spaced small-text">
                       <span>Total</span>
                       <span className="bold primary-color">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total || 0, currency)}
                       </span>
                     </div>
                   </div>
