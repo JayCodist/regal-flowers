@@ -96,7 +96,7 @@ const ProductsPage: FunctionComponent<{
   const router = useRouter();
   const { query, isReady } = router;
   const { selectedOccasion, shopBy } = query;
-  const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string[]>(["regular"]);
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
@@ -153,10 +153,13 @@ const ProductsPage: FunctionComponent<{
           setSelectedFilter(["vip"]);
           return;
         }
-        const filters = String(shopBy || "")
-          .split(",")
-          .filter(Boolean);
-        setSelectedFilter([...filters, "regular"]);
+        const filters = shopBy
+          ? String(shopBy || "")
+              .split(",")
+              .filter(Boolean)
+          : ["regular"];
+
+        setSelectedFilter([...filters]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -507,6 +510,7 @@ const ProductsPage: FunctionComponent<{
                                   }),
                                   "vip"
                                 ];
+                                console.log("newFilters", newFilters);
                                 setSelectedFilter(newFilters);
                                 const url = `/filters?shopBy=${newFilters.join(
                                   ","
