@@ -30,7 +30,8 @@ const defaultSettings: Settings = {
   cartItems: [],
   shouldShowCart: false,
   redirectUrl:
-    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+  shouldShowAuthDropdown: false
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -50,6 +51,7 @@ const App: FunctionComponent<AppProps> = props => {
   }>({});
   const [user, setUser] = useState<User | null>(null);
   const [shouldShowCart, setShouldShowCart] = useState(false);
+  const [shouldShowAuthDropdown, setShouldShowAuthDropdown] = useState(false);
 
   const initializeAppConfig = async () => {
     const savedCartItems = AppStorage.get<CartItem[]>(
@@ -157,7 +159,9 @@ const App: FunctionComponent<AppProps> = props => {
     redirectUrl: settings.redirectUrl,
     setRedirectUrl: (redirectUrl: string) => {
       setSettings({ ...settings, redirectUrl });
-    }
+    },
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown
   };
 
   const headTags = (

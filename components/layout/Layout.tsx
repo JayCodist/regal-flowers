@@ -988,9 +988,16 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 };
 
 export const CheckoutHeader: FunctionComponent = () => {
-  const { currentStage, setShouldShowCart, shouldShowCart } = useContext(
-    SettingsContext
-  );
+  const {
+    currentStage,
+    setShouldShowCart,
+    shouldShowCart,
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown
+  } = useContext(SettingsContext);
+  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setShouldShowAuthDropdown(false);
+  });
 
   const stages = [
     {
@@ -1069,6 +1076,16 @@ export const CheckoutHeader: FunctionComponent = () => {
         cancel={() => setShouldShowCart(false)}
         header="checkout"
       />
+      <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
+        <div
+          className={[
+            styles["auth-dropdown"],
+            shouldShowAuthDropdown && styles.active
+          ].join(" ")}
+        >
+          <AuthDropdown />
+        </div>
+      </div>
     </>
   );
 };

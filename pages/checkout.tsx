@@ -148,7 +148,8 @@ const Checkout: FunctionComponent = () => {
     deliveryDate,
     setDeliveryDate,
     setShouldShowCart,
-    redirectUrl
+    redirectUrl,
+    setShouldShowAuthDropdown
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -555,13 +556,26 @@ const Checkout: FunctionComponent = () => {
                           )}
                         </div>
                         {!user && (
-                          <Checkbox
-                            checked={formData.freeAccount}
-                            onChange={value =>
-                              handleChange("freeAccount", value)
-                            }
-                            text="Create a Free Account"
-                          />
+                          <div className="flex between center-align">
+                            <Checkbox
+                              checked={formData.freeAccount}
+                              onChange={value =>
+                                handleChange("freeAccount", value)
+                              }
+                              text="Create a Free Account"
+                            />
+                            <div className="flex center">
+                              <span className="margin-right">
+                                Already a user?
+                              </span>
+                              <Button
+                                type="plain"
+                                onClick={() => setShouldShowAuthDropdown(true)}
+                              >
+                                Login
+                              </Button>
+                            </div>
+                          </div>
                         )}
                       </div>
                     </div>
