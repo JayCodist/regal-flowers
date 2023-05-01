@@ -484,7 +484,7 @@ const Checkout: FunctionComponent = () => {
                   <>
                     {redirectUrl && (
                       <Link href={redirectUrl}>
-                        <a className="margin-bottom">{"<< Previous Page"}</a>
+                        <a className="margin-bottom">{"< Back to Shop"}</a>
                       </Link>
                     )}
 
