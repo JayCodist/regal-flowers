@@ -88,7 +88,8 @@ export const createOrder: (payload: {
         key: item.key,
         design: item.design?.name || "",
         size: item.size || "",
-        quantity: item.quantity
+        quantity: item.quantity,
+        image: item.image
       }))
     });
     return {

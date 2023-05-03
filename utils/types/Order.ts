@@ -1,17 +1,18 @@
 import { ReactNode } from "react";
 import { Dayjs } from "dayjs";
-import { AppCurrencyName } from "./Core";
+import { AppCurrencyName, OrderItem } from "./Core";
 import { LocationName } from "./Regal";
 import { DeliveryLocationOption } from "../constants";
 
-interface OrderItem {
+interface OrderProduct {
   SKU?: string;
   name: string;
   quantity: number;
+  price: number;
 }
 
 export interface Order {
-  orderProducts?: OrderItem[];
+  orderProducts: OrderProduct[];
   paymentStatus?: PaymentStatus;
   orderID?: number;
   deliveryStatus?: DeliveryStatus;
@@ -19,6 +20,7 @@ export interface Order {
   id: string;
   amount: number;
   deliveryDate: string;
+  orderItem: OrderItem[];
 }
 
 type PaymentStatus =

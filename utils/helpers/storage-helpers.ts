@@ -3,7 +3,8 @@ export const AppStorageConstants = {
   SAVED_CURRENCY: "SAVED_CURRENCY",
   USER_DATA: "userData",
   CART_ITEMS: "CART_ITEMS",
-  REDIRECT_TO: "REDIRECT_TO"
+  REDIRECT_TO: "REDIRECT_TO",
+  ORDER_ID: "ORDER_ID"
 };
 
 const AppStorage = {

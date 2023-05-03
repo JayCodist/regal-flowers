@@ -60,3 +60,7 @@ export interface CartItem {
   addonsTotal?: number;
   cartId: string;
 }
+
+export type OrderItem = Omit<CartItem, "cartId" | "amount"> & {
+  amount: number;
+};

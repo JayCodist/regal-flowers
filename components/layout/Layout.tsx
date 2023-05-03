@@ -17,7 +17,7 @@ import SettingsContext, {
 } from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";
 import Button from "../button/Button";
-import { createOrder } from "../../utils/helpers/data/order";
+import { createOrder, getOrder } from "../../utils/helpers/data/order";
 import dayjs from "dayjs";
 import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
@@ -25,8 +25,12 @@ import useDeviceType from "../../utils/hooks/useDeviceType";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 import Input from "../input/Input";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
-import { Design } from "../../utils/types/Core";
+import { CartItem, Design } from "../../utils/types/Core";
 import DatePicker from "../date-picker/DatePicker";
+import { ProductImage } from "../../utils/types/Product";
+import AppStorage, {
+  AppStorageConstants
+} from "../../utils/helpers/storage-helpers";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -716,10 +720,14 @@ interface CartContextProps {
   visible: boolean;
   cancel: () => void;
   header?: "checkout" | "main";
+  cartItems?: CartItem[];
 }
 
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel, header = "main" } = props;
+
+  const { query, isReady } = useRouter();
+  const { orderId } = query;
 
   const {
     cartItems,
@@ -748,6 +756,36 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       if (backdrop?.contains(e.target as Node)) cancel();
     }
   };
+
+  const fetchOrder = async (orderId: string) => {
+    const { error, data } = await getOrder(orderId);
+
+    if (error) {
+      notify("error", "Order not found! Please create an order");
+      router.push("/");
+    } else {
+      const _cartItems: CartItem[] =
+        data?.orderItem?.map(item => ({
+          image: item.image as ProductImage,
+          name: item.name,
+          price: item.amount,
+          quantity: item.quantity,
+          key: item.key,
+          design: item.design,
+          size: item.size,
+          description: item.description,
+          cartId: item.size || "" + item.key + item.design?.name
+        })) || [];
+      setCartItems(_cartItems);
+    }
+  };
+
+  useEffect(() => {
+    if (isReady && orderId) {
+      fetchOrder(orderId as string);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isReady]);
 
   const handleRemoveItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.cartId === key);
@@ -827,6 +865,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       notify("error", `Unable to create order: ${message}`);
     } else if (data) {
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
+      AppStorage.save(AppStorageConstants.ORDER_ID, data.id);
       router.push(`/checkout?orderId=${data.id}`);
     }
   };
@@ -895,7 +934,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                   src="/icons/delete-cart.svg"
                   alt="delete"
                   className="generic-icon medium margin-top spaced clickable"
-                  onClick={() => handleRemoveItem(item.cartId)}
+                  onClick={() => handleRemoveItem(item?.cartId)}
                 />
                 <div className="flex spaced align-center block">
                   <img

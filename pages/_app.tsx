@@ -148,7 +148,7 @@ const App: FunctionComponent<AppProps> = props => {
     cartItems: settings.cartItems,
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
-      AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
+      // AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
     },
     allCurrencies: settings.allCurrencies,
     shouldShowCart,

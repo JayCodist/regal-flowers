@@ -56,7 +56,10 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
         name: product.name,
         price: product.price,
         quantity: 1,
-        image: product.images[0],
+        image: {
+          src: product.images[0].src,
+          alt: product.images[0].alt
+        },
         cartId: `${product.key}`
       };
 
