@@ -498,7 +498,7 @@ const Checkout: FunctionComponent = () => {
                       </p>
                       <div className={styles.padding}>
                         <div className="flex spaced-xl">
-                          <div className="input-group">
+                          <div className="input-group half-width">
                             <span className="question">Name</span>
                             <Input
                               name="name"
@@ -512,7 +512,7 @@ const Checkout: FunctionComponent = () => {
                               responsive
                             />
                           </div>
-                          <div className="input-group">
+                          <div className="input-group half-width">
                             <span className="question">Email</span>
                             <Input
                               name="email"
@@ -537,11 +537,11 @@ const Checkout: FunctionComponent = () => {
                             onChangeCountryCode={value =>
                               handleChange("senderCountryCode", value)
                             }
-                            className="input-group"
+                            className="input-group half-width"
                           />
 
-                          {!user && (
-                            <div className="input-group">
+                          {!user ? (
+                            <div className="input-group half-width">
                               <span className="question">Create Password</span>
                               <Input
                                 name="password"
@@ -557,8 +557,35 @@ const Checkout: FunctionComponent = () => {
                                 showPasswordIcon
                               />
                             </div>
+                          ) : (
+                            <div className="input-group half-width compact">
+                              <span className="question">
+                                Pickup/Delivery Date
+                              </span>
+                              <DatePicker
+                                value={deliveryDate}
+                                onChange={setDeliveryDate}
+                                format="D MMMM YYYY"
+                                responsive
+                                disablePastDays
+                              />
+                            </div>
                           )}
                         </div>
+                        {!user && (
+                          <div className="input-group half-width compact">
+                            <span className="question">
+                              Pickup/Delivery Date
+                            </span>
+                            <DatePicker
+                              value={deliveryDate}
+                              onChange={setDeliveryDate}
+                              format="D MMMM YYYY"
+                              responsive
+                              disablePastDays
+                            />
+                          </div>
+                        )}
                         {!user && (
                           <div className="flex between center-align">
                             <Checkbox
@@ -594,19 +621,6 @@ const Checkout: FunctionComponent = () => {
                           Delivery Method
                         </p>
                         <div className={styles.padding}>
-                          <div className="input-group half-width compact">
-                            <span className="question">
-                              Pickup/Delivery Date
-                            </span>
-                            <DatePicker
-                              value={deliveryDate}
-                              onChange={setDeliveryDate}
-                              format="D MMMM YYYY"
-                              responsive
-                              disablePastDays
-                            />
-                          </div>
-
                           <div className="flex between center-align">
                             <div
                               className={[
