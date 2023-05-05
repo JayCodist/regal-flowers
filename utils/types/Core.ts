@@ -26,6 +26,7 @@ export interface Settings {
   shouldShowCart: boolean;
   redirectUrl: string;
   shouldShowAuthDropdown: boolean;
+  orderId: string;
 }
 
 export enum Stage {

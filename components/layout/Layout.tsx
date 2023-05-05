@@ -17,7 +17,11 @@ import SettingsContext, {
 } from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";
 import Button from "../button/Button";
-import { createOrder, getOrder } from "../../utils/helpers/data/order";
+import {
+  createOrder,
+  getOrder,
+  updateOrder
+} from "../../utils/helpers/data/order";
 import dayjs from "dayjs";
 import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
@@ -726,8 +730,7 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel, header = "main" } = props;
 
-  const { query, isReady } = useRouter();
-  const { orderId } = query;
+  const { isReady, query } = useRouter();
 
   const {
     cartItems,
@@ -735,7 +738,9 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     deliveryDate,
     setDeliveryDate,
     currency,
-    notify
+    notify,
+    orderId,
+    setOrderId
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -785,7 +790,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       fetchOrder(orderId as string);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
+  }, [orderId, query.orderId]);
 
   const handleRemoveItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.cartId === key);
@@ -865,8 +870,29 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       notify("error", `Unable to create order: ${message}`);
     } else if (data) {
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
-      AppStorage.save(AppStorageConstants.ORDER_ID, data.id);
+      setOrderId(data.id);
       router.push(`/checkout?orderId=${data.id}`);
+    }
+  };
+
+  const handleUpdateOrder = async () => {
+    setLoading(true);
+
+    const { data, error, message } = await updateOrder({
+      cartItems,
+      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || "",
+      id: orderId as string
+    });
+
+    setLoading(false);
+    if (error) {
+      notify("error", `Unable to update order: ${message}`);
+    } else if (data) {
+      setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
+      AppStorage.save(AppStorageConstants.ORDER_ID, data.id);
+      header === "main" && router.push(`/checkout?orderId=${data.id}`);
+
+      notify("success", "Order updated successfully");
     }
   };
 
@@ -1013,7 +1039,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           <Button
             responsive
             className="margin-top spaced capitalize"
-            onClick={handleCreateOrder}
+            onClick={orderId ? handleUpdateOrder : handleCreateOrder}
             loading={loading}
             disabled={!cartItems.length}
           >

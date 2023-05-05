@@ -31,7 +31,8 @@ const defaultSettings: Settings = {
   shouldShowCart: false,
   redirectUrl:
     "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
-  shouldShowAuthDropdown: false
+  shouldShowAuthDropdown: false,
+  orderId: ""
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -54,9 +55,7 @@ const App: FunctionComponent<AppProps> = props => {
   const [shouldShowAuthDropdown, setShouldShowAuthDropdown] = useState(false);
 
   const initializeAppConfig = async () => {
-    const savedCartItems = AppStorage.get<CartItem[]>(
-      AppStorageConstants.CART_ITEMS
-    );
+    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
     const savedCurrency = AppStorage.get<AppCurrency>(
       AppStorageConstants.SAVED_CURRENCY
     );
@@ -64,7 +63,7 @@ const App: FunctionComponent<AppProps> = props => {
     setSettings({
       ...settings,
       currency: savedCurrency || defaultSettings.currency,
-      cartItems: savedCartItems || []
+      orderId: savedOrderId || ""
     });
     const { error, data } = await performHandshake();
     if (error || !data) {
@@ -91,7 +90,6 @@ const App: FunctionComponent<AppProps> = props => {
             currencyValueMap[currentCurrency.name] ||
             currentCurrency.conversionRate
         },
-        cartItems: savedCartItems || [],
         allCurrencies: settings.allCurrencies.map(currency => ({
           ...currency,
           conversionRate:
@@ -161,7 +159,12 @@ const App: FunctionComponent<AppProps> = props => {
       setSettings({ ...settings, redirectUrl });
     },
     shouldShowAuthDropdown,
-    setShouldShowAuthDropdown
+    setShouldShowAuthDropdown,
+    orderId: settings.orderId,
+    setOrderId: (orderId: string) => {
+      setSettings({ ...settings, orderId });
+      AppStorage.save(AppStorageConstants.ORDER_ID, orderId);
+    }
   };
 
   const headTags = (

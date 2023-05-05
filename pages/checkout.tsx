@@ -154,13 +154,17 @@ const Checkout: FunctionComponent = () => {
 
   const deviceType = useDeviceType();
 
-  const total = useMemo(
-    () =>
-      formData.deliveryLocation?.amount
-        ? (order?.amount || 0) + formData.deliveryLocation?.amount
-        : order?.amount || 0,
-    [order, formData.deliveryLocation]
-  );
+  const total = useMemo(() => {
+    const total =
+      order?.orderItem.reduce(
+        (acc, item) => ((acc + item.amount) as number) * item.quantity,
+        0
+      ) || 0;
+
+    return formData.deliveryLocation?.amount
+      ? total + formData.deliveryLocation?.amount
+      : total;
+  }, [order?.orderItem, formData.deliveryLocation]);
 
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
@@ -370,26 +374,26 @@ const Checkout: FunctionComponent = () => {
   const abujaDeliveryZoneOptions = useMemo(() => {
     return (
       allDeliveryLocationZones["abuja"]?.(
-        order?.amount || 0,
+        total || 0,
         currency,
         deliveryDate || dayjs()
       ) || []
     );
-  }, [currency, deliveryDate, order?.amount]);
+  }, [currency, deliveryDate, total]);
 
   const lagosDeliveryZoneOptions = useMemo(() => {
     return (
       allDeliveryLocationZones["lagos"]?.(
-        order?.amount || 0,
+        total || 0,
         currency,
         deliveryDate || dayjs()
       ) || []
     );
-  }, [currency, deliveryDate, order?.amount]);
+  }, [currency, deliveryDate, total]);
 
   const selectedZone =
     allDeliveryLocationZones[formData.state]?.(
-      order?.amount || 0,
+      total || 0,
       currency,
       deliveryDate || dayjs()
     )?.find(zone => zone.value === formData.zone) || null;
@@ -1109,7 +1113,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between ">
                       <span className="normal-text">Subtotal</span>
                       <span className="normal-text bold">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total || 0, currency)}
                       </span>
                     </div>
                     <div className="flex between vertical-margin">
@@ -1372,7 +1376,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Subtotal</span>
                     <span className="bold">
-                      {getPriceDisplay(order?.amount || 0, currency)}
+                      {getPriceDisplay(total || 0, currency)}
                     </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
@@ -2208,7 +2212,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Subtotal</strong>
                       <span className="bold">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total, currency)}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">

@@ -105,6 +105,39 @@ export const createOrder: (payload: {
   }
 };
 
+export const updateOrder: (payload: {
+  cartItems: CartItem[];
+  deliveryDate: string;
+  id: string;
+}) => Promise<RequestResponse<Order>> = async ({
+  cartItems,
+  deliveryDate,
+  id
+}) => {
+  try {
+    const response = await restAPIInstance.put(`/v1/firebase/order/${id}`, {
+      deliveryDate,
+      cartItems: cartItems.map(item => ({
+        key: item.key,
+        design: item.design?.name || "",
+        size: item.size || "",
+        quantity: item.quantity,
+        image: item.image
+      }))
+    });
+    return {
+      error: false,
+      data: response.data as Order
+    };
+  } catch (err) {
+    return {
+      error: true,
+      message: (err as Error).message,
+      data: null
+    };
+  }
+};
+
 export const updateCheckoutState: (
   id: string,
   formData: CheckoutFormData

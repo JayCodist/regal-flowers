@@ -22,6 +22,8 @@ export interface SettingsControls extends Settings {
   setRedirectUrl: (redirectUrl: string) => void;
   setShouldShowAuthDropdown: (shouldShowAuthDropdown: boolean) => void;
   shouldShowAuthDropdown: boolean;
+  orderId: string;
+  setOrderId: (orderId: string) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -43,7 +45,9 @@ const SettingsContext = createContext<SettingsControls>({
     "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
   setRedirectUrl: () => {},
   setShouldShowAuthDropdown: () => {},
-  shouldShowAuthDropdown: false
+  shouldShowAuthDropdown: false,
+  orderId: "",
+  setOrderId: () => {}
 });
 
 export default SettingsContext;
