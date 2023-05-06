@@ -454,16 +454,18 @@ const ProductsPage: FunctionComponent<{
         className={`${styles["content"]} flex ${deviceType === "desktop" &&
           "spaced-xl"}`}
       >
-        {!giftMap[categorySlug || ""] && !showFilterInfo && (
+        {!giftMap[categorySlug || ""] && (
           <div className={styles["left-side"]}>
-            <div className="vertical-margin spaced">
-              <span className={`bold margin-right ${styles["sub-title"]}`}>
-                Filters ({selectedFilter.length})
-              </span>
-              <button className="primary-color" onClick={handleClearFIlter}>
-                Clear Filters
-              </button>
-            </div>
+            {!showFilterInfo && (
+              <div className="vertical-margin spaced">
+                <span className={`bold margin-right ${styles["sub-title"]}`}>
+                  Filters ({selectedFilter.length})
+                </span>
+                <button className="primary-color" onClick={handleClearFIlter}>
+                  Clear Filters
+                </button>
+              </div>
+            )}
 
             <div className={styles["filters-sidebar"]}>
               {filterCategories.map((filter, index) => (
@@ -510,7 +512,6 @@ const ProductsPage: FunctionComponent<{
                                   }),
                                   "vip"
                                 ];
-                                console.log("newFilters", newFilters);
                                 setSelectedFilter(newFilters);
                                 const url = `/filters?shopBy=${newFilters.join(
                                   ","
@@ -603,7 +604,7 @@ const ProductsPage: FunctionComponent<{
                 onClick={() => setShouldShowFilter(!shouldShowFilter)}
               >
                 <h3 className="margin-right">
-                  Filter({selectedFilter.length})
+                  Filter{!showFilterInfo && `(${selectedFilter.length})`}
                 </h3>
                 <img
                   alt="filter"
@@ -626,7 +627,55 @@ const ProductsPage: FunctionComponent<{
                         : filter.options.slice(0, filter.limit)
                       ).map((child, index) => (
                         <div key={index} className="margin-bottom">
-                          {child.link ? (
+                          {filter.name === "Budget" ? (
+                            <>
+                              <div className="margin-bottom">
+                                <Radio
+                                  label="Regular"
+                                  onChange={() => {
+                                    const newFilters = [
+                                      ...selectedFilter.filter(filter => {
+                                        return filter !== "vip";
+                                      }),
+                                      "regular"
+                                    ];
+                                    setSelectedFilter(newFilters);
+                                    const url = categorySlug
+                                      ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                          ","
+                                        )}`
+                                      : `/filters?shopBy=${newFilters.join(
+                                          ","
+                                        )}`;
+                                    router.push(url, undefined, {
+                                      scroll: false
+                                    });
+                                  }}
+                                  checked={selectedFilter.includes("regular")}
+                                />
+                              </div>
+
+                              <Radio
+                                label="VIP"
+                                onChange={() => {
+                                  const newFilters = [
+                                    ...selectedFilter.filter(filter => {
+                                      return filter !== "regular";
+                                    }),
+                                    "vip"
+                                  ];
+                                  setSelectedFilter(newFilters);
+                                  const url = `/filters?shopBy=${newFilters.join(
+                                    ","
+                                  )}`;
+                                  router.push(url, undefined, {
+                                    scroll: false
+                                  });
+                                }}
+                                checked={selectedFilter.includes("vip")}
+                              />
+                            </>
+                          ) : child.link ? (
                             <Link href={child.link}>
                               <a className={styles["filter-link"]}>
                                 {child.name}

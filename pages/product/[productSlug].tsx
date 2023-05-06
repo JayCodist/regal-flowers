@@ -226,8 +226,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     }
   };
 
-  console.log("product", product);
-
   useEffect(() => {
     pickDefaultDesign();
     // eslint-disable-next-line react-hooks/exhaustive-deps
