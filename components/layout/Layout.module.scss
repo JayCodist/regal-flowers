@@ -219,12 +219,9 @@
   .controls-area-mobile {
     display: none;
 
-    button {
-      color: #4b5563;
-    }
-
     .cart-btn {
       position: relative;
+      color: #4b5563;
 
       span {
         position: absolute;
@@ -248,7 +245,15 @@
     }
 
     @media (max-width: 650px) {
-      display: block;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .auth-wrapper {
+      @media (max-width: 650px) {
+        right: -4rem;
+      }
     }
   }
   .controls-area {
@@ -387,6 +392,10 @@
     &.active {
       top: 5.5rem;
       opacity: 1;
+
+      @media (max-width: 650px) {
+        top: 5rem;
+      }
     }
 
     .cart-header {
@@ -829,6 +838,10 @@
     box-shadow: 0.8rem 0.8rem 1rem -0.4rem rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: 0.3s ease-out;
+
+    @media (max-width: 650px) {
+      right: 5rem;
+    }
 
     &.active {
       top: 5.5rem;

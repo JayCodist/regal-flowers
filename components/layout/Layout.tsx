@@ -359,8 +359,13 @@ const Header: FunctionComponent = () => {
     user,
     allCurrencies,
     setShouldShowCart,
-    shouldShowCart
+    shouldShowCart,
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown
   } = useContext(SettingsContext);
+  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setShouldShowAuthDropdown(false);
+  });
 
   const totalCartItems = useMemo(() => {
     if (!cartItems.length) return 0;
@@ -598,21 +603,27 @@ const Header: FunctionComponent = () => {
             " "
           )}
         >
-          <button>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className={styles["control-icon"]}
+          {_pathname === "checkout" ? (
+            <div>
+              <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
+                <div
+                  className={[
+                    styles["auth-dropdown"],
+                    shouldShowAuthDropdown && styles.active
+                  ].join(" ")}
+                >
+                  <AuthDropdown />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <ContextWrapper
+              anchor={accountAnchor}
+              className={styles["auth-wrapper"]}
             >
-              <path
-                d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z"
-                fill="#4B5563"
-              />
-            </svg>
-          </button>
+              <AuthDropdown />
+            </ContextWrapper>
+          )}
           <button
             className={[styles["cart-btn"]].join(" ")}
             onClick={() => {

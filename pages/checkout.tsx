@@ -149,7 +149,8 @@ const Checkout: FunctionComponent = () => {
     setDeliveryDate,
     setShouldShowCart,
     redirectUrl,
-    setShouldShowAuthDropdown
+    setShouldShowAuthDropdown,
+    shouldShowAuthDropdown
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -1454,7 +1455,14 @@ const Checkout: FunctionComponent = () => {
                   <div>
                     <div className="flex align-center between">
                       <p className={styles.title}>Sender's Information</p>
-                      <strong className="primary-color underline">Login</strong>
+                      {/* <strong className="primary-color underline">Login</strong> */}
+                      <Button
+                        type="plain"
+                        onClick={() => setShouldShowAuthDropdown(true)}
+                        className="primary-color underline"
+                      >
+                        Login
+                      </Button>
                     </div>
                     <div className="input-group">
                       <span className="question">Name</span>
