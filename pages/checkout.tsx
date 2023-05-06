@@ -57,6 +57,7 @@ import { Recipient } from "../utils/types/User";
 import { Stage } from "../utils/types/Core";
 import PhoneInput from "../components/phone-input/PhoneInput";
 import { emailValidator } from "../utils/helpers/validators";
+import { getResidentTypes } from "../utils/helpers/data/residentTypes";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -133,6 +134,7 @@ const Checkout: FunctionComponent = () => {
     "sender-info"
   );
   const [allPurposes, setAllPurposes] = useState<Option[]>([]);
+  const [allresidentTypes, setAllResidentTypes] = useState<Option[]>([]);
   const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(
     null
   );
@@ -149,8 +151,7 @@ const Checkout: FunctionComponent = () => {
     setDeliveryDate,
     setShouldShowCart,
     redirectUrl,
-    setShouldShowAuthDropdown,
-    shouldShowAuthDropdown
+    setShouldShowAuthDropdown
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -268,6 +269,20 @@ const Checkout: FunctionComponent = () => {
     }
   };
 
+  const fetchResidentTypes = async () => {
+    const { error, message, data } = await getResidentTypes();
+    if (error) {
+      notify("error", `Unable to fetch purposes: ${message}`);
+    } else {
+      setAllResidentTypes(
+        data?.map(item => ({
+          label: item,
+          value: item
+        })) || []
+      );
+    }
+  };
+
   const {
     pickUpLocation,
     state,
@@ -312,6 +327,7 @@ const Checkout: FunctionComponent = () => {
   useEffect(() => {
     fetchPurposes();
     setCurrentStage(1);
+    fetchResidentTypes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -915,10 +931,7 @@ const Checkout: FunctionComponent = () => {
                                     handleChange("residenceType", value)
                                   }
                                   value={formData.residenceType}
-                                  options={getOptionsFromArray([
-                                    "Home",
-                                    "Office"
-                                  ])}
+                                  options={allresidentTypes}
                                   placeholder="Select a residence type"
                                   responsive
                                   dimmed
