@@ -3,12 +3,18 @@ import { Dayjs } from "dayjs";
 import { AppCurrencyName, OrderItem } from "./Core";
 import { LocationName } from "./Regal";
 import { DeliveryLocationOption } from "../constants";
+import { ProductImage } from "./Product";
 
 interface OrderProduct {
   SKU?: string;
   name: string;
   quantity: number;
   price: number;
+  image: ProductImage;
+  key: number;
+  size: string;
+  design: string;
+  description: string;
 }
 
 export interface Order {

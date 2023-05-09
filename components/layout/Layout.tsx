@@ -781,16 +781,16 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       router.push("/");
     } else {
       const _cartItems: CartItem[] =
-        data?.orderItem?.map(item => ({
+        data?.orderProducts?.map(item => ({
           image: item.image as ProductImage,
           name: item.name,
-          price: item.amount,
+          price: item.price,
           quantity: item.quantity,
           key: item.key,
-          design: item.design,
+          // design: item.design,  //add design later
           size: item.size,
           description: item.description,
-          cartId: item.size || "" + item.key + item.design?.name
+          cartId: item.size || "" + item.key
         })) || [];
       setCartItems(_cartItems);
     }
