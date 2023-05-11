@@ -29,7 +29,11 @@ import {
   placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
-import { getOrder, updateCheckoutState } from "../utils/helpers/data/order";
+import {
+  getOrder,
+  saveSenderInfo,
+  updateCheckoutState
+} from "../utils/helpers/data/order";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
 import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
@@ -50,6 +54,7 @@ import {
 } from "@paypal/paypal-js";
 import { AppCurrency } from "../utils/types/Core";
 import {
+  adaptCheckOutFomData,
   getOptionsFromArray,
   getPriceDisplay
 } from "../utils/helpers/type-conversions";
@@ -128,6 +133,7 @@ const Checkout: FunctionComponent = () => {
   }>({ order: true, payment: false });
   const [isPaid, setIsPaid] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [savingSenderInfo, setSavingSenderInfo] = useState(false);
   const [showPaypal, setShowPaypal] = useState(false);
 
   const [deliveryStage, setDeliveryStage] = useState<DeliverStage>(
@@ -158,15 +164,15 @@ const Checkout: FunctionComponent = () => {
 
   const total = useMemo(() => {
     const total =
-      order?.orderItem.reduce(
-        (acc, item) => ((acc + item.amount) as number) * item.quantity,
+      order?.orderProducts.reduce(
+        (acc, item) => acc + item.price * item.quantity,
         0
       ) || 0;
 
     return formData.deliveryLocation?.amount
       ? total + formData.deliveryLocation?.amount
       : total;
-  }, [order?.orderItem, formData.deliveryLocation]);
+  }, [order?.orderProducts, formData.deliveryLocation]);
 
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
@@ -222,10 +228,6 @@ const Checkout: FunctionComponent = () => {
       router.push("/");
     } else {
       setOrder(data);
-      setFormData({
-        ...formData,
-        deliveryDate: data?.deliveryDate ? dayjs(data?.deliveryDate) : null
-      });
       const _isPaid =
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
         /^paid/i.test(data?.paymentStatus || "");
@@ -288,18 +290,11 @@ const Checkout: FunctionComponent = () => {
     state,
     zone,
     deliveryLocation,
-    senderName,
-    senderEmail,
-    senderPhoneNumber,
     recipientName,
     recipientPhoneNumber,
     recipientHomeAddress,
     residenceType
   } = formData;
-
-  const completedSenderInfo = Boolean(
-    senderName && senderEmail && senderPhoneNumber
-  );
 
   const completedDeliveryLocation = Boolean(deliveryLocation && state && zone);
 
@@ -332,7 +327,28 @@ const Checkout: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    setFormData({ ...formData, freeAccount: Boolean(!user) });
+    if (order?.orderStatus === "processing") {
+      setFormData({
+        ...formData,
+        ...adaptCheckOutFomData(order),
+        freeAccount: Boolean(!user),
+        // zone: order?.zone,
+        deliveryLocation:
+          allDeliveryLocationOptions[order.state]?.(
+            currency,
+            dayjs(order.deliveryDate) || dayjs()
+          ).find(option => option.name === order.zone.split("-")[0]) || null
+      });
+      order?.deliveryDate && setDeliveryDate(dayjs(order?.deliveryDate));
+    } else {
+      setFormData({
+        ...formData,
+        freeAccount: Boolean(!user)
+      });
+    }
+    if (order && "phone" in order?.client) {
+      setDeliveryStage("delivery-type");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
@@ -354,6 +370,33 @@ const Checkout: FunctionComponent = () => {
     } else {
       setCurrentStage(2);
       setDeliveryStage("payment");
+    }
+  };
+
+  const handleSaveSenderInfo = async () => {
+    if (emailValidator(formData.senderEmail)) {
+      notify("error", "Please enter a valid email address");
+      return;
+    } else if (!deliveryDate) {
+      notify("error", "Please select a delivery date");
+      return;
+    }
+    setSavingSenderInfo(true);
+    const { error, message } = await saveSenderInfo(orderId as string, {
+      userData: {
+        email: formData.senderEmail,
+        name: formData.senderName,
+        phone: formData.senderPhoneNumber
+      },
+      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || ""
+    });
+    setSavingSenderInfo(false);
+
+    if (error) {
+      notify("error", `Unable to save sender Info: ${message}`);
+    } else {
+      notify("success", "Saved successfully");
+      setDeliveryStage("delivery-type");
     }
   };
 
@@ -627,7 +670,15 @@ const Checkout: FunctionComponent = () => {
                         )}
                       </div>
                     </div>
-                    {completedSenderInfo && (
+                    {deliveryStage === "sender-info" && (
+                      <Button
+                        loading={savingSenderInfo}
+                        onClick={handleSaveSenderInfo}
+                      >
+                        Continue
+                      </Button>
+                    )}
+                    {deliveryStage === "delivery-type" && (
                       <div
                         className={[
                           styles.border,
@@ -806,8 +857,8 @@ const Checkout: FunctionComponent = () => {
                                           )?.split("-")[0]
                                         }
                                         checked={
-                                          formData.deliveryLocation ===
-                                          locationOption
+                                          formData.deliveryLocation?.name ===
+                                          locationOption.name
                                         }
                                       />
                                     </div>
@@ -1014,13 +1065,15 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     )}
 
-                    <Button
-                      className="half-width"
-                      loading={loading}
-                      buttonType="submit"
-                    >
-                      Proceed to Payment
-                    </Button>
+                    {deliveryStage !== "sender-info" && (
+                      <Button
+                        className="half-width"
+                        loading={loading}
+                        buttonType="submit"
+                      >
+                        Proceed to Payment
+                      </Button>
+                    )}
                   </>
                 )}
                 {currentStage === 2 && (

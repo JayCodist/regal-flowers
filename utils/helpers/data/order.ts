@@ -31,7 +31,9 @@ const adaptCheckoutStateRecord = (
         state: record.state,
         residenceType: record.residenceType,
         method: record.deliveryMethod
-      }
+      },
+      zone: record.zone,
+      state: record.state
     },
     userData: {
       name: record.senderName,
@@ -147,6 +149,35 @@ export const updateCheckoutState: (
     const response = await restAPIInstance.put(
       `/v1/firebase/order/checkout-order/${id}`,
       adaptCheckoutStateRecord(formData)
+    );
+    return {
+      error: false,
+      data: response.data as Order
+    };
+  } catch (err) {
+    return {
+      error: true,
+      message: (err as Error).message,
+      data: null
+    };
+  }
+};
+
+export const saveSenderInfo: (
+  id: string,
+  record: {
+    userData: {
+      name: string;
+      email: string;
+      phone: string;
+    };
+    deliveryDate: string;
+  }
+) => Promise<RequestResponse<Order>> = async (id, record) => {
+  try {
+    const response = await restAPIInstance.put(
+      `/v1/firebase/order/save-sender-info/${id}`,
+      record
     );
     return {
       error: false,
