@@ -41,12 +41,10 @@ export const adaptCheckOutFomData: (
     senderEmail: record.client.email,
     senderName: record.client.name,
     senderPhoneNumber: record.client.phone,
-    senderCountryCode: record.client.phone.slice(0, 3),
     recipientName: record.recipient.name,
     recipientPhoneNumber: record.recipient.phone,
-    recipientCountryCode: record.recipient.phone.slice(0, 3),
     recipientPhoneNumberAlt: record.recipient.phoneAlt,
-    recipientCountryCodeAlt: record.recipient.phoneAlt.slice(0, 3),
+    recipientCountryCodeAlt: record.recipient.phoneAlt,
     recipientHomeAddress: homeAddress,
     residenceType: getValueInParentheses(record.recipientAddress),
     deliveryMethod: homeAddress ? "delivery" : "pick-up",
@@ -56,9 +54,6 @@ export const adaptCheckOutFomData: (
     purpose: record.purpose,
     additionalInfo: record.adminNotes,
     pickUpLocation: record.despatchLocation,
-    shouldSaveAddress: record.shouldSaveAddress,
-    freeAccount: record.shouldCreateAccount,
-    shouldCreateAccount: record.shouldCreateAccount,
     zone: record.zone,
     state: record.state
   };

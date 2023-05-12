@@ -2,6 +2,7 @@ import { Dayjs } from "dayjs";
 import { createContext } from "react";
 import { AppCurrency, CartItem, Settings, Stage } from "../types/Core";
 import User from "../types/User";
+import { Order } from "../types/Order";
 
 export type NotifyType = "success" | "error" | "info";
 
@@ -24,6 +25,8 @@ export interface SettingsControls extends Settings {
   shouldShowAuthDropdown: boolean;
   orderId: string;
   setOrderId: (orderId: string) => void;
+  order: Order | null;
+  setOrder: (order: Order | null) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -47,7 +50,9 @@ const SettingsContext = createContext<SettingsControls>({
   setShouldShowAuthDropdown: () => {},
   shouldShowAuthDropdown: false,
   orderId: "",
-  setOrderId: () => {}
+  setOrderId: () => {},
+  order: null,
+  setOrder: () => {}
 });
 
 export default SettingsContext;

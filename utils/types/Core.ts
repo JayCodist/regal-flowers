@@ -1,6 +1,7 @@
 import { Dayjs } from "dayjs";
 import { ReactNode } from "react";
 import { DesignOptionName, ProductImage } from "./Product";
+import { Order } from "./Order";
 
 export interface AppLink {
   url: string;
@@ -27,6 +28,7 @@ export interface Settings {
   redirectUrl: string;
   shouldShowAuthDropdown: boolean;
   orderId: string;
+  order: Order | null;
 }
 
 export enum Stage {

@@ -21,6 +21,7 @@ import AppStorage, {
   AppStorageConstants
 } from "../utils/helpers/storage-helpers";
 import { performHandshake } from "../utils/helpers/data/core";
+import { Order } from "../utils/types/Order";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
@@ -32,7 +33,8 @@ const defaultSettings: Settings = {
   redirectUrl:
     "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
   shouldShowAuthDropdown: false,
-  orderId: ""
+  orderId: "",
+  order: null
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -53,6 +55,8 @@ const App: FunctionComponent<AppProps> = props => {
   const [user, setUser] = useState<User | null>(null);
   const [shouldShowCart, setShouldShowCart] = useState(false);
   const [shouldShowAuthDropdown, setShouldShowAuthDropdown] = useState(false);
+  const [order, setOrder] = useState<Order | null>(null);
+  const [deliveryDate, setDeliveryDate] = useState<null | Dayjs>(null);
 
   const initializeAppConfig = async () => {
     const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
@@ -140,9 +144,8 @@ const App: FunctionComponent<AppProps> = props => {
     currentStage: settings.currentStage,
     setCurrentStage: (currentStage: Stage) =>
       setSettings({ ...settings, currentStage }),
-    deliveryDate: settings.deliveryDate,
-    setDeliveryDate: (deliveryDate: Dayjs | null) =>
-      setSettings({ ...settings, deliveryDate }),
+    deliveryDate,
+    setDeliveryDate,
     cartItems: settings.cartItems,
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
@@ -164,7 +167,9 @@ const App: FunctionComponent<AppProps> = props => {
     setOrderId: (orderId: string) => {
       setSettings({ ...settings, orderId });
       AppStorage.save(AppStorageConstants.ORDER_ID, orderId);
-    }
+    },
+    order,
+    setOrder
   };
 
   const headTags = (

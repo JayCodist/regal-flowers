@@ -741,7 +741,7 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel, header = "main" } = props;
 
-  const { isReady, query } = useRouter();
+  const { isReady } = useRouter();
 
   const {
     cartItems,
@@ -751,7 +751,9 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     currency,
     notify,
     orderId,
-    setOrderId
+    setOrderId,
+    setOrder,
+    setShouldShowCart
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -793,6 +795,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           cartId: item.size || "" + item.key
         })) || [];
       setCartItems(_cartItems);
+      setOrder(data);
     }
   };
 
@@ -801,7 +804,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       fetchOrder(orderId as string);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, query.orderId]);
+  }, [orderId]);
 
   const handleRemoveItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.cartId === key);
@@ -883,6 +886,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
       setOrderId(data.id);
       router.push(`/checkout?orderId=${data.id}`);
+      setShouldShowCart(false);
     }
   };
 
@@ -899,11 +903,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     if (error) {
       notify("error", `Unable to update order: ${message}`);
     } else if (data) {
+      setOrder(data);
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
       AppStorage.save(AppStorageConstants.ORDER_ID, data.id);
       header === "main" && router.push(`/checkout?orderId=${data.id}`);
 
       notify("success", "Order updated successfully");
+      setShouldShowCart(false);
     }
   };
 

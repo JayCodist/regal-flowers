@@ -144,7 +144,6 @@ export const updateCheckoutState: (
   id: string,
   formData: CheckoutFormData
 ) => Promise<RequestResponse<Order>> = async (id, formData) => {
-  console.log("formData", formData);
   try {
     const response = await restAPIInstance.put(
       `/v1/firebase/order/checkout-order/${id}`,

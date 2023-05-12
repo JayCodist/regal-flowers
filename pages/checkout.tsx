@@ -52,7 +52,7 @@ import {
   CreateOrderData,
   OnApproveData
 } from "@paypal/paypal-js";
-import { AppCurrency } from "../utils/types/Core";
+import { AppCurrency, CartItem } from "../utils/types/Core";
 import {
   adaptCheckOutFomData,
   getOptionsFromArray,
@@ -63,6 +63,7 @@ import { Stage } from "../utils/types/Core";
 import PhoneInput from "../components/phone-input/PhoneInput";
 import { emailValidator } from "../utils/helpers/validators";
 import { getResidentTypes } from "../utils/helpers/data/residentTypes";
+import { ProductImage } from "../utils/types/Product";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -126,7 +127,6 @@ const Checkout: FunctionComponent = () => {
   const [formData, setFormData] = useState<CheckoutFormData>(initialData);
   // const [selectedMethod, setSelectedMethod] = useState<number | null>();
   const [pageLoading, setPageLoading] = useState(false);
-  const [order, setOrder] = useState<Order | null>(null);
   const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
     order?: boolean;
     payment?: boolean;
@@ -157,7 +157,10 @@ const Checkout: FunctionComponent = () => {
     setDeliveryDate,
     setShouldShowCart,
     redirectUrl,
-    setShouldShowAuthDropdown
+    setShouldShowAuthDropdown,
+    setOrder,
+    order,
+    setCartItems
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -317,7 +320,7 @@ const Checkout: FunctionComponent = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, isReady]);
+  }, [orderId, isReady, currentStage]);
 
   useEffect(() => {
     fetchPurposes();
@@ -332,23 +335,35 @@ const Checkout: FunctionComponent = () => {
         ...formData,
         ...adaptCheckOutFomData(order),
         freeAccount: Boolean(!user),
-        // zone: order?.zone,
         deliveryLocation:
           allDeliveryLocationOptions[order.state]?.(
             currency,
             dayjs(order.deliveryDate) || dayjs()
           ).find(option => option.name === order.zone.split("-")[0]) || null
       });
-      order?.deliveryDate && setDeliveryDate(dayjs(order?.deliveryDate));
+      setDeliveryDate(dayjs(order?.deliveryDate));
     } else {
       setFormData({
         ...formData,
         freeAccount: Boolean(!user)
       });
     }
+    const _cartItems: CartItem[] =
+      order?.orderProducts?.map(item => ({
+        image: item.image as ProductImage,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        key: item.key,
+        size: item.size,
+        description: item.description,
+        cartId: item.size || "" + item.key
+      })) || [];
+    setCartItems(_cartItems);
     if (order && "phone" in order?.client) {
       setDeliveryStage("delivery-type");
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
@@ -379,6 +394,18 @@ const Checkout: FunctionComponent = () => {
       return;
     } else if (!deliveryDate) {
       notify("error", "Please select a delivery date");
+      return;
+    } else if (!formData.senderName) {
+      notify("error", "Please enter a sender name");
+      return;
+    } else if (formData.freeAccount && !formData.senderPassword) {
+      notify(
+        "error",
+        "Please enter a password or uncheck the free account box"
+      );
+      return;
+    } else if (!formData.senderPhoneNumber) {
+      notify("error", "Please enter a sender phone number");
       return;
     }
     setSavingSenderInfo(true);
