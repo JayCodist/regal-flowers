@@ -330,6 +330,12 @@ const Checkout: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
+    const isSenderInfoCompleted =
+      order?.client.name &&
+      order?.client.phone &&
+      order.deliveryDate &&
+      order.client.email;
+
     if (order?.orderStatus === "processing") {
       setFormData({
         ...formData,
@@ -340,6 +346,15 @@ const Checkout: FunctionComponent = () => {
             currency,
             dayjs(order.deliveryDate) || dayjs()
           ).find(option => option.name === order.zone.split("-")[0]) || null
+      });
+      setDeliveryDate(dayjs(order?.deliveryDate));
+    } else if (isSenderInfoCompleted) {
+      setFormData({
+        ...formData,
+        senderName: order?.client.name,
+        senderPhoneNumber: order?.client.phone,
+        deliveryDate: dayjs(order.deliveryDate),
+        senderEmail: order.client.email
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
     } else {
@@ -372,6 +387,17 @@ const Checkout: FunctionComponent = () => {
     if (emailValidator(formData.senderEmail)) {
       notify("error", "Please enter a valid email address");
       return;
+    } else if (
+      formData.deliveryMethod === "pick-up" &&
+      !formData.pickUpLocation
+    ) {
+      notify("error", "Please complete the delivery location");
+      return;
+    } else if (formData.deliveryMethod === "delivery") {
+      if (!formData.state && !formData.zone && !formData.deliveryLocation) {
+        notify("error", "Please complete the delivery location");
+        return;
+      }
     }
     setLoading(true);
     const { error, message } = await updateCheckoutState(orderId as string, {
