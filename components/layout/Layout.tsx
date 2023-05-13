@@ -17,7 +17,11 @@ import SettingsContext, {
 } from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";
 import Button from "../button/Button";
-import { createOrder } from "../../utils/helpers/data/order";
+import {
+  createOrder,
+  getOrder,
+  updateOrder
+} from "../../utils/helpers/data/order";
 import dayjs from "dayjs";
 import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
@@ -25,8 +29,12 @@ import useDeviceType from "../../utils/hooks/useDeviceType";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 import Input from "../input/Input";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
-import { Design } from "../../utils/types/Core";
+import { CartItem, Design } from "../../utils/types/Core";
 import DatePicker from "../date-picker/DatePicker";
+import { ProductImage } from "../../utils/types/Product";
+import AppStorage, {
+  AppStorageConstants
+} from "../../utils/helpers/storage-helpers";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -351,8 +359,13 @@ const Header: FunctionComponent = () => {
     user,
     allCurrencies,
     setShouldShowCart,
-    shouldShowCart
+    shouldShowCart,
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown
   } = useContext(SettingsContext);
+  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setShouldShowAuthDropdown(false);
+  });
 
   const totalCartItems = useMemo(() => {
     if (!cartItems.length) return 0;
@@ -590,21 +603,27 @@ const Header: FunctionComponent = () => {
             " "
           )}
         >
-          <button>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className={styles["control-icon"]}
+          {_pathname === "checkout" ? (
+            <div>
+              <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
+                <div
+                  className={[
+                    styles["auth-dropdown"],
+                    shouldShowAuthDropdown && styles.active
+                  ].join(" ")}
+                >
+                  <AuthDropdown />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <ContextWrapper
+              anchor={accountAnchor}
+              className={styles["auth-wrapper"]}
             >
-              <path
-                d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z"
-                fill="#4B5563"
-              />
-            </svg>
-          </button>
+              <AuthDropdown />
+            </ContextWrapper>
+          )}
           <button
             className={[styles["cart-btn"]].join(" ")}
             onClick={() => {
@@ -715,10 +734,14 @@ const Header: FunctionComponent = () => {
 interface CartContextProps {
   visible: boolean;
   cancel: () => void;
+  header?: "checkout" | "main";
+  cartItems?: CartItem[];
 }
 
 const CartContext: FunctionComponent<CartContextProps> = props => {
-  const { visible, cancel } = props;
+  const { visible, cancel, header = "main" } = props;
+
+  const { isReady } = useRouter();
 
   const {
     cartItems,
@@ -726,7 +749,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     deliveryDate,
     setDeliveryDate,
     currency,
-    notify
+    notify,
+    orderId,
+    setOrderId,
+    setOrder,
+    setShouldShowCart
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -747,6 +774,37 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       if (backdrop?.contains(e.target as Node)) cancel();
     }
   };
+
+  const fetchOrder = async (orderId: string) => {
+    const { error, data } = await getOrder(orderId);
+
+    if (error) {
+      notify("error", "Order not found! Please create an order");
+      router.push("/");
+    } else {
+      const _cartItems: CartItem[] =
+        data?.orderProducts?.map(item => ({
+          image: item.image as ProductImage,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          key: item.key,
+          // design: item.design,  //add design later
+          size: item.size,
+          description: item.description,
+          cartId: item.size || "" + item.key
+        })) || [];
+      setCartItems(_cartItems);
+      setOrder(data);
+    }
+  };
+
+  useEffect(() => {
+    if (isReady && orderId) {
+      fetchOrder(orderId as string);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]);
 
   const handleRemoveItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.cartId === key);
@@ -826,7 +884,32 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       notify("error", `Unable to create order: ${message}`);
     } else if (data) {
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
+      setOrderId(data.id);
       router.push(`/checkout?orderId=${data.id}`);
+      setShouldShowCart(false);
+    }
+  };
+
+  const handleUpdateOrder = async () => {
+    setLoading(true);
+
+    const { data, error, message } = await updateOrder({
+      cartItems,
+      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || "",
+      id: orderId as string
+    });
+
+    setLoading(false);
+    if (error) {
+      notify("error", `Unable to update order: ${message}`);
+    } else if (data) {
+      setOrder(data);
+      setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
+      AppStorage.save(AppStorageConstants.ORDER_ID, data.id);
+      header === "main" && router.push(`/checkout?orderId=${data.id}`);
+
+      notify("success", "Order updated successfully");
+      setShouldShowCart(false);
     }
   };
 
@@ -880,6 +963,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                   iconAtLeft
                   content={<p className="underline primary-color">Edit</p>}
                   dropdownAlignment="right"
+                  disablePastDays
                 />
               )}
             </div>
@@ -893,7 +977,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                   src="/icons/delete-cart.svg"
                   alt="delete"
                   className="generic-icon medium margin-top spaced clickable"
-                  onClick={() => handleRemoveItem(item.cartId)}
+                  onClick={() => handleRemoveItem(item?.cartId)}
                 />
                 <div className="flex spaced align-center block">
                   <img
@@ -972,11 +1056,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           <Button
             responsive
             className="margin-top spaced capitalize"
-            onClick={handleCreateOrder}
+            onClick={orderId ? handleUpdateOrder : handleCreateOrder}
             loading={loading}
             disabled={!cartItems.length}
           >
-            Proceed to checkout (
+            {header === "main" ? "Proceed to checkout" : "Update Cart"} (
             {getPriceDisplay(total + designCharges, currency)})
           </Button>
         </div>
@@ -986,9 +1070,16 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 };
 
 export const CheckoutHeader: FunctionComponent = () => {
-  const { currentStage, setShouldShowCart, shouldShowCart } = useContext(
-    SettingsContext
-  );
+  const {
+    currentStage,
+    setShouldShowCart,
+    shouldShowCart,
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown
+  } = useContext(SettingsContext);
+  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setShouldShowAuthDropdown(false);
+  });
 
   const stages = [
     {
@@ -1065,7 +1156,18 @@ export const CheckoutHeader: FunctionComponent = () => {
       <CartContext
         visible={shouldShowCart}
         cancel={() => setShouldShowCart(false)}
+        header="checkout"
       />
+      <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
+        <div
+          className={[
+            styles["auth-dropdown"],
+            shouldShowAuthDropdown && styles.active
+          ].join(" ")}
+        >
+          <AuthDropdown />
+        </div>
+      </div>
     </>
   );
 };

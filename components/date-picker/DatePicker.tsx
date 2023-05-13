@@ -18,6 +18,7 @@ interface DatePickerProps {
   dropdownAlignment?: "left" | "right";
   placeholder?: string;
   content?: React.ReactNode;
+  disablePastDays?: boolean;
 }
 
 const DatePicker = (props: DatePickerProps) => {
@@ -33,7 +34,8 @@ const DatePicker = (props: DatePickerProps) => {
     iconAtLeft,
     placeholder,
     dropdownAlignment = "left",
-    content
+    content,
+    disablePastDays
   } = props;
 
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -84,6 +86,8 @@ const DatePicker = (props: DatePickerProps) => {
 
   const initialMonth = useMemo(() => (value || dayjs()).toDate(), [value]);
   const jsDateValue = useMemo(() => value?.toDate() || new Date(), [value]);
+
+  const isPastDay = (day: Date) => dayjs(day).isBefore(dayjs(), "day");
 
   return (
     <div
@@ -142,6 +146,11 @@ const DatePicker = (props: DatePickerProps) => {
           defaultMonth={initialMonth}
           selected={jsDateValue}
           onDayClick={handleDateSelect}
+          disabled={disablePastDays ? isPastDay : undefined}
+          modifiersClassNames={{
+            today: styles.today,
+            selected: styles.selected
+          }}
         />
       </div>
     </div>

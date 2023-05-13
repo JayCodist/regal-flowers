@@ -1,17 +1,26 @@
 import { ReactNode } from "react";
 import { Dayjs } from "dayjs";
-import { AppCurrencyName } from "./Core";
+import { AppCurrencyName, OrderItem } from "./Core";
 import { LocationName } from "./Regal";
 import { DeliveryLocationOption } from "../constants";
+import { ProductImage } from "./Product";
 
-interface OrderItem {
+interface OrderProduct {
   SKU?: string;
   name: string;
   quantity: number;
+  price: number;
+  image: ProductImage;
+  key: number;
+  size: string;
+  design: string;
+  description: string;
 }
 
+type OrderStatus = "created" | "processing";
+
 export interface Order {
-  orderProducts?: OrderItem[];
+  orderProducts: OrderProduct[];
   paymentStatus?: PaymentStatus;
   orderID?: number;
   deliveryStatus?: DeliveryStatus;
@@ -19,6 +28,15 @@ export interface Order {
   id: string;
   amount: number;
   deliveryDate: string;
+  client: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+  };
+  orderStatus: OrderStatus;
+  zone: string;
+  state: string;
 }
 
 type PaymentStatus =
@@ -252,6 +270,7 @@ export interface CheckoutFormData {
   cardNumber: string;
   cardCVV: string;
   state: LocationName;
+  zone: string;
 }
 
 export type PaymentName =

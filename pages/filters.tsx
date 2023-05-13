@@ -37,9 +37,6 @@ import useOutsideClick from "../utils/hooks/useOutsideClick";
 import styles from "./filters.module.scss";
 import SettingsContext from "../utils/context/SettingsContext";
 import Radio from "../components/radio/Radio";
-import AppStorage, {
-  AppStorageConstants
-} from "../utils/helpers/storage-helpers";
 
 const giftMap: Record<string, string> = {
   "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears":
@@ -99,7 +96,7 @@ const ProductsPage: FunctionComponent<{
   const router = useRouter();
   const { query, isReady } = router;
   const { selectedOccasion, shopBy } = query;
-  const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string[]>(["regular"]);
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
@@ -116,7 +113,9 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
-  const { notify, deliveryDate, setDeliveryDate } = useContext(SettingsContext);
+  const { notify, deliveryDate, setDeliveryDate, setRedirectUrl } = useContext(
+    SettingsContext
+  );
 
   const deviceType = useDeviceType();
 
@@ -154,10 +153,13 @@ const ProductsPage: FunctionComponent<{
           setSelectedFilter(["vip"]);
           return;
         }
-        const filters = String(shopBy || "")
-          .split(",")
-          .filter(Boolean);
-        setSelectedFilter([...filters, "regular"]);
+        const filters = shopBy
+          ? String(shopBy || "")
+              .split(",")
+              .filter(Boolean)
+          : ["regular"];
+
+        setSelectedFilter([...filters]);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -301,7 +303,7 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
-      AppStorage.saveSession(AppStorageConstants.REDIRECT_TO, router.asPath);
+      setRedirectUrl(router.asPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath]);
@@ -452,16 +454,18 @@ const ProductsPage: FunctionComponent<{
         className={`${styles["content"]} flex ${deviceType === "desktop" &&
           "spaced-xl"}`}
       >
-        {!giftMap[categorySlug || ""] && !showFilterInfo && (
+        {!giftMap[categorySlug || ""] && (
           <div className={styles["left-side"]}>
-            <div className="vertical-margin spaced">
-              <span className={`bold margin-right ${styles["sub-title"]}`}>
-                Filters ({selectedFilter.length})
-              </span>
-              <button className="primary-color" onClick={handleClearFIlter}>
-                Clear Filters
-              </button>
-            </div>
+            {!showFilterInfo && (
+              <div className="vertical-margin spaced">
+                <span className={`bold margin-right ${styles["sub-title"]}`}>
+                  Filters ({selectedFilter.length})
+                </span>
+                <button className="primary-color" onClick={handleClearFIlter}>
+                  Clear Filters
+                </button>
+              </div>
+            )}
 
             <div className={styles["filters-sidebar"]}>
               {filterCategories.map((filter, index) => (
@@ -576,6 +580,7 @@ const ProductsPage: FunctionComponent<{
                     onChange={setDeliveryDate}
                     format="D MMM YYYY"
                     placeholder="Select Date"
+                    disablePastDays
                   />
                 </div>
               )}
@@ -599,7 +604,7 @@ const ProductsPage: FunctionComponent<{
                 onClick={() => setShouldShowFilter(!shouldShowFilter)}
               >
                 <h3 className="margin-right">
-                  Filter({selectedFilter.length})
+                  Filter{!showFilterInfo && `(${selectedFilter.length})`}
                 </h3>
                 <img
                   alt="filter"
@@ -622,7 +627,55 @@ const ProductsPage: FunctionComponent<{
                         : filter.options.slice(0, filter.limit)
                       ).map((child, index) => (
                         <div key={index} className="margin-bottom">
-                          {child.link ? (
+                          {filter.name === "Budget" ? (
+                            <>
+                              <div className="margin-bottom">
+                                <Radio
+                                  label="Regular"
+                                  onChange={() => {
+                                    const newFilters = [
+                                      ...selectedFilter.filter(filter => {
+                                        return filter !== "vip";
+                                      }),
+                                      "regular"
+                                    ];
+                                    setSelectedFilter(newFilters);
+                                    const url = categorySlug
+                                      ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                          ","
+                                        )}`
+                                      : `/filters?shopBy=${newFilters.join(
+                                          ","
+                                        )}`;
+                                    router.push(url, undefined, {
+                                      scroll: false
+                                    });
+                                  }}
+                                  checked={selectedFilter.includes("regular")}
+                                />
+                              </div>
+
+                              <Radio
+                                label="VIP"
+                                onChange={() => {
+                                  const newFilters = [
+                                    ...selectedFilter.filter(filter => {
+                                      return filter !== "regular";
+                                    }),
+                                    "vip"
+                                  ];
+                                  setSelectedFilter(newFilters);
+                                  const url = `/filters?shopBy=${newFilters.join(
+                                    ","
+                                  )}`;
+                                  router.push(url, undefined, {
+                                    scroll: false
+                                  });
+                                }}
+                                checked={selectedFilter.includes("vip")}
+                              />
+                            </>
+                          ) : child.link ? (
                             <Link href={child.link}>
                               <a className={styles["filter-link"]}>
                                 {child.name}

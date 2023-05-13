@@ -21,6 +21,7 @@ import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
   allDeliveryLocationOptions,
+  allDeliveryLocationZones,
   deliveryStates,
   freeDeliveryThreshold,
   freeDeliveryThresholdVals,
@@ -28,7 +29,11 @@ import {
   placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
-import { getOrder, updateCheckoutState } from "../utils/helpers/data/order";
+import {
+  getOrder,
+  saveSenderInfo,
+  updateCheckoutState
+} from "../utils/helpers/data/order";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
 import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
@@ -47,8 +52,9 @@ import {
   CreateOrderData,
   OnApproveData
 } from "@paypal/paypal-js";
-import { AppCurrency } from "../utils/types/Core";
+import { AppCurrency, CartItem } from "../utils/types/Core";
 import {
+  adaptCheckOutFomData,
   getOptionsFromArray,
   getPriceDisplay
 } from "../utils/helpers/type-conversions";
@@ -56,9 +62,8 @@ import { Recipient } from "../utils/types/User";
 import { Stage } from "../utils/types/Core";
 import PhoneInput from "../components/phone-input/PhoneInput";
 import { emailValidator } from "../utils/helpers/validators";
-import AppStorage, {
-  AppStorageConstants
-} from "../utils/helpers/storage-helpers";
+import { getResidentTypes } from "../utils/helpers/data/residentTypes";
+import { ProductImage } from "../utils/types/Product";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -87,7 +92,8 @@ const initialData: CheckoutFormData = {
   cardCVV: "",
   recipientCountryCode: "+234",
   senderCountryCode: "+234",
-  recipientCountryCodeAlt: "+234"
+  recipientCountryCodeAlt: "+234",
+  zone: ""
 };
 
 type DeliverStage =
@@ -121,23 +127,23 @@ const Checkout: FunctionComponent = () => {
   const [formData, setFormData] = useState<CheckoutFormData>(initialData);
   // const [selectedMethod, setSelectedMethod] = useState<number | null>();
   const [pageLoading, setPageLoading] = useState(false);
-  const [order, setOrder] = useState<Order | null>(null);
   const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
     order?: boolean;
     payment?: boolean;
   }>({ order: true, payment: false });
   const [isPaid, setIsPaid] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [savingSenderInfo, setSavingSenderInfo] = useState(false);
   const [showPaypal, setShowPaypal] = useState(false);
 
   const [deliveryStage, setDeliveryStage] = useState<DeliverStage>(
     "sender-info"
   );
   const [allPurposes, setAllPurposes] = useState<Option[]>([]);
+  const [allresidentTypes, setAllResidentTypes] = useState<Option[]>([]);
   const [selectedRecipient, setSelectedRecipient] = useState<Recipient | null>(
     null
   );
-  const [savedRedirectTo, setSavedRedirectTo] = useState("");
 
   const {
     user,
@@ -149,15 +155,32 @@ const Checkout: FunctionComponent = () => {
     notify,
     deliveryDate,
     setDeliveryDate,
-    setShouldShowCart
+    setShouldShowCart,
+    redirectUrl,
+    setShouldShowAuthDropdown,
+    setOrder,
+    order,
+    setCartItems
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 
+  const total = useMemo(() => {
+    const total =
+      order?.orderProducts.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      ) || 0;
+
+    return formData.deliveryLocation?.amount
+      ? total + formData.deliveryLocation?.amount
+      : total;
+  }, [order?.orderProducts, formData.deliveryLocation]);
+
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
     email: formData.senderEmail || placeholderEmail,
-    amount: ((order?.amount || 0) * 100) / currency.conversionRate,
+    amount: ((total || 0) * 100) / currency.conversionRate,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
@@ -172,6 +195,24 @@ const Checkout: FunctionComponent = () => {
   } = router;
 
   const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
+    if (key === "state") {
+      setFormData({
+        ...formData,
+        [key as string]: value,
+        zone: ""
+      });
+      return;
+    } else if (key === "zone") {
+      setFormData({
+        ...formData,
+        [key as string]: value,
+        deliveryLocation:
+          deliveryLocationOptions.find(
+            option => option.name === (value as string).split("-")[0]
+          ) || null
+      });
+      return;
+    }
     setFormData({
       ...formData,
       [key]: value
@@ -190,10 +231,6 @@ const Checkout: FunctionComponent = () => {
       router.push("/");
     } else {
       setOrder(data);
-      setFormData({
-        ...formData,
-        deliveryDate: data?.deliveryDate ? dayjs(data?.deliveryDate) : null
-      });
       const _isPaid =
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
         /^paid/i.test(data?.paymentStatus || "");
@@ -237,16 +274,41 @@ const Checkout: FunctionComponent = () => {
     }
   };
 
-  const completedSenderInfo = useMemo(() => {
-    const { senderName, senderEmail, senderPhoneNumber } = formData;
-    return senderName && senderEmail && senderPhoneNumber;
-  }, [formData]);
+  const fetchResidentTypes = async () => {
+    const { error, message, data } = await getResidentTypes();
+    if (error) {
+      notify("error", `Unable to fetch purposes: ${message}`);
+    } else {
+      setAllResidentTypes(
+        data?.map(item => ({
+          label: item,
+          value: item
+        })) || []
+      );
+    }
+  };
 
-  const completedDeliveryType = useMemo(() => {
-    const { deliveryMethod } = formData;
-    return deliveryMethod && deliveryDate;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData]);
+  const {
+    pickUpLocation,
+    state,
+    zone,
+    deliveryLocation,
+    recipientName,
+    recipientPhoneNumber,
+    recipientHomeAddress,
+    residenceType
+  } = formData;
+
+  const completedDeliveryLocation = Boolean(deliveryLocation && state && zone);
+
+  const completedPickUpLocation = Boolean(pickUpLocation);
+
+  const completedReceiverInfo = Boolean(
+    recipientName &&
+      recipientPhoneNumber &&
+      residenceType &&
+      recipientHomeAddress
+  );
 
   useEffect(() => {
     if (isReady) {
@@ -258,19 +320,50 @@ const Checkout: FunctionComponent = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, isReady]);
+  }, [orderId, isReady, currentStage]);
 
   useEffect(() => {
     fetchPurposes();
-
-    setSavedRedirectTo(
-      AppStorage.getSession<string>(AppStorageConstants.REDIRECT_TO) || ""
-    );
+    setCurrentStage(1);
+    fetchResidentTypes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    setFormData({ ...formData, freeAccount: Boolean(!user) });
+    if (order?.orderStatus === "processing") {
+      setFormData({
+        ...formData,
+        ...adaptCheckOutFomData(order),
+        freeAccount: Boolean(!user),
+        deliveryLocation:
+          allDeliveryLocationOptions[order.state]?.(
+            currency,
+            dayjs(order.deliveryDate) || dayjs()
+          ).find(option => option.name === order.zone.split("-")[0]) || null
+      });
+      setDeliveryDate(dayjs(order?.deliveryDate));
+    } else {
+      setFormData({
+        ...formData,
+        freeAccount: Boolean(!user)
+      });
+    }
+    const _cartItems: CartItem[] =
+      order?.orderProducts?.map(item => ({
+        image: item.image as ProductImage,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        key: item.key,
+        size: item.size,
+        description: item.description,
+        cartId: item.size || "" + item.key
+      })) || [];
+    setCartItems(_cartItems);
+    if (order && "phone" in order?.client) {
+      setDeliveryStage("delivery-type");
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
@@ -292,6 +385,45 @@ const Checkout: FunctionComponent = () => {
     } else {
       setCurrentStage(2);
       setDeliveryStage("payment");
+    }
+  };
+
+  const handleSaveSenderInfo = async () => {
+    if (emailValidator(formData.senderEmail)) {
+      notify("error", "Please enter a valid email address");
+      return;
+    } else if (!deliveryDate) {
+      notify("error", "Please select a delivery date");
+      return;
+    } else if (!formData.senderName) {
+      notify("error", "Please enter a sender name");
+      return;
+    } else if (formData.freeAccount && !formData.senderPassword) {
+      notify(
+        "error",
+        "Please enter a password or uncheck the free account box"
+      );
+      return;
+    } else if (!formData.senderPhoneNumber) {
+      notify("error", "Please enter a sender phone number");
+      return;
+    }
+    setSavingSenderInfo(true);
+    const { error, message } = await saveSenderInfo(orderId as string, {
+      userData: {
+        email: formData.senderEmail,
+        name: formData.senderName,
+        phone: formData.senderPhoneNumber
+      },
+      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || ""
+    });
+    setSavingSenderInfo(false);
+
+    if (error) {
+      notify("error", `Unable to save sender Info: ${message}`);
+    } else {
+      notify("success", "Saved successfully");
+      setDeliveryStage("delivery-type");
     }
   };
 
@@ -325,6 +457,33 @@ const Checkout: FunctionComponent = () => {
       ) || []
     );
   }, [currency, deliveryDate, formData.state]);
+
+  const abujaDeliveryZoneOptions = useMemo(() => {
+    return (
+      allDeliveryLocationZones["abuja"]?.(
+        total || 0,
+        currency,
+        deliveryDate || dayjs()
+      ) || []
+    );
+  }, [currency, deliveryDate, total]);
+
+  const lagosDeliveryZoneOptions = useMemo(() => {
+    return (
+      allDeliveryLocationZones["lagos"]?.(
+        total || 0,
+        currency,
+        deliveryDate || dayjs()
+      ) || []
+    );
+  }, [currency, deliveryDate, total]);
+
+  const selectedZone =
+    allDeliveryLocationZones[formData.state]?.(
+      total || 0,
+      currency,
+      deliveryDate || dayjs()
+    )?.find(zone => zone.value === formData.zone) || null;
 
   if (pageLoading) {
     return (
@@ -414,9 +573,9 @@ const Checkout: FunctionComponent = () => {
               <div className={`${styles.left}`}>
                 {currentStage === 1 && (
                   <>
-                    {savedRedirectTo && (
-                      <Link href={savedRedirectTo}>
-                        <a className="margin-bottom">{"<< Previous Page"}</a>
+                    {redirectUrl && (
+                      <Link href={redirectUrl}>
+                        <a className="margin-bottom">{"< Back to Shop"}</a>
                       </Link>
                     )}
 
@@ -426,7 +585,7 @@ const Checkout: FunctionComponent = () => {
                       </p>
                       <div className={styles.padding}>
                         <div className="flex spaced-xl">
-                          <div className="input-group">
+                          <div className="input-group half-width">
                             <span className="question">Name</span>
                             <Input
                               name="name"
@@ -440,7 +599,7 @@ const Checkout: FunctionComponent = () => {
                               responsive
                             />
                           </div>
-                          <div className="input-group">
+                          <div className="input-group half-width">
                             <span className="question">Email</span>
                             <Input
                               name="email"
@@ -465,11 +624,11 @@ const Checkout: FunctionComponent = () => {
                             onChangeCountryCode={value =>
                               handleChange("senderCountryCode", value)
                             }
-                            className="input-group"
+                            className="input-group half-width"
                           />
 
-                          {!user && (
-                            <div className="input-group">
+                          {!user ? (
+                            <div className="input-group half-width">
                               <span className="question">Create Password</span>
                               <Input
                                 name="password"
@@ -485,20 +644,68 @@ const Checkout: FunctionComponent = () => {
                                 showPasswordIcon
                               />
                             </div>
+                          ) : (
+                            <div className="input-group half-width compact">
+                              <span className="question">
+                                Pickup/Delivery Date
+                              </span>
+                              <DatePicker
+                                value={deliveryDate}
+                                onChange={setDeliveryDate}
+                                format="D MMMM YYYY"
+                                responsive
+                                disablePastDays
+                              />
+                            </div>
                           )}
                         </div>
                         {!user && (
-                          <Checkbox
-                            checked={formData.freeAccount}
-                            onChange={value =>
-                              handleChange("freeAccount", value)
-                            }
-                            text="Create a Free Account"
-                          />
+                          <div className="input-group half-width compact">
+                            <span className="question">
+                              Pickup/Delivery Date
+                            </span>
+                            <DatePicker
+                              value={deliveryDate}
+                              onChange={setDeliveryDate}
+                              format="D MMMM YYYY"
+                              responsive
+                              disablePastDays
+                            />
+                          </div>
+                        )}
+                        {!user && (
+                          <div className="flex between center-align">
+                            <Checkbox
+                              checked={formData.freeAccount}
+                              onChange={value =>
+                                handleChange("freeAccount", value)
+                              }
+                              text="Create a Free Account"
+                            />
+                            <div className="flex center">
+                              <span className="margin-right">
+                                Already a user?
+                              </span>
+                              <Button
+                                type="plain"
+                                onClick={() => setShouldShowAuthDropdown(true)}
+                              >
+                                Login
+                              </Button>
+                            </div>
+                          </div>
                         )}
                       </div>
                     </div>
-                    {completedSenderInfo && (
+                    {deliveryStage === "sender-info" && (
+                      <Button
+                        loading={savingSenderInfo}
+                        onClick={handleSaveSenderInfo}
+                      >
+                        Continue
+                      </Button>
+                    )}
+                    {deliveryStage === "delivery-type" && (
                       <div
                         className={[
                           styles.border,
@@ -509,18 +716,6 @@ const Checkout: FunctionComponent = () => {
                           Delivery Method
                         </p>
                         <div className={styles.padding}>
-                          <div className="input-group half-width compact">
-                            <span className="question">
-                              Pickup/Delivery Date
-                            </span>
-                            <DatePicker
-                              value={deliveryDate}
-                              onChange={setDeliveryDate}
-                              format="D MMMM YYYY"
-                              responsive
-                            />
-                          </div>
-
                           <div className="flex between center-align">
                             <div
                               className={[
@@ -576,13 +771,13 @@ const Checkout: FunctionComponent = () => {
                           </div>
 
                           {formData.deliveryMethod === "delivery" && (
-                            <>
-                              <div className="input-group half-width">
+                            <div className="flex spaced-xl">
+                              <div className="input-group">
                                 <span className="question">Delivery State</span>
                                 <Select
-                                  onSelect={value =>
-                                    handleChange("state", value)
-                                  }
+                                  onSelect={value => {
+                                    handleChange("state", value);
+                                  }}
                                   value={formData.state}
                                   options={deliveryStates}
                                   placeholder="Select a state"
@@ -590,7 +785,43 @@ const Checkout: FunctionComponent = () => {
                                   dimmed
                                 />
                               </div>
-                            </>
+                              {formData.state === "abuja" && (
+                                <div className="input-group">
+                                  <span className="question">
+                                    Delivery Zones
+                                  </span>
+                                  <Select
+                                    onSelect={value =>
+                                      handleChange("zone", value)
+                                    }
+                                    value={formData.zone}
+                                    options={abujaDeliveryZoneOptions}
+                                    placeholder="Select a zone"
+                                    responsive
+                                    dimmed
+                                    dropdownOnTop
+                                  />
+                                </div>
+                              )}
+                              {formData.state === "lagos" && (
+                                <div className="input-group">
+                                  <span className="question">
+                                    Delivery Zones
+                                  </span>
+                                  <Select
+                                    onSelect={value =>
+                                      handleChange("zone", value)
+                                    }
+                                    value={formData.zone}
+                                    options={lagosDeliveryZoneOptions}
+                                    placeholder="Select a zone"
+                                    responsive
+                                    dimmed
+                                    dropdownOnTop
+                                  />
+                                </div>
+                              )}
+                            </div>
                           )}
 
                           {formData.deliveryMethod === "delivery" &&
@@ -631,37 +862,35 @@ const Checkout: FunctionComponent = () => {
                                   </div>
                                 )}
 
-                                {deliveryLocationOptions.map(locationOption => (
-                                  <div
-                                    className="vertical-margin spaced"
-                                    key={locationOption.name}
-                                  >
-                                    <Radio
-                                      label={locationOption.label}
-                                      onChange={() =>
-                                        handleChange(
-                                          "deliveryLocation",
-                                          locationOption
-                                        )
-                                      }
-                                      disabled={
-                                        locationOption.amount === 0 &&
-                                        (order?.amount || 0) <=
-                                          (["13-02", "14-02", "15-02"].includes(
-                                            deliveryDate?.format("DD-MM") || ""
+                                {deliveryLocationOptions.map(locationOption => {
+                                  return (
+                                    <div
+                                      className="vertical-margin spaced"
+                                      key={locationOption.name}
+                                    >
+                                      <Radio
+                                        label={locationOption.label}
+                                        onChange={() =>
+                                          handleChange(
+                                            "deliveryLocation",
+                                            locationOption
                                           )
-                                            ? freeDeliveryThresholdVals
-                                            : freeDeliveryThreshold)[
-                                            currency.name
-                                          ]
-                                      }
-                                      checked={
-                                        formData.deliveryLocation ===
-                                        locationOption
-                                      }
-                                    />
-                                  </div>
-                                ))}
+                                        }
+                                        disabled={
+                                          locationOption.name !==
+                                          (
+                                            (selectedZone?.value as string) ||
+                                            ""
+                                          )?.split("-")[0]
+                                        }
+                                        checked={
+                                          formData.deliveryLocation?.name ===
+                                          locationOption.name
+                                        }
+                                      />
+                                    </div>
+                                  );
+                                })}
                               </div>
                             )}
 
@@ -696,123 +925,125 @@ const Checkout: FunctionComponent = () => {
                         </div>
                       </div>
                     )}
-                    {formData.deliveryMethod === "delivery" && (
-                      <div className={styles.border}>
-                        <p className={styles["payment-info"]}>
-                          Receiver's Information
-                        </p>
-                        <div className={styles.padding}>
-                          <div className="input-group">
-                            <span className="question">
-                              Select A Past Recipient{" "}
-                              <em className="normal">(for logged in users)</em>
-                            </span>
-
-                            <Select
-                              onSelect={phone =>
-                                setSelectedRecipient(
-                                  user?.recipients.find(
-                                    recipient => recipient.phone === phone
-                                  ) || null
-                                )
-                              }
-                              value={selectedRecipient?.phone || ""}
-                              options={pastRecipients}
-                              placeholder="Select Past Recipient"
-                              responsive
-                              dimmed
-                            />
-                          </div>
-                          <div className="flex center-align spaced vertical-margin">
-                            <span className={styles["line-through"]}></span>
-                            <span>OR</span>
-                            <span className={styles["line-through"]}></span>
-                          </div>
-                          <div className="flex spaced-xl margin-bottom">
+                    {formData.deliveryMethod === "delivery" &&
+                      completedDeliveryLocation && (
+                        <div className={styles.border}>
+                          <p className={styles["payment-info"]}>
+                            Receiver's Information
+                          </p>
+                          <div className={styles.padding}>
                             <div className="input-group">
-                              <span className="question">Full Name</span>
-                              <Input
-                                name="name"
-                                placeholder="Enter recipient name"
-                                value={formData.recipientName}
-                                onChange={value =>
-                                  handleChange("recipientName", value)
-                                }
-                                dimmed
-                              />
-                            </div>
-
-                            <PhoneInput
-                              phoneNumber={formData.recipientPhoneNumber}
-                              countryCode={formData.recipientCountryCode}
-                              onChangePhoneNumber={value =>
-                                handleChange("recipientPhoneNumber", value)
-                              }
-                              onChangeCountryCode={value =>
-                                handleChange("recipientCountryCode", value)
-                              }
-                              className="input-group"
-                              question="Receiver Phone number"
-                            />
-                          </div>
-
-                          <div className="flex spaced-xl margin-bottom">
-                            <PhoneInput
-                              phoneNumber={formData.recipientPhoneNumberAlt}
-                              countryCode={formData.recipientCountryCodeAlt}
-                              onChangePhoneNumber={value =>
-                                handleChange("recipientPhoneNumberAlt", value)
-                              }
-                              onChangeCountryCode={value =>
-                                handleChange("recipientCountryCodeAlt", value)
-                              }
-                              className="input-group"
-                              question="Enter alternative phone"
-                            />
-                            <div className="input-group">
-                              <span className="question">Residence Type</span>
+                              <span className="question">
+                                Select A Past Recipient{" "}
+                                <em className="normal">
+                                  (for logged in users)
+                                </em>
+                              </span>
 
                               <Select
-                                onSelect={value =>
-                                  handleChange("residenceType", value)
+                                onSelect={phone =>
+                                  setSelectedRecipient(
+                                    user?.recipients.find(
+                                      recipient => recipient.phone === phone
+                                    ) || null
+                                  )
                                 }
-                                value={formData.residenceType}
-                                options={getOptionsFromArray([
-                                  "Home",
-                                  "Office"
-                                ])}
-                                placeholder="Select a residence type"
+                                value={selectedRecipient?.phone || ""}
+                                options={pastRecipients}
+                                placeholder="Select Past Recipient"
                                 responsive
                                 dimmed
                               />
                             </div>
-                          </div>
-                          <div className="input-group">
-                            <span className="question">
-                              Detailed Home Address
-                            </span>
+                            <div className="flex center-align spaced vertical-margin">
+                              <span className={styles["line-through"]}></span>
+                              <span>OR</span>
+                              <span className={styles["line-through"]}></span>
+                            </div>
+                            <div className="flex spaced-xl margin-bottom">
+                              <div className="input-group">
+                                <span className="question">Full Name</span>
+                                <Input
+                                  name="name"
+                                  placeholder="Enter recipient name"
+                                  value={formData.recipientName}
+                                  onChange={value =>
+                                    handleChange("recipientName", value)
+                                  }
+                                  dimmed
+                                />
+                              </div>
 
-                            <TextArea
-                              value={formData.recipientHomeAddress}
-                              placeholder="To help us deliver better, please be detailed as possible"
+                              <PhoneInput
+                                phoneNumber={formData.recipientPhoneNumber}
+                                countryCode={formData.recipientCountryCode}
+                                onChangePhoneNumber={value =>
+                                  handleChange("recipientPhoneNumber", value)
+                                }
+                                onChangeCountryCode={value =>
+                                  handleChange("recipientCountryCode", value)
+                                }
+                                className="input-group"
+                                question="Receiver Phone number"
+                              />
+                            </div>
+
+                            <div className="flex spaced-xl margin-bottom">
+                              <PhoneInput
+                                phoneNumber={formData.recipientPhoneNumberAlt}
+                                countryCode={formData.recipientCountryCodeAlt}
+                                onChangePhoneNumber={value =>
+                                  handleChange("recipientPhoneNumberAlt", value)
+                                }
+                                onChangeCountryCode={value =>
+                                  handleChange("recipientCountryCodeAlt", value)
+                                }
+                                className="input-group"
+                                question="Enter alternative phone (if available)"
+                              />
+                              <div className="input-group">
+                                <span className="question">Residence Type</span>
+
+                                <Select
+                                  onSelect={value =>
+                                    handleChange("residenceType", value)
+                                  }
+                                  value={formData.residenceType}
+                                  options={allresidentTypes}
+                                  placeholder="Select a residence type"
+                                  responsive
+                                  dimmed
+                                />
+                              </div>
+                            </div>
+                            <div className="input-group">
+                              <span className="question">
+                                Detailed Home Address
+                              </span>
+
+                              <TextArea
+                                value={formData.recipientHomeAddress}
+                                placeholder="To help us deliver better, please be detailed as possible"
+                                onChange={value =>
+                                  handleChange("recipientHomeAddress", value)
+                                }
+                                dimmed
+                                rows={3}
+                              />
+                            </div>
+                            <Checkbox
+                              checked={formData.shouldSaveAddress}
                               onChange={value =>
-                                handleChange("recipientHomeAddress", value)
+                                handleChange("shouldSaveAddress", value)
                               }
-                              dimmed
-                              rows={3}
+                              text="Save Recipient"
                             />
                           </div>
-                          <Checkbox
-                            checked={formData.shouldSaveAddress}
-                            onChange={value =>
-                              handleChange("shouldSaveAddress", value)
-                            }
-                            text="Save Recipient"
-                          />
                         </div>
-                      </div>
-                    )}
-                    {completedDeliveryType && (
+                      )}
+                    {(formData.deliveryMethod === "delivery"
+                      ? completedReceiverInfo
+                      : completedPickUpLocation) && (
                       <div className={styles.border}>
                         <p className={styles["payment-info"]}>
                           Optional Message
@@ -861,13 +1092,15 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     )}
 
-                    <Button
-                      className="half-width"
-                      loading={loading}
-                      buttonType="submit"
-                    >
-                      Proceed to Payment
-                    </Button>
+                    {deliveryStage !== "sender-info" && (
+                      <Button
+                        className="half-width"
+                        loading={loading}
+                        buttonType="submit"
+                      >
+                        Proceed to Payment
+                      </Button>
+                    )}
                   </>
                 )}
                 {currentStage === 2 && (
@@ -876,7 +1109,7 @@ const Checkout: FunctionComponent = () => {
                       onClick={() => setCurrentStage(1)}
                       className="margin-bottom"
                     >
-                      {"<< Previous Page"}
+                      {"<< Back To Shop"}
                     </button>
                     <div className={styles.border}>
                       <p className={styles["payment-info"]}>Payment Method</p>
@@ -988,7 +1221,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between ">
                       <span className="normal-text">Subtotal</span>
                       <span className="normal-text bold">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total || 0, currency)}
                       </span>
                     </div>
                     <div className="flex between vertical-margin">
@@ -1001,7 +1234,10 @@ const Checkout: FunctionComponent = () => {
                       <div className="flex between">
                         <span className="normal-text">Delivery Charge</span>
                         <span className="normal-text bold">
-                          {getPriceDisplay(0, currency)}
+                          {getPriceDisplay(
+                            formData.deliveryLocation?.amount || 0,
+                            currency
+                          )}
                         </span>
                       </div>
                     )}
@@ -1021,7 +1257,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between margin-bottom">
                       <span className="normal-text">Total</span>
                       <span className="normal-text bold">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total, currency)}
                       </span>
                     </div>
                     {currentStage === 1 && (
@@ -1248,7 +1484,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Subtotal</span>
                     <span className="bold">
-                      {getPriceDisplay(order?.amount || 0, currency)}
+                      {getPriceDisplay(total || 0, currency)}
                     </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
@@ -1260,7 +1496,12 @@ const Checkout: FunctionComponent = () => {
                       <span>Delivery Charge</span>
                       <p className={`${styles["light-gray"]}`}>Lagos</p>
                     </div>
-                    <span className="bold">{getPriceDisplay(0, currency)}</span>
+                    <span className="bold">
+                      {getPriceDisplay(
+                        formData.deliveryLocation?.amount || 0,
+                        currency
+                      )}
+                    </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
                     <div>
@@ -1276,7 +1517,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between sub-heading margin-bottom spaced">
                     <span>Total</span>
                     <span className="bold primary-color">
-                      {getPriceDisplay(order?.amount || 0, currency)}
+                      {getPriceDisplay(total, currency)}
                     </span>
                   </div>
                 </div>
@@ -1307,7 +1548,14 @@ const Checkout: FunctionComponent = () => {
                   <div>
                     <div className="flex align-center between">
                       <p className={styles.title}>Sender's Information</p>
-                      <strong className="primary-color underline">Login</strong>
+                      {/* <strong className="primary-color underline">Login</strong> */}
+                      <Button
+                        type="plain"
+                        onClick={() => setShouldShowAuthDropdown(true)}
+                        className="primary-color underline"
+                      >
+                        Login
+                      </Button>
                     </div>
                     <div className="input-group">
                       <span className="question">Name</span>
@@ -1374,6 +1622,7 @@ const Checkout: FunctionComponent = () => {
                         onChange={setDeliveryDate}
                         format="D MMMM YYYY"
                         responsive
+                        disablePastDays
                       />
                     </div>
 
@@ -1457,14 +1706,52 @@ const Checkout: FunctionComponent = () => {
                           />
                         </div>
                         {formData.deliveryMethod === "delivery" && (
-                          <Select
-                            onSelect={value => handleChange("state", value)}
-                            value={formData.state}
-                            options={deliveryStates}
-                            placeholder="Select a state"
-                            responsive
-                            dimmed
-                          />
+                          <>
+                            <div className="input-group">
+                              <span className="question">Delivery State</span>
+                              <Select
+                                onSelect={value => handleChange("state", value)}
+                                value={formData.state}
+                                options={deliveryStates}
+                                placeholder="Select a state"
+                                responsive
+                                dimmed
+                              />
+                            </div>
+
+                            {formData.state === "abuja" && (
+                              <div className="input-group">
+                                <span className="question">Delivery Zones</span>
+                                <Select
+                                  onSelect={value =>
+                                    handleChange("zone", value)
+                                  }
+                                  value={formData.zone}
+                                  options={abujaDeliveryZoneOptions}
+                                  placeholder="Select a zone"
+                                  responsive
+                                  dimmed
+                                  dropdownOnTop
+                                />
+                              </div>
+                            )}
+                            {formData.state === "lagos" && (
+                              <div className="input-group">
+                                <span className="question">Delivery Zones</span>
+                                <Select
+                                  onSelect={value =>
+                                    handleChange("zone", value)
+                                  }
+                                  value={formData.zone}
+                                  options={lagosDeliveryZoneOptions}
+                                  placeholder="Select a zone"
+                                  responsive
+                                  dimmed
+                                  dropdownOnTop
+                                />
+                              </div>
+                            )}
+                          </>
                         )}
 
                         {formData.deliveryMethod === "delivery" &&
@@ -1519,15 +1806,10 @@ const Checkout: FunctionComponent = () => {
                                       )
                                     }
                                     disabled={
-                                      locationOption.amount === 0 &&
-                                      (order?.amount || 0) <=
-                                        (["13-02", "14-02", "15-02"].includes(
-                                          deliveryDate?.format("DD-MM") || ""
-                                        )
-                                          ? freeDeliveryThresholdVals
-                                          : freeDeliveryThreshold)[
-                                          currency.name
-                                        ]
+                                      locationOption.name !==
+                                      (
+                                        (selectedZone?.value as string) || ""
+                                      )?.split("-")[0]
                                     }
                                     checked={
                                       formData.deliveryLocation ===
@@ -1571,14 +1853,25 @@ const Checkout: FunctionComponent = () => {
                     </div>
 
                     <Button
-                      onClick={() => setDeliveryStage("receiver")}
+                      onClick={() =>
+                        setDeliveryStage(
+                          formData.deliveryMethod === "delivery"
+                            ? "receiver"
+                            : "customization-message"
+                        )
+                      }
                       className="vertical-margin xl"
                       responsive
                     >
                       Continue
                     </Button>
                     <p className={styles.next}>
-                      Next: <strong>Receiver's Information</strong>
+                      Next:{" "}
+                      <strong>
+                        {formData.deliveryMethod === "delivery"
+                          ? "Receiver's Information"
+                          : "Customization Message"}
+                      </strong>
                     </p>
                   </>
                 )}
@@ -1682,7 +1975,7 @@ const Checkout: FunctionComponent = () => {
                               handleChange("recipientCountryCodeAlt", value)
                             }
                             className="input-group"
-                            question="Enter alternative phone"
+                            question="Enter alternative phone (if available)"
                           />
                           <div className="input-group">
                             <span className="question">Residence Type</span>
@@ -1834,6 +2127,7 @@ const Checkout: FunctionComponent = () => {
                       <Button
                         buttonType="submit"
                         className="vertical-margin xl"
+                        loading={loading}
                         responsive
                       >
                         Continue
@@ -1882,14 +2176,14 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between ">
                     <span className="normal-text">Order Total</span>
                     <span className="normal-text bold">
-                      {getPriceDisplay(order?.amount || 0, currency)}
+                      {getPriceDisplay(total, currency)}
                     </span>
                   </div>
                   {formData.deliveryMethod === "pick-up" && (
                     <div className="flex between">
                       <span className="normal-text">Delivery</span>
                       <span className="normal-text bold">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total || 0, currency)}
                       </span>
                     </div>
                   )}
@@ -1898,7 +2192,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between vertical-margin">
                     <span className="normal-text">Sum Total</span>
                     <span className="normal-text bold">
-                      {getPriceDisplay(order?.amount || 0, currency)}
+                      {getPriceDisplay(total || 0, currency)}
                     </span>
                   </div>
                 </div>
@@ -2033,7 +2327,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Subtotal</strong>
                       <span className="bold">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total, currency)}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
@@ -2049,7 +2343,10 @@ const Checkout: FunctionComponent = () => {
                         </strong>
                       </div>
                       <span className="bold">
-                        {getPriceDisplay(0, currency)}
+                        {getPriceDisplay(
+                          formData.deliveryLocation?.amount || 0,
+                          currency
+                        )}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
@@ -2068,7 +2365,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between sub-heading margin-bottom spaced small-text">
                       <span>Total</span>
                       <span className="bold primary-color">
-                        {getPriceDisplay(order?.amount || 0, currency)}
+                        {getPriceDisplay(total || 0, currency)}
                       </span>
                     </div>
                   </div>

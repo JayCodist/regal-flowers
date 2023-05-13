@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { _countryCodes } from "../../utils/constants";
+import React from "react";
+import { countryCodes } from "../../utils/constants";
 import Input from "../input/Input";
 import Select from "../select/Select";
 import styles from "./PhoneInput.module.scss";
@@ -28,14 +28,6 @@ const PhoneInput = (props: PhoneInputProps) => {
     className
   } = props;
 
-  const [countryCodes, setCountryCodes] = useState(_countryCodes);
-
-  const handleCountryCodeSearch = (props: { searchStr: string }) => {
-    setCountryCodes(
-      _countryCodes.filter(code => code.value.includes(props.searchStr))
-    );
-  };
-
   return (
     <div className={["input-group", className].join(" ")}>
       <span className="question">{question || "Phone Number"}</span>
@@ -48,7 +40,8 @@ const PhoneInput = (props: PhoneInputProps) => {
           responsive
           dimmed
           className={styles["country-code"]}
-          onSearch={handleCountryCodeSearch}
+          display="value"
+          dropdownClassName={styles["country-code-dropdown"]}
         />
         <Input
           placeholder=""

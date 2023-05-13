@@ -89,7 +89,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           }
         : null,
       quantity: 1,
-      image: product.images[0],
+      image: {
+        src: product.images[0].src,
+        alt: product.images[0].alt
+      },
       cartId: productKey
     };
 
@@ -222,8 +225,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       setSelectedDesign(defaultDesign || null);
     }
   };
-
-  console.log("product", product);
 
   useEffect(() => {
     pickDefaultDesign();

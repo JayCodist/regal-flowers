@@ -4,7 +4,6 @@ import AddonGroup from "./AddonGroup";
 export interface ProductImage {
   alt: string;
   src: string;
-  _id: string;
 }
 
 export interface ProductVariant {

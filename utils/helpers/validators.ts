@@ -11,8 +11,11 @@ export const emailValidator: InputValidator = str => {
 };
 
 export const phoneValidator: InputValidator = str => {
-  if (str.length < 10 || str.length > 10) {
+  if (str.length < 10) {
     return "Enter a valid phone number";
+  }
+  if (!/^[+\d]+$/.test(str)) {
+    return "Please enter a valid phone number";
   }
   return "";
 };

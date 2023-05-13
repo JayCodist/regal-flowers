@@ -21,6 +21,7 @@ import AppStorage, {
   AppStorageConstants
 } from "../utils/helpers/storage-helpers";
 import { performHandshake } from "../utils/helpers/data/core";
+import { Order } from "../utils/types/Order";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
@@ -28,7 +29,12 @@ const defaultSettings: Settings = {
   currentStage: 1,
   deliveryDate: null,
   cartItems: [],
-  shouldShowCart: false
+  shouldShowCart: false,
+  redirectUrl:
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+  shouldShowAuthDropdown: false,
+  orderId: "",
+  order: null
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -48,11 +54,12 @@ const App: FunctionComponent<AppProps> = props => {
   }>({});
   const [user, setUser] = useState<User | null>(null);
   const [shouldShowCart, setShouldShowCart] = useState(false);
+  const [shouldShowAuthDropdown, setShouldShowAuthDropdown] = useState(false);
+  const [order, setOrder] = useState<Order | null>(null);
+  const [deliveryDate, setDeliveryDate] = useState<null | Dayjs>(null);
 
   const initializeAppConfig = async () => {
-    const savedCartItems = AppStorage.get<CartItem[]>(
-      AppStorageConstants.CART_ITEMS
-    );
+    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
     const savedCurrency = AppStorage.get<AppCurrency>(
       AppStorageConstants.SAVED_CURRENCY
     );
@@ -60,7 +67,7 @@ const App: FunctionComponent<AppProps> = props => {
     setSettings({
       ...settings,
       currency: savedCurrency || defaultSettings.currency,
-      cartItems: savedCartItems || []
+      orderId: savedOrderId || ""
     });
     const { error, data } = await performHandshake();
     if (error || !data) {
@@ -87,7 +94,6 @@ const App: FunctionComponent<AppProps> = props => {
             currencyValueMap[currentCurrency.name] ||
             currentCurrency.conversionRate
         },
-        cartItems: savedCartItems || [],
         allCurrencies: settings.allCurrencies.map(currency => ({
           ...currency,
           conversionRate:
@@ -138,20 +144,32 @@ const App: FunctionComponent<AppProps> = props => {
     currentStage: settings.currentStage,
     setCurrentStage: (currentStage: Stage) =>
       setSettings({ ...settings, currentStage }),
-    deliveryDate: settings.deliveryDate,
-    setDeliveryDate: (deliveryDate: Dayjs | null) =>
-      setSettings({ ...settings, deliveryDate }),
+    deliveryDate,
+    setDeliveryDate,
     cartItems: settings.cartItems,
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
-      AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
+      // AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
     },
     allCurrencies: settings.allCurrencies,
     shouldShowCart,
     setShouldShowCart,
     notify,
     user,
-    setUser
+    setUser,
+    redirectUrl: settings.redirectUrl,
+    setRedirectUrl: (redirectUrl: string) => {
+      setSettings({ ...settings, redirectUrl });
+    },
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown,
+    orderId: settings.orderId,
+    setOrderId: (orderId: string) => {
+      setSettings({ ...settings, orderId });
+      AppStorage.save(AppStorageConstants.ORDER_ID, orderId);
+    },
+    order,
+    setOrder
   };
 
   const headTags = (

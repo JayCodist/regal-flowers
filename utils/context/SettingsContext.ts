@@ -2,6 +2,7 @@ import { Dayjs } from "dayjs";
 import { createContext } from "react";
 import { AppCurrency, CartItem, Settings, Stage } from "../types/Core";
 import User from "../types/User";
+import { Order } from "../types/Order";
 
 export type NotifyType = "success" | "error" | "info";
 
@@ -18,6 +19,14 @@ export interface SettingsControls extends Settings {
   setUser: (user: User | null) => void;
   setShouldShowCart: (shouldShowCart: boolean) => void;
   shouldShowCart: boolean;
+  redirectUrl: string;
+  setRedirectUrl: (redirectUrl: string) => void;
+  setShouldShowAuthDropdown: (shouldShowAuthDropdown: boolean) => void;
+  shouldShowAuthDropdown: boolean;
+  orderId: string;
+  setOrderId: (orderId: string) => void;
+  order: Order | null;
+  setOrder: (order: Order | null) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -34,7 +43,16 @@ const SettingsContext = createContext<SettingsControls>({
   user: null,
   setUser: () => {},
   setShouldShowCart: () => {},
-  shouldShowCart: false
+  shouldShowCart: false,
+  redirectUrl:
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+  setRedirectUrl: () => {},
+  setShouldShowAuthDropdown: () => {},
+  shouldShowAuthDropdown: false,
+  orderId: "",
+  setOrderId: () => {},
+  order: null,
+  setOrder: () => {}
 });
 
 export default SettingsContext;

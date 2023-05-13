@@ -50,6 +50,7 @@ interface SelectProps {
   multiple?: boolean;
   followUp?: FollowUpType;
   className?: string;
+  dropdownClassName?: string;
   showSelectedCount?: boolean;
   dropdownOnTop?: boolean;
   allowClear?: boolean;
@@ -76,6 +77,7 @@ interface SelectProps {
   fitContent?: boolean;
   dimmed?: boolean;
   hideCaret?: boolean;
+  display?: "label" | "value";
 }
 
 const Select: FunctionComponent<SelectProps> = props => {
@@ -101,7 +103,9 @@ const Select: FunctionComponent<SelectProps> = props => {
     onScrollEnd,
     fitContent,
     dimmed,
-    hideCaret
+    hideCaret,
+    display = "label",
+    dropdownClassName
   } = props;
 
   const [searchStr, setSearchStr] = useState("");
@@ -189,7 +193,7 @@ const Select: FunctionComponent<SelectProps> = props => {
           .filter(option => _selectedMap[option.value])
           .map(option => option.label)
           .join(", ")
-      : (options.find(option => option.value === value) || {}).label;
+      : (options.find(option => option.value === value) || {})[display];
     setDisplayValue(_displayValue || "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options, value]);
@@ -424,7 +428,8 @@ const Select: FunctionComponent<SelectProps> = props => {
           className={[
             styles.dropdown,
             showDropdown && styles["show-dropdown"],
-            dropdownOnTop && styles["on-top"]
+            dropdownOnTop && styles["on-top"],
+            dropdownClassName && dropdownClassName
           ].join(" ")}
           role="list"
           ref={rootRef}

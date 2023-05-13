@@ -1,6 +1,7 @@
 import { Dayjs } from "dayjs";
 import { ReactNode } from "react";
 import { DesignOptionName, ProductImage } from "./Product";
+import { Order } from "./Order";
 
 export interface AppLink {
   url: string;
@@ -24,6 +25,10 @@ export interface Settings {
   cartItems: CartItem[];
   allCurrencies: AppCurrency[];
   shouldShowCart: boolean;
+  redirectUrl: string;
+  shouldShowAuthDropdown: boolean;
+  orderId: string;
+  order: Order | null;
 }
 
 export enum Stage {
@@ -58,3 +63,7 @@ export interface CartItem {
   addonsTotal?: number;
   cartId: string;
 }
+
+export type OrderItem = Omit<CartItem, "cartId" | "amount"> & {
+  amount: number;
+};
