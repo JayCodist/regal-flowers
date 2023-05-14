@@ -135,6 +135,7 @@ const Checkout: FunctionComponent = () => {
   const [loading, setLoading] = useState(false);
   const [savingSenderInfo, setSavingSenderInfo] = useState(false);
   const [showPaypal, setShowPaypal] = useState(false);
+  const [isSenderInfoCompleted, setIsSenderInfoCompleted] = useState(false);
 
   const [deliveryStage, setDeliveryStage] = useState<DeliverStage>(
     "sender-info"
@@ -176,6 +177,15 @@ const Checkout: FunctionComponent = () => {
       ? total + formData.deliveryLocation?.amount
       : total;
   }, [order?.orderProducts, formData.deliveryLocation]);
+
+  const subTotal = useMemo(() => {
+    return (
+      order?.orderProducts.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      ) || 0
+    );
+  }, [order]);
 
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
@@ -330,12 +340,6 @@ const Checkout: FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    const isSenderInfoCompleted =
-      order?.client.name &&
-      order?.client.phone &&
-      order.deliveryDate &&
-      order.client.email;
-
     if (order?.orderStatus === "processing") {
       setFormData({
         ...formData,
@@ -348,7 +352,13 @@ const Checkout: FunctionComponent = () => {
           ).find(option => option.name === order.zone.split("-")[0]) || null
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
-    } else if (isSenderInfoCompleted) {
+      setIsSenderInfoCompleted(true);
+    } else if (
+      order?.client.name &&
+      order?.client.phone &&
+      order.client.email &&
+      order.deliveryDate
+    ) {
       setFormData({
         ...formData,
         senderName: order?.client.name,
@@ -357,6 +367,7 @@ const Checkout: FunctionComponent = () => {
         senderEmail: order.client.email
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
+      setIsSenderInfoCompleted(true);
     } else {
       setFormData({
         ...formData,
@@ -375,9 +386,6 @@ const Checkout: FunctionComponent = () => {
         cartId: item.size || "" + item.key
       })) || [];
     setCartItems(_cartItems);
-    if (order && "phone" in order?.client) {
-      setDeliveryStage("delivery-type");
-    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
@@ -439,11 +447,12 @@ const Checkout: FunctionComponent = () => {
       userData: {
         email: formData.senderEmail,
         name: formData.senderName,
-        phone: formData.senderPhoneNumber
+        phone: formData.senderCountryCode + formData.senderPhoneNumber
       },
       deliveryDate: deliveryDate?.format("YYYY-MM-DD") || ""
     });
     setSavingSenderInfo(false);
+    setIsSenderInfoCompleted(true);
 
     if (error) {
       notify("error", `Unable to save sender Info: ${message}`);
@@ -723,7 +732,7 @@ const Checkout: FunctionComponent = () => {
                         )}
                       </div>
                     </div>
-                    {deliveryStage === "sender-info" && (
+                    {!isSenderInfoCompleted && (
                       <Button
                         loading={savingSenderInfo}
                         onClick={handleSaveSenderInfo}
@@ -731,7 +740,8 @@ const Checkout: FunctionComponent = () => {
                         Continue
                       </Button>
                     )}
-                    {deliveryStage === "delivery-type" && (
+
+                    {isSenderInfoCompleted && (
                       <div
                         className={[
                           styles.border,
@@ -1118,7 +1128,7 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     )}
 
-                    {deliveryStage !== "sender-info" && (
+                    {isSenderInfoCompleted && (
                       <Button
                         className="half-width"
                         loading={loading}
@@ -1135,7 +1145,7 @@ const Checkout: FunctionComponent = () => {
                       onClick={() => setCurrentStage(1)}
                       className="margin-bottom"
                     >
-                      {"<< Back To Shop"}
+                      {"<< Back To Checkout"}
                     </button>
                     <div className={styles.border}>
                       <p className={styles["payment-info"]}>Payment Method</p>
@@ -1247,7 +1257,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between ">
                       <span className="normal-text">Subtotal</span>
                       <span className="normal-text bold">
-                        {getPriceDisplay(total || 0, currency)}
+                        {getPriceDisplay(subTotal || 0, currency)}
                       </span>
                     </div>
                     <div className="flex between vertical-margin">
@@ -1510,7 +1520,7 @@ const Checkout: FunctionComponent = () => {
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Subtotal</span>
                     <span className="bold">
-                      {getPriceDisplay(total || 0, currency)}
+                      {getPriceDisplay(subTotal || 0, currency)}
                     </span>
                   </div>
                   <div className="flex between normal-text margin-bottom spaced">
@@ -2353,7 +2363,7 @@ const Checkout: FunctionComponent = () => {
                     <div className="flex between small-text margin-bottom spaced">
                       <strong className={styles.grayed}>Subtotal</strong>
                       <span className="bold">
-                        {getPriceDisplay(total, currency)}
+                        {getPriceDisplay(subTotal, currency)}
                       </span>
                     </div>
                     <div className="flex between small-text margin-bottom spaced">
