@@ -22,18 +22,53 @@ const adaptCheckoutStateRecord = (
       deliveryMessage: record.message,
       despatchLocation: record.pickUpLocation,
       purpose: record.purpose,
-      recipient: {
-        name: record.recipientName,
-        phone: record.recipientCountryCode + record.recipientPhoneNumber,
-        phoneAlt:
-          record.recipientCountryCodeAlt + record.recipientPhoneNumberAlt,
-        address: record.recipientHomeAddress,
-        state: record.state,
-        residenceType: record.residenceType,
-        method: record.deliveryMethod
-      },
-      zone: record.zone,
-      state: record.state
+      recipient:
+        record.deliveryMethod === "delivery"
+          ? {
+              name: record.recipientName,
+              phone: record.recipientCountryCode + record.recipientPhoneNumber,
+              phoneAlt: record.recipientPhoneNumberAlt
+                ? record.recipientCountryCodeAlt +
+                  record.recipientPhoneNumberAlt
+                : "",
+              address: record.recipientHomeAddress,
+              state: record.state,
+              residenceType: record.residenceType,
+              method: record.deliveryMethod
+            }
+          : {
+              name: "",
+              phone: "",
+              phoneAlt: "",
+              address: "",
+              state: "",
+              residenceType: "",
+              method: record.deliveryMethod
+            },
+      deliveryDetails:
+        record.deliveryMethod === "delivery"
+          ? {
+              recidenceType: record.residenceType,
+              recipientAddress: record.recipientHomeAddress,
+              recipientName: record.recipientName,
+              recipientPhone:
+                record.recipientCountryCode + record.recipientPhoneNumber,
+              recipientAltPhone: record.recipientPhoneNumberAlt
+                ? record.recipientCountryCodeAlt +
+                  record.recipientPhoneNumberAlt
+                : "",
+              state: record.state,
+              zone: record.zone
+            }
+          : {
+              recidenceType: "",
+              recipientAddress: "",
+              recipientName: "",
+              recipientPhone: "",
+              recipientAltPhone: "",
+              state: "",
+              zone: ""
+            }
     },
     userData: {
       name: record.senderName,

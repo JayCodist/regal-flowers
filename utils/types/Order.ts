@@ -33,6 +33,7 @@ export interface Order {
     firstName: string;
     lastName: string;
     phone: string;
+    name: string;
   };
   orderStatus: OrderStatus;
   zone: string;
