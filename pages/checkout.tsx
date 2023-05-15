@@ -222,7 +222,17 @@ const Checkout: FunctionComponent = () => {
           ) || null
       });
       return;
+    } else if (key === "deliveryMethod" && value === "pick-up") {
+      setFormData({
+        ...formData,
+        [key as string]: value,
+        deliveryLocation: null,
+        state: "",
+        zone: ""
+      });
+      return;
     }
+
     setFormData({
       ...formData,
       [key]: value
@@ -346,10 +356,12 @@ const Checkout: FunctionComponent = () => {
         ...adaptCheckOutFomData(order),
         freeAccount: Boolean(!user),
         deliveryLocation:
-          allDeliveryLocationOptions[order.state]?.(
+          allDeliveryLocationOptions[order.deliveryDetails.state]?.(
             currency,
             dayjs(order.deliveryDate) || dayjs()
-          ).find(option => option.name === order.zone.split("-")[0]) || null
+          ).find(
+            option => option.name === order.deliveryDetails.zone.split("-")[0]
+          ) || null
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
       setIsSenderInfoCompleted(true);
