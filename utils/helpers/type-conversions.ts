@@ -48,13 +48,13 @@ export const adaptCheckOutFomData: (
     recipientHomeAddress: record.deliveryDetails.recipientAddress,
     residenceType: getValueInParentheses(record.recipientAddress),
     deliveryMethod: homeAddress ? "delivery" : "pick-up",
-    deliveryLocation: record.despatchLocation,
+    // deliveryLocation: record.despatchLocation,
     deliveryDate: record.deliveryDate,
     message: record.deliveryMessage,
     purpose: record.purpose,
     additionalInfo: record.adminNotes,
     pickUpLocation: record.despatchLocation,
-    zone: record.zone,
-    state: record.state
+    zone: record.deliveryDetails.zone,
+    state: record.deliveryDetails.state
   };
 };

@@ -19,6 +19,17 @@ interface OrderProduct {
 
 type OrderStatus = "created" | "processing";
 
+export type DeliveryDetails = {
+  state: string;
+  zone: string;
+  recipientPhone: string;
+  recipientAltPhone: string;
+  recipientName: string;
+  recipientAddress: string;
+  recidenceType: string;
+  cost: number;
+};
+
 export interface Order {
   orderProducts: OrderProduct[];
   paymentStatus?: PaymentStatus;
@@ -36,8 +47,7 @@ export interface Order {
     name: string;
   };
   orderStatus: OrderStatus;
-  zone: string;
-  state: string;
+  deliveryDetails: DeliveryDetails;
 }
 
 type PaymentStatus =
