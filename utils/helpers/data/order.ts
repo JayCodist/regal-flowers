@@ -27,10 +27,14 @@ const adaptCheckoutStateRecord = (
           ? {
               name: record.recipientName,
               phone: record.recipientCountryCode + record.recipientPhoneNumber,
+              phoneCountryCode: record.recipientCountryCode,
               phoneAlt: record.recipientPhoneNumberAlt
                 ? record.recipientCountryCodeAlt +
                   record.recipientPhoneNumberAlt
                 : "",
+              altPhoneCountryCode:
+                record.recipientPhoneNumberAlt &&
+                record.recipientCountryCodeAlt,
               address: record.recipientHomeAddress,
               state: record.state,
               residenceType: record.residenceType,
@@ -43,7 +47,9 @@ const adaptCheckoutStateRecord = (
               address: "",
               state: "",
               residenceType: "",
-              method: record.deliveryMethod
+              method: record.deliveryMethod,
+              phoneCountryCode: "",
+              altPhoneCountryCode: ""
             },
       deliveryDetails:
         record.deliveryMethod === "delivery"
@@ -53,10 +59,14 @@ const adaptCheckoutStateRecord = (
               recipientName: record.recipientName,
               recipientPhone:
                 record.recipientCountryCode + record.recipientPhoneNumber,
+              recipientPhoneCountryCode: record.recipientCountryCode,
               recipientAltPhone: record.recipientPhoneNumberAlt
                 ? record.recipientCountryCodeAlt +
                   record.recipientPhoneNumberAlt
                 : "",
+              recipientAltPhoneCountryCode:
+                record.recipientPhoneNumberAlt &&
+                record.recipientCountryCodeAlt,
               state: record.state,
               zone: record.zone
             }
@@ -67,14 +77,16 @@ const adaptCheckoutStateRecord = (
               recipientPhone: "",
               recipientAltPhone: "",
               state: "",
-              zone: ""
+              zone: "",
+              recipientPhoneCountryCode: ""
             }
     },
     userData: {
       name: record.senderName,
       email: record.senderEmail,
       phone: record.senderCountryCode + record.senderPhoneNumber,
-      password: record.senderPassword || undefined
+      password: record.senderPassword || undefined,
+      phoneCountryCode: record.senderCountryCode
     }
   };
 
@@ -204,6 +216,7 @@ export const saveSenderInfo: (
       name: string;
       email: string;
       phone: string;
+      phoneCountryCode: string;
     };
     deliveryDate: string;
   }

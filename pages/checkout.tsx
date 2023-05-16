@@ -459,19 +459,20 @@ const Checkout: FunctionComponent = () => {
       userData: {
         email: formData.senderEmail,
         name: formData.senderName,
-        phone: formData.senderCountryCode + formData.senderPhoneNumber
+        phone: formData.senderCountryCode + formData.senderPhoneNumber,
+        phoneCountryCode: formData.senderCountryCode
       },
       deliveryDate: deliveryDate?.format("YYYY-MM-DD") || ""
     });
-    setSavingSenderInfo(false);
-    setIsSenderInfoCompleted(true);
 
     if (error) {
       notify("error", `Unable to save sender Info: ${message}`);
     } else {
       notify("success", "Saved successfully");
       setDeliveryStage("delivery-type");
+      setIsSenderInfoCompleted(true);
     }
+    setSavingSenderInfo(false);
   };
 
   const deliveryMap = {
