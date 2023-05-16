@@ -33,6 +33,14 @@ export function getAddress(str: string) {
   }
 }
 
+function removeCountryCode(phoneNumber: string, countryCode: string) {
+  if (phoneNumber.startsWith(countryCode)) {
+    phoneNumber = phoneNumber.slice(countryCode.length);
+  }
+
+  return phoneNumber;
+}
+
 export const adaptCheckOutFomData: (
   record: any
 ) => Partial<CheckoutFormData> = record => {
@@ -40,15 +48,26 @@ export const adaptCheckOutFomData: (
   return {
     senderEmail: record.client.email,
     senderName: record.client.name,
-    senderPhoneNumber: record.client.phone,
+    senderPhoneNumber: removeCountryCode(
+      record.client.phone,
+      record.client.phoneCountryCode
+    ),
+    senderCountryCode: record.client.phoneCountryCode,
     recipientName: record.deliveryDetails.recipientName,
-    recipientPhoneNumber: record.deliveryDetails.recipientPhone,
-    recipientPhoneNumberAlt: record.deliveryDetails.recipientAltPhone,
-    // recipientCountryCodeAlt: record.deliveryDetails.phoneAlt,
+    recipientPhoneNumber: removeCountryCode(
+      record.deliveryDetails.recipientPhone,
+      record.deliveryDetails.recipientPhoneCountryCode
+    ),
+    recipientCountryCode: record.deliveryDetails.recipientPhoneCountryCode,
+    recipientPhoneNumberAlt: removeCountryCode(
+      record.deliveryDetails.recipientAltPhone,
+      record.deliveryDetails.recipientAltPhoneCountryCode
+    ),
+    recipientCountryCodeAlt:
+      record.deliveryDetails.recipientAltPhoneCountryCode,
     recipientHomeAddress: record.deliveryDetails.recipientAddress,
     residenceType: getValueInParentheses(record.recipientAddress),
     deliveryMethod: homeAddress ? "delivery" : "pick-up",
-    // deliveryLocation: record.despatchLocation,
     deliveryDate: record.deliveryDate,
     message: record.deliveryMessage,
     purpose: record.purpose,
