@@ -80,7 +80,7 @@ const initialData: CheckoutFormData = {
   deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
-  shouldSaveAddress: true,
+  shouldSaveAddress: false,
   residenceType: "",
   recipientHomeAddress: "",
   additionalInfo: "",
@@ -1085,7 +1085,12 @@ const Checkout: FunctionComponent = () => {
                               onChange={value =>
                                 handleChange("shouldSaveAddress", value)
                               }
-                              text="Save Recipient"
+                              text={`${
+                                user
+                                  ? "Save Recipient"
+                                  : "Save Recipient(Login required)"
+                              }`}
+                              disabled={!user}
                             />
                           </div>
                         </div>
