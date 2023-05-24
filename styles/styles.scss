@@ -737,6 +737,10 @@ button {
   margin-top: 1rem;
   line-height: 2em;
 
+  pre {
+    white-space: break-spaces;
+  }
+
   a {
     color: #9b0000;
   }

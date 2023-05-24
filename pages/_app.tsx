@@ -57,23 +57,23 @@ const App: FunctionComponent<AppProps> = props => {
   const [shouldShowAuthDropdown, setShouldShowAuthDropdown] = useState(false);
   const [order, setOrder] = useState<Order | null>(null);
   const [deliveryDate, setDeliveryDate] = useState<null | Dayjs>(null);
+  const [orderId, setOrderId] = useState("");
 
   const initializeAppConfig = async () => {
-    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
     const savedCurrency = AppStorage.get<AppCurrency>(
       AppStorageConstants.SAVED_CURRENCY
     );
 
     setSettings({
       ...settings,
-      currency: savedCurrency || defaultSettings.currency,
-      orderId: savedOrderId || ""
+      currency: savedCurrency || defaultSettings.currency
     });
     const { error, data } = await performHandshake();
     if (error || !data) {
       // Fail quietly and continue using the set constant values
     } else {
       setUser(data.user || null);
+
       AppStorage.save(AppStorageConstants.USER_DATA, data.user);
 
       const currencyValueMap: Partial<Record<AppCurrencyName, number>> =
@@ -107,11 +107,13 @@ const App: FunctionComponent<AppProps> = props => {
     initializeAppConfig();
 
     const savedUser = AppStorage.get<User>(AppStorageConstants.USER_DATA);
+    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
     setUser(
       savedUser
         ? { ...savedUser, recipients: savedUser.recipients || [] }
         : null
     );
+    setOrderId(savedOrderId || "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -163,11 +165,8 @@ const App: FunctionComponent<AppProps> = props => {
     },
     shouldShowAuthDropdown,
     setShouldShowAuthDropdown,
-    orderId: settings.orderId,
-    setOrderId: (orderId: string) => {
-      setSettings({ ...settings, orderId });
-      AppStorage.save(AppStorageConstants.ORDER_ID, orderId);
-    },
+    orderId,
+    setOrderId,
     order,
     setOrder
   };

@@ -161,7 +161,9 @@ const Checkout: FunctionComponent = () => {
     setShouldShowAuthDropdown,
     setOrder,
     order,
-    setCartItems
+    setCartItems,
+    orderId,
+    setOrderId
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -200,7 +202,7 @@ const Checkout: FunctionComponent = () => {
 
   const router = useRouter();
   const {
-    query: { orderId },
+    query: { orderId: _orderId },
     isReady
   } = router;
 
@@ -243,13 +245,17 @@ const Checkout: FunctionComponent = () => {
 
   const fetchOrder = async () => {
     setPageLoading(true);
-    const res = await getOrder(orderId as string);
+    const res = await getOrder(_orderId as string);
     const { error, data } = res;
 
     if (error) {
       notify("error", "Order not found! Please create an order");
       router.push("/");
     } else {
+      if (_orderId !== orderId) {
+        setOrderId(_orderId as string);
+      }
+
       setOrder(data);
       const _isPaid =
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
@@ -332,7 +338,7 @@ const Checkout: FunctionComponent = () => {
 
   useEffect(() => {
     if (isReady) {
-      if (orderId) {
+      if (_orderId) {
         fetchOrder();
       } else {
         notify("error", "Invalid link");
@@ -340,7 +346,7 @@ const Checkout: FunctionComponent = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, isReady, currentStage]);
+  }, [_orderId, isReady, currentStage]);
 
   useEffect(() => {
     fetchPurposes();
@@ -420,7 +426,7 @@ const Checkout: FunctionComponent = () => {
       }
     }
     setLoading(true);
-    const { error, message } = await updateCheckoutState(orderId as string, {
+    const { error, message } = await updateCheckoutState(_orderId as string, {
       ...formData,
       deliveryDate
     });
@@ -455,7 +461,7 @@ const Checkout: FunctionComponent = () => {
       return;
     }
     setSavingSenderInfo(true);
-    const { error, message } = await saveSenderInfo(orderId as string, {
+    const { error, message } = await saveSenderInfo(_orderId as string, {
       userData: {
         email: formData.senderEmail,
         name: formData.senderName,

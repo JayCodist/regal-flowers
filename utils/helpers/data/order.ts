@@ -2,6 +2,7 @@ import { CartItem } from "../../types/Core";
 import { Order, CheckoutFormData } from "../../types/Order";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
+import AppStorage, { AppStorageConstants } from "../storage-helpers";
 import { getKeyMap } from "../type-helpers";
 
 const adaptCheckoutStateRecord = (
@@ -141,6 +142,7 @@ export const createOrder: (payload: {
         image: item.image
       }))
     });
+    AppStorage.save(AppStorageConstants.ORDER_ID, response.data.id);
     return {
       error: false,
       data: response.data as Order
