@@ -64,6 +64,7 @@ import PhoneInput from "../components/phone-input/PhoneInput";
 import { emailValidator } from "../utils/helpers/validators";
 import { getResidentTypes } from "../utils/helpers/data/residentTypes";
 import { ProductImage } from "../utils/types/Product";
+import { formatPhoneNumber } from "../utils/helpers/formatters";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -214,7 +215,8 @@ const Checkout: FunctionComponent = () => {
         zone: ""
       });
       return;
-    } else if (key === "zone") {
+    }
+    if (key === "zone") {
       setFormData({
         ...formData,
         [key as string]: value,
@@ -224,13 +226,26 @@ const Checkout: FunctionComponent = () => {
           ) || null
       });
       return;
-    } else if (key === "deliveryMethod" && value === "pick-up") {
+    }
+    if (key === "deliveryMethod" && value === "pick-up") {
       setFormData({
         ...formData,
         [key as string]: value,
         deliveryLocation: null,
         state: "",
         zone: ""
+      });
+      return;
+    }
+    if (
+      key === "senderPhoneNumber" ||
+      key === "recipientPhoneNumber" ||
+      key === "recipientPhoneNumberAlt"
+    ) {
+      const phoneNumber = formatPhoneNumber(value as string);
+      setFormData({
+        ...formData,
+        [key as string]: phoneNumber
       });
       return;
     }
@@ -410,20 +425,26 @@ const Checkout: FunctionComponent = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (emailValidator(formData.senderEmail)) {
-      notify("error", "Please enter a valid email address");
+    if (formData.deliveryMethod === "pick-up" && !formData.pickUpLocation) {
+      notify("error", "Please complete the delivery location");
       return;
-    } else if (
-      formData.deliveryMethod === "pick-up" &&
-      !formData.pickUpLocation
+    }
+    if (
+      formData.deliveryMethod === "delivery" &&
+      (!formData.state || !formData.zone || !formData.deliveryLocation)
     ) {
       notify("error", "Please complete the delivery location");
       return;
-    } else if (formData.deliveryMethod === "delivery") {
-      if (!formData.state && !formData.zone && !formData.deliveryLocation) {
-        notify("error", "Please complete the delivery location");
-        return;
-      }
+    }
+    if (
+      formData.deliveryMethod === "delivery" &&
+      (!formData.recipientPhoneNumber ||
+        !formData.recipientName ||
+        !formData.residenceType ||
+        !formData.recipientHomeAddress)
+    ) {
+      notify("error", "Please complete the receiver's information");
+      return;
     }
     setLoading(true);
     const { error, message } = await updateCheckoutState(_orderId as string, {
@@ -1402,7 +1423,11 @@ const Checkout: FunctionComponent = () => {
                   )}
                   <Button
                     className={styles["shopping-btn"]}
-                    onClick={() => router.push("/product-category/bouquets")}
+                    onClick={() =>
+                      router.push(
+                        "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+                      )
+                    }
                   >
                     Continue Shopping
                   </Button>
