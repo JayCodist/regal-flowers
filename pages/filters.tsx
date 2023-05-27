@@ -47,7 +47,7 @@ const giftMap: Record<string, string> = {
   "wine-and-champagne": "wine-and-champagne",
   "gift-packs": "gift-packs",
   perfumes: "perfumes",
-  balloon: "balloon"
+  balloons: "balloons"
 };
 
 type ProductClass = "vip" | "regular";
