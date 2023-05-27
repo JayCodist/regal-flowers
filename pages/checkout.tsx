@@ -375,7 +375,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         ...adaptCheckOutFomData(order),
-        freeAccount: Boolean(!user),
+        freeAccount: false,
         deliveryLocation:
           allDeliveryLocationOptions[order.deliveryDetails.state]?.(
             currency,
@@ -386,6 +386,7 @@ const Checkout: FunctionComponent = () => {
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
       setIsSenderInfoCompleted(true);
+      setDeliveryStage("customization-message");
     } else if (
       order?.client.name &&
       order?.client.phone &&
@@ -1708,6 +1709,7 @@ const Checkout: FunctionComponent = () => {
                         format="D MMMM YYYY"
                         responsive
                         disablePastDays
+                        dropdownTop
                       />
                     </div>
 
@@ -1718,10 +1720,15 @@ const Checkout: FunctionComponent = () => {
                         text="Create a Free Account"
                       />
                     )}
+
                     <Button
-                      onClick={() => setDeliveryStage("delivery-type")}
+                      loading={savingSenderInfo}
+                      onClick={
+                        isSenderInfoCompleted
+                          ? () => setDeliveryStage("delivery-type")
+                          : handleSaveSenderInfo
+                      }
                       className="vertical-margin xl"
-                      responsive
                     >
                       Continue
                     </Button>
@@ -2314,9 +2321,21 @@ const Checkout: FunctionComponent = () => {
                     {paymentMethods.map((method, index) => (
                       <div key={index}>
                         <div
-                          className={[styles.method].join(" ")}
-                          onClick={() =>
-                            paymentHandlerMap[method.paymentName]()
+                          className={[
+                            styles.method,
+                            !method.supportedCurrencies.includes(
+                              currency.name
+                            ) && styles.inactive
+                          ].join(" ")}
+                          onClick={
+                            method.supportedCurrencies.includes(currency.name)
+                              ? () => paymentHandlerMap[method.paymentName]()
+                              : undefined
+                          }
+                          title={
+                            !method.supportedCurrencies.includes(currency.name)
+                              ? `This payment method does not support ${currency.name}`
+                              : ""
                           }
                         >
                           <div className="flex spaced-lg center-align">
