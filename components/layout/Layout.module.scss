@@ -180,7 +180,7 @@
             margin-bottom: 0;
           }
         }
-        &:has(.grid) {
+        &.grid {
           display: grid;
           grid-template-columns: repeat(3, max-content);
           column-gap: 1.5rem;

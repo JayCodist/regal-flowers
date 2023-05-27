@@ -544,12 +544,18 @@ const Header: FunctionComponent = () => {
                     {link.subtitle && (
                       <p className={styles.subtitle}>{link.subtitle}</p>
                     )}
-                    <div className={[styles["sub-link"]].join(" ")}>
+                    <div
+                      className={[
+                        styles["sub-link"],
+                        link.children.some(child => child.children.length) &&
+                          styles.grid
+                      ].join(" ")}
+                    >
                       {link.children.map((child, index) => (
                         <div
-                          className={[
-                            child.children.length && styles.grid
-                          ].join(" ")}
+                          // className={[
+                          //   child.children.length && styles.grid
+                          // ].join(" ")}
                           key={index}
                         >
                           {child.url ? (
@@ -579,16 +585,18 @@ const Header: FunctionComponent = () => {
                               )}
                             </>
                           )}
-                          {child.children.map((grandChild, index) => (
-                            <Link href={grandChild.url} key={index}>
-                              <a
-                                className={styles["grand-title"]}
-                                onClick={() => setActiveNav("")}
-                              >
-                                {grandChild.title}
-                              </a>
-                            </Link>
-                          ))}
+                          <div className={styles["grand-children"]}>
+                            {child.children.map((grandChild, index) => (
+                              <Link href={grandChild.url} key={index}>
+                                <a
+                                  className={styles["grand-title"]}
+                                  onClick={() => setActiveNav("")}
+                                >
+                                  {grandChild.title}
+                                </a>
+                              </Link>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
