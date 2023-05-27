@@ -52,19 +52,20 @@ export const adaptCheckOutFomData: (
       record.client.phone,
       record.client.phoneCountryCode
     ),
-    senderCountryCode: record.client.phoneCountryCode,
+    senderCountryCode: record.client.phoneCountryCode || "+234",
     recipientName: record.deliveryDetails.recipientName,
     recipientPhoneNumber: removeCountryCode(
       record.deliveryDetails.recipientPhone,
       record.deliveryDetails.recipientPhoneCountryCode
     ),
-    recipientCountryCode: record.deliveryDetails.recipientPhoneCountryCode,
+    recipientCountryCode:
+      record.deliveryDetails.recipientPhoneCountryCode || "+234",
     recipientPhoneNumberAlt: removeCountryCode(
       record.deliveryDetails.recipientAltPhone,
       record.deliveryDetails.recipientAltPhoneCountryCode
     ),
     recipientCountryCodeAlt:
-      record.deliveryDetails.recipientAltPhoneCountryCode,
+      record.deliveryDetails.recipientAltPhoneCountryCode || "+234",
     recipientHomeAddress: record.deliveryDetails.recipientAddress,
     residenceType: getValueInParentheses(record.recipientAddress),
     deliveryMethod: homeAddress ? "delivery" : "pick-up",
