@@ -52,7 +52,7 @@ import {
   CreateOrderData,
   OnApproveData
 } from "@paypal/paypal-js";
-import { AppCurrency, CartItem } from "../utils/types/Core";
+import { AppCurrency } from "../utils/types/Core";
 import {
   adaptCheckOutFomData,
   getOptionsFromArray,
@@ -63,7 +63,7 @@ import { Stage } from "../utils/types/Core";
 import PhoneInput from "../components/phone-input/PhoneInput";
 import { emailValidator } from "../utils/helpers/validators";
 import { getResidentTypes } from "../utils/helpers/data/residentTypes";
-import { ProductImage } from "../utils/types/Product";
+import { formatPhoneNumber } from "../utils/helpers/formatters";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -80,7 +80,7 @@ const initialData: CheckoutFormData = {
   deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
-  shouldSaveAddress: true,
+  shouldSaveAddress: false,
   residenceType: "",
   recipientHomeAddress: "",
   additionalInfo: "",
@@ -161,7 +161,8 @@ const Checkout: FunctionComponent = () => {
     setShouldShowAuthDropdown,
     setOrder,
     order,
-    setCartItems
+    orderId,
+    setOrderId
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -200,7 +201,7 @@ const Checkout: FunctionComponent = () => {
 
   const router = useRouter();
   const {
-    query: { orderId },
+    query: { orderId: _orderId },
     isReady
   } = router;
 
@@ -212,7 +213,8 @@ const Checkout: FunctionComponent = () => {
         zone: ""
       });
       return;
-    } else if (key === "zone") {
+    }
+    if (key === "zone") {
       setFormData({
         ...formData,
         [key as string]: value,
@@ -222,13 +224,26 @@ const Checkout: FunctionComponent = () => {
           ) || null
       });
       return;
-    } else if (key === "deliveryMethod" && value === "pick-up") {
+    }
+    if (key === "deliveryMethod" && value === "pick-up") {
       setFormData({
         ...formData,
         [key as string]: value,
         deliveryLocation: null,
         state: "",
         zone: ""
+      });
+      return;
+    }
+    if (
+      key === "senderPhoneNumber" ||
+      key === "recipientPhoneNumber" ||
+      key === "recipientPhoneNumberAlt"
+    ) {
+      const phoneNumber = formatPhoneNumber(value as string);
+      setFormData({
+        ...formData,
+        [key as string]: phoneNumber
       });
       return;
     }
@@ -243,13 +258,17 @@ const Checkout: FunctionComponent = () => {
 
   const fetchOrder = async () => {
     setPageLoading(true);
-    const res = await getOrder(orderId as string);
+    const res = await getOrder(_orderId as string);
     const { error, data } = res;
 
     if (error) {
       notify("error", "Order not found! Please create an order");
       router.push("/");
     } else {
+      if (_orderId !== orderId) {
+        setOrderId(_orderId as string);
+      }
+
       setOrder(data);
       const _isPaid =
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
@@ -332,7 +351,7 @@ const Checkout: FunctionComponent = () => {
 
   useEffect(() => {
     if (isReady) {
-      if (orderId) {
+      if (_orderId) {
         fetchOrder();
       } else {
         notify("error", "Invalid link");
@@ -340,7 +359,7 @@ const Checkout: FunctionComponent = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, isReady, currentStage]);
+  }, [_orderId, isReady, currentStage]);
 
   useEffect(() => {
     fetchPurposes();
@@ -354,7 +373,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         ...adaptCheckOutFomData(order),
-        freeAccount: Boolean(!user),
+        freeAccount: false,
         deliveryLocation:
           allDeliveryLocationOptions[order.deliveryDetails.state]?.(
             currency,
@@ -365,6 +384,7 @@ const Checkout: FunctionComponent = () => {
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
       setIsSenderInfoCompleted(true);
+      setDeliveryStage("customization-message");
     } else if (
       order?.client.name &&
       order?.client.phone &&
@@ -386,41 +406,35 @@ const Checkout: FunctionComponent = () => {
         freeAccount: Boolean(!user)
       });
     }
-    const _cartItems: CartItem[] =
-      order?.orderProducts?.map(item => ({
-        image: item.image as ProductImage,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        key: item.key,
-        size: item.size,
-        description: item.description,
-        cartId: item.size || "" + item.key
-      })) || [];
-    setCartItems(_cartItems);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (emailValidator(formData.senderEmail)) {
-      notify("error", "Please enter a valid email address");
+    if (formData.deliveryMethod === "pick-up" && !formData.pickUpLocation) {
+      notify("error", "Please complete the delivery location");
       return;
-    } else if (
-      formData.deliveryMethod === "pick-up" &&
-      !formData.pickUpLocation
+    }
+    if (
+      formData.deliveryMethod === "delivery" &&
+      (!formData.state || !formData.zone || !formData.deliveryLocation)
     ) {
       notify("error", "Please complete the delivery location");
       return;
-    } else if (formData.deliveryMethod === "delivery") {
-      if (!formData.state && !formData.zone && !formData.deliveryLocation) {
-        notify("error", "Please complete the delivery location");
-        return;
-      }
+    }
+    if (
+      formData.deliveryMethod === "delivery" &&
+      (!formData.recipientPhoneNumber ||
+        !formData.recipientName ||
+        !formData.residenceType ||
+        !formData.recipientHomeAddress)
+    ) {
+      notify("error", "Please complete the receiver's information");
+      return;
     }
     setLoading(true);
-    const { error, message } = await updateCheckoutState(orderId as string, {
+    const { error, message } = await updateCheckoutState(_orderId as string, {
       ...formData,
       deliveryDate
     });
@@ -455,7 +469,7 @@ const Checkout: FunctionComponent = () => {
       return;
     }
     setSavingSenderInfo(true);
-    const { error, message } = await saveSenderInfo(orderId as string, {
+    const { error, message } = await saveSenderInfo(_orderId as string, {
       userData: {
         email: formData.senderEmail,
         name: formData.senderName,
@@ -1085,7 +1099,12 @@ const Checkout: FunctionComponent = () => {
                               onChange={value =>
                                 handleChange("shouldSaveAddress", value)
                               }
-                              text="Save Recipient"
+                              text={`${
+                                user
+                                  ? "Save Recipient"
+                                  : "Save Recipient(Login required)"
+                              }`}
+                              disabled={!user}
                             />
                           </div>
                         </div>
@@ -1391,7 +1410,11 @@ const Checkout: FunctionComponent = () => {
                   )}
                   <Button
                     className={styles["shopping-btn"]}
-                    onClick={() => router.push("/product-category/bouquets")}
+                    onClick={() =>
+                      router.push(
+                        "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+                      )
+                    }
                   >
                     Continue Shopping
                   </Button>
@@ -1672,6 +1695,7 @@ const Checkout: FunctionComponent = () => {
                         format="D MMMM YYYY"
                         responsive
                         disablePastDays
+                        dropdownTop
                       />
                     </div>
 
@@ -1682,10 +1706,15 @@ const Checkout: FunctionComponent = () => {
                         text="Create a Free Account"
                       />
                     )}
+
                     <Button
-                      onClick={() => setDeliveryStage("delivery-type")}
+                      loading={savingSenderInfo}
+                      onClick={
+                        isSenderInfoCompleted
+                          ? () => setDeliveryStage("delivery-type")
+                          : handleSaveSenderInfo
+                      }
                       className="vertical-margin xl"
-                      responsive
                     >
                       Continue
                     </Button>
@@ -2278,9 +2307,21 @@ const Checkout: FunctionComponent = () => {
                     {paymentMethods.map((method, index) => (
                       <div key={index}>
                         <div
-                          className={[styles.method].join(" ")}
-                          onClick={() =>
-                            paymentHandlerMap[method.paymentName]()
+                          className={[
+                            styles.method,
+                            !method.supportedCurrencies.includes(
+                              currency.name
+                            ) && styles.inactive
+                          ].join(" ")}
+                          onClick={
+                            method.supportedCurrencies.includes(currency.name)
+                              ? () => paymentHandlerMap[method.paymentName]()
+                              : undefined
+                          }
+                          title={
+                            !method.supportedCurrencies.includes(currency.name)
+                              ? `This payment method does not support ${currency.name}`
+                              : ""
                           }
                         >
                           <div className="flex spaced-lg center-align">

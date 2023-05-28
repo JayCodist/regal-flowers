@@ -1478,7 +1478,7 @@ export const gifts: { title: string; url: string; category?: string }[] = [
   },
   {
     title: "Balloons",
-    url: "/product-category/balloon",
+    url: "/product-category/balloons",
     category: "Balloons"
   },
   {
@@ -2137,7 +2137,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/balloon",
+        url: "/product-category/balloons",
         title: "Balloons",
         children: []
       },

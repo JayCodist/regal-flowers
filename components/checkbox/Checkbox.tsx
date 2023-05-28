@@ -9,21 +9,35 @@ interface CheckboxProps {
   className?: string;
   responsive?: boolean;
   type?: "primary" | "transparent";
+  disabled?: boolean;
 }
 const Checkbox = (props: CheckboxProps) => {
-  const { onChange = () => {}, text, name, checked, className, type } = props;
+  const {
+    onChange = () => {},
+    text,
+    name,
+    checked,
+    className,
+    type,
+    disabled
+  } = props;
 
   const _onChange = (e: ChangeEvent<HTMLInputElement>) =>
     onChange(e.target.checked);
 
   return (
-    <label className={[styles.wrapper, className].join(" ")}>
+    <label
+      className={[styles.wrapper, disabled && styles.disabled, className].join(
+        " "
+      )}
+    >
       <input
         name={name}
         className={styles.checkbox}
         checked={checked}
         onChange={_onChange}
         type="checkbox"
+        disabled={disabled}
       />
       <span
         className={[styles["check-wrapper"], styles[type || "primary"]].join(

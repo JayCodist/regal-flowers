@@ -19,6 +19,7 @@ interface DatePickerProps {
   placeholder?: string;
   content?: React.ReactNode;
   disablePastDays?: boolean;
+  dropdownTop?: boolean;
 }
 
 const DatePicker = (props: DatePickerProps) => {
@@ -35,7 +36,8 @@ const DatePicker = (props: DatePickerProps) => {
     placeholder,
     dropdownAlignment = "left",
     content,
-    disablePastDays
+    disablePastDays,
+    dropdownTop
   } = props;
 
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -139,7 +141,8 @@ const DatePicker = (props: DatePickerProps) => {
         className={[
           styles.dropdown,
           showDropdown && styles["show-dropdown"],
-          styles[dropdownAlignment]
+          styles[dropdownAlignment],
+          dropdownTop && styles["on-top"]
         ].join(" ")}
       >
         <DayPicker

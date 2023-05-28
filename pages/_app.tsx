@@ -57,23 +57,25 @@ const App: FunctionComponent<AppProps> = props => {
   const [shouldShowAuthDropdown, setShouldShowAuthDropdown] = useState(false);
   const [order, setOrder] = useState<Order | null>(null);
   const [deliveryDate, setDeliveryDate] = useState<null | Dayjs>(null);
+  const [orderId, setOrderId] = useState("");
 
   const initializeAppConfig = async () => {
-    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
     const savedCurrency = AppStorage.get<AppCurrency>(
       AppStorageConstants.SAVED_CURRENCY
     );
+    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
 
     setSettings({
       ...settings,
-      currency: savedCurrency || defaultSettings.currency,
-      orderId: savedOrderId || ""
+      currency: savedCurrency || defaultSettings.currency
     });
+    setOrderId(savedOrderId || "");
     const { error, data } = await performHandshake();
     if (error || !data) {
       // Fail quietly and continue using the set constant values
     } else {
       setUser(data.user || null);
+
       AppStorage.save(AppStorageConstants.USER_DATA, data.user);
 
       const currencyValueMap: Partial<Record<AppCurrencyName, number>> =
@@ -149,7 +151,7 @@ const App: FunctionComponent<AppProps> = props => {
     cartItems: settings.cartItems,
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
-      // AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
+      AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
     },
     allCurrencies: settings.allCurrencies,
     shouldShowCart,
@@ -163,11 +165,8 @@ const App: FunctionComponent<AppProps> = props => {
     },
     shouldShowAuthDropdown,
     setShouldShowAuthDropdown,
-    orderId: settings.orderId,
-    setOrderId: (orderId: string) => {
-      setSettings({ ...settings, orderId });
-      AppStorage.save(AppStorageConstants.ORDER_ID, orderId);
-    },
+    orderId,
+    setOrderId,
     order,
     setOrder
   };

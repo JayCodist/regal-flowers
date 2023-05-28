@@ -32,9 +32,6 @@ import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import { CartItem, Design } from "../../utils/types/Core";
 import DatePicker from "../date-picker/DatePicker";
 import { ProductImage } from "../../utils/types/Product";
-import AppStorage, {
-  AppStorageConstants
-} from "../../utils/helpers/storage-helpers";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -544,12 +541,18 @@ const Header: FunctionComponent = () => {
                     {link.subtitle && (
                       <p className={styles.subtitle}>{link.subtitle}</p>
                     )}
-                    <div className={[styles["sub-link"]].join(" ")}>
+                    <div
+                      className={[
+                        styles["sub-link"],
+                        link.children.some(child => child.children.length) &&
+                          styles.grid
+                      ].join(" ")}
+                    >
                       {link.children.map((child, index) => (
                         <div
-                          className={[
-                            child.children.length && styles.grid
-                          ].join(" ")}
+                          // className={[
+                          //   child.children.length && styles.grid
+                          // ].join(" ")}
                           key={index}
                         >
                           {child.url ? (
@@ -579,16 +582,18 @@ const Header: FunctionComponent = () => {
                               )}
                             </>
                           )}
-                          {child.children.map((grandChild, index) => (
-                            <Link href={grandChild.url} key={index}>
-                              <a
-                                className={styles["grand-title"]}
-                                onClick={() => setActiveNav("")}
-                              >
-                                {grandChild.title}
-                              </a>
-                            </Link>
-                          ))}
+                          <div className={styles["grand-children"]}>
+                            {child.children.map((grandChild, index) => (
+                              <Link href={grandChild.url} key={index}>
+                                <a
+                                  className={styles["grand-title"]}
+                                  onClick={() => setActiveNav("")}
+                                >
+                                  {grandChild.title}
+                                </a>
+                              </Link>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -741,8 +746,6 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel, header = "main" } = props;
 
-  const { isReady } = useRouter();
-
   const {
     cartItems,
     setCartItems,
@@ -800,7 +803,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   useEffect(() => {
-    if (isReady && orderId) {
+    if (orderId) {
       fetchOrder(orderId as string);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -905,7 +908,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     } else if (data) {
       setOrder(data);
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
-      AppStorage.save(AppStorageConstants.ORDER_ID, data.id);
       header === "main" && router.push(`/checkout?orderId=${data.id}`);
 
       notify("success", "Order updated successfully");
