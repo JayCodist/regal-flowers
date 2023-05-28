@@ -52,7 +52,7 @@ import {
   CreateOrderData,
   OnApproveData
 } from "@paypal/paypal-js";
-import { AppCurrency, CartItem } from "../utils/types/Core";
+import { AppCurrency } from "../utils/types/Core";
 import {
   adaptCheckOutFomData,
   getOptionsFromArray,
@@ -63,7 +63,6 @@ import { Stage } from "../utils/types/Core";
 import PhoneInput from "../components/phone-input/PhoneInput";
 import { emailValidator } from "../utils/helpers/validators";
 import { getResidentTypes } from "../utils/helpers/data/residentTypes";
-import { ProductImage } from "../utils/types/Product";
 import { formatPhoneNumber } from "../utils/helpers/formatters";
 
 const initialData: CheckoutFormData = {
@@ -162,7 +161,6 @@ const Checkout: FunctionComponent = () => {
     setShouldShowAuthDropdown,
     setOrder,
     order,
-    setCartItems,
     orderId,
     setOrderId
   } = useContext(SettingsContext);
@@ -408,18 +406,6 @@ const Checkout: FunctionComponent = () => {
         freeAccount: Boolean(!user)
       });
     }
-    const _cartItems: CartItem[] =
-      order?.orderProducts?.map(item => ({
-        image: item.image as ProductImage,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        key: item.key,
-        size: item.size,
-        description: item.description,
-        cartId: item.size || "" + item.key
-      })) || [];
-    setCartItems(_cartItems);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);

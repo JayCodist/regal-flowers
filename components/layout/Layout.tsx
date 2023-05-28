@@ -32,9 +32,6 @@ import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import { CartItem, Design } from "../../utils/types/Core";
 import DatePicker from "../date-picker/DatePicker";
 import { ProductImage } from "../../utils/types/Product";
-import AppStorage, {
-  AppStorageConstants
-} from "../../utils/helpers/storage-helpers";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -749,8 +746,6 @@ interface CartContextProps {
 const CartContext: FunctionComponent<CartContextProps> = props => {
   const { visible, cancel, header = "main" } = props;
 
-  const { isReady } = useRouter();
-
   const {
     cartItems,
     setCartItems,
@@ -808,7 +803,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   useEffect(() => {
-    if (isReady && orderId) {
+    if (orderId) {
       fetchOrder(orderId as string);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -913,7 +908,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     } else if (data) {
       setOrder(data);
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
-      AppStorage.save(AppStorageConstants.ORDER_ID, data.id);
       header === "main" && router.push(`/checkout?orderId=${data.id}`);
 
       notify("success", "Order updated successfully");

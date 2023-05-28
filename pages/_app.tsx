@@ -63,11 +63,13 @@ const App: FunctionComponent<AppProps> = props => {
     const savedCurrency = AppStorage.get<AppCurrency>(
       AppStorageConstants.SAVED_CURRENCY
     );
+    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
 
     setSettings({
       ...settings,
       currency: savedCurrency || defaultSettings.currency
     });
+    setOrderId(savedOrderId || "");
     const { error, data } = await performHandshake();
     if (error || !data) {
       // Fail quietly and continue using the set constant values
@@ -107,13 +109,11 @@ const App: FunctionComponent<AppProps> = props => {
     initializeAppConfig();
 
     const savedUser = AppStorage.get<User>(AppStorageConstants.USER_DATA);
-    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
     setUser(
       savedUser
         ? { ...savedUser, recipients: savedUser.recipients || [] }
         : null
     );
-    setOrderId(savedOrderId || "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -151,7 +151,7 @@ const App: FunctionComponent<AppProps> = props => {
     cartItems: settings.cartItems,
     setCartItems: (cartItems: CartItem[]) => {
       setSettings({ ...settings, cartItems });
-      // AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
+      AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
     },
     allCurrencies: settings.allCurrencies,
     shouldShowCart,
