@@ -2511,7 +2511,13 @@ export const allDeliveryLocationZones: Record<
           <br /> Not sure or need us to reach the recipient to confirm address
         </p>
       ),
-      value: "highLagos-zone1"
+      value: !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      )
+        ? "highLagos-zone1"
+        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+        ? "freeLagosVals-zone1"
+        : "mediumLagosVals-zone1"
     },
     {
       label: (
@@ -2526,7 +2532,13 @@ export const allDeliveryLocationZones: Record<
           similar environs)
         </p>
       ),
-      value: "highLagos-zone2"
+      value: !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      )
+        ? "highLagos-zone2"
+        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+        ? "freeLagosVals-zone2"
+        : "mediumLagosVals-zone2"
     },
     {
       label: (
@@ -2549,8 +2561,20 @@ export const allDeliveryLocationZones: Record<
         )
           ? freeDeliveryThresholdVals
           : freeDeliveryThreshold)[currency?.name || "NGN"]
-          ? "freeLagos-zone3"
-          : "mediumLagos-zone3"
+          ? `freeLagos${
+              ["13-02", "14-02", "15-02"].includes(
+                deliveryDate?.format("DD-MM") || ""
+              )
+                ? "Vals"
+                : ""
+            }-zone3`
+          : `mediumLagos${
+              ["13-02", "14-02", "15-02"].includes(
+                deliveryDate?.format("DD-MM") || ""
+              )
+                ? "Vals"
+                : ""
+            }-zone3`
     }
   ],
   abuja: (amount, currency, deliveryDate) => [
@@ -2561,7 +2585,13 @@ export const allDeliveryLocationZones: Record<
           <br /> Not sure or need us to reach the recipient to confirm address
         </p>
       ),
-      value: "highAbuja-zone1"
+      value: !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      )
+        ? "highAbuja-zone1"
+        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+        ? "freeAbujaVals-zone1"
+        : "mediumAbujaVals-zone1"
     },
     {
       label: (
@@ -2572,7 +2602,13 @@ export const allDeliveryLocationZones: Record<
           Kagini, Dawaki and similar environs
         </p>
       ),
-      value: "highAbuja-zone2"
+      value: !["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      )
+        ? "highAbuja-zone2"
+        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+        ? "freeAbujaVals-zone2"
+        : "mediumAbujaVals-zone2"
     },
     {
       label: (
@@ -2590,8 +2626,20 @@ export const allDeliveryLocationZones: Record<
         )
           ? freeDeliveryThresholdVals
           : freeDeliveryThreshold)[currency?.name || "NGN"]
-          ? "freeAbuja-zone3"
-          : "mediumAbuja-zone3"
+          ? `freeAbuja${
+              ["13-02", "14-02", "15-02"].includes(
+                deliveryDate?.format("DD-MM") || ""
+              )
+                ? "Vals"
+                : ""
+            }-zone3`
+          : `mediumAbuja${
+              ["13-02", "14-02", "15-02"].includes(
+                deliveryDate?.format("DD-MM") || ""
+              )
+                ? "Vals"
+                : ""
+            }-zone3`
     }
   ]
 };
@@ -2645,7 +2693,7 @@ export const allDeliveryLocationOptions: Record<
         }${freeDeliveryThresholdVals[
           currency.name
         ].toLocaleString()} (or please pickup instead)`,
-        name: "highLagosVals",
+        name: "mediumLagosVals",
         amount: 15000
       },
       ["13-02", "14-02", "15-02"].includes(
@@ -2694,7 +2742,7 @@ export const allDeliveryLocationOptions: Record<
         }${freeDeliveryThresholdVals[
           currency.name
         ].toLocaleString()} (or please pickup instead)`,
-        name: "highAbujaVals",
+        name: "mediumAbujaVals",
         amount: 15000
       },
       ["13-02", "14-02", "15-02"].includes(
