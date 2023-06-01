@@ -689,24 +689,7 @@ const Checkout: FunctionComponent = () => {
                             className="input-group half-width"
                           />
 
-                          {!user ? (
-                            <div className="input-group half-width">
-                              <span className="question">Create Password</span>
-                              <Input
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                                value={formData.senderPassword}
-                                onChange={value =>
-                                  handleChange("senderPassword", value)
-                                }
-                                dimmed
-                                autoComplete="new-password"
-                                required={formData.freeAccount}
-                                showPasswordIcon
-                              />
-                            </div>
-                          ) : (
+                          {!user && (
                             <div className="input-group half-width compact">
                               <span className="question">
                                 Pickup/Delivery Date
@@ -721,7 +704,25 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           )}
                         </div>
-                        {!user && (
+                        {!user ? (
+                          <div className="input-group half-width">
+                            <span className="question">Create Password</span>
+                            <Input
+                              name="password"
+                              type="password"
+                              placeholder="Password"
+                              value={formData.senderPassword}
+                              onChange={value =>
+                                handleChange("senderPassword", value)
+                              }
+                              dimmed
+                              autoComplete="new-password"
+                              required={formData.freeAccount}
+                              showPasswordIcon
+                              disabled={!formData.freeAccount}
+                            />
+                          </div>
+                        ) : (
                           <div className="input-group half-width compact">
                             <span className="question">
                               Pickup/Delivery Date
@@ -735,6 +736,7 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
                         )}
+
                         {!user && (
                           <div className="flex between center-align">
                             <Checkbox
@@ -1667,6 +1669,18 @@ const Checkout: FunctionComponent = () => {
                       }
                       className="input-group"
                     />
+
+                    <div className="input-group">
+                      <span className="question">Pickup/Delivery Date</span>
+                      <DatePicker
+                        value={deliveryDate}
+                        onChange={setDeliveryDate}
+                        format="D MMMM YYYY"
+                        responsive
+                        disablePastDays
+                        dropdownTop
+                      />
+                    </div>
                     {!user && (
                       <div className="input-group">
                         <span className="question">Create Password</span>
@@ -1681,23 +1695,12 @@ const Checkout: FunctionComponent = () => {
                           dimmed
                           responsive
                           autoComplete="new-password"
-                          required
+                          required={formData.freeAccount}
                           showPasswordIcon
+                          disabled={!formData.freeAccount}
                         />
                       </div>
                     )}
-
-                    <div className="input-group">
-                      <span className="question">Pickup/Delivery Date</span>
-                      <DatePicker
-                        value={deliveryDate}
-                        onChange={setDeliveryDate}
-                        format="D MMMM YYYY"
-                        responsive
-                        disablePastDays
-                        dropdownTop
-                      />
-                    </div>
 
                     {!user && (
                       <Checkbox
