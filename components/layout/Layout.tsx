@@ -799,6 +799,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         })) || [];
       setCartItems(_cartItems);
       setOrder(data);
+      setDeliveryDate(data?.deliveryDate ? dayjs(data?.deliveryDate) : null);
     }
   };
 
