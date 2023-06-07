@@ -162,7 +162,8 @@ const Checkout: FunctionComponent = () => {
     setOrder,
     order,
     orderId,
-    setOrderId
+    setOrderId,
+    confirm
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -373,7 +374,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         ...adaptCheckOutFomData(order),
-        freeAccount: false,
+        freeAccount: true,
         deliveryLocation:
           allDeliveryLocationOptions[order.deliveryDetails.state]?.(
             currency,
@@ -433,6 +434,7 @@ const Checkout: FunctionComponent = () => {
       notify("error", "Please complete the receiver's information");
       return;
     }
+
     setLoading(true);
     const { error, message } = await updateCheckoutState(_orderId as string, {
       ...formData,
@@ -441,6 +443,35 @@ const Checkout: FunctionComponent = () => {
     setLoading(false);
 
     if (error) {
+      if (message === "User already exists") {
+        confirm({
+          title: "Create Account",
+          body:
+            "We couldn't create an account for you, as the user already exists",
+          onOk() {
+            setShouldShowAuthDropdown(true);
+          },
+          cancelText: "Continue as Guest",
+          okText: "Login",
+          onCancel: async () => {
+            const { error, message } = await updateCheckoutState(
+              _orderId as string,
+              {
+                ...formData,
+                deliveryDate,
+                freeAccount: false
+              }
+            );
+            if (error) {
+              notify("error", `Unable to save order: ${message}`);
+              return;
+            }
+            setCurrentStage(2);
+            setDeliveryStage("payment");
+          }
+        });
+        return;
+      }
       notify("error", `Unable to save order: ${message}`);
     } else {
       setCurrentStage(2);

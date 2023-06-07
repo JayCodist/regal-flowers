@@ -2,7 +2,11 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/styles.scss";
-import Layout, { Toaster } from "../components/layout/Layout";
+import Layout, {
+  ConfirmModal,
+  ConfirmParams,
+  Toaster
+} from "../components/layout/Layout";
 import SettingsContext, {
   NotifyType,
   SettingsControls
@@ -44,6 +48,15 @@ const toasterDuration = {
   error: 5000
 };
 
+const defaultConfirmParams = {
+  body: "",
+  cancelText: "",
+  okText: "",
+  onCancel: () => {},
+  onOk: () => {},
+  title: ""
+};
+
 const App: FunctionComponent<AppProps> = props => {
   const { Component, pageProps } = props;
   const [settings, setSettings] = useState<Settings>(defaultSettings);
@@ -52,6 +65,10 @@ const App: FunctionComponent<AppProps> = props => {
     message?: string;
     type?: NotifyType;
   }>({});
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmParams, setConfirmParams] = useState<ConfirmParams>(
+    defaultConfirmParams
+  );
   const [user, setUser] = useState<User | null>(null);
   const [shouldShowCart, setShouldShowCart] = useState(false);
   const [shouldShowAuthDropdown, setShouldShowAuthDropdown] = useState(false);
@@ -137,6 +154,16 @@ const App: FunctionComponent<AppProps> = props => {
     setShowToaster(false);
   };
 
+  const confirm = (params: ConfirmParams) => {
+    setConfirmParams(params);
+    setShowConfirm(true);
+  };
+
+  const dismissConfirm = () => {
+    setShowConfirm(false);
+    setConfirmParams(defaultConfirmParams);
+  };
+
   const settingsControls: SettingsControls = {
     currency: settings.currency,
     setCurrency: (currency: AppCurrency) => {
@@ -168,7 +195,8 @@ const App: FunctionComponent<AppProps> = props => {
     orderId,
     setOrderId,
     order,
-    setOrder
+    setOrder,
+    confirm
   };
 
   const headTags = (
@@ -184,6 +212,11 @@ const App: FunctionComponent<AppProps> = props => {
         {headTags}
         <Layout>
           <Component {...pageProps} />
+          <ConfirmModal
+            visible={showConfirm}
+            confirmParams={confirmParams}
+            cancel={dismissConfirm}
+          />
           <Toaster
             visible={showToaster}
             toasterParams={toasterParams}
