@@ -3,6 +3,7 @@ import { createContext } from "react";
 import { AppCurrency, CartItem, Settings, Stage } from "../types/Core";
 import User from "../types/User";
 import { Order } from "../types/Order";
+import { ConfirmParams } from "../../components/layout/Layout";
 
 export type NotifyType = "success" | "error" | "info";
 
@@ -27,6 +28,7 @@ export interface SettingsControls extends Settings {
   setOrderId: (orderId: string) => void;
   order: Order | null;
   setOrder: (order: Order | null) => void;
+  confirm: (confirmParams: ConfirmParams) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -52,7 +54,8 @@ const SettingsContext = createContext<SettingsControls>({
   orderId: "",
   setOrderId: () => {},
   order: null,
-  setOrder: () => {}
+  setOrder: () => {},
+  confirm: () => {}
 });
 
 export default SettingsContext;
