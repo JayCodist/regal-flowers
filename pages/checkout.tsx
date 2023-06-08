@@ -401,6 +401,7 @@ const Checkout: FunctionComponent = () => {
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
       setIsSenderInfoCompleted(true);
+      setDeliveryStage("delivery-type");
     } else {
       setFormData({
         ...formData,
@@ -1743,11 +1744,7 @@ const Checkout: FunctionComponent = () => {
 
                     <Button
                       loading={savingSenderInfo}
-                      onClick={
-                        isSenderInfoCompleted
-                          ? () => setDeliveryStage("delivery-type")
-                          : handleSaveSenderInfo
-                      }
+                      onClick={handleSaveSenderInfo}
                       className="vertical-margin xl"
                     >
                       Continue

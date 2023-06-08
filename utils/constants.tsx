@@ -401,8 +401,7 @@ export const paymentMethods: PaymentMethod[] = [
         />
       </svg>
     ),
-    info:
-      "You will be redirected to the PayPal website after submitting your order",
+    info: "Credit/Dedit Cards - You don't need to own a Paypal account.",
     other: [
       {
         icon: (
