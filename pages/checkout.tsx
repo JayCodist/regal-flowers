@@ -30,7 +30,6 @@ import {
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
 import {
-  getOrder,
   saveSenderInfo,
   updateCheckoutState
 } from "../utils/helpers/data/order";
@@ -159,10 +158,7 @@ const Checkout: FunctionComponent = () => {
     setShouldShowCart,
     redirectUrl,
     setShouldShowAuthDropdown,
-    setOrder,
     order,
-    orderId,
-    setOrderId,
     confirm
   } = useContext(SettingsContext);
 
@@ -202,8 +198,7 @@ const Checkout: FunctionComponent = () => {
 
   const router = useRouter();
   const {
-    query: { orderId: _orderId },
-    isReady
+    query: { orderId: _orderId }
   } = router;
 
   const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
@@ -256,32 +251,6 @@ const Checkout: FunctionComponent = () => {
   };
 
   const { initializeMonnify, isMonnifyReady } = useMonnify();
-
-  const fetchOrder = async () => {
-    setPageLoading(true);
-    const res = await getOrder(_orderId as string);
-    const { error, data } = res;
-
-    if (error) {
-      notify("error", "Order not found! Please create an order");
-      router.push("/");
-    } else {
-      if (_orderId !== orderId) {
-        setOrderId(_orderId as string);
-      }
-
-      setOrder(data);
-      const _isPaid =
-        /go\s*ahead/i.test(data?.paymentStatus || "") ||
-        /^paid/i.test(data?.paymentStatus || "");
-      setIsPaid(_isPaid);
-      if (_isPaid) {
-        setCurrentStage(3);
-      }
-    }
-
-    setPageLoading(false);
-  };
 
   useEffect(() => {
     if (selectedRecipient) {
@@ -349,18 +318,6 @@ const Checkout: FunctionComponent = () => {
       residenceType &&
       recipientHomeAddress
   );
-
-  useEffect(() => {
-    if (isReady) {
-      if (_orderId) {
-        fetchOrder();
-      } else {
-        notify("error", "Invalid link");
-        router.push("/");
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_orderId, isReady, currentStage]);
 
   useEffect(() => {
     fetchPurposes();
