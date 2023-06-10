@@ -119,6 +119,9 @@ export const getOrder: (
       data: response.data as Order
     };
   } catch (err) {
+    if ((err as Error).message === "Order not found") {
+      AppStorage.remove(AppStorageConstants.ORDER_ID);
+    }
     return {
       error: true,
       message: (err as Error).message,

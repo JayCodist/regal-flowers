@@ -757,7 +757,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     orderId,
     setOrderId,
     setOrder,
-    setShouldShowCart
+    setShouldShowCart,
+    currentStage
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -770,6 +771,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   const backdropRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+  const {
+    query: { orderId: _orderId },
+    isReady,
+    push
+  } = router;
 
   const handleCloseCart = (e: MouseEvent) => {
     const cartBody = cartRef.current;
@@ -780,12 +786,20 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const fetchOrder = async (orderId: string) => {
-    const { error, data } = await getOrder(orderId);
+    const { error, data, message } = await getOrder(orderId);
 
     if (error) {
-      notify("error", "Order not found! Please create an order");
-      router.push("/");
+      if (message === "Order not found") {
+        setOrderId("");
+        setOrder(null);
+        setCartItems([]);
+        setDeliveryDate(null);
+      }
+      push("/");
     } else {
+      if (_orderId !== orderId) {
+        setOrderId(_orderId as string);
+      }
       const _cartItems: CartItem[] =
         data?.orderProducts?.map(item => ({
           image: item.image as ProductImage,
@@ -804,12 +818,16 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
+  console.log("orderId", orderId);
+
   useEffect(() => {
-    if (orderId) {
-      fetchOrder(orderId as string);
+    if (isReady) {
+      if (orderId || _orderId) {
+        fetchOrder(orderId as string);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]);
+  }, [orderId, _orderId, isReady, currentStage]);
 
   const handleRemoveItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.cartId === key);
