@@ -794,8 +794,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         setOrder(null);
         setCartItems([]);
         setDeliveryDate(null);
+        push("/");
       }
-      push("/");
     } else {
       if (_orderId !== orderId) {
         setOrderId(_orderId as string);
@@ -818,14 +818,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
-  console.log("orderId", orderId);
-
   useEffect(() => {
     if (isReady) {
       if (orderId || _orderId) {
-        fetchOrder(orderId as string);
+        fetchOrder(orderId || (_orderId as string));
       }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId, _orderId, isReady, currentStage]);
 

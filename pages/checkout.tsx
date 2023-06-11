@@ -879,7 +879,7 @@ const Checkout: FunctionComponent = () => {
                           )}
 
                           {formData.deliveryMethod === "delivery" &&
-                            formData.state && (
+                            formData.zone && (
                               <div className={styles["pickup-locations"]}>
                                 {deliveryLocationOptions.length > 0 && (
                                   <p className="primary-color align-icon normal-text bold margin-bottom">
