@@ -171,9 +171,7 @@ const Checkout: FunctionComponent = () => {
         0
       ) || 0;
 
-    return formData.deliveryLocation?.amount
-      ? total + formData.deliveryLocation?.amount
-      : total;
+    return total + (formData.deliveryLocation?.amount || 0);
   }, [order?.orderProducts, formData.deliveryLocation]);
 
   const subTotal = useMemo(() => {
@@ -512,29 +510,32 @@ const Checkout: FunctionComponent = () => {
   const abujaDeliveryZoneOptions = useMemo(() => {
     return (
       allDeliveryLocationZones["abuja"]?.(
-        total || 0,
+        subTotal || 0,
         currency,
         deliveryDate || dayjs()
       ) || []
     );
-  }, [currency, deliveryDate, total]);
+  }, [currency, deliveryDate, subTotal]);
 
   const lagosDeliveryZoneOptions = useMemo(() => {
     return (
       allDeliveryLocationZones["lagos"]?.(
-        total || 0,
+        subTotal || 0,
         currency,
         deliveryDate || dayjs()
       ) || []
     );
-  }, [currency, deliveryDate, total]);
+  }, [currency, deliveryDate, subTotal]);
 
-  const selectedZone =
-    allDeliveryLocationZones[formData.state]?.(
-      total || 0,
-      currency,
-      deliveryDate || dayjs()
-    )?.find(zone => zone.value === formData.zone) || null;
+  const selectedZone = useMemo(
+    () =>
+      allDeliveryLocationZones[formData.state]?.(
+        subTotal || 0,
+        currency,
+        deliveryDate || dayjs()
+      )?.find(zone => zone.value === formData.zone) || null,
+    [currency, deliveryDate, formData.state, formData.zone, subTotal]
+  );
 
   if (pageLoading) {
     return (
