@@ -364,6 +364,14 @@ const Checkout: FunctionComponent = () => {
       });
     }
 
+    const _isPaid =
+      /go\s*ahead/i.test(order?.paymentStatus || "") ||
+      /^paid/i.test(order?.paymentStatus || "");
+    setIsPaid(_isPaid);
+    if (_isPaid) {
+      setCurrentStage(3);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
@@ -1383,23 +1391,27 @@ const Checkout: FunctionComponent = () => {
                       {order?.fullOrderId || ""}
                     </span>
                   </p>
-                  {isDelivered(order?.deliveryStatus) && (
-                    <div
-                      className={`flex center-align spaced ${styles["order-info"]}`}
-                    >
-                      <div className={styles.icon}>
-                        <img
-                          src="icons/info.svg"
-                          alt="information"
-                          className="generic-icon"
-                        />
-                      </div>
+
+                  <div
+                    className={`flex column center-align spaced normal-text ${styles["order-info"]}`}
+                  >
+                    <p>
+                      Your order was received, please note your order number in
+                      every correspondence with us.
+                    </p>
+                    <div className="flex spaced">
+                      <img
+                        src="icons/info.svg"
+                        alt="information"
+                        className={["generic-icon", styles.icon].join(" ")}
+                      />
                       <p>
-                        Your order was received, please note your order number
-                        in every correspondence with us.
+                        If your order is a pickup, please mention your order
+                        number on arrival.
                       </p>
                     </div>
-                  )}
+                  </div>
+
                   <Button
                     className={styles["shopping-btn"]}
                     onClick={() =>
