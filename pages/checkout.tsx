@@ -332,7 +332,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         ...adaptCheckOutFomData(order),
-        freeAccount: true,
+        freeAccount: false,
         deliveryLocation:
           allDeliveryLocationOptions[order.deliveryDetails.state]?.(
             currency,
@@ -378,19 +378,22 @@ const Checkout: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const validateDeliveryMethod = () => {
     if (formData.deliveryMethod === "pick-up" && !formData.pickUpLocation) {
       notify("error", "Please complete the delivery location");
-      return;
-    }
-    if (
+      return false;
+    } else if (
       formData.deliveryMethod === "delivery" &&
       (!formData.state || !formData.zone || !formData.deliveryLocation)
     ) {
       notify("error", "Please complete the delivery location");
-      return;
+      return false;
     }
+
+    return true;
+  };
+
+  const validateReceiverInfo = () => {
     if (
       formData.deliveryMethod === "delivery" &&
       (!formData.recipientPhoneNumber ||
@@ -399,6 +402,17 @@ const Checkout: FunctionComponent = () => {
         !formData.recipientHomeAddress)
     ) {
       notify("error", "Please complete the receiver's information");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const isDeliveryMethodComplete = validateDeliveryMethod();
+    const isReceiverInfoComplete = validateReceiverInfo();
+
+    if (!isDeliveryMethodComplete || !isReceiverInfoComplete) {
       return;
     }
 
@@ -1217,6 +1231,16 @@ const Checkout: FunctionComponent = () => {
                           </span>{" "}
                         </p>
                         <div className={styles["payment-methods"]}>
+                          <p
+                            className={`${styles.info} flex center-align spaced margin-bottom`}
+                          >
+                            <InfoIcon fill="#1C6DD0" />{" "}
+                            <span>
+                              Payment issues? Simply Email
+                              payments@regalflowers.com.ng or Call/Whatsapp
+                              +2347011992888
+                            </span>{" "}
+                          </p>
                           {paymentMethods.map((method, index) => (
                             <div key={index}>
                               <div
@@ -1936,13 +1960,17 @@ const Checkout: FunctionComponent = () => {
                     </div>
 
                     <Button
-                      onClick={() =>
+                      onClick={() => {
+                        const isDeliveryMethodComplete = validateDeliveryMethod();
+                        if (!isDeliveryMethodComplete) {
+                          return;
+                        }
                         setDeliveryStage(
                           formData.deliveryMethod === "delivery"
                             ? "receiver"
                             : "customization-message"
-                        )
-                      }
+                        );
+                      }}
                       className="vertical-margin xl"
                       responsive
                     >
@@ -2098,9 +2126,14 @@ const Checkout: FunctionComponent = () => {
                           />
                         </div>
                         <Button
-                          onClick={() =>
-                            setDeliveryStage("customization-message")
-                          }
+                          onClick={() => {
+                            const isReceiverInfoComplete = validateReceiverInfo();
+
+                            if (!isReceiverInfoComplete) {
+                              return;
+                            }
+                            setDeliveryStage("customization-message");
+                          }}
                           className="vertical-margin xl"
                           responsive
                         >
@@ -2309,6 +2342,14 @@ const Checkout: FunctionComponent = () => {
                   </div>
 
                   <div className={styles["payment-methods"]}>
+                    <p className={`${styles.info} flex center-align spaced`}>
+                      <InfoIcon fill="#1C6DD0" />{" "}
+                      <span>
+                        Payment issues? Simply Email
+                        payments@regalflowers.com.ng or Call/Whatsapp
+                        +2347011992888
+                      </span>{" "}
+                    </p>
                     {paymentMethods.map((method, index) => (
                       <div key={index}>
                         <div
