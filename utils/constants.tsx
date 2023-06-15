@@ -492,7 +492,7 @@ export const paymentMethods: PaymentMethod[] = [
         />
       </svg>
     ),
-    info: "You will be redirected to Paystack to complete your payment",
+    info: "Credit/Dedit Cards",
     other: [
       {
         icon: (

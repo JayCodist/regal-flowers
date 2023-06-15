@@ -571,34 +571,8 @@ const ProductsPage: FunctionComponent<{
         )}
         <div className={styles["product-wrapper"]}>
           <div className="flex between block center-align">
-            <div className={styles["date-wrapper"]}>
-              {deviceType === "desktop" && (
-                <div>
-                  <span>Delivery Date: </span>
-                  <DatePicker
-                    value={deliveryDate}
-                    onChange={setDeliveryDate}
-                    format="D MMM YYYY"
-                    placeholder="Select Date"
-                    disablePastDays
-                  />
-                </div>
-              )}
-
-              <div className="flex column">
-                <span>Sort: </span>
-                <Select
-                  options={sortOptions}
-                  value={sort}
-                  onSelect={value => setSort(value as Sort)}
-                  placeholder="Default"
-                  className={styles["sort"]}
-                />
-              </div>
-            </div>
-
             <div className={styles["filter-mobile"]} ref={filterDropdownRef}>
-              <span>Filter: </span>
+              <span>Filters: </span>
               <button
                 className={styles.btn}
                 onClick={() => setShouldShowFilter(!shouldShowFilter)}
@@ -714,6 +688,16 @@ const ProductsPage: FunctionComponent<{
                   </div>
                 ))}
               </div>
+            </div>
+            <div className="flex column">
+              <span>Sort: </span>
+              <Select
+                options={sortOptions}
+                value={sort}
+                onSelect={value => setSort(value as Sort)}
+                placeholder="Default"
+                className={styles["sort"]}
+              />
             </div>
           </div>
 
