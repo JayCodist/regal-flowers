@@ -63,6 +63,9 @@ import PhoneInput from "../components/phone-input/PhoneInput";
 import { emailValidator } from "../utils/helpers/validators";
 import { getResidentTypes } from "../utils/helpers/data/residentTypes";
 import { formatPhoneNumber } from "../utils/helpers/formatters";
+import AppStorage, {
+  AppStorageConstants
+} from "../utils/helpers/storage-helpers";
 
 const initialData: CheckoutFormData = {
   senderName: "",
@@ -369,7 +372,7 @@ const Checkout: FunctionComponent = () => {
       /^paid/i.test(order?.paymentStatus || "");
     setIsPaid(_isPaid);
     if (_isPaid) {
-      setCurrentStage(3);
+      markAsPaid();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -559,6 +562,7 @@ const Checkout: FunctionComponent = () => {
   const markAsPaid = () => {
     setIsPaid(true);
     setCurrentStage(3);
+    AppStorage.remove(AppStorageConstants.ORDER_ID);
   };
 
   const paymentHandlerMap: Record<PaymentName, () => void> = {
@@ -2392,22 +2396,22 @@ const Checkout: FunctionComponent = () => {
 
                   <div className={[styles["order-details"]].join(" ")}>
                     {order?.orderProducts?.map((item, index) => (
-                      <div key={index} className="flex column spaced">
-                        <div className={styles["order-detail"]}>
-                          <span className="flex between">
-                            <strong>Name</strong>
-                            <span className={styles["detail-value"]}>
-                              {item.name}
-                            </span>
+                      // <div key={index} className="flex column spaced">
+                      <div className={styles["order-detail"]} key={index}>
+                        <span className="flex between">
+                          <strong>Name</strong>
+                          <span className={styles["detail-value"]}>
+                            {item.name}
                           </span>
-                          <span className="flex between">
-                            <strong>Qty</strong>
-                            <span className={styles["detail-value"]}>
-                              {item.quantity}
-                            </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Qty</strong>
+                          <span className={styles["detail-value"]}>
+                            {item.quantity}
                           </span>
-                        </div>
+                        </span>
                       </div>
+                      // </div>
                     ))}
                   </div>
 
