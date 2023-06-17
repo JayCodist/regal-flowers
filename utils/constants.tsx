@@ -2086,7 +2086,7 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Design",
-        url: "",
+        url: "/filters?shopBy=wrapped bouquet",
         children: [
           {
             title: "Wrapped Bouquets",
@@ -2107,7 +2107,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Flower Types",
-        url: "",
+        url: "/filters?shopBy=fresh+flowers",
         children: [
           {
             title: "Fresh Flowers",
@@ -2128,7 +2128,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Packages",
-        url: "",
+        url: "/filters?shopBy=flowers",
         children: [
           {
             title: "View Bundled Products",
@@ -2139,7 +2139,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Delivery",
-        url: "",
+        url: "/filters?shopBy=same+day+delivery",
         children: [
           {
             title: "Same Day Delivery",
@@ -2150,7 +2150,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Flower Name",
-        url: "",
+        url: "/filters?shopBy=roses",
         children: [
           {
             title: "Roses",

@@ -11,6 +11,10 @@
   background-color: white;
   box-shadow: 0 0.2rem 0.5rem 0.2rem rgba(0, 0, 0, 0.1);
 
+  @media (max-width: 500px) {
+    padding: 1rem 1.5rem;
+  }
+
   .hamburger-menu {
     display: none;
     height: 1.5rem;
@@ -28,7 +32,7 @@
     opacity: 0;
     visibility: hidden;
     position: fixed;
-    top: 6rem;
+    top: 5rem;
     left: 0;
     width: 100vw;
     height: 90vh;
@@ -354,7 +358,7 @@
   }
 }
 .main {
-  margin-top: 5.5rem;
+  margin-top: 5rem;
   min-height: calc(100vh - 5.5rem);
   background-color: white;
 }

@@ -80,7 +80,25 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
           </p>
         );
       } else {
-        notify("info", "Item Already In Cart");
+        const _cartItems = cartItems.map(item => {
+          if (item.key === product.key) {
+            item.quantity += 1;
+          }
+          return item;
+        });
+        setCartItems(_cartItems);
+        notify(
+          "success",
+          <p>
+            Item Added To Cart{" "}
+            <span
+              className="view-cart"
+              onClick={() => setShouldShowCart(!shouldShowCart)}
+            >
+              View Cart
+            </span>
+          </p>
+        );
       }
       e.stopPropagation();
     };
