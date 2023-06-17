@@ -1659,6 +1659,9 @@ const Checkout: FunctionComponent = () => {
           <div className={styles.content}>
             {currentStage === 1 && (
               <div>
+                <Link href={redirectUrl}>
+                  <a className="margin-bottom spaced">{"< Back to Shop"}</a>
+                </Link>
                 {deliveryStage === "sender-info" && (
                   <div>
                     <div className="flex align-center between">
@@ -1780,6 +1783,9 @@ const Checkout: FunctionComponent = () => {
                       {formData.senderEmail && <p>{formData.senderEmail}</p>}
                       {formData.senderPhoneNumber && (
                         <p>{formData.senderPhoneNumber}</p>
+                      )}
+                      {deliveryDate && (
+                        <p>{deliveryDate.format("dddd, MMMM Do YYYY")}</p>
                       )}
                     </div>
 
@@ -1910,32 +1916,34 @@ const Checkout: FunctionComponent = () => {
                                 </div>
                               )}
 
-                              {deliveryLocationOptions.map(locationOption => (
-                                <div
-                                  className="vertical-margin spaced"
-                                  key={locationOption.name}
-                                >
-                                  <Radio
-                                    label={locationOption.label}
-                                    onChange={() =>
-                                      handleChange(
-                                        "deliveryLocation",
-                                        locationOption
-                                      )
-                                    }
-                                    disabled={
-                                      locationOption.name !==
-                                      (
-                                        (selectedZone?.value as string) || ""
-                                      )?.split("-")[0]
-                                    }
-                                    checked={
-                                      formData.deliveryLocation ===
-                                      locationOption
-                                    }
-                                  />
-                                </div>
-                              ))}
+                              {deliveryLocationOptions.map(locationOption => {
+                                return (
+                                  <div
+                                    className="vertical-margin spaced"
+                                    key={locationOption.name}
+                                  >
+                                    <Radio
+                                      label={locationOption.label}
+                                      onChange={() =>
+                                        handleChange(
+                                          "deliveryLocation",
+                                          locationOption
+                                        )
+                                      }
+                                      disabled={
+                                        locationOption.name !==
+                                        (
+                                          (selectedZone?.value as string) || ""
+                                        )?.split("-")[0]
+                                      }
+                                      checked={
+                                        formData.deliveryLocation?.name ===
+                                        locationOption.name
+                                      }
+                                    />
+                                  </div>
+                                );
+                              })}
                             </div>
                           )}
 
@@ -2014,6 +2022,9 @@ const Checkout: FunctionComponent = () => {
                       {formData.senderEmail && <p>{formData.senderEmail}</p>}
                       {formData.senderPhoneNumber && (
                         <p>{formData.senderPhoneNumber}</p>
+                      )}
+                      {deliveryDate && (
+                        <p>{deliveryDate.format("dddd, MMMM Do YYYY")}</p>
                       )}
                     </div>
                     <div className="flex between">
@@ -2133,7 +2144,12 @@ const Checkout: FunctionComponent = () => {
                             onChange={value =>
                               handleChange("shouldSaveAddress", value)
                             }
-                            text="Save Address"
+                            text={`${
+                              user
+                                ? "Save Recipient"
+                                : "Save Recipient(Login required)"
+                            }`}
+                            disabled={!user}
                           />
                         </div>
                         <Button
@@ -2174,6 +2190,9 @@ const Checkout: FunctionComponent = () => {
                       {formData.senderEmail && <p>{formData.senderEmail}</p>}
                       {formData.senderPhoneNumber && (
                         <p>{formData.senderPhoneNumber}</p>
+                      )}
+                      {deliveryDate && (
+                        <p>{deliveryDate.format("dddd, MMMM Do YYYY")}</p>
                       )}
                     </div>
                     <div className="flex between">
@@ -2299,18 +2318,27 @@ const Checkout: FunctionComponent = () => {
 
             {currentStage === 2 && (
               <div className={styles["payment-tab"]}>
+                <button
+                  onClick={() => setCurrentStage(1)}
+                  className="margin-bottom"
+                >
+                  {"<< Back To Checkout"}
+                </button>
                 <div className={`${styles.border} padded`}>
                   <div className="flex between ">
                     <span className="normal-text">Order Total</span>
                     <span className="normal-text bold">
-                      {getPriceDisplay(total, currency)}
+                      {getPriceDisplay(subTotal, currency)}
                     </span>
                   </div>
-                  {formData.deliveryMethod === "pick-up" && (
+                  {formData.deliveryMethod === "delivery" && (
                     <div className="flex between">
                       <span className="normal-text">Delivery</span>
                       <span className="normal-text bold">
-                        {getPriceDisplay(total || 0, currency)}
+                        {getPriceDisplay(
+                          formData.deliveryLocation?.amount || 0,
+                          currency
+                        )}
                       </span>
                     </div>
                   )}
