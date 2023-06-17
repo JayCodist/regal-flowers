@@ -771,11 +771,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   const backdropRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
-  const {
-    query: { orderId: _orderId },
-    isReady,
-    push
-  } = router;
+  const { push } = router;
 
   const handleCloseCart = (e: MouseEvent) => {
     const cartBody = cartRef.current;
@@ -797,36 +793,38 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         push("/");
       }
     } else {
-      if (_orderId !== orderId) {
-        setOrderId(_orderId as string);
+      const _isPaid =
+        /go\s*ahead/i.test(data?.paymentStatus || "") ||
+        /^paid/i.test(data?.paymentStatus || "");
+
+      if (!_isPaid) {
+        const _cartItems: CartItem[] =
+          data?.orderProducts?.map(item => ({
+            image: item.image as ProductImage,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            key: item.key,
+            // design: item.design,  //add design later
+            size: item.size,
+            description: item.description,
+            cartId: item.size || "" + item.key
+          })) || [];
+        setCartItems(_cartItems);
       }
-      const _cartItems: CartItem[] =
-        data?.orderProducts?.map(item => ({
-          image: item.image as ProductImage,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          key: item.key,
-          // design: item.design,  //add design later
-          size: item.size,
-          description: item.description,
-          cartId: item.size || "" + item.key
-        })) || [];
-      setCartItems(_cartItems);
+
       setOrder(data);
       setDeliveryDate(data?.deliveryDate ? dayjs(data?.deliveryDate) : null);
     }
   };
 
   useEffect(() => {
-    if (isReady) {
-      if (orderId || _orderId) {
-        fetchOrder(orderId || (_orderId as string));
-      }
+    if (orderId) {
+      fetchOrder(orderId);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, _orderId, isReady, currentStage]);
+  }, [orderId, currentStage]);
 
   const handleRemoveItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.cartId === key);

@@ -75,6 +75,7 @@ const App: FunctionComponent<AppProps> = props => {
   const [order, setOrder] = useState<Order | null>(null);
   const [deliveryDate, setDeliveryDate] = useState<null | Dayjs>(null);
   const [orderId, setOrderId] = useState("");
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const initializeAppConfig = async () => {
     const savedCurrency = AppStorage.get<AppCurrency>(
@@ -175,14 +176,8 @@ const App: FunctionComponent<AppProps> = props => {
       setSettings({ ...settings, currentStage }),
     deliveryDate,
     setDeliveryDate,
-    cartItems: settings.cartItems,
-    setCartItems: (cartItems: CartItem[]) => {
-      setSettings({ ...settings, cartItems });
-      // AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
-      if (cartItems.length === 0) {
-        AppStorage.remove(AppStorageConstants.ORDER_ID);
-      }
-    },
+    cartItems,
+    setCartItems,
     allCurrencies: settings.allCurrencies,
     shouldShowCart,
     setShouldShowCart,

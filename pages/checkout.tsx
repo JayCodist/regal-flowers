@@ -162,7 +162,9 @@ const Checkout: FunctionComponent = () => {
     redirectUrl,
     setShouldShowAuthDropdown,
     order,
-    confirm
+    confirm,
+    setCartItems,
+    setOrderId
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -186,12 +188,20 @@ const Checkout: FunctionComponent = () => {
     );
   }, [order]);
 
+  const markAsPaid = () => {
+    setIsPaid(true);
+    setCartItems([]);
+    setCurrentStage(3);
+    setOrderId("");
+    AppStorage.remove(AppStorageConstants.ORDER_ID);
+  };
+
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
     email: formData.senderEmail || placeholderEmail,
     amount: Math.round(((total || 0) * 100) / currency.conversionRate),
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
-    publicKey: "pk_test_d4948f2002e85ddfd66c71bf10d9fa969fb163b4",
+    publicKey: "pk_test_3840ef4162a5542a0b92ba1eca94147059df955d",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
   };
 
@@ -199,7 +209,8 @@ const Checkout: FunctionComponent = () => {
 
   const router = useRouter();
   const {
-    query: { orderId: _orderId }
+    query: { orderId: _orderId },
+    isReady
   } = router;
 
   const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
@@ -322,57 +333,63 @@ const Checkout: FunctionComponent = () => {
 
   useEffect(() => {
     fetchPurposes();
-    setCurrentStage(1);
     fetchResidentTypes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (order?.orderStatus === "processing") {
-      setFormData({
-        ...formData,
-        ...adaptCheckOutFomData(order),
-        freeAccount: false,
-        deliveryLocation:
-          allDeliveryLocationOptions[order.deliveryDetails.state]?.(
-            currency,
-            dayjs(order.deliveryDate) || dayjs()
-          ).find(
-            option => option.name === order.deliveryDetails.zone.split("-")[0]
-          ) || null
-      });
-      setDeliveryDate(dayjs(order?.deliveryDate));
-      setIsSenderInfoCompleted(true);
-      setDeliveryStage("customization-message");
-    } else if (
-      order?.client.name &&
-      order?.client.phone &&
-      order.client.email &&
-      order.deliveryDate
-    ) {
-      setFormData({
-        ...formData,
-        senderName: order?.client.name,
-        senderPhoneNumber: order?.client.phone,
-        deliveryDate: dayjs(order.deliveryDate),
-        senderEmail: order.client.email
-      });
-      setDeliveryDate(dayjs(order?.deliveryDate));
-      setIsSenderInfoCompleted(true);
-      setDeliveryStage("delivery-type");
-    } else {
-      setFormData({
-        ...formData,
-        freeAccount: Boolean(!user)
-      });
+    if (isReady) {
+      setOrderId(_orderId as string);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_orderId, isReady]);
 
+  useEffect(() => {
     const _isPaid =
       /go\s*ahead/i.test(order?.paymentStatus || "") ||
       /^paid/i.test(order?.paymentStatus || "");
     setIsPaid(_isPaid);
     if (_isPaid) {
       markAsPaid();
+    } else {
+      if (order?.orderStatus === "processing") {
+        setFormData({
+          ...formData,
+          ...adaptCheckOutFomData(order),
+          freeAccount: false,
+          deliveryLocation:
+            allDeliveryLocationOptions[order.deliveryDetails.state]?.(
+              currency,
+              dayjs(order.deliveryDate) || dayjs()
+            ).find(
+              option => option.name === order.deliveryDetails.zone.split("-")[0]
+            ) || null
+        });
+        setDeliveryDate(dayjs(order?.deliveryDate));
+        setIsSenderInfoCompleted(true);
+        setDeliveryStage("customization-message");
+      } else if (
+        order?.client.name &&
+        order?.client.phone &&
+        order.client.email &&
+        order.deliveryDate
+      ) {
+        setFormData({
+          ...formData,
+          senderName: order?.client.name,
+          senderPhoneNumber: order?.client.phone,
+          deliveryDate: dayjs(order.deliveryDate),
+          senderEmail: order.client.email
+        });
+        setDeliveryDate(dayjs(order?.deliveryDate));
+        setIsSenderInfoCompleted(true);
+        setDeliveryStage("delivery-type");
+      } else {
+        setFormData({
+          ...formData,
+          freeAccount: Boolean(!user)
+        });
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -572,12 +589,6 @@ const Checkout: FunctionComponent = () => {
       </div>
     );
   }
-
-  const markAsPaid = () => {
-    setIsPaid(true);
-    setCurrentStage(3);
-    AppStorage.remove(AppStorageConstants.ORDER_ID);
-  };
 
   const paymentHandlerMap: Record<PaymentName, () => void> = {
     paystack: () => {
