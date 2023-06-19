@@ -393,6 +393,11 @@
     opacity: 0;
     padding-bottom: 1rem;
 
+    @media (max-width: 650px) {
+      right: 50%;
+      transform: translateX(50%);
+    }
+
     &.active {
       top: 5.5rem;
       opacity: 1;
