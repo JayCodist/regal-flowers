@@ -114,7 +114,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         </p>
       );
     } else {
-      if (existingCartItem.name !== selectedSize?.name) {
+      if (existingCartItem.size !== selectedSize?.name) {
         setCartItems([...cartItems, cartItem]);
         notify(
           "success",
