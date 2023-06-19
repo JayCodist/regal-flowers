@@ -1123,18 +1123,20 @@ const Checkout: FunctionComponent = () => {
                                 rows={3}
                               />
                             </div>
-                            <Checkbox
-                              checked={formData.shouldSaveAddress}
-                              onChange={value =>
-                                handleChange("shouldSaveAddress", value)
-                              }
-                              text={`${
-                                user
-                                  ? "Save Recipient"
-                                  : "Save Recipient(Login required)"
-                              }`}
-                              disabled={!user}
-                            />
+                            {!user && (
+                              <Checkbox
+                                checked={formData.shouldSaveAddress}
+                                onChange={value =>
+                                  handleChange("shouldSaveAddress", value)
+                                }
+                                text={`${
+                                  user
+                                    ? "Save Recipient"
+                                    : "Save Recipient(Login required)"
+                                }`}
+                                disabled={!user}
+                              />
+                            )}
                           </div>
                         </div>
                       )}
@@ -1785,7 +1787,7 @@ const Checkout: FunctionComponent = () => {
                         <p>{formData.senderPhoneNumber}</p>
                       )}
                       {deliveryDate && (
-                        <p>{deliveryDate.format("dddd, MMMM Do YYYY")}</p>
+                        <p>{deliveryDate.format("dddd, MMMM DD YYYY")}</p>
                       )}
                     </div>
 
@@ -2139,18 +2141,20 @@ const Checkout: FunctionComponent = () => {
                               rows={3}
                             />
                           </div>
-                          <Checkbox
-                            checked={formData.shouldSaveAddress}
-                            onChange={value =>
-                              handleChange("shouldSaveAddress", value)
-                            }
-                            text={`${
-                              user
-                                ? "Save Recipient"
-                                : "Save Recipient(Login required)"
-                            }`}
-                            disabled={!user}
-                          />
+                          {!user && (
+                            <Checkbox
+                              checked={formData.shouldSaveAddress}
+                              onChange={value =>
+                                handleChange("shouldSaveAddress", value)
+                              }
+                              text={`${
+                                user
+                                  ? "Save Recipient"
+                                  : "Save Recipient(Login required)"
+                              }`}
+                              disabled={!user}
+                            />
+                          )}
                         </div>
                         <Button
                           onClick={() => {

@@ -399,6 +399,8 @@
 
       @media (max-width: 650px) {
         top: 5rem;
+        right: 50%;
+        transform: translateX(50%);
       }
     }
 

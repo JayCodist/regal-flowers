@@ -24,7 +24,6 @@ import {
   sortOptions,
   tagsMap
 } from "../utils/constants";
-import DatePicker from "../components/date-picker/DatePicker";
 import Select from "../components/select/Select";
 import {
   FetchResourceParams,
@@ -107,15 +106,13 @@ const ProductsPage: FunctionComponent<{
   const [filterCategories, setFilterCategories] = useState(_filterCategories);
   const [sort, setSort] = useState<Sort>("name-asc");
   const [hasMore, setHasMore] = useState(false);
-  const [shouldShowFilter, setShouldShowFilter] = useState(false);
+  const [shouldShowFilter, setShouldShowFilter] = useState(true);
 
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
   });
 
-  const { notify, deliveryDate, setDeliveryDate, setRedirectUrl } = useContext(
-    SettingsContext
-  );
+  const { notify, setRedirectUrl } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 

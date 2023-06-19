@@ -399,7 +399,7 @@ const Header: FunctionComponent = () => {
           className={styles["control-icon"]}
         />
       )}
-      <span>Account</span>
+      {/* <span>Account</span> */}
     </button>
   );
 
