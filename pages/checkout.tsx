@@ -1420,11 +1420,7 @@ const Checkout: FunctionComponent = () => {
                     className={`text-center ${styles["complete-image"]}`}
                   />
                   <p className={styles["order-received"]}>
-                    Order{" "}
-                    {order?.deliveryStatus &&
-                      deliveryMap[
-                        order?.deliveryStatus as keyof typeof deliveryMap
-                      ]}
+                    Order Order Received Succesfully
                   </p>
                   <p className={styles["order-number"]}>
                     Order No:{" "}
@@ -2473,6 +2469,25 @@ const Checkout: FunctionComponent = () => {
                       </p>
                     </div>
                   )}
+                  <div
+                    className={`flex column center-align spaced normal-text ${styles["order-info"]}`}
+                  >
+                    <p>
+                      Your order was received, please note your order number in
+                      every correspondence with us.
+                    </p>
+                    <div className="flex spaced">
+                      <img
+                        src="icons/info.svg"
+                        alt="information"
+                        className={["generic-icon", styles.icon].join(" ")}
+                      />
+                      <p>
+                        If your order is a pickup, please mention your order
+                        number on arrival.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles["order-summary"]}>
