@@ -279,6 +279,7 @@
       flex-wrap: wrap;
       width: 100%;
       position: relative;
+      justify-content: flex-start;
       @media (max-width: 1300px) {
         gap: 1.5rem;
       }

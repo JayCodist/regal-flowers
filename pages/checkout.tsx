@@ -518,14 +518,14 @@ const Checkout: FunctionComponent = () => {
     setSavingSenderInfo(false);
   };
 
-  const deliveryMap = {
-    Arranged: "Arranged",
-    Delivered: "Delivered",
-    Despatched: "Despatched",
-    "Not Arranged": "Not Arranged",
-    "Delivery Failed/Issues with Delivery": "Delivery Failed",
-    "Delivered (drivers update)": "Delivered"
-  };
+  // const deliveryMap = {
+  //   Arranged: "Arranged",
+  //   Delivered: "Delivered",
+  //   Despatched: "Despatched",
+  //   "Not Arranged": "Not Arranged",
+  //   "Delivery Failed/Issues with Delivery": "Delivery Failed",
+  //   "Delivered (drivers update)": "Delivered"
+  // };
 
   const isDelivered = (deliveryStatus = "") => {
     return /delivered/i.test(deliveryStatus);
@@ -1123,18 +1123,20 @@ const Checkout: FunctionComponent = () => {
                                 rows={3}
                               />
                             </div>
-                            <Checkbox
-                              checked={formData.shouldSaveAddress}
-                              onChange={value =>
-                                handleChange("shouldSaveAddress", value)
-                              }
-                              text={`${
-                                user
-                                  ? "Save Recipient"
-                                  : "Save Recipient(Login required)"
-                              }`}
-                              disabled={!user}
-                            />
+                            {!user && (
+                              <Checkbox
+                                checked={formData.shouldSaveAddress}
+                                onChange={value =>
+                                  handleChange("shouldSaveAddress", value)
+                                }
+                                text={`${
+                                  user
+                                    ? "Save Recipient"
+                                    : "Save Recipient(Login required)"
+                                }`}
+                                disabled={!user}
+                              />
+                            )}
                           </div>
                         </div>
                       )}
@@ -1211,8 +1213,8 @@ const Checkout: FunctionComponent = () => {
                     <div className={styles.border}>
                       <p className={styles["payment-info"]}>Payment Method</p>
                       <div className={styles.padding}>
-                        <div className="flex center-align spaced-lg">
-                          <p className="normal-text bold vertical-margin spaced">
+                        <div className="flex center-align spaced-lg vertical-margin spaced">
+                          <p className="normal-text bold ">
                             Select your preferred currency
                           </p>
                           <div className="flex spaced-lg">
@@ -1418,11 +1420,7 @@ const Checkout: FunctionComponent = () => {
                     className={`text-center ${styles["complete-image"]}`}
                   />
                   <p className={styles["order-received"]}>
-                    Order{" "}
-                    {order?.deliveryStatus &&
-                      deliveryMap[
-                        order?.deliveryStatus as keyof typeof deliveryMap
-                      ]}
+                    Order Order Received Succesfully
                   </p>
                   <p className={styles["order-number"]}>
                     Order No:{" "}
@@ -1778,14 +1776,18 @@ const Checkout: FunctionComponent = () => {
                         Edit
                       </strong>
                     </div>
-                    <div className={styles["sender-info"]}>
+                    <div
+                      className={[styles["sender-info"], "normal-text"].join(
+                        " "
+                      )}
+                    >
                       {formData.senderName && <p>{formData.senderName}</p>}
                       {formData.senderEmail && <p>{formData.senderEmail}</p>}
                       {formData.senderPhoneNumber && (
                         <p>{formData.senderPhoneNumber}</p>
                       )}
                       {deliveryDate && (
-                        <p>{deliveryDate.format("dddd, MMMM Do YYYY")}</p>
+                        <p>{deliveryDate.format("dddd, MMMM DD YYYY")}</p>
                       )}
                     </div>
 
@@ -2017,14 +2019,18 @@ const Checkout: FunctionComponent = () => {
                         Edit
                       </strong>
                     </div>
-                    <div className={styles["sender-info"]}>
+                    <div
+                      className={[styles["sender-info"], "normal-text"].join(
+                        " "
+                      )}
+                    >
                       {formData.senderName && <p>{formData.senderName}</p>}
                       {formData.senderEmail && <p>{formData.senderEmail}</p>}
                       {formData.senderPhoneNumber && (
                         <p>{formData.senderPhoneNumber}</p>
                       )}
                       {deliveryDate && (
-                        <p>{deliveryDate.format("dddd, MMMM Do YYYY")}</p>
+                        <p>{deliveryDate.format("dddd, MMMM DD YYYY")}</p>
                       )}
                     </div>
                     <div className="flex between">
@@ -2036,7 +2042,9 @@ const Checkout: FunctionComponent = () => {
                         Edit
                       </strong>
                     </div>
-                    <div className={`${styles["sender-info"]} flex between`}>
+                    <div
+                      className={`${styles["sender-info"]} normal-text flex between`}
+                    >
                       <p>Delivery</p>
                       <p>{formData.state}</p>
                     </div>
@@ -2139,18 +2147,20 @@ const Checkout: FunctionComponent = () => {
                               rows={3}
                             />
                           </div>
-                          <Checkbox
-                            checked={formData.shouldSaveAddress}
-                            onChange={value =>
-                              handleChange("shouldSaveAddress", value)
-                            }
-                            text={`${
-                              user
-                                ? "Save Recipient"
-                                : "Save Recipient(Login required)"
-                            }`}
-                            disabled={!user}
-                          />
+                          {!user && (
+                            <Checkbox
+                              checked={formData.shouldSaveAddress}
+                              onChange={value =>
+                                handleChange("shouldSaveAddress", value)
+                              }
+                              text={`${
+                                user
+                                  ? "Save Recipient"
+                                  : "Save Recipient(Login required)"
+                              }`}
+                              disabled={!user}
+                            />
+                          )}
                         </div>
                         <Button
                           onClick={() => {
@@ -2185,14 +2195,18 @@ const Checkout: FunctionComponent = () => {
                         Edit
                       </strong>
                     </div>
-                    <div className={styles["sender-info"]}>
+                    <div
+                      className={[styles["sender-info"], "normal-text"].join(
+                        " "
+                      )}
+                    >
                       {formData.senderName && <p>{formData.senderName}</p>}
                       {formData.senderEmail && <p>{formData.senderEmail}</p>}
                       {formData.senderPhoneNumber && (
                         <p>{formData.senderPhoneNumber}</p>
                       )}
                       {deliveryDate && (
-                        <p>{deliveryDate.format("dddd, MMMM Do YYYY")}</p>
+                        <p>{deliveryDate.format("dddd, MMMM DD YYYY")}</p>
                       )}
                     </div>
                     <div className="flex between">
@@ -2204,7 +2218,9 @@ const Checkout: FunctionComponent = () => {
                         Edit
                       </strong>
                     </div>
-                    <div className={`${styles["sender-info"]} flex between`}>
+                    <div
+                      className={`${styles["sender-info"]} normal-text flex between`}
+                    >
                       <p>Delivery</p>
                       <p>{formData.state}</p>
                     </div>
@@ -2220,7 +2236,7 @@ const Checkout: FunctionComponent = () => {
                       </div>
                     )}
                     {formData.deliveryMethod === "delivery" && (
-                      <div className={`${styles["sender-info"]}`}>
+                      <div className={`${styles["sender-info"]} normal-text`}>
                         <p>{formData.recipientName}</p>
                         <p className={styles.grayed}>Pickup/Delivery Date</p>
                         <p>{deliveryDate?.format("YYYY-MM-DD")}</p>
@@ -2353,13 +2369,7 @@ const Checkout: FunctionComponent = () => {
                 </div>
 
                 <div className={styles.padding}>
-                  <p className={`${styles.info} flex center-align spaced`}>
-                    <InfoIcon fill="#1C6DD0" />{" "}
-                    <span>
-                      Kindly select $ or £ for international payment options
-                    </span>{" "}
-                  </p>
-                  <div className="flex  spaced-lg column ">
+                  <div className="flex  spaced-lg column margin-bottom">
                     <p className="normal-text bold vertical-margin spaced">
                       Select your preferred currency
                     </p>
@@ -2379,6 +2389,12 @@ const Checkout: FunctionComponent = () => {
                       ))}
                     </div>
                   </div>
+                  <p className={`${styles.info} flex center-align spaced`}>
+                    <InfoIcon fill="#1C6DD0" />{" "}
+                    <span>
+                      Kindly select $ or £ for international payment options
+                    </span>{" "}
+                  </p>
 
                   <div className={styles["payment-methods"]}>
                     <p className={`${styles.info} flex center-align spaced`}>
@@ -2469,6 +2485,25 @@ const Checkout: FunctionComponent = () => {
                       </p>
                     </div>
                   )}
+                  <div
+                    className={`flex column center-align spaced normal-text ${styles["order-info"]}`}
+                  >
+                    <p>
+                      Your order was received, please note your order number in
+                      every correspondence with us.
+                    </p>
+                    <div className="flex spaced">
+                      <img
+                        src="icons/info.svg"
+                        alt="information"
+                        className={["generic-icon", styles.icon].join(" ")}
+                      />
+                      <p>
+                        If your order is a pickup, please mention your order
+                        number on arrival.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 <div className={styles["order-summary"]}>

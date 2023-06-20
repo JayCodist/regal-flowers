@@ -393,12 +393,19 @@
     opacity: 0;
     padding-bottom: 1rem;
 
+    @media (max-width: 650px) {
+      right: 50%;
+      transform: translateX(50%);
+    }
+
     &.active {
       top: 5.5rem;
       opacity: 1;
 
       @media (max-width: 650px) {
         top: 5rem;
+        right: 50%;
+        transform: translateX(50%);
       }
     }
 
@@ -430,6 +437,10 @@
       .delivery-date {
         border: none;
         width: 5rem;
+      }
+
+      @media (max-width: 650px) {
+        font-size: 1.2rem;
       }
     }
 
