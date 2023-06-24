@@ -342,7 +342,7 @@ const CurrencyController = () => {
 };
 
 const Header: FunctionComponent = () => {
-  const [activeNav, setActiveNav] = useState("");
+  const [activeNavLink, setActiveNavLink] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
 
   const deviceType = useDeviceType();
@@ -371,20 +371,20 @@ const Header: FunctionComponent = () => {
   }, [cartItems]);
 
   const handleActiveNav = (title: string, e: ReactMouseEvent) => {
-    setActiveNav(title === activeNav ? "" : title);
+    setActiveNavLink(title === activeNavLink ? "" : title);
     e.stopPropagation();
   };
 
   const excludedAreaRef = useOutsideClick(() => {
-    setActiveNav("");
+    setActiveNavLink("");
   });
 
   useEffect(() => {
-    if (!activeNav && showSidebar) {
+    if (!activeNavLink && showSidebar) {
       setShowSidebar(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeNav]);
+  }, [activeNavLink]);
 
   const accountAnchor = (
     <button className="flex column center-align">
@@ -399,7 +399,7 @@ const Header: FunctionComponent = () => {
           className={styles["control-icon"]}
         />
       )}
-      {/* <span>Account</span> */}
+      {deviceType === "desktop" && <span>Account</span>}
     </button>
   );
 
@@ -428,7 +428,7 @@ const Header: FunctionComponent = () => {
                     <a
                       className={`flex center-align spaced ${styles.title}`}
                       onClick={() => {
-                        setActiveNav(link.title);
+                        setActiveNavLink(link.title);
                         !link.children.length && setShowSidebar(false);
                       }}
                     >
@@ -442,7 +442,7 @@ const Header: FunctionComponent = () => {
                   <div
                     className={`flex center-align spaced ${styles.title}`}
                     onClick={() => {
-                      setActiveNav(link.title);
+                      setActiveNavLink(link.title);
                       !link.children.length && setShowSidebar(false);
                     }}
                   >
@@ -458,13 +458,13 @@ const Header: FunctionComponent = () => {
                     <div
                       className={[
                         styles["sub-link"],
-                        activeNav === link.title && styles.active
+                        activeNavLink === link.title && styles.active
                       ].join(" ")}
                     >
                       <div
                         className={styles.back}
                         onClick={() => {
-                          setActiveNav("");
+                          setActiveNavLink("");
                           setShowSidebar(true);
                         }}
                       >
@@ -503,7 +503,7 @@ const Header: FunctionComponent = () => {
                 className={styles.link}
                 key={index}
                 ref={
-                  link.title === activeNav
+                  link.title === activeNavLink
                     ? (excludedAreaRef as LegacyRef<HTMLDivElement>)
                     : undefined
                 }
@@ -527,7 +527,7 @@ const Header: FunctionComponent = () => {
                     <div
                       className={[
                         styles.arrow,
-                        activeNav === link.title && styles.active
+                        activeNavLink === link.title && styles.active
                       ].join(" ")}
                     ></div>
                   )}
@@ -536,7 +536,7 @@ const Header: FunctionComponent = () => {
                   <div
                     className={[
                       styles["dropdown"],
-                      activeNav === link.title && styles.active
+                      activeNavLink === link.title && styles.active
                     ].join(" ")}
                   >
                     {link.subtitle && (
@@ -558,7 +558,7 @@ const Header: FunctionComponent = () => {
                         >
                           {child.url ? (
                             <Link href={child.url} key={index}>
-                              <a onClick={() => setActiveNav("")}>
+                              <a onClick={() => setActiveNavLink("")}>
                                 {child.title && (
                                   <span
                                     className={[
@@ -588,7 +588,7 @@ const Header: FunctionComponent = () => {
                               <Link href={grandChild.url} key={index}>
                                 <a
                                   className={styles["grand-title"]}
-                                  onClick={() => setActiveNav("")}
+                                  onClick={() => setActiveNavLink("")}
                                 >
                                   {grandChild.title}
                                 </a>
@@ -653,7 +653,7 @@ const Header: FunctionComponent = () => {
               />
             </svg>
 
-            <span>{cartItems.length}</span>
+            <span>{totalCartItems}</span>
           </button>
         </div>
         <div className={styles["controls-area"]}>
@@ -758,7 +758,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     setOrderId,
     setOrder,
     setShouldShowCart,
-    currentStage
+    currentStage,
+    confirm
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -878,7 +879,15 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   );
 
   const handleRemoveItem = (key: string) => {
-    setCartItems(cartItems.filter(item => item.cartId !== key));
+    confirm({
+      title: "Delete item",
+      body: "Do you really want to delete this?",
+      onOk: () => {
+        setCartItems(cartItems.filter(item => item.cartId !== key));
+      },
+      okText: "Delete",
+      cancelText: "Don't delete"
+    });
   };
 
   useEffect(() => {

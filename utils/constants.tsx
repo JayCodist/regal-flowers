@@ -1950,8 +1950,7 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Romance, Birthdays & Anniversary",
-        url:
-          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+        url: "",
         children: [
           {
             title: "Flowers",
@@ -1973,7 +1972,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Just to say Hi, Sorry, Thank You",
-        url: "/product-category/just-to-say-bouquets",
+        url: "",
         children: [
           {
             title: "Flowers",
@@ -1994,7 +1993,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Get Well Soon",
-        url: "/product-category/get-well-soon",
+        url: "",
         children: [
           {
             title: "Flowers",
@@ -2015,7 +2014,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Bridal Bouquets & Accessories",
-        url: "/product-category/bridal-bouquets",
+        url: "",
         children: [
           {
             title: "Bridal Bouquets",
@@ -2037,7 +2036,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Funeral & Condolence",
-        url: "/product-category/funeral-amp-condolence",
+        url: "",
         children: [
           {
             title: "Wreaths & Flowers",

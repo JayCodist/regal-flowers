@@ -64,6 +64,12 @@ const AuthDropdown: FunctionComponent = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (formType === "newPassword") {
+      if (password !== passwordConfirm) {
+        notify("error", "Passwords do not match");
+        return;
+      }
+    }
     const handlerMap: Partial<Record<
       FormType,
       () => Promise<RequestResponse>
@@ -101,6 +107,10 @@ const AuthDropdown: FunctionComponent = () => {
         setFormType("newPassword");
         notify("success", "OTP validated successfully");
       } else if (formType === "newPassword") {
+        if (password !== passwordConfirm) {
+          notify("error", "Passwords do not match");
+          return;
+        }
         setPassword("");
         setPasswordConfirm("");
         setFormType("login");
