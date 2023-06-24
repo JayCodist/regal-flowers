@@ -80,6 +80,10 @@
       padding: 2rem 3rem;
       transition: all 0.3s ease-in-out;
 
+      &.sub-sub-link {
+        z-index: 11;
+      }
+
       &.active {
         opacity: 1;
         visibility: visible;
@@ -105,9 +109,10 @@
 
       .sub-link-title {
         font-size: 1.2rem;
-        display: block;
+        display: flex;
         padding: 1rem 0;
         font-weight: 600;
+        align-items: center;
       }
     }
   }
@@ -226,6 +231,7 @@
     .cart-btn {
       position: relative;
       color: #4b5563;
+      margin-bottom: -0.5rem;
 
       span {
         position: absolute;
@@ -246,6 +252,21 @@
     .control-icon {
       height: 1.8rem;
       width: auto;
+
+      &.initial {
+        background-color: #f5e5e5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        height: 1.6rem;
+        width: 1.6rem;
+        // margin: 0.6rem 0 0.1rem;
+        font-weight: bold;
+        color: #9b0000;
+        border-radius: 50%;
+        font-size: 1.1rem;
+      }
     }
 
     @media (max-width: 650px) {
@@ -853,6 +874,7 @@
     box-shadow: 0.8rem 0.8rem 1rem -0.4rem rgba(0, 0, 0, 0.2);
     opacity: 0;
     transition: 0.4s ease-out;
+    margin-top: -1rem;
 
     @media (max-width: 650px) {
       right: 5rem;
