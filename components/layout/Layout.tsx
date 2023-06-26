@@ -344,6 +344,13 @@ const CurrencyController = () => {
 const Header: FunctionComponent = () => {
   const [activeNavLink, setActiveNavLink] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
+  const [activeSublinkNav, setActiveSublinkNav] = useState("");
+
+  console.log({
+    activeNavLink,
+    activeSublinkNav,
+    showSidebar
+  });
 
   const deviceType = useDeviceType();
 
@@ -377,15 +384,8 @@ const Header: FunctionComponent = () => {
   };
 
   const excludedAreaRef = useOutsideClick(() => {
-    setActiveNavLink("");
+    // setActiveNavLink("");
   });
-
-  useEffect(() => {
-    if (!activeNavLink && showSidebar) {
-      setShowSidebar(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeNavLink]);
 
   const accountAnchor = (
     <button className="flex column center-align">
@@ -475,11 +475,65 @@ const Header: FunctionComponent = () => {
                       </div>
 
                       {link.children.map((child, index) => (
-                        <Link href={child.url} key={index}>
-                          <a className={styles["sub-link-title"]}>
-                            {child.title && <p>{child.title}</p>}
-                          </a>
-                        </Link>
+                        <>
+                          {child.url ? (
+                            <Link href={child.url} key={index}>
+                              <a
+                                className={styles["sub-link-title"]}
+                                onClick={() => {
+                                  setActiveNavLink("");
+                                  setShowSidebar(false);
+                                  setActiveSublinkNav("");
+                                }}
+                              >
+                                {child.title && <p>{child.title}</p>}
+                              </a>
+                            </Link>
+                          ) : (
+                            <div
+                              className={styles["sub-link-title"]}
+                              onClick={() => {
+                                setActiveSublinkNav(child.title);
+                              }}
+                            >
+                              <strong>{child.title}</strong>
+                              {child.children.length > 0 && (
+                                <div className={[styles.arrow].join(" ")}></div>
+                              )}
+                            </div>
+                          )}
+                          <div
+                            className={[
+                              styles["sub-child"],
+                              activeSublinkNav === child.title && styles.active
+                            ].join(" ")}
+                          >
+                            <div
+                              className={styles.back}
+                              onClick={() => {
+                                setActiveNavLink(link.title);
+                                setActiveSublinkNav("");
+                              }}
+                            >
+                              <div className={styles["back-arrow"]}></div>
+                              Back
+                            </div>
+                            {child.children.map((subChild, index) => (
+                              <Link href={subChild.url} key={index}>
+                                <a
+                                  className={styles["sub-link-title"]}
+                                  onClick={() => {
+                                    setActiveNavLink("");
+                                    setShowSidebar(false);
+                                    setActiveSublinkNav("");
+                                  }}
+                                >
+                                  {subChild.title && <p>{subChild.title}</p>}
+                                </a>
+                              </Link>
+                            ))}
+                          </div>
+                        </>
                       ))}
                     </div>
                   )}
