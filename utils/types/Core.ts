@@ -18,6 +18,11 @@ export interface AppCurrency {
   sign?: string;
 }
 
+export interface Redirect {
+  url: string;
+  title: string;
+}
+
 export interface Settings {
   currency: AppCurrency;
   currentStage: Stage;
@@ -25,7 +30,7 @@ export interface Settings {
   cartItems: CartItem[];
   allCurrencies: AppCurrency[];
   shouldShowCart: boolean;
-  redirectUrl: string;
+  redirect: Redirect;
   shouldShowAuthDropdown: boolean;
   orderId: string;
   order: Order | null;

@@ -359,7 +359,8 @@ const Header: FunctionComponent = () => {
     setShouldShowCart,
     shouldShowCart,
     shouldShowAuthDropdown,
-    setShouldShowAuthDropdown
+    setShouldShowAuthDropdown,
+    setRedirect
   } = useContext(SettingsContext);
   const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowAuthDropdown(false);
@@ -430,6 +431,7 @@ const Header: FunctionComponent = () => {
                       onClick={() => {
                         setActiveNavLink(link.title);
                         !link.children.length && setShowSidebar(false);
+                        setRedirect({ title: link.title, url: link.url });
                       }}
                     >
                       <strong>{link.title}</strong>
@@ -558,7 +560,15 @@ const Header: FunctionComponent = () => {
                         >
                           {child.url ? (
                             <Link href={child.url} key={index}>
-                              <a onClick={() => setActiveNavLink("")}>
+                              <a
+                                onClick={() => {
+                                  setActiveNavLink("");
+                                  setRedirect({
+                                    title: child.title,
+                                    url: child.url
+                                  });
+                                }}
+                              >
                                 {child.title && (
                                   <span
                                     className={[
@@ -588,7 +598,13 @@ const Header: FunctionComponent = () => {
                               <Link href={grandChild.url} key={index}>
                                 <a
                                   className={styles["grand-title"]}
-                                  onClick={() => setActiveNavLink("")}
+                                  onClick={() => {
+                                    setActiveNavLink("");
+                                    setRedirect({
+                                      title: child.title,
+                                      url: grandChild.url
+                                    });
+                                  }}
                                 >
                                   {grandChild.title}
                                 </a>

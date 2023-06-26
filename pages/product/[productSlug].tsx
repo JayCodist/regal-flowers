@@ -10,6 +10,7 @@ import { CartItem } from "../../utils/types/Core";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import useDeviceType from "../../utils/hooks/useDeviceType";
 import { DesignOption } from "../../utils/constants";
+import Link from "next/dist/client/link";
 
 interface Size {
   name: string;
@@ -37,9 +38,12 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     notify,
     currency,
     shouldShowCart,
-    setShouldShowCart
+    setShouldShowCart,
+    redirect
   } = useContext(SettingsContext);
   const deviceType = useDeviceType();
+
+  console.log("rediredct", redirect);
 
   const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
@@ -248,22 +252,26 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   return (
     <section className={`${styles.product}`}>
       <div className={`margin-bottom spaced ${styles.padding}`}>
-        <span className="margin-right align-icon">
-          Home{" "}
+        <div className="margin-right align-icon">
+          <Link href="/">
+            <a>Home</a>
+          </Link>
           <img
             src="/icons/chevron-right.svg"
             alt="right"
             className="generic-icon small margin-left"
           />
-        </span>
-        <span className="margin-right align-icon">
-          Love, Birthdays & Anniversary{" "}
+        </div>
+        <div className="margin-right align-icon">
+          <Link href={redirect.url}>
+            <a>{redirect.title}</a>
+          </Link>
           <img
             src="/icons/chevron-right.svg"
             alt="right"
             className="generic-icon small margin-left"
           />
-        </span>
+        </div>
         <span className="generic-icon small margin-left">
           {product.name.split("–")[0]}
         </span>

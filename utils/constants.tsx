@@ -41,6 +41,12 @@ export const defaultCurrency: AppCurrency = {
   sign: "₦"
 };
 
+export const defaultRedirect = {
+  title: "Love, Birthdays & Anniversary",
+  url:
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+};
+
 export const currencyOptions: AppCurrency[] = [
   { ...defaultCurrency },
   { name: "USD", conversionRate: 453, sign: "$" },

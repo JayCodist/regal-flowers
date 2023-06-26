@@ -159,7 +159,7 @@ const Checkout: FunctionComponent = () => {
     deliveryDate,
     setDeliveryDate,
     setShouldShowCart,
-    redirectUrl,
+    redirect,
     setShouldShowAuthDropdown,
     order,
     confirm,
@@ -662,8 +662,8 @@ const Checkout: FunctionComponent = () => {
               <div className={`${styles.left}`}>
                 {currentStage === 1 && (
                   <>
-                    {redirectUrl && (
-                      <Link href={redirectUrl}>
+                    {redirect && (
+                      <Link href={redirect.url}>
                         <a className="margin-bottom">{"< Back to Shop"}</a>
                       </Link>
                     )}
@@ -1657,7 +1657,7 @@ const Checkout: FunctionComponent = () => {
           <div className={styles.content}>
             {currentStage === 1 && (
               <div>
-                <Link href={redirectUrl}>
+                <Link href={redirect.url}>
                   <a className="margin-bottom spaced">{"< Back to Shop"}</a>
                 </Link>
                 {deliveryStage === "sender-info" && (
