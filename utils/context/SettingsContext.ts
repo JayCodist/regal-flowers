@@ -1,6 +1,12 @@
 import { Dayjs } from "dayjs";
 import { createContext } from "react";
-import { AppCurrency, CartItem, Settings, Stage } from "../types/Core";
+import {
+  AppCurrency,
+  CartItem,
+  Redirect,
+  Settings,
+  Stage
+} from "../types/Core";
 import User from "../types/User";
 import { Order } from "../types/Order";
 import { ConfirmParams } from "../../components/layout/Layout";
@@ -20,8 +26,8 @@ export interface SettingsControls extends Settings {
   setUser: (user: User | null) => void;
   setShouldShowCart: (shouldShowCart: boolean) => void;
   shouldShowCart: boolean;
-  redirectUrl: string;
-  setRedirectUrl: (redirectUrl: string) => void;
+  redirect: Redirect;
+  setRedirect: (redirect: Redirect) => void;
   setShouldShowAuthDropdown: (shouldShowAuthDropdown: boolean) => void;
   shouldShowAuthDropdown: boolean;
   orderId: string;
@@ -46,9 +52,12 @@ const SettingsContext = createContext<SettingsControls>({
   setUser: () => {},
   setShouldShowCart: () => {},
   shouldShowCart: false,
-  redirectUrl:
-    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
-  setRedirectUrl: () => {},
+  redirect: {
+    title: "Love, Birthdays & Anniversary",
+    url:
+      "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+  },
+  setRedirect: () => {},
   setShouldShowAuthDropdown: () => {},
   shouldShowAuthDropdown: false,
   orderId: "",

@@ -41,6 +41,12 @@ export const defaultCurrency: AppCurrency = {
   sign: "₦"
 };
 
+export const defaultRedirect = {
+  title: "Love, Birthdays & Anniversary",
+  url:
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+};
+
 export const currencyOptions: AppCurrency[] = [
   { ...defaultCurrency },
   { name: "USD", conversionRate: 453, sign: "$" },
@@ -1965,7 +1971,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/gifts",
+            url: "/product-category/gift-packs",
             children: []
           }
         ]
@@ -2085,7 +2091,7 @@ export const links: AppLink[] = [
     children: [
       {
         title: "Design",
-        url: "/filters?shopBy=wrapped bouquet",
+        url: "",
         children: [
           {
             title: "Wrapped Bouquets",
@@ -2106,7 +2112,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Flower Types",
-        url: "/filters?shopBy=fresh+flowers",
+        url: "",
         children: [
           {
             title: "Fresh Flowers",
@@ -2127,7 +2133,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Packages",
-        url: "/filters?shopBy=flowers",
+        url: "",
         children: [
           {
             title: "View Bundled Products",
@@ -2138,7 +2144,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Delivery",
-        url: "/filters?shopBy=same+day+delivery",
+        url: "",
         children: [
           {
             title: "Same Day Delivery",
@@ -2149,7 +2155,7 @@ export const links: AppLink[] = [
       },
       {
         title: "Flower Name",
-        url: "/filters?shopBy=roses",
+        url: "",
         children: [
           {
             title: "Roses",

@@ -112,7 +112,7 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
-  const { notify, setRedirectUrl } = useContext(SettingsContext);
+  const { notify } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 
@@ -298,12 +298,12 @@ const ProductsPage: FunctionComponent<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySlug]);
 
-  useEffect(() => {
-    if (isReady) {
-      setRedirectUrl(router.asPath);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router.asPath]);
+  // useEffect(() => {
+  //   if (isReady) {
+  //     setRedirect(router.asPath);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [router.asPath]);
 
   return (
     <section className={styles.filters} ref={rootRef}>

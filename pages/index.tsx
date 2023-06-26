@@ -19,7 +19,8 @@ import {
   mostLoved,
   allOccasionOptions,
   giftItems,
-  bestSellersRomance
+  bestSellersRomance,
+  defaultRedirect
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -46,6 +47,13 @@ const LandingPage: FunctionComponent<{
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
 
   const deviceType = useDeviceType();
+
+  const { setRedirect } = useContext(SettingsContext);
+
+  useEffect(() => {
+    setRedirect(defaultRedirect);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <section className="page-content">
