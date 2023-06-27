@@ -15,7 +15,6 @@ import {
   AppCurrency,
   AppCurrencyName,
   CartItem,
-  Redirect,
   Settings,
   Stage
 } from "../utils/types/Core";
@@ -35,11 +34,8 @@ const defaultSettings: Settings = {
   deliveryDate: null,
   cartItems: [],
   shouldShowCart: false,
-  redirect: {
-    title: "Love, Birthdays & Anniversary",
-    url:
-      "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-  },
+  redirect:
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
   shouldShowAuthDropdown: false,
   orderId: "",
   order: null
@@ -189,7 +185,7 @@ const App: FunctionComponent<AppProps> = props => {
     user,
     setUser,
     redirect: settings.redirect,
-    setRedirect: (redirect: Redirect) => {
+    setRedirectUrl: (redirect: string) => {
       setSettings({ ...settings, redirect });
     },
     shouldShowAuthDropdown,

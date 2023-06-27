@@ -663,7 +663,7 @@ const Checkout: FunctionComponent = () => {
                 {currentStage === 1 && (
                   <>
                     {redirect && (
-                      <Link href={redirect.url}>
+                      <Link href={redirect}>
                         <a className="margin-bottom">{"< Back to Shop"}</a>
                       </Link>
                     )}
@@ -1657,7 +1657,7 @@ const Checkout: FunctionComponent = () => {
           <div className={styles.content}>
             {currentStage === 1 && (
               <div>
-                <Link href={redirect.url}>
+                <Link href={redirect}>
                   <a className="margin-bottom spaced">{"< Back to Shop"}</a>
                 </Link>
                 {deliveryStage === "sender-info" && (

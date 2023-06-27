@@ -346,12 +346,6 @@ const Header: FunctionComponent = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeSublinkNav, setActiveSublinkNav] = useState("");
 
-  console.log({
-    activeNavLink,
-    activeSublinkNav,
-    showSidebar
-  });
-
   const deviceType = useDeviceType();
 
   const { pathname } = useRouter();
@@ -366,8 +360,7 @@ const Header: FunctionComponent = () => {
     setShouldShowCart,
     shouldShowCart,
     shouldShowAuthDropdown,
-    setShouldShowAuthDropdown,
-    setRedirect
+    setShouldShowAuthDropdown
   } = useContext(SettingsContext);
   const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowAuthDropdown(false);
@@ -431,7 +424,6 @@ const Header: FunctionComponent = () => {
                       onClick={() => {
                         setActiveNavLink(link.title);
                         !link.children.length && setShowSidebar(false);
-                        setRedirect({ title: link.title, url: link.url });
                       }}
                     >
                       <strong>{link.title}</strong>
@@ -617,10 +609,6 @@ const Header: FunctionComponent = () => {
                               <a
                                 onClick={() => {
                                   setActiveNavLink("");
-                                  setRedirect({
-                                    title: child.title,
-                                    url: child.url
-                                  });
                                 }}
                               >
                                 {child.title && (
@@ -654,10 +642,6 @@ const Header: FunctionComponent = () => {
                                   className={styles["grand-title"]}
                                   onClick={() => {
                                     setActiveNavLink("");
-                                    setRedirect({
-                                      title: child.title,
-                                      url: grandChild.url
-                                    });
                                   }}
                                 >
                                   {grandChild.title}
