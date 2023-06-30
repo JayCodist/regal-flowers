@@ -33,6 +33,9 @@ import { CartItem, Design } from "../../utils/types/Core";
 import DatePicker from "../date-picker/DatePicker";
 import { ProductImage } from "../../utils/types/Product";
 import Modal from "../modal/Modal";
+import AppStorage, {
+  AppStorageConstants
+} from "../../utils/helpers/storage-helpers";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -873,14 +876,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
-  useEffect(() => {
-    if (orderId) {
-      fetchOrder(orderId);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId, currentStage]);
-
   const handleRemoveItemQuantity = (key: string) => {
     const item = cartItems.find(item => item.cartId === key);
     if (item) {
@@ -936,11 +931,18 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     confirm({
       title: "Delete item",
       body: "Do you really want to delete this?",
-      onOk: () => {
-        setCartItems(cartItems.filter(item => item.cartId !== key));
+      onOk: () => {},
+      onCancel: () => {
+        setCartItems(prevState => {
+          if (prevState.length === 1) {
+            AppStorage.remove(AppStorageConstants.ORDER_ID);
+            setOrderId("");
+          }
+          return prevState.filter(item => item.cartId !== key);
+        });
       },
-      okText: "Delete",
-      cancelText: "Don't delete"
+      okText: "Don't Delete",
+      cancelText: "Delete"
     });
   };
 
@@ -1002,6 +1004,14 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       return total + (designTotal || 0);
     }, 0);
   }, [cartItems]);
+
+  useEffect(() => {
+    if (orderId) {
+      fetchOrder(orderId);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId, currentStage]);
 
   return (
     <div

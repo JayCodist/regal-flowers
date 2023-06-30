@@ -1748,7 +1748,7 @@ const Checkout: FunctionComponent = () => {
                       <Checkbox
                         checked={formData.freeAccount}
                         onChange={value => handleChange("freeAccount", value)}
-                        text="Create a Free Account"
+                        text="Create a Free Account Or Login"
                       />
                     )}
 

@@ -42,8 +42,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   } = useContext(SettingsContext);
   const deviceType = useDeviceType();
 
-  console.log("products", product);
-
   const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
   );
