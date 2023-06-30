@@ -38,12 +38,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     notify,
     currency,
     shouldShowCart,
-    setShouldShowCart,
-    redirect
+    setShouldShowCart
   } = useContext(SettingsContext);
   const deviceType = useDeviceType();
-
-  console.log("rediredct", redirect);
 
   const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
@@ -263,9 +260,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           />
         </div>
         <div className="margin-right align-icon">
-          <Link href={redirect.url}>
+          {/* <Link href={redirect.url}>
             <a>{redirect.title}</a>
-          </Link>
+          </Link> */}
+          Love, Birthdays & Anniversary{" "}
           <img
             src="/icons/chevron-right.svg"
             alt="right"

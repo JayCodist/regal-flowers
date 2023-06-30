@@ -395,6 +395,10 @@ const Checkout: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentStage]);
+
   const validateDeliveryMethod = () => {
     if (formData.deliveryMethod === "pick-up" && !formData.pickUpLocation) {
       notify("error", "Please complete the delivery location");
@@ -663,7 +667,7 @@ const Checkout: FunctionComponent = () => {
                 {currentStage === 1 && (
                   <>
                     {redirect && (
-                      <Link href={redirect.url}>
+                      <Link href={redirect}>
                         <a className="margin-bottom">{"< Back to Shop"}</a>
                       </Link>
                     )}
@@ -1657,7 +1661,7 @@ const Checkout: FunctionComponent = () => {
           <div className={styles.content}>
             {currentStage === 1 && (
               <div>
-                <Link href={redirect.url}>
+                <Link href={redirect}>
                   <a className="margin-bottom spaced">{"< Back to Shop"}</a>
                 </Link>
                 {deliveryStage === "sender-info" && (
@@ -1748,7 +1752,7 @@ const Checkout: FunctionComponent = () => {
                       <Checkbox
                         checked={formData.freeAccount}
                         onChange={value => handleChange("freeAccount", value)}
-                        text="Create a Free Account"
+                        text="Create a Free Account Or Login"
                       />
                     )}
 

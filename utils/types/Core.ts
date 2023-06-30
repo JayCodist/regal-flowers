@@ -30,7 +30,7 @@ export interface Settings {
   cartItems: CartItem[];
   allCurrencies: AppCurrency[];
   shouldShowCart: boolean;
-  redirect: Redirect;
+  redirect: string;
   shouldShowAuthDropdown: boolean;
   orderId: string;
   order: Order | null;

@@ -106,13 +106,13 @@ const ProductsPage: FunctionComponent<{
   const [filterCategories, setFilterCategories] = useState(_filterCategories);
   const [sort, setSort] = useState<Sort>("name-asc");
   const [hasMore, setHasMore] = useState(false);
-  const [shouldShowFilter, setShouldShowFilter] = useState(true);
+  const [shouldShowFilter, setShouldShowFilter] = useState(false);
 
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
   });
 
-  const { notify } = useContext(SettingsContext);
+  const { notify, setRedirectUrl } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
 
@@ -140,33 +140,6 @@ const ProductsPage: FunctionComponent<{
       setJustToSayText(JustToSayTexts[count]);
     }
   };
-
-  useEffect(() => {
-    if (isReady) {
-      if (shopBy === "vip") {
-        setSelectedFilter(["vip"]);
-      } else {
-        if (categorySlug === "vip") {
-          setSelectedFilter(["vip"]);
-          return;
-        }
-        const filters = shopBy
-          ? String(shopBy || "")
-              .split(",")
-              .filter(Boolean)
-          : ["regular"];
-
-        setSelectedFilter([...filters]);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
-
-  useEffect(() => {
-    const intervalId = setInterval(shuffleText, 3000);
-    return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [count]);
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
@@ -247,6 +220,34 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
+      if (shopBy === "vip") {
+        setSelectedFilter(["vip"]);
+      } else {
+        if (categorySlug === "vip") {
+          setSelectedFilter(["vip"]);
+          return;
+        }
+        const filters = shopBy
+          ? String(shopBy || "")
+              .split(",")
+              .filter(Boolean)
+          : ["regular"];
+
+        setSelectedFilter([...filters]);
+        shopBy && setShouldShowFilter(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shopBy]);
+
+  useEffect(() => {
+    const intervalId = setInterval(shuffleText, 3000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count]);
+
+  useEffect(() => {
+    if (isReady) {
       if (page === 1) {
         fetchProductCategory();
       } else {
@@ -298,12 +299,12 @@ const ProductsPage: FunctionComponent<{
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySlug]);
 
-  // useEffect(() => {
-  //   if (isReady) {
-  //     setRedirect(router.asPath);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [router.asPath]);
+  useEffect(() => {
+    if (isReady) {
+      setRedirectUrl(router.asPath);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
