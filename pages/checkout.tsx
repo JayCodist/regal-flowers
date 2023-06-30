@@ -395,6 +395,10 @@ const Checkout: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentStage]);
+
   const validateDeliveryMethod = () => {
     if (formData.deliveryMethod === "pick-up" && !formData.pickUpLocation) {
       notify("error", "Please complete the delivery location");
