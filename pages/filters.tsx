@@ -106,7 +106,7 @@ const ProductsPage: FunctionComponent<{
   const [filterCategories, setFilterCategories] = useState(_filterCategories);
   const [sort, setSort] = useState<Sort>("name-asc");
   const [hasMore, setHasMore] = useState(false);
-  const [shouldShowFilter, setShouldShowFilter] = useState(true);
+  const [shouldShowFilter, setShouldShowFilter] = useState(false);
 
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
@@ -140,33 +140,6 @@ const ProductsPage: FunctionComponent<{
       setJustToSayText(JustToSayTexts[count]);
     }
   };
-
-  useEffect(() => {
-    if (isReady) {
-      if (shopBy === "vip") {
-        setSelectedFilter(["vip"]);
-      } else {
-        if (categorySlug === "vip") {
-          setSelectedFilter(["vip"]);
-          return;
-        }
-        const filters = shopBy
-          ? String(shopBy || "")
-              .split(",")
-              .filter(Boolean)
-          : ["regular"];
-
-        setSelectedFilter([...filters]);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
-
-  useEffect(() => {
-    const intervalId = setInterval(shuffleText, 3000);
-    return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [count]);
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
@@ -244,6 +217,34 @@ const ProductsPage: FunctionComponent<{
       : `/filters?shopBy=${newFilters.join(",")}`;
     router.push(url, undefined, { scroll: false });
   };
+
+  useEffect(() => {
+    if (isReady) {
+      if (shopBy === "vip") {
+        setSelectedFilter(["vip"]);
+      } else {
+        if (categorySlug === "vip") {
+          setSelectedFilter(["vip"]);
+          return;
+        }
+        const filters = shopBy
+          ? String(shopBy || "")
+              .split(",")
+              .filter(Boolean)
+          : ["regular"];
+
+        setSelectedFilter([...filters]);
+        shopBy && setShouldShowFilter(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shopBy]);
+
+  useEffect(() => {
+    const intervalId = setInterval(shuffleText, 3000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count]);
 
   useEffect(() => {
     if (isReady) {
