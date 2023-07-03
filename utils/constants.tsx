@@ -14,6 +14,60 @@ import {
   BlogPost,
   LocationName
 } from "./types/Regal";
+import { Breadcrumb } from "./context/SettingsContext";
+
+export const breadcrumbItems: Breadcrumb[] = [
+  {
+    url:
+      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    label: "Romance, Birthdays & Anniversary"
+  },
+  { url: "just-to-say-bouquets", label: "Just To Say Hi, Sorry, Thank You" },
+  { url: "get-well-soon", label: "Get Well Soon" },
+  { url: "bridal-bouquets", label: "Bridal" },
+  { url: "funeral-amp-condolence", label: "Funeral & Condolence" },
+  { url: "event-amp-centerpiece", label: "Events & Centerpiece" },
+  { url: "fathers-day-flowers", label: "Father's Day" },
+  { url: "mothers-day-flowers", label: "Mother's Day" },
+
+  {
+    url: "chocolate-and-biscuits",
+    label: "Chocolate & Biscuits"
+  },
+  {
+    url: "wine-and-champagne",
+    label: "Wine & Champagne"
+  },
+  {
+    url: "cakes-and-cupcakes",
+    label: "Cakes & Cupcakes"
+  },
+  {
+    url: "teddy-bears",
+    label: "Teddy Bears"
+  },
+  {
+    url: "gift-packs",
+    label: "Gift Packs"
+  },
+  { url: "perfumes", label: "Perfumes" },
+  { url: "balloons", label: "Balloons" },
+  {
+    url: "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
+    label: "All Gifts"
+  },
+  { url: "cascadingdropping-bouquets", label: "Cascading Bridal Bouquets" },
+  {
+    url: "accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
+    label: "Accessories & Boutonnieress"
+  }
+];
+
+export const defaultBreadcrumb: Breadcrumb = {
+  url:
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+  label: "Romance, Birthdays & Anniversary"
+};
 
 export const allOccasionOptions: Option[] = [
   {
@@ -2126,7 +2180,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Plants",
-            url: "/filters?shopBy=flowers",
+            url: "/filters?shopBy=plants",
             children: []
           }
         ]
@@ -2137,7 +2191,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "View Bundled Products",
-            url: "/filters?shopBy=flowers",
+            url: "/filters?shopBy=bundled products",
             children: []
           }
         ]

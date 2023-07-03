@@ -14,7 +14,9 @@ import FlowerCard from "../components/flower-card/FlowerCard";
 import {
   FilterOption,
   aboutUsContent,
+  breadcrumbItems,
   bridalOccasionFilters,
+  defaultBreadcrumb,
   filtersCatgories,
   funeralOccasion,
   giftItems,
@@ -112,9 +114,13 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
-  const { notify, setRedirectUrl } = useContext(SettingsContext);
+  const { notify, setRedirectUrl, setBreadcrumb } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
+
+  const selectedBreadcrumb = breadcrumbItems.find(
+    _breadcrumb => _breadcrumb.url === categorySlug
+  );
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [
@@ -302,6 +308,14 @@ const ProductsPage: FunctionComponent<{
   useEffect(() => {
     if (isReady) {
       setRedirectUrl(router.asPath);
+      setBreadcrumb(
+        selectedBreadcrumb
+          ? {
+              label: selectedBreadcrumb.label,
+              url: router.asPath
+            }
+          : defaultBreadcrumb
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath]);

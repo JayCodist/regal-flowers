@@ -8,6 +8,7 @@ import Layout, {
   Toaster
 } from "../components/layout/Layout";
 import SettingsContext, {
+  Breadcrumb,
   NotifyType,
   SettingsControls
 } from "../utils/context/SettingsContext";
@@ -18,7 +19,11 @@ import {
   Settings,
   Stage
 } from "../utils/types/Core";
-import { currencyOptions, defaultCurrency } from "../utils/constants";
+import {
+  currencyOptions,
+  defaultBreadcrumb,
+  defaultCurrency
+} from "../utils/constants";
 import { Dayjs } from "dayjs";
 import User from "../utils/types/User";
 import AppStorage, {
@@ -76,6 +81,7 @@ const App: FunctionComponent<AppProps> = props => {
   const [deliveryDate, setDeliveryDate] = useState<null | Dayjs>(null);
   const [orderId, setOrderId] = useState("");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>(defaultBreadcrumb);
 
   const initializeAppConfig = async () => {
     const savedCurrency = AppStorage.get<AppCurrency>(
@@ -194,7 +200,9 @@ const App: FunctionComponent<AppProps> = props => {
     setOrderId,
     order,
     setOrder,
-    confirm
+    confirm,
+    breadcrumb,
+    setBreadcrumb
   };
 
   const headTags = (

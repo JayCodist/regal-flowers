@@ -1749,11 +1749,23 @@ const Checkout: FunctionComponent = () => {
                     )}
 
                     {!user && (
-                      <Checkbox
-                        checked={formData.freeAccount}
-                        onChange={value => handleChange("freeAccount", value)}
-                        text="Create a Free Account Or Login"
-                      />
+                      <div className="flex between">
+                        <Checkbox
+                          checked={formData.freeAccount}
+                          onChange={value => handleChange("freeAccount", value)}
+                          text="Create a Free Account"
+                        />
+                        <p className="flex spaced">
+                          <span>or</span>
+                          <Button
+                            type="plain"
+                            onClick={() => setShouldShowAuthDropdown(true)}
+                            className="primary-color"
+                          >
+                            Login
+                          </Button>
+                        </p>
+                      </div>
                     )}
 
                     <Button
