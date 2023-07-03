@@ -181,7 +181,9 @@ const ProductsPage: FunctionComponent<{
           };
 
     const filterParams = {
-      category: [categorySlug !== "all" ? categorySlug || "" : ""],
+      category: [
+        !["vip", "all"].includes(categorySlug || "") ? categorySlug || "" : ""
+      ],
       productClass,
       ...tagFilters
     };

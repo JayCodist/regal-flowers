@@ -60,7 +60,8 @@ export const breadcrumbItems: Breadcrumb[] = [
   {
     url: "accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
     label: "Accessories & Boutonnieress"
-  }
+  },
+  { label: "VIP", url: "vip" }
 ];
 
 export const defaultBreadcrumb: Breadcrumb = {
