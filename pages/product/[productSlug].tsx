@@ -38,7 +38,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     notify,
     currency,
     shouldShowCart,
-    setShouldShowCart
+    setShouldShowCart,
+    breadcrumb
   } = useContext(SettingsContext);
   const deviceType = useDeviceType();
 
@@ -260,10 +261,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           />
         </div>
         <div className="margin-right align-icon">
-          {/* <Link href={redirect.url}>
-            <a>{redirect.title}</a>
-          </Link> */}
-          Love, Birthdays & Anniversary{" "}
+          <Link href={breadcrumb.url}>
+            <a>{breadcrumb.label}</a>
+          </Link>
+
           <img
             src="/icons/chevron-right.svg"
             alt="right"

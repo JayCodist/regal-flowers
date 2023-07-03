@@ -19,7 +19,8 @@ import {
   mostLoved,
   allOccasionOptions,
   giftItems,
-  bestSellersRomance
+  bestSellersRomance,
+  defaultBreadcrumb
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -44,8 +45,14 @@ const LandingPage: FunctionComponent<{
   featuredFlowers?: Product[];
 }> = ({ featuredBirthday, locationName, featuredRomance }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
+  const { setBreadcrumb } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
+
+  useEffect(() => {
+    setBreadcrumb(defaultBreadcrumb);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <section className="page-content">

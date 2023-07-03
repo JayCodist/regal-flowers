@@ -7,6 +7,11 @@ import { ConfirmParams } from "../../components/layout/Layout";
 
 export type NotifyType = "success" | "error" | "info";
 
+export interface Breadcrumb {
+  label: string;
+  url: string;
+}
+
 export interface SettingsControls extends Settings {
   currency: AppCurrency;
   setCurrency: (currency: AppCurrency) => void;
@@ -29,6 +34,8 @@ export interface SettingsControls extends Settings {
   order: Order | null;
   setOrder: (order: Order | null) => void;
   confirm: (confirmParams: ConfirmParams) => void;
+  breadcrumb: Breadcrumb;
+  setBreadcrumb: (breadcrumb: Breadcrumb) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -55,7 +62,9 @@ const SettingsContext = createContext<SettingsControls>({
   setOrderId: () => {},
   order: null,
   setOrder: () => {},
-  confirm: () => {}
+  confirm: () => {},
+  breadcrumb: { label: "", url: "" },
+  setBreadcrumb: () => {}
 });
 
 export default SettingsContext;
