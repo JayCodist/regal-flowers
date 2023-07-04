@@ -666,27 +666,13 @@ const Header: FunctionComponent = () => {
             " "
           )}
         >
-          {_pathname === "checkout" ? (
-            <div>
-              <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
-                <div
-                  className={[
-                    styles["auth-dropdown"],
-                    shouldShowAuthDropdown && styles.active
-                  ].join(" ")}
-                >
-                  <AuthDropdown />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <ContextWrapper
-              anchor={accountAnchor}
-              className={styles["auth-wrapper"]}
-            >
-              <AuthDropdown />
-            </ContextWrapper>
-          )}
+          <ContextWrapper
+            anchor={accountAnchor}
+            className={styles["auth-wrapper"]}
+          >
+            <AuthDropdown />
+          </ContextWrapper>
+
           <button
             className={[styles["cart-btn"]].join(" ")}
             onClick={() => {
