@@ -361,13 +361,11 @@ const Header: FunctionComponent = () => {
     user,
     allCurrencies,
     setShouldShowCart,
-    shouldShowCart,
-    shouldShowAuthDropdown,
-    setShouldShowAuthDropdown
+    shouldShowCart
   } = useContext(SettingsContext);
-  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
-    setShouldShowAuthDropdown(false);
-  });
+  // const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+  //   setShouldShowAuthDropdown(false);
+  // });
 
   const totalCartItems = useMemo(() => {
     if (!cartItems.length) return 0;
