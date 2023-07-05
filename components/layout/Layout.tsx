@@ -361,13 +361,11 @@ const Header: FunctionComponent = () => {
     user,
     allCurrencies,
     setShouldShowCart,
-    shouldShowCart,
-    shouldShowAuthDropdown,
-    setShouldShowAuthDropdown
+    shouldShowCart
   } = useContext(SettingsContext);
-  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
-    setShouldShowAuthDropdown(false);
-  });
+  // const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+  //   setShouldShowAuthDropdown(false);
+  // });
 
   const totalCartItems = useMemo(() => {
     if (!cartItems.length) return 0;
@@ -666,27 +664,13 @@ const Header: FunctionComponent = () => {
             " "
           )}
         >
-          {_pathname === "checkout" ? (
-            <div>
-              <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
-                <div
-                  className={[
-                    styles["auth-dropdown"],
-                    shouldShowAuthDropdown && styles.active
-                  ].join(" ")}
-                >
-                  <AuthDropdown />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <ContextWrapper
-              anchor={accountAnchor}
-              className={styles["auth-wrapper"]}
-            >
-              <AuthDropdown />
-            </ContextWrapper>
-          )}
+          <ContextWrapper
+            anchor={accountAnchor}
+            className={styles["auth-wrapper"]}
+          >
+            <AuthDropdown />
+          </ContextWrapper>
+
           <button
             className={[styles["cart-btn"]].join(" ")}
             onClick={() => {
