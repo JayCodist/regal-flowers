@@ -218,7 +218,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         [key as string]: value,
-        zone: ""
+        zone: value === "other-locations" ? value : ""
       });
       return;
     }
@@ -428,6 +428,8 @@ const Checkout: FunctionComponent = () => {
     return true;
   };
 
+  console.log("freeAccount", formData);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const isDeliveryMethodComplete = validateDeliveryMethod();
@@ -538,11 +540,13 @@ const Checkout: FunctionComponent = () => {
   const pastRecipients = useMemo(
     () =>
       user?.recipients.map(recipient => ({
-        label: recipient.name,
-        value: recipient.phone
+        label: `${recipient.name} | ${recipient.phone} | ${recipient.phoneAlt} | ${recipient.address}`,
+        value: `${recipient.name}${recipient.phone}${recipient.phoneAlt}${recipient.address}`
       })) || [],
     [user]
   );
+
+  console.log("pastRecipients", pastRecipients);
 
   const deliveryLocationOptions = useMemo(() => {
     return (
@@ -1029,11 +1033,24 @@ const Checkout: FunctionComponent = () => {
                           </p>
                           <div className={styles.padding}>
                             <div className="input-group">
-                              <span className="question">
-                                Select A Past Recipient{" "}
-                                <em className="normal">
-                                  (for logged in users)
-                                </em>
+                              <span className="question flex spaced">
+                                <span>Select A Past Recipient </span>
+                                {user ? (
+                                  <em className="normal">(if available)</em>
+                                ) : (
+                                  <span className="normal flex spaced">
+                                    (
+                                    <button
+                                      onClick={() =>
+                                        setShouldShowAuthDropdown(true)
+                                      }
+                                      className="primary-color bold"
+                                    >
+                                      Login
+                                    </button>
+                                    <span>to use</span>)
+                                  </span>
+                                )}
                               </span>
 
                               <Select
@@ -1424,7 +1441,7 @@ const Checkout: FunctionComponent = () => {
                     className={`text-center ${styles["complete-image"]}`}
                   />
                   <p className={styles["order-received"]}>
-                    Order Order Received Succesfully
+                    Order Received Succesfully
                   </p>
                   <p className={styles["order-number"]}>
                     Order No:{" "}
@@ -2061,9 +2078,24 @@ const Checkout: FunctionComponent = () => {
                         <p className={styles.title}>Receiver's Information</p>
                         <div className={styles.padding}>
                           <div className="input-group">
-                            <span className="question">
-                              Select A Past Recipient{" "}
-                              <em className="normal">(for logged in users)</em>
+                            <span className="question flex spaced">
+                              <span>Select A Past Recipient </span>
+                              {user ? (
+                                <em className="normal">(if available)</em>
+                              ) : (
+                                <span className="normal flex spaced">
+                                  (
+                                  <button
+                                    onClick={() =>
+                                      setShouldShowAuthDropdown(true)
+                                    }
+                                    className="primary-color bold"
+                                  >
+                                    Login
+                                  </button>
+                                  <span>to use</span>)
+                                </span>
+                              )}
                             </span>
 
                             <Select
