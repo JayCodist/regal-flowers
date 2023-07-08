@@ -82,7 +82,7 @@ const initialData: CheckoutFormData = {
   deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
-  shouldSaveAddress: false,
+  shouldSaveAddress: true,
   residenceType: "",
   recipientHomeAddress: "",
   additionalInfo: "",
@@ -539,7 +539,7 @@ const Checkout: FunctionComponent = () => {
     () =>
       user?.recipients.map(recipient => ({
         label: `${recipient.name} | ${recipient.phone} | ${recipient.phoneAlt} | ${recipient.address}`,
-        value: `${recipient.name}${recipient.phone}${recipient.phoneAlt}${recipient.address}`
+        value: `${recipient.name}${recipient.phone}`
       })) || [],
     [user]
   );
@@ -1052,14 +1052,20 @@ const Checkout: FunctionComponent = () => {
                               </span>
 
                               <Select
-                                onSelect={phone =>
+                                onSelect={value => {
                                   setSelectedRecipient(
                                     user?.recipients.find(
-                                      recipient => recipient.phone === phone
+                                      recipient =>
+                                        `${recipient.name}${recipient.phone}` ===
+                                        value
                                     ) || null
-                                  )
+                                  );
+                                }}
+                                value={
+                                  selectedRecipient
+                                    ? `${selectedRecipient.name}${selectedRecipient?.phone}`
+                                    : ""
                                 }
-                                value={selectedRecipient?.phone || ""}
                                 options={pastRecipients}
                                 placeholder="Select Past Recipient"
                                 responsive
@@ -1142,20 +1148,6 @@ const Checkout: FunctionComponent = () => {
                                 rows={3}
                               />
                             </div>
-                            {!user && (
-                              <Checkbox
-                                checked={formData.shouldSaveAddress}
-                                onChange={value =>
-                                  handleChange("shouldSaveAddress", value)
-                                }
-                                text={`${
-                                  user
-                                    ? "Save Recipient"
-                                    : "Save Recipient(Login required)"
-                                }`}
-                                disabled={!user}
-                              />
-                            )}
                           </div>
                         </div>
                       )}
@@ -2099,14 +2091,20 @@ const Checkout: FunctionComponent = () => {
                             </span>
 
                             <Select
-                              onSelect={phone =>
+                              onSelect={value => {
                                 setSelectedRecipient(
                                   user?.recipients.find(
-                                    recipient => recipient.phone === phone
+                                    recipient =>
+                                      `${recipient.name}${recipient.phone}` ===
+                                      value
                                   ) || null
-                                )
+                                );
+                              }}
+                              value={
+                                selectedRecipient
+                                  ? `${selectedRecipient.name}${selectedRecipient?.phone}`
+                                  : ""
                               }
-                              value={selectedRecipient?.phone || ""}
                               options={pastRecipients}
                               placeholder="Select Past Recipient"
                               responsive
@@ -2188,20 +2186,6 @@ const Checkout: FunctionComponent = () => {
                               rows={3}
                             />
                           </div>
-                          {!user && (
-                            <Checkbox
-                              checked={formData.shouldSaveAddress}
-                              onChange={value =>
-                                handleChange("shouldSaveAddress", value)
-                              }
-                              text={`${
-                                user
-                                  ? "Save Recipient"
-                                  : "Save Recipient(Login required)"
-                              }`}
-                              disabled={!user}
-                            />
-                          )}
                         </div>
                         <Button
                           onClick={() => {
