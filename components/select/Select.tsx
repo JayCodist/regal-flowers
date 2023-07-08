@@ -56,6 +56,7 @@ interface SelectProps {
   allowClear?: boolean;
   startIcon?: string;
   keepDropdownOpen?: boolean;
+  optionColor?: "gray-white";
   /*
    * Add the following prop if you want an extra checkbox to select/unselect all options.
    * Works only when the `multiple` prop is present
@@ -105,7 +106,8 @@ const Select: FunctionComponent<SelectProps> = props => {
     dimmed,
     hideCaret,
     display = "label",
-    dropdownClassName
+    dropdownClassName,
+    optionColor
   } = props;
 
   const [searchStr, setSearchStr] = useState("");
@@ -435,7 +437,10 @@ const Select: FunctionComponent<SelectProps> = props => {
           ref={rootRef}
         >
           {multiple && selectAll && (
-            <div className={`${styles.option} ${styles.active}`}>
+            <div
+              className={`${styles.option} ${optionColor &&
+                styles[optionColor]} ${styles.active}`}
+            >
               <Checkbox
                 checked={selectedAll}
                 text="Select All"
@@ -453,7 +458,8 @@ const Select: FunctionComponent<SelectProps> = props => {
               option && (
                 <div
                   className={`${styles.option} ${!option.value &&
-                    styles.initial} ${option.value === value && styles.active}`}
+                    styles.initial} ${option.value === value &&
+                    styles.active} ${optionColor && styles[optionColor]}`}
                   role="listitem"
                   key={i}
                   onClick={

@@ -118,8 +118,10 @@ const ProductsPage: FunctionComponent<{
 
   const deviceType = useDeviceType();
 
-  const selectedBreadcrumb = breadcrumbItems.find(
-    _breadcrumb => _breadcrumb.url === categorySlug
+  const selectedBreadcrumb = breadcrumbItems.find(_breadcrumb =>
+    categorySlug
+      ? _breadcrumb.url === categorySlug
+      : _breadcrumb.url === productCategory
   );
 
   const rootRef = useRef<HTMLDivElement>(null);

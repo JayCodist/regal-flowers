@@ -4,6 +4,7 @@ import {
   ChangeEvent,
   MutableRefObject,
   ReactNode,
+  useEffect,
   useRef,
   useState
 } from "react";
@@ -141,6 +142,12 @@ const Input = (props: InputProps) => {
       setCompleted(true);
     }
   };
+
+  useEffect(() => {
+    if (!required) {
+      setErrorMessage("");
+    }
+  }, [required]);
 
   const displayValue =
     number && typeof value === "number" ? value.toLocaleString() : value;

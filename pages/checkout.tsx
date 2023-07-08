@@ -82,7 +82,7 @@ const initialData: CheckoutFormData = {
   deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
-  shouldSaveAddress: false,
+  shouldSaveAddress: true,
   residenceType: "",
   recipientHomeAddress: "",
   additionalInfo: "",
@@ -218,7 +218,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         [key as string]: value,
-        zone: ""
+        zone: value === "other-locations" ? value : ""
       });
       return;
     }
@@ -538,8 +538,8 @@ const Checkout: FunctionComponent = () => {
   const pastRecipients = useMemo(
     () =>
       user?.recipients.map(recipient => ({
-        label: recipient.name,
-        value: recipient.phone
+        label: `${recipient.name} | ${recipient.phone} | ${recipient.phoneAlt} | ${recipient.address}`,
+        value: `${recipient.name}${recipient.phone}`
       })) || [],
     [user]
   );
@@ -896,6 +896,7 @@ const Checkout: FunctionComponent = () => {
                                     responsive
                                     dimmed
                                     dropdownOnTop
+                                    optionColor="gray-white"
                                   />
                                 </div>
                               )}
@@ -914,6 +915,7 @@ const Checkout: FunctionComponent = () => {
                                     responsive
                                     dimmed
                                     dropdownOnTop
+                                    optionColor="gray-white"
                                   />
                                 </div>
                               )}
@@ -1029,22 +1031,41 @@ const Checkout: FunctionComponent = () => {
                           </p>
                           <div className={styles.padding}>
                             <div className="input-group">
-                              <span className="question">
-                                Select A Past Recipient{" "}
-                                <em className="normal">
-                                  (for logged in users)
-                                </em>
+                              <span className="question flex spaced">
+                                <span>Select A Past Recipient </span>
+                                {user ? (
+                                  <em className="normal">(if available)</em>
+                                ) : (
+                                  <span className="normal flex spaced">
+                                    (
+                                    <button
+                                      onClick={() =>
+                                        setShouldShowAuthDropdown(true)
+                                      }
+                                      className="primary-color bold"
+                                    >
+                                      Login
+                                    </button>
+                                    <span>to use</span>)
+                                  </span>
+                                )}
                               </span>
 
                               <Select
-                                onSelect={phone =>
+                                onSelect={value => {
                                   setSelectedRecipient(
                                     user?.recipients.find(
-                                      recipient => recipient.phone === phone
+                                      recipient =>
+                                        `${recipient.name}${recipient.phone}` ===
+                                        value
                                     ) || null
-                                  )
+                                  );
+                                }}
+                                value={
+                                  selectedRecipient
+                                    ? `${selectedRecipient.name}${selectedRecipient?.phone}`
+                                    : ""
                                 }
-                                value={selectedRecipient?.phone || ""}
                                 options={pastRecipients}
                                 placeholder="Select Past Recipient"
                                 responsive
@@ -1127,20 +1148,6 @@ const Checkout: FunctionComponent = () => {
                                 rows={3}
                               />
                             </div>
-                            {!user && (
-                              <Checkbox
-                                checked={formData.shouldSaveAddress}
-                                onChange={value =>
-                                  handleChange("shouldSaveAddress", value)
-                                }
-                                text={`${
-                                  user
-                                    ? "Save Recipient"
-                                    : "Save Recipient(Login required)"
-                                }`}
-                                disabled={!user}
-                              />
-                            )}
                           </div>
                         </div>
                       )}
@@ -1424,7 +1431,7 @@ const Checkout: FunctionComponent = () => {
                     className={`text-center ${styles["complete-image"]}`}
                   />
                   <p className={styles["order-received"]}>
-                    Order Order Received Succesfully
+                    Order Received Succesfully
                   </p>
                   <p className={styles["order-number"]}>
                     Order No:{" "}
@@ -1866,6 +1873,7 @@ const Checkout: FunctionComponent = () => {
                                   responsive
                                   dimmed
                                   dropdownOnTop
+                                  optionColor="gray-white"
                                 />
                               </div>
                             )}
@@ -1882,6 +1890,7 @@ const Checkout: FunctionComponent = () => {
                                   responsive
                                   dimmed
                                   dropdownOnTop
+                                  optionColor="gray-white"
                                 />
                               </div>
                             )}
@@ -2061,24 +2070,46 @@ const Checkout: FunctionComponent = () => {
                         <p className={styles.title}>Receiver's Information</p>
                         <div className={styles.padding}>
                           <div className="input-group">
-                            <span className="question">
-                              Select A Past Recipient{" "}
-                              <em className="normal">(for logged in users)</em>
+                            <span className="question flex spaced">
+                              <span>Select A Past Recipient </span>
+                              {user ? (
+                                <em className="normal">(if available)</em>
+                              ) : (
+                                <span className="normal flex spaced">
+                                  (
+                                  <button
+                                    onClick={() =>
+                                      setShouldShowAuthDropdown(true)
+                                    }
+                                    className="primary-color bold"
+                                  >
+                                    Login
+                                  </button>
+                                  <span>to use</span>)
+                                </span>
+                              )}
                             </span>
 
                             <Select
-                              onSelect={phone =>
+                              onSelect={value => {
                                 setSelectedRecipient(
                                   user?.recipients.find(
-                                    recipient => recipient.phone === phone
+                                    recipient =>
+                                      `${recipient.name}${recipient.phone}` ===
+                                      value
                                   ) || null
-                                )
+                                );
+                              }}
+                              value={
+                                selectedRecipient
+                                  ? `${selectedRecipient.name}${selectedRecipient?.phone}`
+                                  : ""
                               }
-                              value={selectedRecipient?.phone || ""}
                               options={pastRecipients}
                               placeholder="Select Past Recipient"
                               responsive
                               dimmed
+                              optionColor="gray-white"
                             />
                           </div>
                           <div className="flex center-align spaced vertical-margin">
@@ -2155,20 +2186,6 @@ const Checkout: FunctionComponent = () => {
                               rows={3}
                             />
                           </div>
-                          {!user && (
-                            <Checkbox
-                              checked={formData.shouldSaveAddress}
-                              onChange={value =>
-                                handleChange("shouldSaveAddress", value)
-                              }
-                              text={`${
-                                user
-                                  ? "Save Recipient"
-                                  : "Save Recipient(Login required)"
-                              }`}
-                              disabled={!user}
-                            />
-                          )}
                         </div>
                         <Button
                           onClick={() => {
