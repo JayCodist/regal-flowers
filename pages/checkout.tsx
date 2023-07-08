@@ -428,8 +428,6 @@ const Checkout: FunctionComponent = () => {
     return true;
   };
 
-  console.log("freeAccount", formData);
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const isDeliveryMethodComplete = validateDeliveryMethod();
@@ -545,8 +543,6 @@ const Checkout: FunctionComponent = () => {
       })) || [],
     [user]
   );
-
-  console.log("pastRecipients", pastRecipients);
 
   const deliveryLocationOptions = useMemo(() => {
     return (
@@ -900,6 +896,7 @@ const Checkout: FunctionComponent = () => {
                                     responsive
                                     dimmed
                                     dropdownOnTop
+                                    optionColor="gray-white"
                                   />
                                 </div>
                               )}
@@ -918,6 +915,7 @@ const Checkout: FunctionComponent = () => {
                                     responsive
                                     dimmed
                                     dropdownOnTop
+                                    optionColor="gray-white"
                                   />
                                 </div>
                               )}
@@ -1883,6 +1881,7 @@ const Checkout: FunctionComponent = () => {
                                   responsive
                                   dimmed
                                   dropdownOnTop
+                                  optionColor="gray-white"
                                 />
                               </div>
                             )}
@@ -1899,6 +1898,7 @@ const Checkout: FunctionComponent = () => {
                                   responsive
                                   dimmed
                                   dropdownOnTop
+                                  optionColor="gray-white"
                                 />
                               </div>
                             )}
@@ -2111,6 +2111,7 @@ const Checkout: FunctionComponent = () => {
                               placeholder="Select Past Recipient"
                               responsive
                               dimmed
+                              optionColor="gray-white"
                             />
                           </div>
                           <div className="flex center-align spaced vertical-margin">

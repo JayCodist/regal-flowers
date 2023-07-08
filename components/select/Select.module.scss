@@ -130,6 +130,16 @@ $placeholder: rgba(0, 0, 0, 0.6);
     &.follow-up {
       font-weight: bold;
     }
+
+    &.gray-white {
+      &:nth-child(odd) {
+        background-color: white;
+      }
+
+      &:nth-child(even) {
+        background-color: #e5e7eb5e;
+      }
+    }
   }
   .option.initial {
     color: $placeholder;

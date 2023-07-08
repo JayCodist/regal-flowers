@@ -976,7 +976,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
       header === "main" && router.push(`/checkout?orderId=${data.id}`);
 
-      notify("success", "Order updated successfully");
       setShouldShowCart(false);
     }
   };
