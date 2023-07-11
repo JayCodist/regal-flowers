@@ -162,6 +162,7 @@ const Input = (props: InputProps) => {
         inputActive && styles["input-active"],
         completed && styles.completed,
         errorMessage && styles.error,
+        disabled && styles.disabled,
         className
       ].join(" ")}
     >

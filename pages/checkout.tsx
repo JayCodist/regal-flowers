@@ -1043,6 +1043,7 @@ const Checkout: FunctionComponent = () => {
                                         setShouldShowAuthDropdown(true)
                                       }
                                       className="primary-color bold"
+                                      type="button"
                                     >
                                       Login
                                     </button>
@@ -2082,6 +2083,7 @@ const Checkout: FunctionComponent = () => {
                                       setShouldShowAuthDropdown(true)
                                     }
                                     className="primary-color bold"
+                                    type="button"
                                   >
                                     Login
                                   </button>
