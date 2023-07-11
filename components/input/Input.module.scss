@@ -18,6 +18,9 @@
   &.completed {
     border-color: #00875a;
   }
+  &.disabled {
+    border-color: #0000004d;
+  }
   // &.input-active {
   //   // border-color: #2684ff;
   // }
@@ -52,6 +55,12 @@
     &.disable-resize {
       resize: none;
     }
+  }
+
+  .input:disabled {
+    background-color: rgb(196 198 201 / 30%);
+    color: #a3a3a3;
+    cursor: not-allowed;
   }
   .error-message {
     position: absolute;
