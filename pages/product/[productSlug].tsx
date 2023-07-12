@@ -461,7 +461,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                             setProductPrice(variant.price);
                           }}
                         >
-                          {variant.name.slice(1)} |{" "}
+                          {variant.name} |{" "}
                           {getPriceDisplay(variant.price, currency)}
                         </span>
                       ))}
@@ -500,7 +500,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                               setProductPrice(variant.price);
                             }}
                           >
-                            {variant.name.slice(1).replace(/Vip/i, "VIP")} |
+                            {variant.name.replace(/Vip/i, "VIP")} |
                             {getPriceDisplay(variant.price, currency)}
                           </span>
                         );
