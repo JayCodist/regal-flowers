@@ -141,6 +141,8 @@ const ProductsPage: FunctionComponent<{
     "all"
   ].includes(categorySlug as string);
 
+  const hideFilters = isGiftPage || ["all"].includes(categorySlug as string);
+
   const shuffleText = () => {
     if (count < JustToSayTexts.length - 1) {
       setJustToSayText(JustToSayTexts[count]);
@@ -473,7 +475,7 @@ const ProductsPage: FunctionComponent<{
         className={`${styles["content"]} flex ${deviceType === "desktop" &&
           "spaced-xl"}`}
       >
-        {!isGiftPage && (
+        {!hideFilters && (
           <div className={styles["left-side"]}>
             {!hideFilterInfo && (
               <div className="vertical-margin spaced">
@@ -746,7 +748,7 @@ const ProductsPage: FunctionComponent<{
                   url={`/product/${product.slug}`}
                   mode={`${
                     deviceType === "desktop"
-                      ? isGiftPage || categorySlug === "all"
+                      ? hideFilters
                         ? "four-x-grid"
                         : "three-x-grid"
                       : "two-x-grid"
