@@ -378,7 +378,7 @@ const Header: FunctionComponent = () => {
   };
 
   const excludedAreaRef = useOutsideClick(() => {
-    // setActiveNavLink("");
+    setActiveNavLink("");
   });
 
   const accountAnchor = (

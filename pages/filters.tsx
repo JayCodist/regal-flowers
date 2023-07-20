@@ -165,22 +165,19 @@ const ProductsPage: FunctionComponent<{
 
     const shopByArray = String(shopBy).split(",");
 
-    const tagFilters: Record<string, string[]> =
-      categorySlug || productClass
-        ? {}
-        : shopBy
-        ? shopByArray.reduce((map: Record<string, string[]>, tag) => {
-            const tagKey = Object.keys(tagsMap).find(key => {
-              return tagsMap[key].includes(tag);
-            });
-            if (tagKey) {
-              map[tagKey] = [...(map[tagKey] || []), tag];
-            }
-            return map;
-          }, {})
-        : {
-            budget: ["regular"]
-          };
+    const tagFilters: Record<string, string[]> = shopBy
+      ? shopByArray.reduce((map: Record<string, string[]>, tag) => {
+          const tagKey = Object.keys(tagsMap).find(key => {
+            return tagsMap[key].includes(tag);
+          });
+          if (tagKey) {
+            map[tagKey] = [...(map[tagKey] || []), tag];
+          }
+          return map;
+        }, {})
+      : {
+          budget: productClass == "vip" ? ["vip"] : ["regular"]
+        };
 
     const filterParams = {
       category: [
@@ -230,7 +227,7 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
-      if (shopBy === "vip") {
+      if (shopBy === "vip" || productClass === "vip") {
         setSelectedFilter(["vip"]);
       } else {
         if (categorySlug === "vip") {
@@ -249,6 +246,12 @@ const ProductsPage: FunctionComponent<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shopBy]);
+
+  useEffect(() => {
+    if (productClass === "vip") {
+      setSelectedFilter(["vip"]);
+    }
+  }, [productClass]);
 
   useEffect(() => {
     const intervalId = setInterval(shuffleText, 3000);
