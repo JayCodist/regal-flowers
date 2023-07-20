@@ -164,7 +164,8 @@ const Checkout: FunctionComponent = () => {
     order,
     confirm,
     setCartItems,
-    setOrderId
+    setOrderId,
+    orderLoading
   } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -583,7 +584,7 @@ const Checkout: FunctionComponent = () => {
     [currency, deliveryDate, formData.state, formData.zone, subTotal]
   );
 
-  if (pageLoading) {
+  if (pageLoading || orderLoading) {
     return (
       <div className={styles.loader}>
         <img src="/images/spinner.svg" alt="loader" className={styles.icon} />
@@ -2696,7 +2697,7 @@ const PaypalModal: FunctionComponent<ModalProps & {
   }, [currency]);
 
   return (
-    <Modal visible={visible} cancel={cancel}>
+    <Modal visible={visible} cancel={cancel} className="scrollable">
       <h1 className="title thin margin-bottom spaced">
         Complete Paypal Payment
       </h1>

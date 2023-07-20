@@ -82,6 +82,7 @@ const App: FunctionComponent<AppProps> = props => {
   const [orderId, setOrderId] = useState("");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>(defaultBreadcrumb);
+  const [orderLoading, setOrderLoading] = useState(false);
 
   const initializeAppConfig = async () => {
     const savedCurrency = AppStorage.get<AppCurrency>(
@@ -202,7 +203,9 @@ const App: FunctionComponent<AppProps> = props => {
     setOrder,
     confirm,
     breadcrumb,
-    setBreadcrumb
+    setBreadcrumb,
+    orderLoading,
+    setOrderLoading
   };
 
   const headTags = (

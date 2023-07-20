@@ -800,7 +800,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     setOrder,
     setShouldShowCart,
     currentStage,
-    confirm
+    confirm,
+    setOrderLoading
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -824,6 +825,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const fetchOrder = async (orderId: string) => {
+    setOrderLoading(true);
     const { error, data, message } = await getOrder(orderId);
 
     if (error) {
@@ -858,6 +860,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       setOrder(data);
       setDeliveryDate(data?.deliveryDate ? dayjs(data?.deliveryDate) : null);
     }
+    setOrderLoading(false);
   };
 
   const handleRemoveItemQuantity = (key: string) => {
