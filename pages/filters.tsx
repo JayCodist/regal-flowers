@@ -310,7 +310,7 @@ const ProductsPage: FunctionComponent<{
       setFilterCategories(_filterCategories);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug]);
+  }, [categorySlug, isReady]);
 
   useEffect(() => {
     if (isReady) {
@@ -725,7 +725,7 @@ const ProductsPage: FunctionComponent<{
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
                 : ` ${pageTitle} ${
-                    !giftMap[categorySlug || ""] ? "Flowers" : ""
+                    !giftMap[categorySlug || ""] && pageTitle ? "Flowers" : ""
                   } ${
                     !giftMap[categorySlug || ""] && !pageTitle
                       ? "All Occasion Flowers"
