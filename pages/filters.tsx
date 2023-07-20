@@ -114,6 +114,8 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
+  const isGiftPage = giftMap[categorySlug as string];
+
   const { notify, setRedirectUrl, setBreadcrumb } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
@@ -133,7 +135,7 @@ const ProductsPage: FunctionComponent<{
   const [page, setPage] = useScrollHandler({
     node: lastProductEleRef
   });
-  const showFilterInfo = [
+  const hideFilterInfo = [
     ...bridalCategories,
     ...funeralCategories,
     "all"
@@ -175,6 +177,8 @@ const ProductsPage: FunctionComponent<{
           }
           return map;
         }, {})
+      : isGiftPage || hideFilterInfo
+      ? {}
       : {
           budget: productClass == "vip" ? ["vip"] : ["regular"]
         };
@@ -186,6 +190,7 @@ const ProductsPage: FunctionComponent<{
       productClass,
       ...tagFilters
     };
+
     const sortParams: SortLogic = {
       sortField: sort.split("-")[0],
       sortType: sort.split("-")[1] as "asc" | "desc"
@@ -288,7 +293,7 @@ const ProductsPage: FunctionComponent<{
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedOccasion, router, sort]);
+  }, [categorySlug, selectedOccasion, sort]);
 
   useEffect(() => {
     if (isReady) {
@@ -341,40 +346,37 @@ const ProductsPage: FunctionComponent<{
             <div
               className={[
                 styles["occasion-wrapper"],
-                giftMap[categorySlug || ""] && styles["gifts-wrapper"]
+                isGiftPage && styles["gifts-wrapper"]
               ].join(" ")}
             >
-              {(giftMap[categorySlug || ""] ? gifts : occasions).map(
-                (occasion, index) => {
-                  return (
-                    <Link href={occasion.url} key={index}>
-                      <a
-                        className={[
-                          styles["occasion"],
-                          giftMap[categorySlug || ""] &&
-                            styles["gift-occasion"],
+              {(isGiftPage ? gifts : occasions).map((occasion, index) => {
+                return (
+                  <Link href={occasion.url} key={index}>
+                    <a
+                      className={[
+                        styles["occasion"],
+                        isGiftPage && styles["gift-occasion"],
 
-                          categorySlug === occasion.url.split("/")[2] &&
-                            styles["active"]
-                        ].join(" ")}
-                        onClick={() => {
-                          router.push(occasion.url, undefined, {
-                            scroll: false
-                          });
-                        }}
-                      >
-                        <strong>
-                          {occasion.title}
-                          <br />
-                          {occasion.title === "Just to Say" && (
-                            <span>{JustToSayText}</span>
-                          )}{" "}
-                        </strong>
-                      </a>
-                    </Link>
-                  );
-                }
-              )}
+                        categorySlug === occasion.url.split("/")[2] &&
+                          styles["active"]
+                      ].join(" ")}
+                      onClick={() => {
+                        router.push(occasion.url, undefined, {
+                          scroll: false
+                        });
+                      }}
+                    >
+                      <strong>
+                        {occasion.title}
+                        <br />
+                        {occasion.title === "Just to Say" && (
+                          <span>{JustToSayText}</span>
+                        )}{" "}
+                      </strong>
+                    </a>
+                  </Link>
+                );
+              })}
             </div>
           )}
           {productCategory === "occasion" && deviceType === "mobile" && (
@@ -384,16 +386,15 @@ const ProductsPage: FunctionComponent<{
                   categorySlug || ""
                 ] && styles["gifts-category"]}`}
               >
-                {(giftMap[categorySlug || ""] ? gifts : occasions)
-                  .slice(0, giftMap[categorySlug || ""] ? 4 : 3)
+                {(isGiftPage ? gifts : occasions)
+                  .slice(0, isGiftPage ? 4 : 3)
                   .map((occasion, index) => {
                     return (
                       <Link href={occasion.url} key={index}>
                         <a
                           className={[
                             styles["occasion"],
-                            giftMap[categorySlug || ""] &&
-                              styles["gift-occasion"],
+                            isGiftPage && styles["gift-occasion"],
 
                             categorySlug === occasion.url.split("/")[2] &&
                               styles["active"]
@@ -419,19 +420,18 @@ const ProductsPage: FunctionComponent<{
               <div
                 className={[
                   styles.occasions,
-                  giftMap[categorySlug || ""] && styles["gifts-categor"]
+                  isGiftPage && styles["gifts-categor"]
                 ].join(" ")}
               >
-                {(giftMap[categorySlug || ""] ? gifts : occasions)
-                  .slice(giftMap[categorySlug || ""] ? 4 : 3)
+                {(isGiftPage ? gifts : occasions)
+                  .slice(isGiftPage ? 4 : 3)
                   .map((occasion, index) => {
                     return (
                       <Link href={occasion.url} key={index}>
                         <a
                           className={[
                             styles["occasion"],
-                            giftMap[categorySlug || ""] &&
-                              styles["gift-occasion"],
+                            isGiftPage && styles["gift-occasion"],
 
                             categorySlug === occasion.url.split("/")[2] &&
                               styles["active"]
@@ -473,9 +473,9 @@ const ProductsPage: FunctionComponent<{
         className={`${styles["content"]} flex ${deviceType === "desktop" &&
           "spaced-xl"}`}
       >
-        {!giftMap[categorySlug || ""] && (
+        {!isGiftPage && (
           <div className={styles["left-side"]}>
-            {!showFilterInfo && (
+            {!hideFilterInfo && (
               <div className="vertical-margin spaced">
                 <span className={`bold margin-right ${styles["sub-title"]}`}>
                   Filters ({selectedFilter.length})
@@ -597,7 +597,7 @@ const ProductsPage: FunctionComponent<{
                 onClick={() => setShouldShowFilter(!shouldShowFilter)}
               >
                 <h3 className="margin-right">
-                  Filter{!showFilterInfo && `(${selectedFilter.length})`}
+                  Filter{!hideFilterInfo && `(${selectedFilter.length})`}
                 </h3>
                 <img
                   alt="filter"
@@ -724,16 +724,12 @@ const ProductsPage: FunctionComponent<{
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : ` ${pageTitle} ${
-                    !giftMap[categorySlug || ""] && pageTitle ? "Flowers" : ""
-                  } ${
-                    !giftMap[categorySlug || ""] && !pageTitle
-                      ? "All Occasion Flowers"
-                      : ""
+                : ` ${pageTitle} ${!isGiftPage && pageTitle ? "Flowers" : ""} ${
+                    !isGiftPage && !pageTitle ? "All Occasion Flowers" : ""
                   }`}
             </h1>
 
-            <div className={styles.products}>
+            <div className={[styles.products].join(" ")}>
               {productsLoading && (
                 <div className={styles.spinner}>
                   <img src="/images/spinner.svg" alt="spinner" />
@@ -748,10 +744,9 @@ const ProductsPage: FunctionComponent<{
                   buttonText="Add to Cart"
                   subTitle={product.subtitle || product.name.split("–")[1]}
                   url={`/product/${product.slug}`}
-                  // mode="three-x-grid"
                   mode={`${
                     deviceType === "desktop"
-                      ? giftMap[categorySlug || ""] || categorySlug === "all"
+                      ? isGiftPage || categorySlug === "all"
                         ? "four-x-grid"
                         : "three-x-grid"
                       : "two-x-grid"
@@ -759,7 +754,7 @@ const ProductsPage: FunctionComponent<{
                   ref={
                     index === arr.length - 1
                       ? ele => {
-                          if (ele && hasMore) {
+                          if (ele && hasMore && !productsLoading) {
                             setLastProductEleRef(ele);
                           }
                         }
@@ -781,7 +776,7 @@ const ProductsPage: FunctionComponent<{
         </div>
       </div>
       <div className={styles.gifts}>
-        {!giftMap[categorySlug || ""] && (
+        {!isGiftPage && (
           <>
             <div className="flex between margin-bottom spaced">
               <span className={styles.title}>
