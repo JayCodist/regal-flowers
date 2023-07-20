@@ -36,6 +36,8 @@ export interface SettingsControls extends Settings {
   confirm: (confirmParams: ConfirmParams) => void;
   breadcrumb: Breadcrumb;
   setBreadcrumb: (breadcrumb: Breadcrumb) => void;
+  orderLoading: boolean;
+  setOrderLoading: (orderLoading: boolean) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -64,7 +66,9 @@ const SettingsContext = createContext<SettingsControls>({
   setOrder: () => {},
   confirm: () => {},
   breadcrumb: { label: "", url: "" },
-  setBreadcrumb: () => {}
+  setBreadcrumb: () => {},
+  orderLoading: false,
+  setOrderLoading: () => {}
 });
 
 export default SettingsContext;
