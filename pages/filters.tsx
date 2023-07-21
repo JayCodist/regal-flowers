@@ -295,7 +295,7 @@ const ProductsPage: FunctionComponent<{
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedOccasion, sort]);
+  }, [categorySlug, selectedOccasion, sort, shopBy]);
 
   useEffect(() => {
     if (isReady) {
