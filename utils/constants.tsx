@@ -2367,12 +2367,12 @@ export const featuredSlugs: Record<LocationName, string[]> = {
 export const popularSections: Occasion[] = [
   {
     title: "Fresh Flowers",
-    url: `/filters?filter=${encodeURIComponent("Fresh Flowers")}`,
+    url: `/filters?shopBy=${encodeURIComponent("fresh flowers")}`,
     image: "/images/popular-fresh.jpg"
   },
   {
     title: "Forever Roses",
-    url: `/filters?filter=${encodeURIComponent("Forever Roses")}`,
+    url: `/filters?shopBy=${encodeURIComponent("forever roses")}`,
     image: "/images/popular-forever.jpg"
   },
   {
@@ -2382,7 +2382,7 @@ export const popularSections: Occasion[] = [
   },
   {
     title: "Bundled Products",
-    url: `/filters?filter=${encodeURIComponent("Bundled Products")}`,
+    url: `/filters?shopBy=${encodeURIComponent("bundled products")}`,
     image: "/images/popular-bundled.jpg"
   }
   // {
