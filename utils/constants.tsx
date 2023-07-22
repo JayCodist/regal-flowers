@@ -2284,6 +2284,11 @@ export const links: AppLink[] = [
         url: "/product-category/gift-packs",
         title: "Giftsets",
         children: []
+      },
+      {
+        url: "/product-category/scented-candles",
+        title: "Scented Candles",
+        children: []
       }
     ]
   },
