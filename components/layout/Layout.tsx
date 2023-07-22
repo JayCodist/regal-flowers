@@ -1,6 +1,5 @@
 import React, {
   FunctionComponent,
-  LegacyRef,
   MouseEvent as ReactMouseEvent,
   ReactNode,
   useContext,
@@ -373,13 +372,9 @@ const Header: FunctionComponent = () => {
   }, [cartItems]);
 
   const handleActiveNav = (title: string, e: ReactMouseEvent) => {
-    setActiveNavLink(title === activeNavLink ? "" : title);
+    setActiveNavLink(title);
     e.stopPropagation();
   };
-
-  const excludedAreaRef = useOutsideClick(() => {
-    setActiveNavLink("");
-  });
 
   const accountAnchor = (
     <button className="flex column center-align">
@@ -551,15 +546,11 @@ const Header: FunctionComponent = () => {
               <div
                 className={styles.link}
                 key={index}
-                ref={
-                  link.title === activeNavLink
-                    ? (excludedAreaRef as LegacyRef<HTMLDivElement>)
-                    : undefined
-                }
+                onMouseEnter={e => handleActiveNav(link.title, e)}
+                onMouseLeave={() => setActiveNavLink("")}
               >
                 <div
                   className={`flex center-align spaced  ${styles.title}`}
-                  onClick={e => handleActiveNav(link.title, e)}
                   key={link.title}
                   role="button"
                 >
@@ -576,7 +567,9 @@ const Header: FunctionComponent = () => {
                     <div
                       className={[
                         styles.arrow,
-                        activeNavLink === link.title && styles.active
+                        activeNavLink === link.title && activeNavLink
+                          ? styles.active
+                          : ""
                       ].join(" ")}
                     ></div>
                   )}
@@ -599,12 +592,7 @@ const Header: FunctionComponent = () => {
                       ].join(" ")}
                     >
                       {link.children.map((child, index) => (
-                        <div
-                          // className={[
-                          //   child.children.length && styles.grid
-                          // ].join(" ")}
-                          key={index}
-                        >
+                        <div key={index}>
                           {child.url ? (
                             <Link href={child.url} key={index}>
                               <a
