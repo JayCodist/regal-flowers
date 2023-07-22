@@ -53,8 +53,8 @@ export const breadcrumbItems: Breadcrumb[] = [
   { url: "perfumes", label: "Perfumes" },
   { url: "balloons", label: "Balloons" },
   {
-    url: "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
-    label: "All Gifts"
+    url: "scented-candles",
+    label: "Scented Candles"
   },
   { url: "cascadingdropping-bouquets", label: "Cascading Bridal Bouquets" },
   {
@@ -1628,10 +1628,9 @@ export const gifts: { title: string; url: string; category?: string }[] = [
     category: "Giftsets"
   },
   {
-    title: "All Gifts",
-    url:
-      "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
-    category: "All Gifts"
+    title: "Scented Candles",
+    url: "/product-category/scented-candles",
+    category: "Scented Candles"
   }
 ];
 
@@ -2284,6 +2283,11 @@ export const links: AppLink[] = [
       {
         url: "/product-category/gift-packs",
         title: "Giftsets",
+        children: []
+      },
+      {
+        url: "/product-category/scented-candles",
+        title: "Scented Candles",
         children: []
       }
     ]
