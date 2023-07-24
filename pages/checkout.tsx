@@ -200,7 +200,7 @@ const Checkout: FunctionComponent = () => {
   const payStackConfig: PaystackProps = {
     reference: order?.id as string,
     email: formData.senderEmail || placeholderEmail,
-    amount: Math.round(((total || 0) * 100) / currency.conversionRate),
+    amount: Math.ceil(((total || 0) * 100) / currency.conversionRate),
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_test_3840ef4162a5542a0b92ba1eca94147059df955d",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
