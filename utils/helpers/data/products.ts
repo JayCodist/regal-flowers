@@ -17,13 +17,6 @@ export const getProduct: (
       `/v1/wordpress/product/single/${slug}?relatedProductsCount=${relatedProductsCount}`
     );
 
-    if (!response.data.inStock) {
-      return {
-        error: true,
-        message: "Product is out of stock",
-        data: null
-      };
-    }
     return {
       error: false,
       data: response.data as Product
@@ -84,10 +77,9 @@ export const getAllProducts: () => Promise<
 > = async () => {
   try {
     const response = await restAPIInstance.get("/v1/wordpress/product/all");
-    const data = filterInStockProducts(response.data.data);
     return {
       error: false,
-      data
+      data: response.data.data as Product[]
     };
   } catch (err) {
     console.error("Unable to get all products: ", err);
@@ -106,10 +98,9 @@ export const getProductsBySlugs: (
     const response = await restAPIInstance.get(
       `/v1/wordpress/product/slug-multiple?slugs=${slugs.join(",")}`
     );
-    const data = filterInStockProducts(response.data);
     return {
       error: false,
-      data
+      data: response.data as Product[]
     };
   } catch (err) {
     console.error("Unable to get products by slugs", err);
