@@ -56,6 +56,7 @@ interface Product {
   class: "regular" | "vip";
   designNote: string;
   design: string;
+  inStock: boolean;
 }
 
 export interface Gift {

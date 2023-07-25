@@ -2,6 +2,7 @@ import { ProductFilterLogic } from "../../../pages/filters";
 import { FetchResourceParams } from "../../types/FetchResourceParams";
 import Product from "../../types/Product";
 import RequestResponse from "../../types/RequestResponse";
+import { filterInStockProducts } from "../functions";
 import { restAPIInstance } from "../rest-api-config";
 
 export const getProduct: (
@@ -15,6 +16,14 @@ export const getProduct: (
     const response = await restAPIInstance.get(
       `/v1/wordpress/product/single/${slug}?relatedProductsCount=${relatedProductsCount}`
     );
+
+    if (!response.data.inStock) {
+      return {
+        error: true,
+        message: "Product is out of stock",
+        data: null
+      };
+    }
     return {
       error: false,
       data: response.data as Product
@@ -55,9 +64,10 @@ export const getProductsByCategory: (
         ","
       )}&flowerType=${flowerType?.join(",")}&packages=${packages?.join(",")}`
     );
+    const data = filterInStockProducts(response.data.data);
     return {
       error: false,
-      data: response.data.data as Product[]
+      data
     };
   } catch (err) {
     console.error("Unable to get products by category: ", err);
@@ -74,9 +84,10 @@ export const getAllProducts: () => Promise<
 > = async () => {
   try {
     const response = await restAPIInstance.get("/v1/wordpress/product/all");
+    const data = filterInStockProducts(response.data.data);
     return {
       error: false,
-      data: response.data.data as Product[]
+      data
     };
   } catch (err) {
     console.error("Unable to get all products: ", err);
@@ -95,9 +106,10 @@ export const getProductsBySlugs: (
     const response = await restAPIInstance.get(
       `/v1/wordpress/product/slug-multiple?slugs=${slugs.join(",")}`
     );
+    const data = filterInStockProducts(response.data);
     return {
       error: false,
-      data: response.data as Product[]
+      data
     };
   } catch (err) {
     console.error("Unable to get products by slugs", err);
