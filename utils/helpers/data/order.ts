@@ -1,4 +1,4 @@
-import { CartItem } from "../../types/Core";
+import { AppCurrencyName, CartItem } from "../../types/Core";
 import { Order, CheckoutFormData } from "../../types/Order";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
@@ -134,7 +134,12 @@ export const getOrder: (
 export const createOrder: (payload: {
   cartItems: CartItem[];
   deliveryDate: string;
-}) => Promise<RequestResponse<Order>> = async ({ cartItems, deliveryDate }) => {
+  currency: AppCurrencyName;
+}) => Promise<RequestResponse<Order>> = async ({
+  cartItems,
+  deliveryDate,
+  currency
+}) => {
   try {
     const response = await restAPIInstance.post(`/v1/firebase/order/create`, {
       deliveryDate,
@@ -144,7 +149,8 @@ export const createOrder: (payload: {
         size: item.size || "",
         quantity: item.quantity,
         image: item.image
-      }))
+      })),
+      currency
     });
     AppStorage.save(AppStorageConstants.ORDER_ID, response.data.id);
     return {
@@ -164,10 +170,12 @@ export const updateOrder: (payload: {
   cartItems: CartItem[];
   deliveryDate: string;
   id: string;
+  currency: AppCurrencyName;
 }) => Promise<RequestResponse<Order>> = async ({
   cartItems,
   deliveryDate,
-  id
+  id,
+  currency
 }) => {
   try {
     const response = await restAPIInstance.put(`/v1/firebase/order/${id}`, {
@@ -178,7 +186,8 @@ export const updateOrder: (payload: {
         size: item.size || "",
         quantity: item.quantity,
         image: item.image
-      }))
+      })),
+      currency
     });
     return {
       error: false,

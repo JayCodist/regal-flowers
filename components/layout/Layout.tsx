@@ -950,7 +950,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
     const { data, error, message } = await createOrder({
       cartItems,
-      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || ""
+      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || "",
+      currency: currency.name
     });
 
     setLoading(false);
@@ -970,7 +971,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     const { data, error, message } = await updateOrder({
       cartItems,
       deliveryDate: deliveryDate?.format("YYYY-MM-DD") || "",
-      id: orderId as string
+      id: orderId as string,
+      currency: currency.name
     });
 
     setLoading(false);

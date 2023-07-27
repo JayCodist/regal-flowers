@@ -95,7 +95,8 @@ const initialData: CheckoutFormData = {
   recipientCountryCode: "+234",
   senderCountryCode: "+234",
   recipientCountryCodeAlt: "+234",
-  zone: ""
+  zone: "",
+  currency: "NGN"
 };
 
 type DeliverStage =
@@ -2658,6 +2659,11 @@ const PaypalModal: FunctionComponent<ModalProps & {
   const currencyRef: MutableRefObject<AppCurrency> = useRef(currency);
 
   currencyRef.current = currency;
+
+  console.log({
+    currencyRef: currencyRef.current,
+    currency
+  });
 
   const handleSessionCreate = (
     data: CreateOrderData,
