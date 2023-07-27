@@ -195,6 +195,7 @@ const Checkout: FunctionComponent = () => {
     setCurrentStage(3);
     setOrderId("");
     AppStorage.remove(AppStorageConstants.ORDER_ID);
+    AppStorage.remove(AppStorageConstants.CART_ITEMS);
   };
 
   const payStackConfig: PaystackProps = {
@@ -2667,9 +2668,9 @@ const PaypalModal: FunctionComponent<ModalProps & {
         {
           amount: {
             value: String(
-              (
+              Math.ceil(
                 (order?.amount || 0) /
-                (currencyRef.current?.conversionRate || 1)
+                  (currencyRef.current?.conversionRate || 1)
               ).toFixed(2)
             )
           },

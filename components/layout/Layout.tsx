@@ -360,7 +360,11 @@ const Header: FunctionComponent = () => {
     user,
     allCurrencies,
     setShouldShowCart,
-    shouldShowCart
+    shouldShowCart,
+    setOrder,
+    setCurrentStage,
+    setDeliveryDate,
+    orderId
   } = useContext(SettingsContext);
   // const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
   //   setShouldShowAuthDropdown(false);
@@ -375,6 +379,16 @@ const Header: FunctionComponent = () => {
     setActiveNavLink(title);
     e.stopPropagation();
   };
+
+  useEffect(() => {
+    if (!orderId) {
+      setOrder(null);
+      setCurrentStage(1);
+      setDeliveryDate(null);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]);
 
   const accountAnchor = (
     <button className="flex column center-align">
@@ -982,6 +996,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   useEffect(() => {
     if (orderId) {
       fetchOrder(orderId);
+    } else {
+      const savedCartItems = AppStorage.get(AppStorageConstants.CART_ITEMS);
+      if (savedCartItems) {
+        setCartItems(savedCartItems);
+      }
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

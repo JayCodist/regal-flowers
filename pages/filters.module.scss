@@ -65,6 +65,14 @@
       }
 
       .gifts-wrapper {
+        display: grid;
+        grid-template-columns: repeat(4, 14rem);
+        grid-gap: 1rem;
+        padding: 0 6rem;
+        justify-content: center;
+        justify-items: center;
+        row-gap: 2rem;
+
         @media (max-width: 1400px) {
           padding: 0 2rem;
         }
@@ -106,8 +114,8 @@
         }
 
         &.gift-occasion {
-          height: 10rem;
           width: 10rem;
+          height: 10rem;
           @media (max-width: 1150px) {
             width: 9rem;
             height: 9rem;
