@@ -121,6 +121,7 @@ export const getOrder: (
   } catch (err) {
     if ((err as Error).message === "Order not found") {
       AppStorage.remove(AppStorageConstants.ORDER_ID);
+      AppStorage.remove(AppStorageConstants.CART_ITEMS);
     }
     return {
       error: true,

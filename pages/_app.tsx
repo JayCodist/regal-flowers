@@ -83,6 +83,7 @@ const App: FunctionComponent<AppProps> = props => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>(defaultBreadcrumb);
   const [orderLoading, setOrderLoading] = useState(false);
+  const [currentStage, setCurrentStage] = useState<Stage>(1);
 
   const initializeAppConfig = async () => {
     const savedCurrency = AppStorage.get<AppCurrency>(
@@ -172,15 +173,18 @@ const App: FunctionComponent<AppProps> = props => {
     setConfirmParams(defaultConfirmParams);
   };
 
+  useEffect(() => {
+    AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
+  }, [cartItems]);
+
   const settingsControls: SettingsControls = {
     currency: settings.currency,
     setCurrency: (currency: AppCurrency) => {
       setSettings({ ...settings, currency });
       AppStorage.save(AppStorageConstants.SAVED_CURRENCY, currency);
     },
-    currentStage: settings.currentStage,
-    setCurrentStage: (currentStage: Stage) =>
-      setSettings({ ...settings, currentStage }),
+    currentStage,
+    setCurrentStage,
     deliveryDate,
     setDeliveryDate,
     cartItems,
