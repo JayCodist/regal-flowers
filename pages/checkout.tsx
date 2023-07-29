@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import Link from "next/link";
 import { usePaystackPayment } from "react-paystack";
 import { PaystackProps } from "react-paystack/dist/types";
@@ -190,6 +190,8 @@ const Checkout: FunctionComponent = () => {
     );
   }, [order]);
 
+  const convertedTotal = Math.ceil(subTotal / currency.conversionRate);
+
   const markAsPaid = () => {
     setIsPaid(true);
     setCartItems([]);
@@ -351,6 +353,12 @@ const Checkout: FunctionComponent = () => {
     const _isPaid =
       /go\s*ahead/i.test(order?.paymentStatus || "") ||
       /^paid/i.test(order?.paymentStatus || "");
+
+    const isSenderInfo =
+      order?.client.name &&
+      order?.client.phone &&
+      order.client.email &&
+      order.deliveryDate;
     setIsPaid(_isPaid);
     if (_isPaid) {
       markAsPaid();
@@ -371,12 +379,7 @@ const Checkout: FunctionComponent = () => {
         setDeliveryDate(dayjs(order?.deliveryDate));
         setIsSenderInfoCompleted(true);
         setDeliveryStage("customization-message");
-      } else if (
-        order?.client.name &&
-        order?.client.phone &&
-        order.client.email &&
-        order.deliveryDate
-      ) {
+      } else if (isSenderInfo) {
         setFormData({
           ...formData,
           senderName: order?.client.name,
@@ -397,6 +400,18 @@ const Checkout: FunctionComponent = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
+
+  useEffect(() => {
+    if (user && !formData.senderName && !formData.senderEmail) {
+      setFormData({
+        ...formData,
+        senderName: user.name,
+        senderEmail: user.email,
+        senderPhoneNumber: user.phone
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -494,7 +509,7 @@ const Checkout: FunctionComponent = () => {
     } else if (!formData.senderName) {
       notify("error", "Please enter a sender name");
       return;
-    } else if (formData.freeAccount && !formData.senderPassword) {
+    } else if (formData.freeAccount && !formData.senderPassword && !user) {
       notify(
         "error",
         "Please enter a password or uncheck the free account box"
@@ -525,14 +540,15 @@ const Checkout: FunctionComponent = () => {
     setSavingSenderInfo(false);
   };
 
-  // const deliveryMap = {
-  //   Arranged: "Arranged",
-  //   Delivered: "Delivered",
-  //   Despatched: "Despatched",
-  //   "Not Arranged": "Not Arranged",
-  //   "Delivery Failed/Issues with Delivery": "Delivery Failed",
-  //   "Delivered (drivers update)": "Delivered"
-  // };
+  const handleDateChange = (date: Dayjs | null) => {
+    setDeliveryDate(date);
+    setFormData({
+      ...formData,
+      zone: "",
+      deliveryLocation: null,
+      state: ""
+    });
+  };
 
   const isDelivered = (deliveryStatus = "") => {
     return /delivered/i.test(deliveryStatus);
@@ -556,35 +572,16 @@ const Checkout: FunctionComponent = () => {
     );
   }, [currency, deliveryDate, formData.state]);
 
-  const abujaDeliveryZoneOptions = useMemo(() => {
+  const selectedZone = useMemo(() => {
+    const amount = Math.ceil(subTotal / currency.conversionRate);
     return (
-      allDeliveryLocationZones["abuja"]?.(
-        subTotal || 0,
-        currency,
-        deliveryDate || dayjs()
-      ) || []
-    );
-  }, [currency, deliveryDate, subTotal]);
-
-  const lagosDeliveryZoneOptions = useMemo(() => {
-    return (
-      allDeliveryLocationZones["lagos"]?.(
-        subTotal || 0,
-        currency,
-        deliveryDate || dayjs()
-      ) || []
-    );
-  }, [currency, deliveryDate, subTotal]);
-
-  const selectedZone = useMemo(
-    () =>
       allDeliveryLocationZones[formData.state]?.(
-        subTotal || 0,
+        amount,
         currency,
         deliveryDate || dayjs()
-      )?.find(zone => zone.value === formData.zone) || null,
-    [currency, deliveryDate, formData.state, formData.zone, subTotal]
-  );
+      )?.find(zone => zone.value === formData.zone) || null
+    );
+  }, [currency, deliveryDate, formData.state, formData.zone, subTotal]);
 
   if (pageLoading || orderLoading) {
     return (
@@ -730,7 +727,7 @@ const Checkout: FunctionComponent = () => {
                               </span>
                               <DatePicker
                                 value={deliveryDate}
-                                onChange={setDeliveryDate}
+                                onChange={date => handleDateChange(date)}
                                 format="D MMMM YYYY"
                                 responsive
                                 disablePastDays
@@ -763,7 +760,7 @@ const Checkout: FunctionComponent = () => {
                             </span>
                             <DatePicker
                               value={deliveryDate}
-                              onChange={setDeliveryDate}
+                              onChange={date => handleDateChange(date)}
                               format="D MMMM YYYY"
                               responsive
                               disablePastDays
@@ -884,7 +881,7 @@ const Checkout: FunctionComponent = () => {
                                   dimmed
                                 />
                               </div>
-                              {formData.state === "abuja" && (
+                              {formData.state && (
                                 <div className="input-group">
                                   <span className="question">
                                     Delivery Zones
@@ -894,26 +891,13 @@ const Checkout: FunctionComponent = () => {
                                       handleChange("zone", value)
                                     }
                                     value={formData.zone}
-                                    options={abujaDeliveryZoneOptions}
-                                    placeholder="Select a zone"
-                                    responsive
-                                    dimmed
-                                    dropdownOnTop
-                                    optionColor="gray-white"
-                                  />
-                                </div>
-                              )}
-                              {formData.state === "lagos" && (
-                                <div className="input-group">
-                                  <span className="question">
-                                    Delivery Zones
-                                  </span>
-                                  <Select
-                                    onSelect={value =>
-                                      handleChange("zone", value)
-                                    }
-                                    value={formData.zone}
-                                    options={lagosDeliveryZoneOptions}
+                                    options={allDeliveryLocationZones[
+                                      formData.state
+                                    ](
+                                      convertedTotal,
+                                      currency,
+                                      deliveryDate || dayjs()
+                                    )}
                                     placeholder="Select a zone"
                                     responsive
                                     dimmed
@@ -1723,7 +1707,7 @@ const Checkout: FunctionComponent = () => {
                       <span className="question">Pickup/Delivery Date</span>
                       <DatePicker
                         value={deliveryDate}
-                        onChange={setDeliveryDate}
+                        onChange={date => handleDateChange(date)}
                         format="D MMMM YYYY"
                         responsive
                         disablePastDays
@@ -1864,7 +1848,7 @@ const Checkout: FunctionComponent = () => {
                               />
                             </div>
 
-                            {formData.state === "abuja" && (
+                            {formData.state && (
                               <div className="input-group">
                                 <span className="question">Delivery Zones</span>
                                 <Select
@@ -1872,24 +1856,13 @@ const Checkout: FunctionComponent = () => {
                                     handleChange("zone", value)
                                   }
                                   value={formData.zone}
-                                  options={abujaDeliveryZoneOptions}
-                                  placeholder="Select a zone"
-                                  responsive
-                                  dimmed
-                                  dropdownOnTop
-                                  optionColor="gray-white"
-                                />
-                              </div>
-                            )}
-                            {formData.state === "lagos" && (
-                              <div className="input-group">
-                                <span className="question">Delivery Zones</span>
-                                <Select
-                                  onSelect={value =>
-                                    handleChange("zone", value)
-                                  }
-                                  value={formData.zone}
-                                  options={lagosDeliveryZoneOptions}
+                                  options={allDeliveryLocationZones[
+                                    formData.state
+                                  ](
+                                    convertedTotal,
+                                    currency,
+                                    deliveryDate || dayjs()
+                                  )}
                                   placeholder="Select a zone"
                                   responsive
                                   dimmed
@@ -2659,11 +2632,6 @@ const PaypalModal: FunctionComponent<ModalProps & {
   const currencyRef: MutableRefObject<AppCurrency> = useRef(currency);
 
   currencyRef.current = currency;
-
-  console.log({
-    currencyRef: currencyRef.current,
-    currency
-  });
 
   const handleSessionCreate = (
     data: CreateOrderData,
