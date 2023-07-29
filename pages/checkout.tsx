@@ -354,11 +354,6 @@ const Checkout: FunctionComponent = () => {
       /go\s*ahead/i.test(order?.paymentStatus || "") ||
       /^paid/i.test(order?.paymentStatus || "");
 
-    const isSenderInfo =
-      order?.client.name &&
-      order?.client.phone &&
-      order.client.email &&
-      order.deliveryDate;
     setIsPaid(_isPaid);
     if (_isPaid) {
       markAsPaid();
@@ -379,7 +374,12 @@ const Checkout: FunctionComponent = () => {
         setDeliveryDate(dayjs(order?.deliveryDate));
         setIsSenderInfoCompleted(true);
         setDeliveryStage("customization-message");
-      } else if (isSenderInfo) {
+      } else if (
+        order?.client.name &&
+        order?.client.phone &&
+        order.client.email &&
+        order.deliveryDate
+      ) {
         setFormData({
           ...formData,
           senderName: order?.client.name,
