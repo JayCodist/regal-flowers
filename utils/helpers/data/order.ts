@@ -119,14 +119,15 @@ export const getOrder: (
       data: response.data as Order
     };
   } catch (err) {
-    if ((err as Error).message === "Order not found") {
+    if ((err as any).status === 404) {
       AppStorage.remove(AppStorageConstants.ORDER_ID);
       AppStorage.remove(AppStorageConstants.CART_ITEMS);
     }
     return {
       error: true,
       message: (err as Error).message,
-      data: null
+      data: null,
+      status: (err as any).status
     };
   }
 };
