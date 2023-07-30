@@ -449,6 +449,7 @@ const Header: FunctionComponent = () => {
                       setActiveNavLink(link.title);
                       !link.children.length && setShowSidebar(false);
                     }}
+                    key={link.title}
                   >
                     <strong>{link.title}</strong>
                     {link.children.length > 0 && (
@@ -477,7 +478,7 @@ const Header: FunctionComponent = () => {
                       </div>
 
                       {link.children.map((child, index) => (
-                        <>
+                        <div key={index}>
                           {child.url ? (
                             <Link href={child.url} key={index}>
                               <a
@@ -497,6 +498,7 @@ const Header: FunctionComponent = () => {
                               onClick={() => {
                                 setActiveSublinkNav(child.title);
                               }}
+                              key={index}
                             >
                               <strong>{child.title}</strong>
                               {child.children.length > 0 && (
@@ -535,7 +537,7 @@ const Header: FunctionComponent = () => {
                               </Link>
                             ))}
                           </div>
-                        </>
+                        </div>
                       ))}
                     </div>
                   )}
@@ -608,7 +610,7 @@ const Header: FunctionComponent = () => {
                       {link.children.map((child, index) => (
                         <div key={index}>
                           {child.url ? (
-                            <Link href={child.url} key={index}>
+                            <Link href={child.url}>
                               <a
                                 onClick={() => {
                                   setActiveNavLink("");
@@ -828,10 +830,10 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
   const fetchOrder = async (orderId: string) => {
     setOrderLoading(true);
-    const { error, data, message } = await getOrder(orderId);
+    const { error, data, status } = await getOrder(orderId);
 
     if (error) {
-      if (message === "Order not found") {
+      if (status === 404) {
         setOrderId("");
         setOrder(null);
         setCartItems([]);
