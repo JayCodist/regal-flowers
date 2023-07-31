@@ -458,7 +458,8 @@ const Checkout: FunctionComponent = () => {
     setLoading(true);
     const { error, message } = await updateCheckoutState(_orderId as string, {
       ...formData,
-      deliveryDate
+      deliveryDate,
+      currency: currency.name
     });
     setLoading(false);
 
@@ -479,7 +480,8 @@ const Checkout: FunctionComponent = () => {
               {
                 ...formData,
                 deliveryDate,
-                freeAccount: false
+                freeAccount: false,
+                currency: currency.name
               }
             );
             if (error) {

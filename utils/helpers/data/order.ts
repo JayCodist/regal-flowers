@@ -210,7 +210,7 @@ export const updateCheckoutState: (
   try {
     const response = await restAPIInstance.put(
       `/v1/firebase/order/checkout-order/${id}`,
-      adaptCheckoutStateRecord(formData)
+      { ...adaptCheckoutStateRecord(formData), currency: formData.currency }
     );
     return {
       error: false,
