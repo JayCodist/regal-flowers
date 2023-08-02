@@ -75,7 +75,7 @@ const initialData: CheckoutFormData = {
   freeAccount: true,
   coupon: "",
   deliveryMethod: "pick-up",
-  state: "",
+  state: "lagos",
   pickUpLocation: "",
   deliveryLocation: null,
   recipientName: "",
@@ -190,7 +190,15 @@ const Checkout: FunctionComponent = () => {
     );
   }, [order]);
 
-  const convertedTotal = Math.ceil(subTotal / currency.conversionRate);
+  const deliveryZoneOptions = useMemo(() => {
+    return formData.state
+      ? allDeliveryLocationZones[formData.state](
+          subTotal / currency.conversionRate,
+          currency,
+          deliveryDate || dayjs()
+        )
+      : [];
+  }, [subTotal, currency, deliveryDate, formData.state]);
 
   const markAsPaid = () => {
     setIsPaid(true);
@@ -359,10 +367,18 @@ const Checkout: FunctionComponent = () => {
       markAsPaid();
     } else {
       if (order?.orderStatus === "processing") {
+        const isZoneValid = Boolean(
+          deliveryZoneOptions.find(
+            option => option.value === order.deliveryDetails.zone
+          )
+        );
+
         setFormData({
           ...formData,
           ...adaptCheckOutFomData(order),
           freeAccount: false,
+          state: isZoneValid ? order.deliveryDetails.state : "",
+          zone: isZoneValid ? order.deliveryDetails.zone : "",
           deliveryLocation:
             allDeliveryLocationOptions[order.deliveryDetails.state]?.(
               currency,
@@ -893,13 +909,7 @@ const Checkout: FunctionComponent = () => {
                                       handleChange("zone", value)
                                     }
                                     value={formData.zone}
-                                    options={allDeliveryLocationZones[
-                                      formData.state
-                                    ](
-                                      convertedTotal,
-                                      currency,
-                                      deliveryDate || dayjs()
-                                    )}
+                                    options={deliveryZoneOptions}
                                     placeholder="Select a zone"
                                     responsive
                                     dimmed
@@ -1124,9 +1134,7 @@ const Checkout: FunctionComponent = () => {
                               </div>
                             </div>
                             <div className="input-group">
-                              <span className="question">
-                                Detailed Home Address
-                              </span>
+                              <span className="question">Detailed Address</span>
 
                               <TextArea
                                 value={formData.recipientHomeAddress}
@@ -1167,7 +1175,6 @@ const Checkout: FunctionComponent = () => {
 
                             <TextArea
                               value={formData.additionalInfo}
-                              placeholder="E.g Drop it with the waiter"
                               onChange={value =>
                                 handleChange("additionalInfo", value)
                               }
@@ -1858,13 +1865,7 @@ const Checkout: FunctionComponent = () => {
                                     handleChange("zone", value)
                                   }
                                   value={formData.zone}
-                                  options={allDeliveryLocationZones[
-                                    formData.state
-                                  ](
-                                    convertedTotal,
-                                    currency,
-                                    deliveryDate || dayjs()
-                                  )}
+                                  options={deliveryZoneOptions}
                                   placeholder="Select a zone"
                                   responsive
                                   dimmed
@@ -2152,9 +2153,7 @@ const Checkout: FunctionComponent = () => {
                             />
                           </div>
                           <div className="input-group">
-                            <span className="question">
-                              Detailed Home Address
-                            </span>
+                            <span className="question">Detailed Address</span>
 
                             <TextArea
                               value={formData.recipientHomeAddress}
@@ -2271,7 +2270,6 @@ const Checkout: FunctionComponent = () => {
 
                         <TextArea
                           value={formData.additionalInfo}
-                          placeholder="E.g Drop it with the waiter"
                           onChange={value =>
                             handleChange("additionalInfo", value)
                           }
