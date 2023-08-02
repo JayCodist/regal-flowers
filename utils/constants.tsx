@@ -2635,82 +2635,84 @@ export interface DeliveryLocationOption {
 
 export const allDeliveryLocationZones: Record<
   LocationName,
-  (amount?: number, currency?: AppCurrency, deliveryDate?: Dayjs) => Option[]
+  (amount: number, currency: AppCurrency, deliveryDate: Dayjs) => Option[]
 > = {
-  lagos: (amount = 0, currency, deliveryDate) => [
-    {
-      label: (
-        <p>
-          <strong>ZONE 1</strong>
-          <br /> Not sure or need us to reach the recipient to confirm address
-        </p>
-      ),
-      value: !["13-02", "14-02", "15-02"].includes(
-        deliveryDate?.format("DD-MM") || ""
-      )
-        ? "highLagos-zone1"
-        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
-        ? "freeLagosVals-zone1"
-        : "mediumLagosVals-zone1"
-    },
-    {
-      label: (
-        <p>
-          <strong>ZONE 2</strong>
-          <br />
-          <strong>Island</strong> (Ibeju Lekki, Badore, Free Trade Zone, Epe)
-          <br />
-          <br />
-          <strong>Mainland</strong> (Idimu, Badagry, Ikorodu, Alaba/Ojo, Ikotun,
-          Festac, Ikotun, Iyana-Ipaja, Egbeda, Apapa, Badagry, Abule Egba, and
-          similar environs)
-        </p>
-      ),
-      value: !["13-02", "14-02", "15-02"].includes(
-        deliveryDate?.format("DD-MM") || ""
-      )
-        ? "highLagos-zone2"
-        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
-        ? "freeLagosVals-zone2"
-        : "mediumLagosVals-zone2"
-    },
-    {
-      label: (
-        <p>
-          <strong>ZONE 3</strong>
-          <br />
-          <strong>Island</strong>(Ikoyi, Victoria Island, Lagos Island, Lekki
-          Phase 1 up to Ajah)
-          <br />
-          <br />
-          <strong>Mainland</strong>(Yaba, Surulere, Mushin, Anthony, Ogudu,
-          Magodo, Omole, Gbagada, Ilupeju, Maryland, Maryland, Ikeja, Opebi,
-          Ogba)
-        </p>
-      ),
-      value:
-        (amount || 0) >=
-        (["13-02", "14-02", "15-02"].includes(
+  lagos: (amount = 0, currency, deliveryDate) => {
+    return [
+      {
+        label: (
+          <p>
+            <strong>ZONE 1</strong>
+            <br /> Not sure or need us to reach the recipient to confirm address
+          </p>
+        ),
+        value: !["13-02", "14-02", "15-02"].includes(
           deliveryDate?.format("DD-MM") || ""
         )
-          ? freeDeliveryThresholdVals
-          : freeDeliveryThreshold)[currency?.name || "NGN"]
-          ? `freeLagos${
-              ["13-02", "14-02", "15-02"].includes(
-                deliveryDate?.format("DD-MM") || ""
-              )
-                ? "Vals"
-                : ""
-            }-zone3`
-          : `mediumLagos${
-              ["13-02", "14-02", "15-02"].includes(
-                deliveryDate?.format("DD-MM") || ""
-              )
-                ? "Vals"
-                : ""
-            }-zone3`
-    }
-  ],
+          ? "highLagos-zone1"
+          : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+          ? "freeLagosVals-zone1"
+          : "mediumLagosVals-zone1"
+      },
+      {
+        label: (
+          <p>
+            <strong>ZONE 2</strong>
+            <br />
+            <strong>Island</strong> (Ibeju Lekki, Badore, Free Trade Zone, Epe)
+            <br />
+            <br />
+            <strong>Mainland</strong> (Idimu, Badagry, Ikorodu, Alaba/Ojo,
+            Ikotun, Festac, Ikotun, Iyana-Ipaja, Egbeda, Apapa, Badagry, Abule
+            Egba, and similar environs)
+          </p>
+        ),
+        value: !["13-02", "14-02", "15-02"].includes(
+          deliveryDate?.format("DD-MM") || ""
+        )
+          ? "highLagos-zone2"
+          : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+          ? "freeLagosVals-zone2"
+          : "mediumLagosVals-zone2"
+      },
+      {
+        label: (
+          <p>
+            <strong>ZONE 3</strong>
+            <br />
+            <strong>Island</strong>(Ikoyi, Victoria Island, Lagos Island, Lekki
+            Phase 1 up to Ajah)
+            <br />
+            <br />
+            <strong>Mainland</strong>(Yaba, Surulere, Mushin, Anthony, Ogudu,
+            Magodo, Omole, Gbagada, Ilupeju, Maryland, Maryland, Ikeja, Opebi,
+            Ogba)
+          </p>
+        ),
+        value:
+          (amount || 0) >=
+          (["13-02", "14-02", "15-02"].includes(
+            deliveryDate?.format("DD-MM") || ""
+          )
+            ? freeDeliveryThresholdVals
+            : freeDeliveryThreshold)[currency?.name || "NGN"]
+            ? `freeLagos${
+                ["13-02", "14-02", "15-02"].includes(
+                  deliveryDate?.format("DD-MM") || ""
+                )
+                  ? "Vals"
+                  : ""
+              }-zone3`
+            : `mediumLagos${
+                ["13-02", "14-02", "15-02"].includes(
+                  deliveryDate?.format("DD-MM") || ""
+                )
+                  ? "Vals"
+                  : ""
+              }-zone3`
+      }
+    ];
+  },
   abuja: (amount, currency, deliveryDate) => [
     {
       label: (
