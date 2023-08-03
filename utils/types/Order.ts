@@ -283,6 +283,7 @@ export interface CheckoutFormData {
   state: LocationName;
   zone: string;
   currency: AppCurrencyName;
+  deliveryInstruction: string;
 }
 
 export type PaymentName =

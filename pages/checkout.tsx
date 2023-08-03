@@ -96,7 +96,8 @@ const initialData: CheckoutFormData = {
   senderCountryCode: "+234",
   recipientCountryCodeAlt: "+234",
   zone: "",
-  currency: "NGN"
+  currency: "NGN",
+  deliveryInstruction: ""
 };
 
 type DeliverStage =
@@ -1146,6 +1147,21 @@ const Checkout: FunctionComponent = () => {
                                 rows={3}
                               />
                             </div>
+                            <div className="input-group">
+                              <span className="question">
+                                Any Delivery Instructions
+                              </span>
+
+                              <TextArea
+                                value={formData.deliveryInstruction}
+                                placeholder="e.g. Ask for security guard called Segun"
+                                onChange={value =>
+                                  handleChange("deliveryInstruction", value)
+                                }
+                                dimmed
+                                rows={3}
+                              />
+                            </div>
                           </div>
                         </div>
                       )}
@@ -2160,6 +2176,21 @@ const Checkout: FunctionComponent = () => {
                               placeholder="To help us deliver better, please be detailed as possible"
                               onChange={value =>
                                 handleChange("recipientHomeAddress", value)
+                              }
+                              dimmed
+                              rows={3}
+                            />
+                          </div>
+                          <div className="input-group">
+                            <span className="question">
+                              Any Delivery Instructions
+                            </span>
+
+                            <TextArea
+                              value={formData.deliveryInstruction}
+                              placeholder="e.g. Ask for security guard called Segun"
+                              onChange={value =>
+                                handleChange("deliveryInstruction", value)
                               }
                               dimmed
                               rows={3}
