@@ -1850,6 +1850,34 @@ const Checkout: FunctionComponent = () => {
                             checked={formData.deliveryMethod === "pick-up"}
                           />
                         </div>
+                        {formData.deliveryMethod === "pick-up" && (
+                          <div className={styles["pickup-locations"]}>
+                            <p className="primary-color align-icon normal-text bold margin-bottom">
+                              <InfoRedIcon />
+                              <span className="margin-left">
+                                Pick Up Locations
+                              </span>
+                            </p>
+                            <div>
+                              <Radio
+                                label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+                                onChange={() =>
+                                  handleChange("pickUpLocation", "Ikoyi")
+                                }
+                                checked={formData.pickUpLocation === "Ikoyi"}
+                              />
+                            </div>
+                            <div className="vertical-margin">
+                              <Radio
+                                label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+                                onChange={() =>
+                                  handleChange("pickUpLocation", "Abuja")
+                                }
+                                checked={formData.pickUpLocation === "Abuja"}
+                              />
+                            </div>
+                          </div>
+                        )}
                         <div className="vertical-margin spaced">
                           <Radio
                             label="Delivery"
@@ -1961,35 +1989,6 @@ const Checkout: FunctionComponent = () => {
                               })}
                             </div>
                           )}
-
-                        {formData.deliveryMethod === "pick-up" && (
-                          <div className={styles["pickup-locations"]}>
-                            <p className="primary-color align-icon normal-text bold margin-bottom">
-                              <InfoRedIcon />
-                              <span className="margin-left">
-                                Pick Up Locations
-                              </span>
-                            </p>
-                            <div>
-                              <Radio
-                                label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
-                                onChange={() =>
-                                  handleChange("pickUpLocation", "Ikoyi")
-                                }
-                                checked={formData.pickUpLocation === "Ikoyi"}
-                              />
-                            </div>
-                            <div className="vertical-margin">
-                              <Radio
-                                label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
-                                onChange={() =>
-                                  handleChange("pickUpLocation", "Abuja")
-                                }
-                                checked={formData.pickUpLocation === "Abuja"}
-                              />
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </div>
 
