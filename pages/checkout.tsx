@@ -232,7 +232,9 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         [key as string]: value,
-        zone: value === "other-locations" ? value : ""
+        zone: value === "other-locations" ? value : "",
+        pickUpLocation: "",
+        deliveryLocation: null
       });
       return;
     }
@@ -247,15 +249,24 @@ const Checkout: FunctionComponent = () => {
       });
       return;
     }
-    if (key === "deliveryMethod" && value === "pick-up") {
-      setFormData({
-        ...formData,
-        [key as string]: value,
-        deliveryLocation: null,
-        state: "",
-        zone: ""
-      });
-      return;
+    if (key === "deliveryMethod") {
+      if (value === "pick-up") {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          deliveryLocation: null,
+          state: "",
+          zone: ""
+        });
+        return;
+      } else {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          pickUpLocation: ""
+        });
+        return;
+      }
     }
     if (
       key === "senderPhoneNumber" ||
@@ -1004,9 +1015,9 @@ const Checkout: FunctionComponent = () => {
                                 <Radio
                                   label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
                                   onChange={() =>
-                                    handleChange("pickUpLocation", "Ikoyi")
+                                    handleChange("pickUpLocation", "Lagos")
                                   }
-                                  checked={formData.pickUpLocation === "Ikoyi"}
+                                  checked={formData.pickUpLocation === "Lagos"}
                                 />
                               </div>
                               <div className="vertical-margin">
@@ -1862,9 +1873,9 @@ const Checkout: FunctionComponent = () => {
                               <Radio
                                 label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
                                 onChange={() =>
-                                  handleChange("pickUpLocation", "Ikoyi")
+                                  handleChange("pickUpLocation", "Lagos")
                                 }
-                                checked={formData.pickUpLocation === "Ikoyi"}
+                                checked={formData.pickUpLocation === "Lagos"}
                               />
                             </div>
                             <div className="vertical-margin">
@@ -2058,7 +2069,10 @@ const Checkout: FunctionComponent = () => {
                       className={`${styles["sender-info"]} normal-text flex between`}
                     >
                       <p>Delivery</p>
-                      <p>{formData.state}</p>
+                      {formData.pickUpLocation && (
+                        <p>Pick Up {formData.pickUpLocation}</p>
+                      )}
+                      {formData.state && <p>{formData.state}</p>}
                     </div>
                     {formData.deliveryMethod === "delivery" && (
                       <div>
@@ -2256,7 +2270,10 @@ const Checkout: FunctionComponent = () => {
                       className={`${styles["sender-info"]} normal-text flex between`}
                     >
                       <p>Delivery</p>
-                      <p>{formData.state}</p>
+                      {formData.pickUpLocation && (
+                        <p>Pick Up {formData.pickUpLocation}</p>
+                      )}
+                      {formData.state && <p>{formData.state}</p>}
                     </div>
                     {formData.deliveryMethod === "delivery" && (
                       <div className="flex between">

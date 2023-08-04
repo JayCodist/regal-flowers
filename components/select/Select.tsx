@@ -197,6 +197,9 @@ const Select: FunctionComponent<SelectProps> = props => {
           .join(", ")
       : (options.find(option => option.value === value) || {})[display];
     setDisplayValue(_displayValue || "");
+    if (!value) {
+      setOptions(_options);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options, value]);
 
