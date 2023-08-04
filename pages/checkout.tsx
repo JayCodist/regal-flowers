@@ -54,7 +54,6 @@ import {
 import { AppCurrency } from "../utils/types/Core";
 import {
   adaptCheckOutFomData,
-  getOptionsFromArray,
   getPriceDisplay
 } from "../utils/helpers/type-conversions";
 import { Recipient } from "../utils/types/User";
@@ -401,7 +400,9 @@ const Checkout: FunctionComponent = () => {
         });
         setDeliveryDate(dayjs(order?.deliveryDate));
         setIsSenderInfoCompleted(true);
-        setDeliveryStage("customization-message");
+        !isZoneValid
+          ? setDeliveryStage("delivery-type")
+          : setDeliveryStage("customization-message");
       } else if (
         order?.client.name &&
         order?.client.phone &&
@@ -2188,7 +2189,7 @@ const Checkout: FunctionComponent = () => {
                                 handleChange("residenceType", value)
                               }
                               value={formData.residenceType}
-                              options={getOptionsFromArray(["Home", "Office"])}
+                              options={allresidentTypes}
                               placeholder="Select a residence type"
                               responsive
                               dimmed
