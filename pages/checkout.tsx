@@ -1863,11 +1863,8 @@ const Checkout: FunctionComponent = () => {
                         </div>
                         {formData.deliveryMethod === "pick-up" && (
                           <div className={styles["pickup-locations"]}>
-                            <p className="primary-color align-icon normal-text bold margin-bottom">
-                              <InfoRedIcon />
-                              <span className="margin-left">
-                                Pick Up Locations
-                              </span>
+                            <p className="align-icon normal-text bold margin-bottom">
+                              Pick Up Locations
                             </p>
                             <div>
                               <Radio
@@ -2056,24 +2053,36 @@ const Checkout: FunctionComponent = () => {
                         <p>{deliveryDate.format("dddd, MMMM DD YYYY")}</p>
                       )}
                     </div>
-                    <div className="flex between">
-                      <p className={styles.title}>Delivery Type</p>
-                      <strong
-                        onClick={() => setDeliveryStage("delivery-type")}
-                        className="primary-color underline"
+                    {formData.deliveryMethod && (
+                      <div className="flex between">
+                        <p className={styles.title}>Delivery Type</p>
+                        <strong
+                          onClick={() => setDeliveryStage("delivery-type")}
+                          className="primary-color underline"
+                        >
+                          Edit
+                        </strong>
+                      </div>
+                    )}
+                    {formData.deliveryMethod === "delivery" && formData.state && (
+                      <div
+                        className={`${styles["sender-info"]} normal-text flex between`}
                       >
-                        Edit
-                      </strong>
-                    </div>
-                    <div
-                      className={`${styles["sender-info"]} normal-text flex between`}
-                    >
-                      <p>Delivery</p>
-                      {formData.pickUpLocation && (
-                        <p>Pick Up {formData.pickUpLocation}</p>
+                        <p>Delivery</p>
+                        {formData.state && (
+                          <p className="capitalize">{formData.state}</p>
+                        )}
+                      </div>
+                    )}
+                    {formData.deliveryMethod === "pick-up" &&
+                      formData.pickUpLocation && (
+                        <div
+                          className={`${styles["sender-info"]} normal-text flex between`}
+                        >
+                          <p>Pick Up</p>
+                          {<p>{formData.pickUpLocation}</p>}
+                        </div>
                       )}
-                      {formData.state && <p>{formData.state}</p>}
-                    </div>
                     {formData.deliveryMethod === "delivery" && (
                       <div>
                         <p className={styles.title}>Receiver's Information</p>
@@ -2257,24 +2266,36 @@ const Checkout: FunctionComponent = () => {
                         <p>{deliveryDate.format("dddd, MMMM DD YYYY")}</p>
                       )}
                     </div>
-                    <div className="flex between">
-                      <p className={styles.title}>Delivery Type</p>
-                      <strong
-                        onClick={() => setDeliveryStage("delivery-type")}
-                        className="primary-color underline"
+                    {formData.deliveryMethod && (
+                      <div className="flex between">
+                        <p className={styles.title}>Delivery Type</p>
+                        <strong
+                          onClick={() => setDeliveryStage("delivery-type")}
+                          className="primary-color underline"
+                        >
+                          Edit
+                        </strong>
+                      </div>
+                    )}
+                    {formData.deliveryMethod === "delivery" && formData.state && (
+                      <div
+                        className={`${styles["sender-info"]} normal-text flex between`}
                       >
-                        Edit
-                      </strong>
-                    </div>
-                    <div
-                      className={`${styles["sender-info"]} normal-text flex between`}
-                    >
-                      <p>Delivery</p>
-                      {formData.pickUpLocation && (
-                        <p>Pick Up {formData.pickUpLocation}</p>
+                        <p>Delivery</p>
+                        {formData.state && (
+                          <p className="capitalize">{formData.state}</p>
+                        )}
+                      </div>
+                    )}
+                    {formData.deliveryMethod === "pick-up" &&
+                      formData.pickUpLocation && (
+                        <div
+                          className={`${styles["sender-info"]} normal-text flex between`}
+                        >
+                          <p>Pick Up</p>
+                          {<p>{formData.pickUpLocation}</p>}
+                        </div>
                       )}
-                      {formData.state && <p>{formData.state}</p>}
-                    </div>
                     {formData.deliveryMethod === "delivery" && (
                       <div className="flex between">
                         <p className={styles.title}>Receiver's Information</p>
