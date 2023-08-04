@@ -2777,7 +2777,8 @@ export const allDeliveryLocationZones: Record<
                 : ""
             }-zone3`
     }
-  ]
+  ],
+  "other-locations": () => []
 };
 
 export const allDeliveryLocationOptions: Record<

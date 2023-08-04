@@ -911,25 +911,26 @@ const Checkout: FunctionComponent = () => {
                                   dimmed
                                 />
                               </div>
-                              {formData.state && (
-                                <div className="input-group">
-                                  <span className="question">
-                                    Delivery Zones
-                                  </span>
-                                  <Select
-                                    onSelect={value =>
-                                      handleChange("zone", value)
-                                    }
-                                    value={formData.zone}
-                                    options={deliveryZoneOptions}
-                                    placeholder="Select a zone"
-                                    responsive
-                                    dimmed
-                                    dropdownOnTop
-                                    optionColor="gray-white"
-                                  />
-                                </div>
-                              )}
+                              {formData.state &&
+                                formData.state !== "other-locations" && (
+                                  <div className="input-group">
+                                    <span className="question">
+                                      Delivery Zones
+                                    </span>
+                                    <Select
+                                      onSelect={value =>
+                                        handleChange("zone", value)
+                                      }
+                                      value={formData.zone}
+                                      options={deliveryZoneOptions}
+                                      placeholder="Select a zone"
+                                      responsive
+                                      dimmed
+                                      dropdownOnTop
+                                      optionColor="gray-white"
+                                    />
+                                  </div>
+                                )}
                             </div>
                           )}
 
@@ -1909,23 +1910,26 @@ const Checkout: FunctionComponent = () => {
                               />
                             </div>
 
-                            {formData.state && (
-                              <div className="input-group">
-                                <span className="question">Delivery Zones</span>
-                                <Select
-                                  onSelect={value =>
-                                    handleChange("zone", value)
-                                  }
-                                  value={formData.zone}
-                                  options={deliveryZoneOptions}
-                                  placeholder="Select a zone"
-                                  responsive
-                                  dimmed
-                                  dropdownOnTop
-                                  optionColor="gray-white"
-                                />
-                              </div>
-                            )}
+                            {formData.state &&
+                              formData.state !== "other-locations" && (
+                                <div className="input-group">
+                                  <span className="question">
+                                    Delivery Zones
+                                  </span>
+                                  <Select
+                                    onSelect={value =>
+                                      handleChange("zone", value)
+                                    }
+                                    value={formData.zone}
+                                    options={deliveryZoneOptions}
+                                    placeholder="Select a zone"
+                                    responsive
+                                    dimmed
+                                    dropdownOnTop
+                                    optionColor="gray-white"
+                                  />
+                                </div>
+                              )}
                           </>
                         )}
 
