@@ -2321,6 +2321,8 @@ const Checkout: FunctionComponent = () => {
                         <p className={styles.grayed}>Alternative Number</p>
                         <p>{formData.recipientPhoneNumberAlt}</p>
                         <p>{formData.recipientHomeAddress}</p>
+                        <p className={styles.grayed}>Delivery Instructions</p>
+                        <p>{formData.deliveryInstruction}</p>
                       </div>
                     )}
                     <div>
