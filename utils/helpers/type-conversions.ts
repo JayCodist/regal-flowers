@@ -75,6 +75,7 @@ export const adaptCheckOutFomData: (
     additionalInfo: record.adminNotes,
     pickUpLocation: record.despatchLocation,
     zone: record.deliveryDetails.zone,
-    state: record.deliveryDetails.state
+    state: record.deliveryDetails.state,
+    deliveryInstruction: record.deliveryInstruction
   };
 };
