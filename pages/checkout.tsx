@@ -589,7 +589,7 @@ const Checkout: FunctionComponent = () => {
     () =>
       user?.recipients.map(recipient => ({
         label: `${recipient.name} | ${recipient.phone} | ${recipient.phoneAlt} | ${recipient.address}`,
-        value: `${recipient.name}${recipient.phone}`
+        value: recipient._id
       })) || [],
     [user]
   );
@@ -1069,16 +1069,12 @@ const Checkout: FunctionComponent = () => {
                                 onSelect={value => {
                                   setSelectedRecipient(
                                     user?.recipients.find(
-                                      recipient =>
-                                        `${recipient.name}${recipient.phone}` ===
-                                        value
+                                      recipient => recipient._id === value
                                     ) || null
                                   );
                                 }}
                                 value={
-                                  selectedRecipient
-                                    ? `${selectedRecipient.name}${selectedRecipient?.phone}`
-                                    : ""
+                                  selectedRecipient ? selectedRecipient._id : ""
                                 }
                                 options={pastRecipients}
                                 placeholder="Select Past Recipient"
@@ -2118,16 +2114,12 @@ const Checkout: FunctionComponent = () => {
                               onSelect={value => {
                                 setSelectedRecipient(
                                   user?.recipients.find(
-                                    recipient =>
-                                      `${recipient.name}${recipient.phone}` ===
-                                      value
+                                    recipient => recipient._id === value
                                   ) || null
                                 );
                               }}
                               value={
-                                selectedRecipient
-                                  ? `${selectedRecipient.name}${selectedRecipient?.phone}`
-                                  : ""
+                                selectedRecipient ? selectedRecipient._id : ""
                               }
                               options={pastRecipients}
                               placeholder="Select Past Recipient"
