@@ -54,7 +54,8 @@ import {
 import { AppCurrency } from "../utils/types/Core";
 import {
   adaptCheckOutFomData,
-  getPriceDisplay
+  getPriceDisplay,
+  removeCountryCode
 } from "../utils/helpers/type-conversions";
 import { Recipient } from "../utils/types/User";
 import { Stage } from "../utils/types/Core";
@@ -92,7 +93,7 @@ const initialData: CheckoutFormData = {
   cardNumber: "",
   cardCVV: "",
   recipientCountryCode: "+234",
-  senderCountryCode: "+234",
+  senderCountryCode: "",
   recipientCountryCodeAlt: "+234",
   zone: "",
   currency: "NGN",
@@ -293,13 +294,21 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         recipientName: selectedRecipient.name,
-        recipientPhoneNumber: selectedRecipient.phone,
-        recipientPhoneNumberAlt: selectedRecipient.phoneAlt,
+        recipientPhoneNumber: removeCountryCode(
+          selectedRecipient.phone,
+          selectedRecipient.phoneCountryCode
+        ),
+        recipientPhoneNumberAlt: removeCountryCode(
+          selectedRecipient.phoneAlt,
+          selectedRecipient.altPhoneCountryCode
+        ),
         recipientHomeAddress: selectedRecipient.address,
         message: selectedRecipient.message,
         deliveryMethod: selectedRecipient.method,
         residenceType: selectedRecipient.residenceType,
-        state: selectedRecipient.state
+        state: selectedRecipient.state,
+        recipientCountryCode: selectedRecipient.phoneCountryCode,
+        recipientCountryCodeAlt: selectedRecipient.altPhoneCountryCode
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -549,6 +558,9 @@ const Checkout: FunctionComponent = () => {
     } else if (!formData.senderPhoneNumber) {
       notify("error", "Please enter a sender phone number");
       return;
+    } else if (!formData.senderCountryCode) {
+      notify("error", "Please select a country code");
+      return;
     }
     setSavingSenderInfo(true);
     const { error, message } = await saveSenderInfo(_orderId as string, {
@@ -751,22 +763,20 @@ const Checkout: FunctionComponent = () => {
                             className="input-group half-width"
                           />
 
-                          {!user && (
-                            <div className="input-group half-width compact">
-                              <span className="question">
-                                Pickup/Delivery Date
-                              </span>
-                              <DatePicker
-                                value={deliveryDate}
-                                onChange={date => handleDateChange(date)}
-                                format="D MMMM YYYY"
-                                responsive
-                                disablePastDays
-                              />
-                            </div>
-                          )}
+                          <div className="input-group half-width compact">
+                            <span className="question">
+                              Pickup/Delivery Date
+                            </span>
+                            <DatePicker
+                              value={deliveryDate}
+                              onChange={date => handleDateChange(date)}
+                              format="D MMMM YYYY"
+                              responsive
+                              disablePastDays
+                            />
+                          </div>
                         </div>
-                        {!user ? (
+                        {!user && (
                           <div className="input-group half-width">
                             <span className="question">Create Password</span>
                             <Input
@@ -782,19 +792,6 @@ const Checkout: FunctionComponent = () => {
                               required={formData.freeAccount}
                               showPasswordIcon
                               disabled={!formData.freeAccount}
-                            />
-                          </div>
-                        ) : (
-                          <div className="input-group half-width compact">
-                            <span className="question">
-                              Pickup/Delivery Date
-                            </span>
-                            <DatePicker
-                              value={deliveryDate}
-                              onChange={date => handleDateChange(date)}
-                              format="D MMMM YYYY"
-                              responsive
-                              disablePastDays
                             />
                           </div>
                         )}

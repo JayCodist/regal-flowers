@@ -33,7 +33,7 @@ export function getAddress(str: string) {
   }
 }
 
-function removeCountryCode(phoneNumber: string, countryCode: string) {
+export function removeCountryCode(phoneNumber: string, countryCode: string) {
   if (phoneNumber.startsWith(countryCode)) {
     phoneNumber = phoneNumber.slice(countryCode.length);
   }
