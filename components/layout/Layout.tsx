@@ -384,14 +384,14 @@ const Header: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    if (!orderId) {
+    if (!orderId && _pathname !== "checkout") {
       setOrder(null);
       setCurrentStage(1);
       setDeliveryDate(null);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]);
+  }, [_pathname]);
 
   const accountAnchor = (
     <button className="flex column center-align">

@@ -26,6 +26,7 @@ import {
   freeDeliveryThreshold,
   freeDeliveryThresholdVals,
   paymentMethods,
+  pickupLocations,
   placeholderEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
@@ -131,10 +132,10 @@ const Checkout: FunctionComponent = () => {
   const [formData, setFormData] = useState<CheckoutFormData>(initialData);
   // const [selectedMethod, setSelectedMethod] = useState<number | null>();
   const [pageLoading, setPageLoading] = useState(false);
-  const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
-    order?: boolean;
-    payment?: boolean;
-  }>({ order: true, payment: false });
+  // const [expandedOrderSummary, setExpandedOrderSummary] = useState<{
+  //   order?: boolean;
+  //   payment?: boolean;
+  // }>({ order: true, payment: false });
   const [isPaid, setIsPaid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [savingSenderInfo, setSavingSenderInfo] = useState(false);
@@ -215,7 +216,7 @@ const Checkout: FunctionComponent = () => {
     email: formData.senderEmail || placeholderEmail,
     amount: Math.ceil(((total || 0) * 100) / currency.conversionRate),
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
-    publicKey: "pk_test_3840ef4162a5542a0b92ba1eca94147059df955d",
+    publicKey: "pk_live_1077b3af566a8ecdaaef2f5cb48b3486b0e6a521",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
   };
 
@@ -385,55 +386,54 @@ const Checkout: FunctionComponent = () => {
     setIsPaid(_isPaid);
     if (_isPaid) {
       markAsPaid();
-    } else {
-      if (order?.orderStatus === "processing") {
-        const isZoneValid = Boolean(
-          deliveryZoneOptions.find(
-            option => option.value === order.deliveryDetails.zone
-          )
-        );
+    }
+    if (order?.orderStatus === "processing") {
+      const isZoneValid = Boolean(
+        deliveryZoneOptions.find(
+          option => option.value === order.deliveryDetails.zone
+        )
+      );
 
-        setFormData({
-          ...formData,
-          ...adaptCheckOutFomData(order),
-          freeAccount: false,
-          state: isZoneValid ? order.deliveryDetails.state : "",
-          zone: isZoneValid ? order.deliveryDetails.zone : "",
-          deliveryLocation:
-            allDeliveryLocationOptions[order.deliveryDetails.state]?.(
-              currency,
-              dayjs(order.deliveryDate) || dayjs()
-            ).find(
-              option => option.name === order.deliveryDetails.zone.split("-")[0]
-            ) || null
-        });
-        setDeliveryDate(dayjs(order?.deliveryDate));
-        setIsSenderInfoCompleted(true);
-        !isZoneValid
-          ? setDeliveryStage("delivery-type")
-          : setDeliveryStage("customization-message");
-      } else if (
-        order?.client.name &&
-        order?.client.phone &&
-        order.client.email &&
-        order.deliveryDate
-      ) {
-        setFormData({
-          ...formData,
-          senderName: order?.client.name,
-          senderPhoneNumber: order?.client.phone,
-          deliveryDate: dayjs(order.deliveryDate),
-          senderEmail: order.client.email
-        });
-        setDeliveryDate(dayjs(order?.deliveryDate));
-        setIsSenderInfoCompleted(true);
-        setDeliveryStage("delivery-type");
-      } else {
-        setFormData({
-          ...formData,
-          freeAccount: Boolean(!user)
-        });
-      }
+      setFormData({
+        ...formData,
+        ...adaptCheckOutFomData(order),
+        freeAccount: false,
+        state: isZoneValid ? order.deliveryDetails.state : "",
+        zone: isZoneValid ? order.deliveryDetails.zone : "",
+        deliveryLocation:
+          allDeliveryLocationOptions[order.deliveryDetails.state]?.(
+            currency,
+            dayjs(order.deliveryDate) || dayjs()
+          ).find(
+            option => option.name === order.deliveryDetails.zone.split("-")[0]
+          ) || null
+      });
+      setDeliveryDate(dayjs(order?.deliveryDate));
+      setIsSenderInfoCompleted(true);
+      !isZoneValid
+        ? setDeliveryStage("delivery-type")
+        : setDeliveryStage("customization-message");
+    } else if (
+      order?.client.name &&
+      order?.client.phone &&
+      order.client.email &&
+      order.deliveryDate
+    ) {
+      setFormData({
+        ...formData,
+        senderName: order?.client.name,
+        senderPhoneNumber: order?.client.phone,
+        deliveryDate: dayjs(order.deliveryDate),
+        senderEmail: order.client.email
+      });
+      setDeliveryDate(dayjs(order?.deliveryDate));
+      setIsSenderInfoCompleted(true);
+      setDeliveryStage("delivery-type");
+    } else {
+      setFormData({
+        ...formData,
+        freeAccount: Boolean(!user)
+      });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1441,7 +1441,12 @@ const Checkout: FunctionComponent = () => {
             </div>
           )}
           {currentStage === 3 && isPaid && (
-            <div className="flex between">
+            <div
+              className={[
+                "flex between",
+                styles["completed-checkout-wrapper"]
+              ].join(" ")}
+            >
               <div className={styles["complete-checkout"]}>
                 <div className="text-center">
                   <img
@@ -1477,6 +1482,8 @@ const Checkout: FunctionComponent = () => {
                         number on arrival.
                       </p>
                     </div>
+                    {formData.deliveryMethod === "pick-up" &&
+                      pickupLocations[formData.pickUpLocation as string]}
                   </div>
 
                   <Button
@@ -1517,50 +1524,139 @@ const Checkout: FunctionComponent = () => {
                   Payment successful. A copy has been sent to your mail for
                   reference.
                 </p>
-                <div className="flex between vertical-margin spaced center-align">
-                  <p
-                    className={[
-                      styles.detail,
-                      expandedOrderSummary.order && styles.active
-                    ].join(" ")}
-                  >
-                    Order Details
+                <div className="vertical-margin spaced center-align">
+                  <p className={[styles.detail].join(" ")}>
+                    Sender's Information
                   </p>
-                  <div
-                    className={[
-                      styles["circle-outline"],
-                      expandedOrderSummary.order && styles.active
-                    ].join(" ")}
-                    onClick={() =>
-                      setExpandedOrderSummary({
-                        ...expandedOrderSummary,
-                        order: !expandedOrderSummary.order,
-                        payment: false
-                      })
-                    }
-                  >
-                    <span
-                      className={[
-                        styles.vertical,
-                        expandedOrderSummary.order && styles.active
-                      ].join(" ")}
-                    ></span>
-                    <span
-                      className={[
-                        styles.horizontal,
-                        expandedOrderSummary.order && styles.active
-                      ].join(" ")}
-                    ></span>
+                  <hr className="hr vertical-margin" />
+                  <div className={[styles["order-detail"]].join(" ")}>
+                    <div className="flex column spaced">
+                      <div className={styles["order-detail"]}>
+                        <span className="flex between">
+                          <strong>Name</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.senderName}
+                          </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Phone Number</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.senderPhoneNumber}
+                          </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Email</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.senderEmail}
+                          </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Delivery Date</strong>
+                          <span className={styles["detail-value"]}>
+                            {deliveryDate?.format("DD MMMM, YYYY")}
+                          </span>
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <hr className="hr" />
+                {formData.deliveryMethod === "pick-up" && (
+                  <div className="vertical-margin spaced center-align">
+                    <p className={[styles.detail].join(" ")}>
+                      Pick Up Location
+                    </p>
+                    <hr className="hr vertical-margin" />
+                    <div className={[styles["order-detail"]].join(" ")}>
+                      {pickupLocations[formData.pickUpLocation as string]}
+                    </div>
+                  </div>
+                )}
+                {formData.deliveryMethod === "delivery" && (
+                  <div className="vertical-margin spaced center-align">
+                    <p className={[styles.detail].join(" ")}>
+                      Receiver's Information
+                    </p>
+                    <hr className="hr vertical-margin" />
+                    <div className={[styles["order-detail"]].join(" ")}>
+                      <div className="flex column spaced">
+                        <div className={styles["order-detail"]}>
+                          <span className="flex between">
+                            <strong>Name</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.recipientName}
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Phone Number</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.recipientPhoneNumber}
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Address</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.recipientHomeAddress}
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Residence Type</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.residenceType}
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Delivery Instructions</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.deliveryInstruction}
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
-                <div
-                  className={[
-                    styles["order-details"],
-                    expandedOrderSummary.order && styles.active
-                  ].join(" ")}
-                >
+                <div className="vertical-margin spaced center-align">
+                  <p className={[styles.detail].join(" ")}>Optional Message</p>
+                  <hr className="hr vertical-margin" />
+                  <div className={[styles["order-detail"]].join(" ")}>
+                    <div className="flex column spaced">
+                      <div className={styles["order-detail"]}>
+                        {formData.message && (
+                          <span className="flex between">
+                            <strong>Message</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.message}
+                            </span>
+                          </span>
+                        )}
+                        {formData.additionalInfo && (
+                          <span className="flex between">
+                            <strong>Additional Info</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.additionalInfo}
+                            </span>
+                          </span>
+                        )}
+                        {formData.purpose && (
+                          <span className="flex between">
+                            <strong>Purpose</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.purpose}
+                            </span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex between vertical-margin spaced center-align">
+                  <p className={[styles.detail].join(" ")}>Order Details</p>
+                </div>
+                <hr className="hr vertical-margin" />
+
+                <div className={[styles["order-details"]].join(" ")}>
                   {order?.orderProducts?.map((item, index) => (
                     <div key={index} className="flex column spaced">
                       <div className={styles["order-detail"]}>
@@ -1582,47 +1678,9 @@ const Checkout: FunctionComponent = () => {
                 </div>
 
                 <div className="flex between vertical-margin spaced center-align">
-                  <p
-                    className={[
-                      styles.detail,
-                      expandedOrderSummary.payment && styles.active
-                    ].join(" ")}
-                  >
-                    Payment Details
-                  </p>
-                  <div
-                    className={[
-                      styles["circle-outline"],
-                      expandedOrderSummary.payment && styles.active
-                    ].join(" ")}
-                    onClick={() =>
-                      setExpandedOrderSummary({
-                        ...expandedOrderSummary,
-                        payment: !expandedOrderSummary.payment,
-                        order: false
-                      })
-                    }
-                  >
-                    <span
-                      className={[
-                        styles.vertical,
-                        expandedOrderSummary.payment && styles.active
-                      ].join(" ")}
-                    ></span>
-                    <span
-                      className={[
-                        styles.horizontal,
-                        expandedOrderSummary.payment && styles.active
-                      ].join(" ")}
-                    ></span>
-                  </div>
+                  <p className={[styles.detail].join(" ")}>Payment Details</p>
                 </div>
-                <div
-                  className={[
-                    styles["order-details"],
-                    expandedOrderSummary.payment && styles.active
-                  ].join(" ")}
-                >
+                <div className={[styles["order-details"]].join(" ")}>
                   <hr className="hr margin-bottom spaced" />
                   <div className="flex between normal-text margin-bottom spaced">
                     <span>Subtotal</span>
@@ -2540,7 +2598,11 @@ const Checkout: FunctionComponent = () => {
                     <p>Order Received Succesfully</p>
                     <p className={styles["order-number"]}>
                       Order No:{" "}
-                      <span className={styles.bold}>{order?.fullOrderId}</span>{" "}
+                      <span
+                        className={[styles.bold, "primary-color"].join(" ")}
+                      >
+                        {order?.fullOrderId}
+                      </span>{" "}
                     </p>
                   </div>
 
@@ -2570,15 +2632,143 @@ const Checkout: FunctionComponent = () => {
                         number on arrival.
                       </p>
                     </div>
+                    <Button
+                      className={styles["shopping-btn"]}
+                      onClick={() =>
+                        router.push(
+                          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+                        )
+                      }
+                    >
+                      Continue Shopping
+                    </Button>
+                    {pickupLocations[formData.pickUpLocation as string]}
                   </div>
                 </div>
 
                 <div className={styles["order-summary"]}>
+                  <p className={[styles.detail].join(" ")}>
+                    Sender's Information
+                  </p>
+                  <div className={[styles["order-details"]].join(" ")}>
+                    <div className={styles["order-detail"]}>
+                      <span className="flex between">
+                        <strong>Name</strong>
+                        <span className={styles["detail-value"]}>
+                          {formData.senderName}
+                        </span>
+                      </span>
+                      <span className="flex between">
+                        <strong>Phone Number</strong>
+                        <span className={styles["detail-value"]}>
+                          {formData.senderPhoneNumber}
+                        </span>
+                      </span>
+                      <span className="flex between">
+                        <strong>Email</strong>
+                        <span className={styles["detail-value"]}>
+                          {formData.senderEmail}
+                        </span>
+                      </span>
+                      <span className="flex between">
+                        <strong>Delivery Date</strong>
+                        <span className={styles["detail-value"]}>
+                          {deliveryDate?.format("DD MMMM, YYYY")}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                  {formData.deliveryMethod === "pick-up" && (
+                    <>
+                      <p className={[styles.detail].join(" ")}>
+                        Pick Up Location
+                      </p>
+                      <div className={[styles["order-details"]].join(" ")}>
+                        <div className={styles["order-detail"]}>
+                          {pickupLocations[formData.pickUpLocation as string]}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {formData.deliveryMethod === "delivery" && (
+                    <div className="vertical-margin">
+                      <p className={[styles.detail].join(" ")}>
+                        Receiver's Information
+                      </p>
+                      <div className={[styles["order-details"]].join(" ")}>
+                        <div className={styles["order-detail"]}>
+                          <span className="flex between">
+                            <strong>Name</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.recipientName}
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Phone Number</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.recipientPhoneNumber}
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Address</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.recipientHomeAddress}
+                            </span>
+                          </span>
+                          <span className="flex between">
+                            <strong>Residence Type</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.residenceType}
+                            </span>
+                          </span>
+                          {formData.deliveryInstruction && (
+                            <span className="flex between">
+                              <strong>Delivery Instructions</strong>
+                              <span className={styles["detail-value"]}>
+                                {formData.deliveryInstruction}
+                              </span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <>
+                    <p className={[styles.detail].join(" ")}>
+                      Optional Message
+                    </p>
+                    <div className={[styles["order-details"]].join(" ")}>
+                      <div className={styles["order-detail"]}>
+                        {formData.message && (
+                          <span className="flex between">
+                            <strong>Message</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.message}
+                            </span>
+                          </span>
+                        )}
+                        {formData.additionalInfo && (
+                          <span className="flex between">
+                            <strong>Additional Info</strong>
+                            <span className={styles["detail-value"]}>
+                              {formData.additionalInfo}
+                            </span>
+                          </span>
+                        )}
+
+                        <span className="flex between">
+                          <strong>Purpose</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.purpose}
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </>
                   <p className={[styles.detail].join(" ")}>Order Details</p>
 
                   <div className={[styles["order-details"]].join(" ")}>
                     {order?.orderProducts?.map((item, index) => (
-                      // <div key={index} className="flex column spaced">
                       <div className={styles["order-detail"]} key={index}>
                         <span className="flex between">
                           <strong>Name</strong>
@@ -2593,7 +2783,6 @@ const Checkout: FunctionComponent = () => {
                           </span>
                         </span>
                       </div>
-                      // </div>
                     ))}
                   </div>
 
@@ -2601,25 +2790,25 @@ const Checkout: FunctionComponent = () => {
                     <p className={[styles.detail].join(" ")}>Payment Details</p>
                   </div>
                   <div className={[styles["order-details"]].join(" ")}>
-                    <div className="flex between small-text margin-bottom spaced">
+                    <div className="flex between margin-bottom spaced">
                       <strong className={styles.grayed}>Subtotal</strong>
-                      <span className="bold">
+                      <span className={styles["detail-value"]}>
                         {getPriceDisplay(subTotal, currency)}
                       </span>
                     </div>
-                    <div className="flex between small-text margin-bottom spaced">
+                    <div className="flex between margin-bottom spaced">
                       <strong className={styles.grayed}>Add-Ons total</strong>
-                      <span className="bold">
+                      <span className={styles["detail-value"]}>
                         {getPriceDisplay(0, currency)}
                       </span>
                     </div>
-                    <div className="flex between small-text margin-bottom spaced">
+                    <div className="flex between margin-bottom spaced">
                       <div>
                         <strong className={styles.grayed}>
                           Delivery Charge
                         </strong>
                       </div>
-                      <span className="bold">
+                      <span className={styles["detail-value"]}>
                         {getPriceDisplay(
                           formData.deliveryLocation?.amount || 0,
                           currency

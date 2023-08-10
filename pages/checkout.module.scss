@@ -151,9 +151,14 @@
     }
   }
 
+  .completed-checkout-wrapper{
+    position: relative;
+  }
+
   .complete-checkout {
     width: 45%;
     padding-bottom: 2rem;
+    position: fixed;
 
     .complete-image {
       height: 14rem;
@@ -171,9 +176,10 @@
       background-color: #f3fcf6;
       padding: 0.5rem;
       display: inline-block;
-      font-size: 1rem;
+      font-size: 1.2rem;
       .bold {
         font-weight: 600;
+        color: #9b0000;
       }
       margin-bottom: 1.2rem;
     }
@@ -223,14 +229,11 @@
     padding: 1.5rem;
     width: 40%;
     height: fit-content;
+    margin-left: 60%;
     .detail {
       font-size: 1.4rem;
       font-weight: 600;
-      color: #2e3a59;
-
-      &.active {
-        color: #9b0000;
-      }
+      color: #9b0000;      
     }
     .circle-outline {
       width: 1.2rem;
@@ -270,10 +273,6 @@
       }
     }
 
-    .order-detail {
-      margin: 1.5rem auto;
-    }
-
     .order-image {
       height: 5.6rem;
       width: 5.6rem;
@@ -285,18 +284,6 @@
       width: 2.8rem;
       object-fit: contain;
       border-radius: 0.4rem;
-    }
-
-    .order-details {
-      max-height: 0;
-      margin-top: 0;
-      overflow: hidden;
-      transition: all 0.2s ease-out;
-
-      &.active {
-        max-height: 100%;
-        margin-top: 1.2rem;
-      }
     }
   }
   .light-gray {
@@ -486,7 +473,7 @@
 
   .order-number {
     font-size: 1rem;
-    color: black;
+    color: #6b7280;
   }
 
   .order-info {
@@ -500,7 +487,7 @@
     .detail {
       font-size: 1.2rem;
       font-weight: 600;
-      color: #2e3a59;
+      color: #9b0000;
     }
 
     .order-details {
@@ -564,4 +551,5 @@
   margin-left: 0.4rem;
   text-align: right;
   margin-bottom: 1rem;
+  overflow-wrap: anywhere;
 }

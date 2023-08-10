@@ -16,6 +16,21 @@ import {
 } from "./types/Regal";
 import { Breadcrumb } from "./context/SettingsContext";
 
+export const pickupLocations: Record<string, JSX.Element> = {
+  Lagos: (
+    <p>
+      <strong>Lagos Pickup Address</strong> - 81b, Lafiaji Way, Dolphin Estate,
+      Ikoyi, Lagos
+    </p>
+  ),
+  Abuja: (
+    <p>
+      <strong>Abuja Pickup Address</strong> - 5, Nairobi Street, off Aminu Kano
+      Crescent, Wuse 2, Abuja
+    </p>
+  )
+};
+
 export const breadcrumbItems: Breadcrumb[] = [
   {
     url:
