@@ -384,14 +384,14 @@ const Header: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    if (!orderId) {
+    if (!orderId && _pathname !== "checkout") {
       setOrder(null);
       setCurrentStage(1);
       setDeliveryDate(null);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderId]);
+  }, [_pathname]);
 
   const accountAnchor = (
     <button className="flex column center-align">
@@ -671,27 +671,24 @@ const Header: FunctionComponent = () => {
             " "
           )}
         >
-          {_pathname === "checkout" ? (
-            <div>
-              <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
-                <div
-                  className={[
-                    styles["auth-dropdown"],
-                    shouldShowAuthDropdown && styles.active
-                  ].join(" ")}
-                >
-                  <AuthDropdown />
-                </div>
+          <div>
+            <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
+              <div
+                className={[
+                  styles["auth-dropdown"],
+                  shouldShowAuthDropdown && styles.active
+                ].join(" ")}
+              >
+                <AuthDropdown />
               </div>
             </div>
-          ) : (
-            <ContextWrapper
-              anchor={accountAnchor}
-              className={styles["auth-wrapper"]}
-            >
-              <AuthDropdown />
-            </ContextWrapper>
-          )}
+          </div>
+          <ContextWrapper
+            anchor={accountAnchor}
+            className={styles["auth-wrapper"]}
+          >
+            <AuthDropdown />
+          </ContextWrapper>
 
           <button
             className={[styles["cart-btn"]].join(" ")}

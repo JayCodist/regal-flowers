@@ -21,6 +21,7 @@ interface Size {
 const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const { product } = props;
 
+  const outOfStock = product && !product.sku && !product.variants.length;
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [descriptionTab] = useState("product description");
   const [sizeType, setsizeType] = useState("regular");
@@ -628,7 +629,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               "vertical-margin"}`}
           >
             <Button
-              disabled={cannotBuy}
+              disabled={cannotBuy || outOfStock}
               className={` spaced ${deviceType == "desktop" &&
                 "vertical-margin"}`}
               responsive
@@ -641,7 +642,12 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   : ""
               }
             >
-              Add to Cart {getPriceDisplay(total || productPrice, currency)}
+              {outOfStock
+                ? "Out Of Stock"
+                : `Add to Cart ${getPriceDisplay(
+                    total || productPrice,
+                    currency
+                  )}`}
             </Button>
           </div>
         </div>
