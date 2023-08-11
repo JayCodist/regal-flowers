@@ -176,7 +176,7 @@
       background-color: #f3fcf6;
       padding: 0.5rem;
       display: inline-block;
-      font-size: 1.2rem;
+      font-size: 1.8rem;
       .bold {
         font-weight: 600;
         color: #9b0000;
@@ -234,6 +234,14 @@
       font-size: 1.4rem;
       font-weight: 600;
       color: #9b0000;      
+    }
+    .order-detail{
+      font-size: 1rem;
+
+      @media (max-width: 980px) {
+        font-size: 1.2rem;
+      }
+      
     }
     .circle-outline {
       width: 1.2rem;
@@ -481,7 +489,7 @@
     font-size: 1rem;
   }
 
-  .order-summary {
+  .order-summary-mobile {
     border: 0.1rem solid #f9fafb;
     border-radius: 0.6rem;
     .detail {
