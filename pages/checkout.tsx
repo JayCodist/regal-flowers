@@ -761,6 +761,7 @@ const Checkout: FunctionComponent = () => {
                               handleChange("senderCountryCode", value)
                             }
                             className="input-group half-width"
+                            countryCodePlaceholder="Code"
                           />
 
                           <div className="input-group half-width compact">
@@ -1109,6 +1110,7 @@ const Checkout: FunctionComponent = () => {
                                 }
                                 className="input-group"
                                 question="Receiver Phone number"
+                                countryCodePlaceholder="Code"
                               />
                             </div>
 
@@ -1124,6 +1126,7 @@ const Checkout: FunctionComponent = () => {
                                 }
                                 className="input-group"
                                 question="Enter alternative phone (if available)"
+                                countryCodePlaceholder="Code"
                               />
                               <div className="input-group">
                                 <span className="question">Residence Type</span>
@@ -1791,6 +1794,7 @@ const Checkout: FunctionComponent = () => {
                         handleChange("senderCountryCode", value)
                       }
                       className="input-group"
+                      countryCodePlaceholder="Code"
                     />
 
                     <div className="input-group">
@@ -2215,6 +2219,7 @@ const Checkout: FunctionComponent = () => {
                             }
                             className="input-group"
                             question="Receiver Phone number"
+                            countryCodePlaceholder="Code"
                           />
 
                           <PhoneInput
@@ -2228,6 +2233,7 @@ const Checkout: FunctionComponent = () => {
                             }
                             className="input-group"
                             question="Enter alternative phone (if available)"
+                            countryCodePlaceholder="Code"
                           />
                           <div className="input-group">
                             <span className="question">Residence Type</span>

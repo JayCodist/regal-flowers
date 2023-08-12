@@ -15,6 +15,7 @@ type PhoneInputProps = {
   question?: string;
   required?: boolean;
   className?: string;
+  countryCodePlaceholder?: string;
 };
 
 const PhoneInput = (props: PhoneInputProps) => {
@@ -25,7 +26,8 @@ const PhoneInput = (props: PhoneInputProps) => {
     onChangePhoneNumber,
     question,
     required,
-    className
+    className,
+    countryCodePlaceholder
   } = props;
 
   return (
@@ -36,7 +38,7 @@ const PhoneInput = (props: PhoneInputProps) => {
           onSelect={onChangeCountryCode as (value: ValueType) => void}
           value={countryCode}
           options={countryCodes}
-          placeholder="+234"
+          placeholder={countryCodePlaceholder || "+234"}
           responsive
           dimmed
           className={styles["country-code"]}
