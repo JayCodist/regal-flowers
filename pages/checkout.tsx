@@ -761,6 +761,7 @@ const Checkout: FunctionComponent = () => {
                               handleChange("senderCountryCode", value)
                             }
                             className="input-group half-width"
+                            countryCodePlaceholder="Code"
                           />
 
                           <div className="input-group half-width compact">
@@ -1109,6 +1110,7 @@ const Checkout: FunctionComponent = () => {
                                 }
                                 className="input-group"
                                 question="Receiver Phone number"
+                                countryCodePlaceholder="Code"
                               />
                             </div>
 
@@ -1124,6 +1126,7 @@ const Checkout: FunctionComponent = () => {
                                 }
                                 className="input-group"
                                 question="Enter alternative phone (if available)"
+                                countryCodePlaceholder="Code"
                               />
                               <div className="input-group">
                                 <span className="question">Residence Type</span>
@@ -1577,40 +1580,43 @@ const Checkout: FunctionComponent = () => {
                       Receiver's Information
                     </p>
                     <hr className="hr vertical-margin" />
-                    <div className={[styles["order-detail"]].join(" ")}>
-                      <div className="flex column spaced">
-                        <div className={styles["order-detail"]}>
-                          <span className="flex between">
-                            <strong>Name</strong>
-                            <span className={styles["detail-value"]}>
-                              {formData.recipientName}
-                            </span>
+                    <div
+                      className={[
+                        styles["order-detail"],
+                        "flex column spaced"
+                      ].join(" ")}
+                    >
+                      <div className={styles["order-detail"]}>
+                        <span className="flex between">
+                          <strong>Name</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.recipientName}
                           </span>
-                          <span className="flex between">
-                            <strong>Phone Number</strong>
-                            <span className={styles["detail-value"]}>
-                              {formData.recipientPhoneNumber}
-                            </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Phone Number</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.recipientPhoneNumber}
                           </span>
-                          <span className="flex between">
-                            <strong>Address</strong>
-                            <span className={styles["detail-value"]}>
-                              {formData.recipientHomeAddress}
-                            </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Address</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.recipientHomeAddress}
                           </span>
-                          <span className="flex between">
-                            <strong>Residence Type</strong>
-                            <span className={styles["detail-value"]}>
-                              {formData.residenceType}
-                            </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Residence Type</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.residenceType}
                           </span>
-                          <span className="flex between">
-                            <strong>Delivery Instructions</strong>
-                            <span className={styles["detail-value"]}>
-                              {formData.deliveryInstruction}
-                            </span>
+                        </span>
+                        <span className="flex between">
+                          <strong>Delivery Instructions</strong>
+                          <span className={styles["detail-value"]}>
+                            {formData.deliveryInstruction}
                           </span>
-                        </div>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -1651,64 +1657,62 @@ const Checkout: FunctionComponent = () => {
                   </div>
                 </div>
 
-                <div className="flex between vertical-margin spaced center-align">
+                <div className="vertical-margin spaced center-align">
                   <p className={[styles.detail].join(" ")}>Order Details</p>
-                </div>
-                <hr className="hr vertical-margin" />
 
-                <div className={[styles["order-details"]].join(" ")}>
-                  {order?.orderProducts?.map((item, index) => (
-                    <div key={index} className="flex column spaced">
-                      <div className={styles["order-detail"]}>
-                        <span className="flex between">
-                          <strong>Name</strong>
-                          <span className={styles["detail-value"]}>
-                            {item.name}
+                  <hr className="hr vertical-margin" />
+
+                  <div className={[styles["order-details"]].join(" ")}>
+                    {order?.orderProducts?.map((item, index) => (
+                      <div key={index} className="flex column spaced">
+                        <div className={styles["order-detail"]}>
+                          <span className="flex between">
+                            <strong>Name</strong>
+                            <span className={styles["detail-value"]}>
+                              {item.name}
+                            </span>
                           </span>
-                        </span>
-                        <span className="flex between">
-                          <strong>Qty</strong>
-                          <span className={styles["detail-value"]}>
-                            {item.quantity}
+                          <span className="flex between">
+                            <strong>Qty</strong>
+                            <span className={styles["detail-value"]}>
+                              {item.quantity}
+                            </span>
                           </span>
-                        </span>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
 
-                <div className="flex between vertical-margin spaced center-align">
-                  <p className={[styles.detail].join(" ")}>Payment Details</p>
-                </div>
-                <div className={[styles["order-details"]].join(" ")}>
-                  <hr className="hr margin-bottom spaced" />
-                  <div className="flex between normal-text margin-bottom spaced">
-                    <span>Subtotal</span>
-                    <span className="bold">
-                      {getPriceDisplay(subTotal || 0, currency)}
-                    </span>
+                <p className={[styles.detail, "margin-bottom"].join(" ")}>
+                  Payment Details
+                </p>
+                <hr className="hr margin-bottom spaced" />
+                <div className={[styles["order-detail"]].join(" ")}>
+                  <div className="flex between  margin-bottom spaced">
+                    <strong>Subtotal</strong>
+                    <span>{getPriceDisplay(subTotal || 0, currency)}</span>
                   </div>
-                  <div className="flex between normal-text margin-bottom spaced">
-                    <span>Add-Ons total</span>
-                    <span className="bold">{getPriceDisplay(0, currency)}</span>
+                  <div className="flex between  margin-bottom spaced">
+                    <strong>Add-Ons total</strong>
+                    <span>{getPriceDisplay(0, currency)}</span>
                   </div>
-                  <div className="flex between normal-text margin-bottom spaced">
+                  <div className="flex between  margin-bottom spaced">
                     <div>
-                      <span>Delivery Charge</span>
-                      <p className={`${styles["light-gray"]}`}>Lagos</p>
+                      <strong>Delivery Charge</strong>
                     </div>
-                    <span className="bold">
+                    <span>
                       {getPriceDisplay(
                         formData.deliveryLocation?.amount || 0,
                         currency
                       )}
                     </span>
                   </div>
-                  <div className="flex between normal-text margin-bottom spaced">
+                  <div className="flex between  margin-bottom spaced">
                     <div>
-                      <span>Payment Method</span>
+                      <strong>Payment Method</strong>
                     </div>
-                    <span className="bold">
+                    <span>
                       {order?.paymentStatus
                         ?.match(/\(.+\)/)?.[0]
                         ?.replace(/[()]/g, "")}
@@ -1790,6 +1794,7 @@ const Checkout: FunctionComponent = () => {
                         handleChange("senderCountryCode", value)
                       }
                       className="input-group"
+                      countryCodePlaceholder="Code"
                     />
 
                     <div className="input-group">
@@ -2214,6 +2219,7 @@ const Checkout: FunctionComponent = () => {
                             }
                             className="input-group"
                             question="Receiver Phone number"
+                            countryCodePlaceholder="Code"
                           />
 
                           <PhoneInput
@@ -2227,6 +2233,7 @@ const Checkout: FunctionComponent = () => {
                             }
                             className="input-group"
                             question="Enter alternative phone (if available)"
+                            countryCodePlaceholder="Code"
                           />
                           <div className="input-group">
                             <span className="question">Residence Type</span>
@@ -2632,21 +2639,11 @@ const Checkout: FunctionComponent = () => {
                         number on arrival.
                       </p>
                     </div>
-                    <Button
-                      className={styles["shopping-btn"]}
-                      onClick={() =>
-                        router.push(
-                          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-                        )
-                      }
-                    >
-                      Continue Shopping
-                    </Button>
                     {pickupLocations[formData.pickUpLocation as string]}
                   </div>
                 </div>
 
-                <div className={styles["order-summary"]}>
+                <div className={styles["order-summary-mobile"]}>
                   <p className={[styles.detail].join(" ")}>
                     Sender's Information
                   </p>
