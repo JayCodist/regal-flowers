@@ -2639,16 +2639,6 @@ const Checkout: FunctionComponent = () => {
                         number on arrival.
                       </p>
                     </div>
-                    <Button
-                      className={styles["shopping-btn"]}
-                      onClick={() =>
-                        router.push(
-                          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-                        )
-                      }
-                    >
-                      Continue Shopping
-                    </Button>
                     {pickupLocations[formData.pickUpLocation as string]}
                   </div>
                 </div>
