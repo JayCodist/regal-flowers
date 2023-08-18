@@ -212,7 +212,7 @@ const Checkout: FunctionComponent = () => {
   };
 
   const payStackConfig: PaystackProps = {
-    reference: order?.id as string,
+    reference: `${order?.id}${currency.name}` as string,
     email: formData.senderEmail || placeholderEmail,
     amount: Math.ceil(((total || 0) * 100) / currency.conversionRate),
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
