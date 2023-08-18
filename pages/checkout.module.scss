@@ -151,7 +151,7 @@
     }
   }
 
-  .completed-checkout-wrapper{
+  .completed-checkout-wrapper {
     position: relative;
   }
 
@@ -231,15 +231,14 @@
     .detail {
       font-size: 1.4rem;
       font-weight: 600;
-      color: #9b0000;      
+      color: #9b0000;
     }
-    .order-detail{
+    .order-detail {
       font-size: 1rem;
 
       @media (max-width: 980px) {
         font-size: 1.2rem;
       }
-      
     }
     .circle-outline {
       width: 1.2rem;
@@ -478,7 +477,7 @@
   }
 
   .order-number {
-    font-size: 1rem;
+    font-size: 1.5rem;
     color: #6b7280;
   }
 
