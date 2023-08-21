@@ -559,7 +559,10 @@ const Checkout: FunctionComponent = () => {
       notify("error", "Please enter a sender phone number");
       return;
     } else if (!formData.senderCountryCode) {
-      notify("error", "Please select a country code");
+      notify(
+        "error",
+        "Please select a country code in the phone number section"
+      );
       return;
     }
     setSavingSenderInfo(true);

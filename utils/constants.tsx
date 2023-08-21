@@ -459,7 +459,7 @@ export const deliveryStates: Option[] = [
 
 export const paymentMethods: PaymentMethod[] = [
   {
-    title: "PayPal - Credit/Dedit Cards",
+    title: "PayPal or Credit/Debit Cards",
     paymentName: "payPal",
     supportedCurrencies: ["USD", "GBP"],
     icon: (
@@ -568,7 +568,7 @@ export const paymentMethods: PaymentMethod[] = [
         />
       </svg>
     ),
-    info: "Credit/Dedit Cards",
+    info: "Credit/Debit Cards",
     other: [
       {
         icon: (
@@ -2633,7 +2633,7 @@ export const sortOptions: Option[] = [
 export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
   USD: 185,
   GBP: 150,
-  NGN: 85000
+  NGN: 100000
 };
 
 export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
