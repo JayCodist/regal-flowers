@@ -2933,7 +2933,7 @@ const PaypalModal: FunctionComponent<ModalProps & {
         <PayPalScriptProvider
           options={{
             "client-id":
-              "Af_9Hb3YCZgV8fAqfAgRLgppDkjdyt7YLVcZkI_ly93n6ZZ03JtlKFGCKiY8aQpFLqreWyGZWCRh-EiA",
+              "AfyoObBLl4cAk7XZWYPyHo0NTb9bD9gg-K7fJV5sAiI714s3l4LboJpLgz3YJCJ3EM1hJu7uKp4MclhE",
             currency: currencyRef.current?.name
             // "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
           }}
