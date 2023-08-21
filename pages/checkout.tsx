@@ -214,7 +214,7 @@ const Checkout: FunctionComponent = () => {
   const payStackConfig: PaystackProps = {
     reference: `${order?.id}${currency.name}` as string,
     email: formData.senderEmail || placeholderEmail,
-    amount: Math.ceil(((total || 0) * 100) / currency.conversionRate),
+    amount: Math.ceil((total || 0) / currency.conversionRate) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_live_1077b3af566a8ecdaaef2f5cb48b3486b0e6a521",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
@@ -2933,7 +2933,7 @@ const PaypalModal: FunctionComponent<ModalProps & {
         <PayPalScriptProvider
           options={{
             "client-id":
-              "AfyoObBLl4cAk7XZWYPyHo0NTb9bD9gg-K7fJV5sAiI714s3l4LboJpLgz3YJCJ3EM1hJu7uKp4MclhE",
+              "Af_9Hb3YCZgV8fAqfAgRLgppDkjdyt7YLVcZkI_ly93n6ZZ03JtlKFGCKiY8aQpFLqreWyGZWCRh-EiA",
             currency: currencyRef.current?.name
             // "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
           }}
