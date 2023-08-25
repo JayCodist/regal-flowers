@@ -50,8 +50,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import {
   CreateOrderActions,
   CreateOrderData,
-  OnApproveData,
-  OnApproveActions
+  OnApproveData
 } from "@paypal/paypal-js";
 import { AppCurrency } from "../utils/types/Core";
 import {
@@ -2908,22 +2907,19 @@ const PaypalModal: FunctionComponent<ModalProps & {
     });
   };
 
-  const handleApprove = async (
-    data: OnApproveData,
-    actions: OnApproveActions
-  ) => {
-    const response = await actions.order?.capture();
+  const handleApprove = async (data: OnApproveData) => {
+    // const response = await actions.order?.capture();
 
-    if (response?.status === "COMPLETED") {
-      const { error, message } = await verifyPaypalPayment(data.orderID);
-      if (error) {
-        notify("error", `Unable to verify paypal payment: ${message}`);
-      } else {
-        notify("success", "Successfully paid for order");
-        onComplete();
-        cancel?.();
-      }
+    // if (response?.status === "COMPLETED") {
+    const { error, message } = await verifyPaypalPayment(data.orderID);
+    if (error) {
+      notify("error", `Unable to verify paypal payment: ${message}`);
+    } else {
+      notify("success", "Successfully paid for order");
+      onComplete();
+      cancel?.();
     }
+    // }
   };
 
   const canInitialize = useMemo(() => {
