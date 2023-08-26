@@ -1,5 +1,6 @@
 import { Option } from "../../components/select/Select";
-import { AppCurrency } from "../types/Core";
+import { AppCurrency, AppCurrencyName } from "../types/Core";
+import AppStorage, { AppStorageConstants } from "./storage-helpers";
 
 export const getOptionsFromArray: (
   strArray: string[] | number[]
@@ -14,4 +15,28 @@ export const getPriceDisplay: (
   return `${currency.sign || ""}${Math.round(
     price / currency.conversionRate
   ).toLocaleString()}`;
+};
+
+export const getDefaultCurrency: () => {
+  defaultCurrencyName: AppCurrencyName;
+  fromStorage: boolean;
+} = () => {
+  const savedCurrency = AppStorage.get<AppCurrency>(
+    AppStorageConstants.SAVED_CURRENCY
+  );
+  if (savedCurrency) {
+    return { defaultCurrencyName: savedCurrency.name, fromStorage: true };
+  }
+  const timezoneCurrencyMap: Record<string, AppCurrencyName> = {
+    GB: "GBP",
+    "GB-Eire": "GBP",
+    "Europe/Belfast": "GBP",
+    "Europe/London": "GBP",
+    "Africa/Lagos": "NGN"
+  };
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  return {
+    defaultCurrencyName: timezoneCurrencyMap[timezone] || "USD",
+    fromStorage: false
+  };
 };
