@@ -21,6 +21,7 @@ import AppStorage, {
   AppStorageConstants
 } from "../utils/helpers/storage-helpers";
 import { performHandshake } from "../utils/helpers/data/core";
+import { getDefaultCurrency } from "../utils/helpers/type-conversions";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
@@ -51,13 +52,24 @@ const App: FunctionComponent<AppProps> = props => {
     const savedCartItems = AppStorage.get<CartItem[]>(
       AppStorageConstants.CART_ITEMS
     );
-    const savedCurrency = AppStorage.get<AppCurrency>(
-      AppStorageConstants.SAVED_CURRENCY
-    );
+
+    const { defaultCurrencyName, fromStorage } = getDefaultCurrency();
+    const defaultCurrency =
+      settings.allCurrencies.find(
+        currency => currency.name === defaultCurrencyName
+      ) || defaultSettings.currency;
+
+    if (defaultCurrencyName !== "NGN" && !fromStorage) {
+      notify(
+        "info",
+        `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
+        4000
+      );
+    }
 
     setSettings({
       ...settings,
-      currency: savedCurrency || defaultSettings.currency,
+      currency: defaultCurrency,
       cartItems: savedCartItems || []
     });
     const { error, data } = await performHandshake();
@@ -75,15 +87,13 @@ const App: FunctionComponent<AppProps> = props => {
           }),
           {}
         ) || {};
-
-      const currentCurrency = savedCurrency || settings.currency;
       setSettings({
         ...settings,
         currency: {
-          ...currentCurrency,
+          ...defaultCurrency,
           conversionRate:
-            currencyValueMap[currentCurrency.name] ||
-            currentCurrency.conversionRate
+            currencyValueMap[defaultCurrency.name] ||
+            defaultCurrency.conversionRate
         },
         cartItems: savedCartItems || [],
         allCurrencies: settings.allCurrencies.map(currency => ({
