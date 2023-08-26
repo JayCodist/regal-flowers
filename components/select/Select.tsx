@@ -50,11 +50,13 @@ interface SelectProps {
   multiple?: boolean;
   followUp?: FollowUpType;
   className?: string;
+  dropdownClassName?: string;
   showSelectedCount?: boolean;
   dropdownOnTop?: boolean;
   allowClear?: boolean;
   startIcon?: string;
   keepDropdownOpen?: boolean;
+  optionColor?: "gray-white";
   /*
    * Add the following prop if you want an extra checkbox to select/unselect all options.
    * Works only when the `multiple` prop is present
@@ -76,6 +78,7 @@ interface SelectProps {
   fitContent?: boolean;
   dimmed?: boolean;
   hideCaret?: boolean;
+  display?: "label" | "value";
 }
 
 const Select: FunctionComponent<SelectProps> = props => {
@@ -101,7 +104,10 @@ const Select: FunctionComponent<SelectProps> = props => {
     onScrollEnd,
     fitContent,
     dimmed,
-    hideCaret
+    hideCaret,
+    display = "label",
+    dropdownClassName,
+    optionColor
   } = props;
 
   const [searchStr, setSearchStr] = useState("");
@@ -189,8 +195,11 @@ const Select: FunctionComponent<SelectProps> = props => {
           .filter(option => _selectedMap[option.value])
           .map(option => option.label)
           .join(", ")
-      : (options.find(option => option.value === value) || {}).label;
+      : (options.find(option => option.value === value) || {})[display];
     setDisplayValue(_displayValue || "");
+    if (!value) {
+      setOptions(_options);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options, value]);
 
@@ -424,13 +433,17 @@ const Select: FunctionComponent<SelectProps> = props => {
           className={[
             styles.dropdown,
             showDropdown && styles["show-dropdown"],
-            dropdownOnTop && styles["on-top"]
+            dropdownOnTop && styles["on-top"],
+            dropdownClassName && dropdownClassName
           ].join(" ")}
           role="list"
           ref={rootRef}
         >
           {multiple && selectAll && (
-            <div className={`${styles.option} ${styles.active}`}>
+            <div
+              className={`${styles.option} ${optionColor &&
+                styles[optionColor]} ${styles.active}`}
+            >
               <Checkbox
                 checked={selectedAll}
                 text="Select All"
@@ -448,7 +461,8 @@ const Select: FunctionComponent<SelectProps> = props => {
               option && (
                 <div
                   className={`${styles.option} ${!option.value &&
-                    styles.initial} ${option.value === value && styles.active}`}
+                    styles.initial} ${option.value === value &&
+                    styles.active} ${optionColor && styles[optionColor]}`}
                   role="listitem"
                   key={i}
                   onClick={

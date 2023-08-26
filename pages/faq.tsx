@@ -120,10 +120,8 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   Paypal to email{" "}
                 </strong>
                 <p className="normal-text">
-                  Email Address: <strong> regalpaypal@gmail.com</strong>
-                </p>
-                <p className="normal-text">
-                  Account Name: <strong> REGAL FLOWERS LTD</strong>
+                  Email Address:{" "}
+                  <strong> paypalpayments@regalflowers.com.ng</strong>
                 </p>
               </div>
               <p className="margin-buttton flex align-center spaced normal-text">
@@ -300,6 +298,8 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
               subTitle={flower.details}
               price={flower.price}
               url={`/product/${flower.slug}`}
+              buttonText="Add to Cart"
+              cart={flower.variants?.length ? false : true}
             />
           ))}
         </div>
@@ -310,7 +310,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
 
 export const getStaticProps: GetStaticProps = async () => {
   const { data, error, message } = await getProductsBySlugs(
-    featuredSlugs.general
+    featuredSlugs["featured-birthday"]
   );
   if (error) {
     console.error("Unable to fetch products by slugs: ", message);

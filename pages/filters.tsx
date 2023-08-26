@@ -7,28 +7,37 @@ import {
 } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Dayjs } from "dayjs";
 import { getProductsByCategory } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import Checkbox from "../components/checkbox/Checkbox";
 import FlowerCard from "../components/flower-card/FlowerCard";
 import {
+  FilterOption,
   aboutUsContent,
+  breadcrumbItems,
+  bridalOccasionFilters,
+  defaultBreadcrumb,
   filtersCatgories,
+  funeralOccasion,
   giftItems,
   gifts,
   occasions,
-  sortOptions
+  otherOccasions,
+  sortOptions,
+  tagsMap
 } from "../utils/constants";
-import DatePicker from "../components/date-picker/DatePicker";
 import Select from "../components/select/Select";
-import { FetchResourceParams } from "../utils/types/FetchResourceParams";
+import {
+  FetchResourceParams,
+  SortLogic
+} from "../utils/types/FetchResourceParams";
 import useScrollHandler from "../utils/hooks/useScrollHandler";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import Button from "../components/button/Button";
 import useOutsideClick from "../utils/hooks/useOutsideClick";
 import styles from "./filters.module.scss";
 import SettingsContext from "../utils/context/SettingsContext";
+import Radio from "../components/radio/Radio";
 
 const giftMap: Record<string, string> = {
   "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears":
@@ -39,20 +48,28 @@ const giftMap: Record<string, string> = {
   "wine-and-champagne": "wine-and-champagne",
   "gift-packs": "gift-packs",
   perfumes: "perfumes",
-  balloon: "balloon"
+  balloons: "balloons",
+  "scented-candles": "scented-candles"
 };
 
 type ProductClass = "vip" | "regular";
 
 export interface ProductFilterLogic {
   category: string[];
-  tags: string[];
   productClass?: ProductClass;
+  budget?: string[];
+  design?: string[];
+  flowerType?: string[];
+  flowerName?: string[];
+  packages?: string[];
+  delivery?: string[];
 }
 
-const JustToSayTexts = ["Hi", "Thank You", "Congrats", "Etc"];
+const JustToSayTexts = ["Sorry", "Hi", "Thank You", "Congrats", "Etc"];
 
 type ProductCategory = "vip" | "occasion";
+
+type Sort = "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
 const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
@@ -61,10 +78,27 @@ const ProductsPage: FunctionComponent<{
 }> = props => {
   const { productCategory = "occasion", categorySlug, productClass } = props;
 
+  const bridalCategories = [
+    "cascadingdropping-bouquets",
+    "accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
+    "bridal-bouquets"
+  ];
+
+  const funeralCategories = ["funeral-amp-condolence"];
+
+  const _filterCategories =
+    categorySlug === "all"
+      ? []
+      : bridalCategories.includes(categorySlug as string)
+      ? bridalOccasionFilters
+      : funeralCategories.includes(categorySlug as string)
+      ? funeralOccasion
+      : filtersCatgories;
+
   const router = useRouter();
   const { query, isReady } = router;
   const { selectedOccasion, shopBy } = query;
-  const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string[]>(["regular"]);
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
@@ -72,9 +106,8 @@ const ProductsPage: FunctionComponent<{
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
-  const [todayDate, setTodayDate] = useState<Dayjs | null>(null);
-  const [filterCategories, setFilterCategories] = useState(filtersCatgories);
-  const [sort, setSort] = useState<string>("");
+  const [filterCategories, setFilterCategories] = useState(_filterCategories);
+  const [sort, setSort] = useState<Sort>("name-asc");
   const [hasMore, setHasMore] = useState(false);
   const [shouldShowFilter, setShouldShowFilter] = useState(false);
 
@@ -82,9 +115,17 @@ const ProductsPage: FunctionComponent<{
     setShouldShowFilter(false);
   });
 
-  const { notify } = useContext(SettingsContext);
+  const isGiftPage = giftMap[categorySlug as string];
+
+  const { notify, setRedirectUrl, setBreadcrumb } = useContext(SettingsContext);
 
   const deviceType = useDeviceType();
+
+  const selectedBreadcrumb = breadcrumbItems.find(_breadcrumb =>
+    categorySlug
+      ? _breadcrumb.url === categorySlug
+      : _breadcrumb.url === productCategory
+  );
 
   const rootRef = useRef<HTMLDivElement>(null);
   const [
@@ -92,9 +133,16 @@ const ProductsPage: FunctionComponent<{
     setLastProductEleRef
   ] = useState<HTMLAnchorElement | null>(null);
 
-  const [page] = useScrollHandler({
+  const [page, setPage] = useScrollHandler({
     node: lastProductEleRef
   });
+  const hideFilterInfo = [
+    ...bridalCategories,
+    ...funeralCategories,
+    "all"
+  ].includes(categorySlug as string);
+
+  const hideFilters = isGiftPage || ["all"].includes(categorySlug as string);
 
   const shuffleText = () => {
     if (count < JustToSayTexts.length - 1) {
@@ -105,21 +153,6 @@ const ProductsPage: FunctionComponent<{
       setJustToSayText(JustToSayTexts[count]);
     }
   };
-
-  useEffect(() => {
-    if (isReady) {
-      const filters = String(shopBy || "")
-        .split(",")
-        .filter(Boolean);
-      setSelectedFilter(filters);
-    }
-  }, [shopBy, isReady]);
-
-  useEffect(() => {
-    const intervalId = setInterval(shuffleText, 3000);
-    return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [count]);
 
   const handleClearFIlter = () => {
     setSelectedFilter([]);
@@ -134,14 +167,41 @@ const ProductsPage: FunctionComponent<{
     } else {
       setProductsLoading(true);
     }
+
+    const shopByArray = String(shopBy).split(",");
+
+    const tagFilters: Record<string, string[]> = shopBy
+      ? shopByArray.reduce((map: Record<string, string[]>, tag) => {
+          const tagKey = Object.keys(tagsMap).find(key => {
+            return tagsMap[key].includes(tag);
+          });
+          if (tagKey) {
+            map[tagKey] = [...(map[tagKey] || []), tag];
+          }
+          return map;
+        }, {})
+      : isGiftPage || hideFilterInfo
+      ? {}
+      : {
+          budget: productClass == "vip" ? ["vip"] : ["regular"]
+        };
+
     const filterParams = {
-      category: [categorySlug !== "all" ? categorySlug || "" : ""],
-      tags: [(shopBy as string) || ""],
-      productClass
+      category: [
+        !["vip", "all"].includes(categorySlug || "") ? categorySlug || "" : ""
+      ],
+      productClass,
+      ...tagFilters
+    };
+
+    const sortParams: SortLogic = {
+      sortField: sort.split("-")[0],
+      sortType: sort.split("-")[1] as "asc" | "desc"
     };
     const params: FetchResourceParams<ProductFilterLogic> = {
       pageNumber: page,
-      filter: filterParams
+      filter: filterParams,
+      sortLogic: sortParams
     };
 
     const response = await getProductsByCategory(params);
@@ -160,6 +220,65 @@ const ProductsPage: FunctionComponent<{
     }
   };
 
+  const handleFilterChange = (filter: FilterOption) => {
+    const newFilters = selectedFilter.includes(filter.tag || "")
+      ? selectedFilter.filter(_filter => _filter !== filter.tag)
+      : [...selectedFilter, filter.tag];
+    setSelectedFilter(newFilters.filter(Boolean) as string[]);
+    setProductsLoading(true);
+
+    const url = categorySlug
+      ? `/product-category/${categorySlug}?shopBy=${newFilters.join(",")}`
+      : `/filters?shopBy=${newFilters.join(",")}`;
+    router.push(url, undefined, { scroll: false });
+  };
+
+  useEffect(() => {
+    if (isReady) {
+      if (shopBy === "vip" || productClass === "vip") {
+        setSelectedFilter(["vip"]);
+      } else {
+        if (categorySlug === "vip") {
+          setSelectedFilter(["vip"]);
+          return;
+        }
+        const filters = shopBy
+          ? String(shopBy || "")
+              .split(",")
+              .filter(Boolean)
+          : ["regular"];
+
+        setSelectedFilter([...filters]);
+        shopBy && setShouldShowFilter(true);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shopBy]);
+
+  useEffect(() => {
+    if (productClass === "vip") {
+      setSelectedFilter(["vip"]);
+    }
+  }, [productClass]);
+
+  useEffect(() => {
+    const intervalId = setInterval(shuffleText, 3000);
+    return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [count]);
+
+  useEffect(() => {
+    if (isReady) {
+      if (page === 1) {
+        fetchProductCategory();
+      } else {
+        fetchProductCategory(true);
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
   useEffect(() => {
     if (productCategory === "vip") {
       const filteredCategory = filterCategories.filter(
@@ -172,36 +291,49 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
+      setPage(1);
       fetchProductCategory();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedOccasion, router]);
+  }, [categorySlug, selectedOccasion, sort, shopBy]);
 
   useEffect(() => {
     if (isReady) {
-      fetchProductCategory(true);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  useEffect(() => {
-    if (isReady) {
-      const flowerTitle = occasions.find(
+      const occasionTitle = occasions.find(
         item => item.url === `/product-category/${categorySlug}`
       )?.title;
       const giftTitle = gifts.find(
         item => item.url === `/product-category/${categorySlug}`
       )?.title;
-      const title = flowerTitle || giftTitle;
+      const otherTitle = otherOccasions.find(
+        item => item.url === `/product-category/${categorySlug}`
+      )?.title;
+      const title = occasionTitle || giftTitle || otherTitle;
 
       if (title) {
         setPageTitle(title);
       }
+
+      setFilterCategories(_filterCategories);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug]);
+  }, [categorySlug, isReady]);
+
+  useEffect(() => {
+    if (isReady) {
+      setRedirectUrl(router.asPath);
+      setBreadcrumb(
+        selectedBreadcrumb
+          ? {
+              label: selectedBreadcrumb.label,
+              url: router.asPath
+            }
+          : defaultBreadcrumb
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.asPath]);
 
   return (
     <section className={styles.filters} ref={rootRef}>
@@ -213,38 +345,118 @@ const ProductsPage: FunctionComponent<{
         ].join(" ")}
       >
         <div className={`hero-content flex column center center-align `}>
-          {productCategory === "occasion" && (
-            <div className={styles["occasion-wrapper"]}>
-              {(giftMap[categorySlug || ""] ? gifts : occasions).map(
-                (occasion, index) => {
-                  return (
-                    <Link href={occasion.url} key={index}>
-                      <a
-                        className={[
-                          styles["occasion"],
-                          categorySlug !==
-                            "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears" &&
+          {productCategory === "occasion" && deviceType === "desktop" && (
+            <div
+              className={[
+                styles["occasion-wrapper"],
+                isGiftPage && styles["gifts-wrapper"]
+              ].join(" ")}
+            >
+              {(isGiftPage ? gifts : occasions).map((occasion, index) => {
+                return (
+                  <Link href={occasion.url} key={index}>
+                    <a
+                      className={[
+                        styles["occasion"],
+                        isGiftPage && styles["gift-occasion"],
+
+                        categorySlug === occasion.url.split("/")[2] &&
+                          styles["active"]
+                      ].join(" ")}
+                      onClick={() => {
+                        router.push(occasion.url, undefined, {
+                          scroll: false
+                        });
+                      }}
+                    >
+                      <strong>
+                        {occasion.title}
+                        <br />
+                        {occasion.title === "Just to Say" && (
+                          <span>{JustToSayText}</span>
+                        )}{" "}
+                      </strong>
+                    </a>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+          {productCategory === "occasion" && deviceType === "mobile" && (
+            <div className={styles["occasions-mobile"]}>
+              <div
+                className={`margin-bottom spaced ${styles.occasions} ${giftMap[
+                  categorySlug || ""
+                ] && styles["gifts-category"]}`}
+              >
+                {(isGiftPage ? gifts : occasions)
+                  .slice(0, isGiftPage ? 4 : 3)
+                  .map((occasion, index) => {
+                    return (
+                      <Link href={occasion.url} key={index}>
+                        <a
+                          className={[
+                            styles["occasion"],
+                            isGiftPage && styles["gift-occasion"],
+
                             categorySlug === occasion.url.split("/")[2] &&
-                            styles["active"]
-                        ].join(" ")}
-                        onClick={() => {
-                          router.push(occasion.url, undefined, {
-                            scroll: false
-                          });
-                        }}
-                      >
-                        <strong>
-                          {occasion.title}
-                          <br />
-                          {occasion.title === "Just to Say" && (
-                            <span>{JustToSayText}</span>
-                          )}{" "}
-                        </strong>
-                      </a>
-                    </Link>
-                  );
-                }
-              )}
+                              styles["active"]
+                          ].join(" ")}
+                          onClick={() => {
+                            router.push(occasion.url, undefined, {
+                              scroll: false
+                            });
+                          }}
+                        >
+                          <strong>
+                            {occasion.title}
+                            <br />
+                            {occasion.title === "Just to Say" && (
+                              <span>{JustToSayText}</span>
+                            )}{" "}
+                          </strong>
+                        </a>
+                      </Link>
+                    );
+                  })}
+              </div>
+              <div
+                className={[
+                  styles.occasions,
+                  isGiftPage && styles["gifts-categor"]
+                ].join(" ")}
+              >
+                {(isGiftPage ? gifts : occasions)
+                  .slice(isGiftPage ? 4 : 3)
+                  .map((occasion, index) => {
+                    return (
+                      <Link href={occasion.url} key={index}>
+                        <a
+                          className={[
+                            styles["occasion"],
+                            isGiftPage && styles["gift-occasion"],
+
+                            categorySlug === occasion.url.split("/")[2] &&
+                              styles["active"]
+                          ].join(" ")}
+                          onClick={() => {
+                            router.push(occasion.url, undefined, {
+                              scroll: false
+                            });
+                          }}
+                        >
+                          <strong>
+                            {occasion.title}
+                            <br />
+                            {occasion.title === "Just to Say" && (
+                              <span>{JustToSayText}</span>
+                            )}{" "}
+                          </strong>
+                        </a>
+                      </Link>
+                    );
+                  })}
+              </div>
             </div>
           )}
           {productCategory === "vip" && (
@@ -264,110 +476,131 @@ const ProductsPage: FunctionComponent<{
         className={`${styles["content"]} flex ${deviceType === "desktop" &&
           "spaced-xl"}`}
       >
-        <div className={styles["left-side"]}>
-          <div className="vertical-margin spaced">
-            <span className={`bold margin-right ${styles["sub-title"]}`}>
-              Filters ({selectedFilter.length})
-            </span>
-            <button className="primary-color" onClick={handleClearFIlter}>
-              Clear Filters
-            </button>
-          </div>
+        {!hideFilters && (
+          <div className={styles["left-side"]}>
+            {!hideFilterInfo && (
+              <div className="vertical-margin spaced">
+                <span className={`bold margin-right ${styles["sub-title"]}`}>
+                  Filters ({selectedFilter.length})
+                </span>
+                <button className="primary-color" onClick={handleClearFIlter}>
+                  Clear Filters
+                </button>
+              </div>
+            )}
 
-          <div className={styles["filters-sidebar"]}>
-            {filterCategories.map((filter, index) => (
-              <div key={index} className="vertical-margin spaced">
-                <p className="bold vertical-margin spaced">{filter.name}</p>
-                <div>
-                  {(filter.viewMore
-                    ? filter.options
-                    : filter.options.slice(0, filter.limit)
-                  ).map((child, i) => (
-                    <div key={i} className="margin-bottom">
-                      <Checkbox
-                        onChange={() => {
-                          const newFilters = selectedFilter.includes(
-                            child.tag || ""
-                          )
-                            ? selectedFilter.filter(
-                                _filter => _filter !== child.tag
-                              )
-                            : [...selectedFilter, child.tag];
-                          setSelectedFilter(
-                            newFilters.filter(Boolean) as string[]
-                          );
-                          setProductsLoading(true);
-                          router.push(
-                            `/product-category/${categorySlug}?shopBy=${newFilters.join(
-                              ","
-                            )}`,
-                            undefined,
-                            { scroll: false }
-                          );
-                        }}
-                        text={child.name}
-                        checked={selectedFilter.includes(child.tag || "")}
-                      />
-                    </div>
-                  ))}
+            <div className={styles["filters-sidebar"]}>
+              {filterCategories.map((filter, index) => (
+                <div key={index} className="vertical-margin spaced">
+                  <p className="bold vertical-margin spaced">{filter.name}</p>
+                  <div>
+                    {(filter.viewMore
+                      ? filter.options
+                      : filter.options.slice(0, filter.limit)
+                    ).map((child, i) => (
+                      <div key={i} className="margin-bottom">
+                        {filter.name === "Budget" ? (
+                          <>
+                            <div className="margin-bottom">
+                              <Radio
+                                label="Regular"
+                                onChange={() => {
+                                  const newFilters = [
+                                    ...selectedFilter.filter(filter => {
+                                      return filter !== "vip";
+                                    }),
+                                    "regular"
+                                  ];
+                                  setSelectedFilter(newFilters);
+                                  const url = categorySlug
+                                    ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                        ","
+                                      )}`
+                                    : `/filters?shopBy=${newFilters.join(",")}`;
+                                  router.push(url, undefined, {
+                                    scroll: false
+                                  });
+                                }}
+                                checked={selectedFilter.includes("regular")}
+                              />
+                            </div>
+
+                            <Radio
+                              label="VIP"
+                              onChange={() => {
+                                const newFilters = [
+                                  ...selectedFilter.filter(filter => {
+                                    return filter !== "regular";
+                                  }),
+                                  "vip"
+                                ];
+                                setSelectedFilter(newFilters);
+                                const url = `/filters?shopBy=${newFilters.join(
+                                  ","
+                                )}`;
+                                router.push(url, undefined, { scroll: false });
+                              }}
+                              checked={selectedFilter.includes("vip")}
+                            />
+                          </>
+                        ) : child.link ? (
+                          <Link href={child.link}>
+                            <a
+                              className={[
+                                styles["filter-link"],
+                                child.link.includes(categorySlug as string)
+                                  ? styles.active
+                                  : ""
+                              ].join(" ")}
+                            >
+                              {child.name}
+                            </a>
+                          </Link>
+                        ) : (
+                          <Checkbox
+                            onChange={() => handleFilterChange(child)}
+                            text={child.name}
+                            checked={selectedFilter.includes(child.tag || "")}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  {filter.limit < filter.options.length && (
+                    <button
+                      className={styles["btn-view"]}
+                      onClick={() => {
+                        setFilterCategories(prev =>
+                          prev.map((item, _index) => {
+                            if (index === _index) {
+                              return {
+                                ...item,
+                                viewMore: !item.viewMore
+                              };
+                            }
+                            return item;
+                          })
+                        );
+                      }}
+                    >
+                      {!filter.viewMore ? "View More" : "View Less"}
+                    </button>
+                  )}
                 </div>
-                {filter.limit < filter.options.length && (
-                  <button
-                    className={styles["btn-view"]}
-                    onClick={() => {
-                      setFilterCategories(prev =>
-                        prev.map((item, _index) => {
-                          if (index === _index) {
-                            return {
-                              ...item,
-                              viewMore: !item.viewMore
-                            };
-                          }
-                          return item;
-                        })
-                      );
-                    }}
-                  >
-                    {!filter.viewMore ? "View More" : "View Less"}
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className={styles["product-wrapper"]}>
-          <div className="flex between">
-            <div className={styles["date-wrapper"]}>
-              <div>
-                <span>Delivery Date: </span>
-                <DatePicker
-                  onChange={date => {
-                    setTodayDate(date);
-                  }}
-                  value={todayDate}
-                  format="D MMM YYYY"
-                  placeholder="Select Date"
-                />
-              </div>
-
-              <div>
-                <span>Sort: </span>
-                <Select
-                  options={sortOptions}
-                  value={sort}
-                  onSelect={value => setSort(value as string)}
-                  placeholder="Default"
-                />
-              </div>
+              ))}
             </div>
-
+          </div>
+        )}
+        <div className={styles["product-wrapper"]}>
+          <div className="flex between block center-align">
             <div className={styles["filter-mobile"]} ref={filterDropdownRef}>
+              <span>Filters: </span>
               <button
                 className={styles.btn}
                 onClick={() => setShouldShowFilter(!shouldShowFilter)}
               >
                 <h3 className="margin-right">
-                  Filter({selectedFilter.length})
+                  Filter{!hideFilterInfo && `(${selectedFilter.length})`}
                 </h3>
                 <img
                   alt="filter"
@@ -390,30 +623,67 @@ const ProductsPage: FunctionComponent<{
                         : filter.options.slice(0, filter.limit)
                       ).map((child, index) => (
                         <div key={index} className="margin-bottom">
-                          <Checkbox
-                            onChange={() => {
-                              const newFilters = selectedFilter.includes(
-                                child.tag || ""
-                              )
-                                ? selectedFilter.filter(
-                                    _filter => _filter !== child.tag
-                                  )
-                                : [...selectedFilter, child.tag];
-                              setSelectedFilter(
-                                newFilters.filter(Boolean) as string[]
-                              );
-                              setProductsLoading(true);
-                              router.push(
-                                `${router.pathname}?shopBy=${newFilters.join(
-                                  ","
-                                )}`,
-                                undefined,
-                                { scroll: false }
-                              );
-                            }}
-                            text={child.name}
-                            checked={selectedFilter.includes(child.name)}
-                          />
+                          {filter.name === "Budget" ? (
+                            <>
+                              <div className="margin-bottom">
+                                <Radio
+                                  label="Regular"
+                                  onChange={() => {
+                                    const newFilters = [
+                                      ...selectedFilter.filter(filter => {
+                                        return filter !== "vip";
+                                      }),
+                                      "regular"
+                                    ];
+                                    setSelectedFilter(newFilters);
+                                    const url = categorySlug
+                                      ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                          ","
+                                        )}`
+                                      : `/filters?shopBy=${newFilters.join(
+                                          ","
+                                        )}`;
+                                    router.push(url, undefined, {
+                                      scroll: false
+                                    });
+                                  }}
+                                  checked={selectedFilter.includes("regular")}
+                                />
+                              </div>
+
+                              <Radio
+                                label="VIP"
+                                onChange={() => {
+                                  const newFilters = [
+                                    ...selectedFilter.filter(filter => {
+                                      return filter !== "regular";
+                                    }),
+                                    "vip"
+                                  ];
+                                  setSelectedFilter(newFilters);
+                                  const url = `/filters?shopBy=${newFilters.join(
+                                    ","
+                                  )}`;
+                                  router.push(url, undefined, {
+                                    scroll: false
+                                  });
+                                }}
+                                checked={selectedFilter.includes("vip")}
+                              />
+                            </>
+                          ) : child.link ? (
+                            <Link href={child.link}>
+                              <a className={styles["filter-link"]}>
+                                {child.name}
+                              </a>
+                            </Link>
+                          ) : (
+                            <Checkbox
+                              onChange={() => handleFilterChange(child)}
+                              text={child.name}
+                              checked={selectedFilter.includes(child.tag || "")}
+                            />
+                          )}
                         </div>
                       ))}
                     </div>
@@ -441,18 +711,28 @@ const ProductsPage: FunctionComponent<{
                 ))}
               </div>
             </div>
+            <div className="flex column">
+              <span>Sort: </span>
+              <Select
+                options={sortOptions}
+                value={sort}
+                onSelect={value => setSort(value as Sort)}
+                placeholder="Default"
+                className={styles["sort"]}
+              />
+            </div>
           </div>
 
           <div>
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
-                : `${pageTitle} ${
-                    !giftMap[categorySlug || ""] ? "Flowers" : ""
+                : ` ${pageTitle} ${!isGiftPage && pageTitle ? "Flowers" : ""} ${
+                    !isGiftPage && !pageTitle ? "All Occasion Flowers" : ""
                   }`}
             </h1>
 
-            <div className={styles.products}>
+            <div className={[styles.products].join(" ")}>
               {productsLoading && (
                 <div className={styles.spinner}>
                   <img src="/images/spinner.svg" alt="spinner" />
@@ -465,23 +745,26 @@ const ProductsPage: FunctionComponent<{
                   image={product.images[0].src}
                   price={product.price}
                   buttonText="Add to Cart"
-                  subTitle={product.name.split("–")[1]}
+                  subTitle={product.subtitle || product.name.split("–")[1]}
                   url={`/product/${product.slug}`}
-                  // mode="three-x-grid"
                   mode={`${
-                    deviceType === "desktop" ? "three-x-grid" : "two-x-grid"
+                    deviceType === "desktop"
+                      ? hideFilters
+                        ? "four-x-grid"
+                        : "three-x-grid"
+                      : "two-x-grid"
                   }`}
                   ref={
                     index === arr.length - 1
                       ? ele => {
-                          if (ele && hasMore) {
+                          if (ele && hasMore && !productsLoading) {
                             setLastProductEleRef(ele);
                           }
                         }
                       : null
                   }
                   product={product}
-                  cart
+                  cart={product.variants?.length ? false : true}
                 />
               ))}
             </div>
@@ -496,11 +779,11 @@ const ProductsPage: FunctionComponent<{
         </div>
       </div>
       <div className={styles.gifts}>
-        {!giftMap[categorySlug || ""] && (
+        {!isGiftPage && (
           <>
             <div className="flex between margin-bottom spaced">
               <span className={styles.title}>
-                Valentine Gifts to Include with Flowers
+                Gifts to Include with Flowers
               </span>
               {deviceType === "desktop" && (
                 <Button

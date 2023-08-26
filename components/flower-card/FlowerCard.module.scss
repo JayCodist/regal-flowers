@@ -37,6 +37,10 @@
     @media (max-width: 650px) {
       width: 47%;
     }
+
+    @media (max-width: 400px) {
+      min-width: 11rem;
+    }
   }
   &.three-x-grid {
     width: 30%;
@@ -64,6 +68,9 @@
   &.two-x-grid {
     width: 47%;
     min-width: 12rem;
+    @media (max-width: 400px) {
+      min-width: 11rem;
+    }
     .img-wrapper {
       height: 15rem;
       .flower-image {
@@ -80,7 +87,11 @@
     padding: 0.6rem 1rem;
   }
   .name {
-    font-size: small;
+    font-size: 1.1rem;
+
+    &.only-name {
+      font-size: 1.3rem;
+    }
   }
   .title {
     min-height: 3.5rem;
@@ -107,6 +118,27 @@
     min-width: 6rem;
     font-weight: normal;
     font-size: 0.9rem;
+
+    @media (max-width: 400px) {
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .price-btn-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+
+    &.price {
+      justify-content: space-between;
+    }
+
+    @media (max-width: 400px) {
+      flex-direction: column;
+      align-items: center;
+    }
   }
   .img-wrapper {
     overflow: hidden;

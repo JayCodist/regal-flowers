@@ -30,6 +30,12 @@ html {
   @media (max-width: 650px) {
     font-size: 80%;
   }
+  @media (max-width: 400px) {
+    font-size: 75%;
+  }
+  @media (max-width: 350px) {
+    font-size: 60%;
+  }
 
   @media (min-width: 1500px) {
     font-size: 95%;
@@ -66,6 +72,7 @@ a:visited {
   color: inherit;
   cursor: pointer;
   transition: 0.3s ease-out;
+  display: inline-block;
 }
 input,
 input:active,
@@ -261,6 +268,10 @@ button {
   &.spaced {
     margin-bottom: 1.2rem;
   }
+
+  &.xl {
+    margin-bottom: 2rem;
+  }
 }
 .margin-top {
   margin-top: 0.6rem;
@@ -378,26 +389,34 @@ button {
 .generic-icon {
   height: 1rem;
   width: auto;
+  min-width: 1rem;
   &.xxsmall {
     height: 0.4rem;
+    min-width: 0.4rem;
   }
   &.xsmall {
     height: 0.6rem;
+    min-width: 0.6rem;
   }
   &.small {
     height: 0.8rem;
+    min-width: 0.8rem;
   }
   &.medium {
     height: 1.5rem;
+    min-width: 1.5rem;
   }
   &.large {
     height: 2rem;
+    min-width: 2rem;
   }
   &.xl {
     height: 4rem;
+    min-width: 4rem;
   }
   &.xxl {
     height: 6rem;
+    min-width: 6rem;
   }
 }
 .relative {
@@ -459,6 +478,10 @@ button {
     font-weight: bold;
     margin-bottom: 0.4rem;
     font-size: 0.9rem;
+
+    @media (max-width: 650px) {
+      font-size: 1.2rem;
+    }
   }
   .subtitle {
     font-size: 0.75rem;
@@ -575,6 +598,10 @@ button {
   font-weight: 700;
 }
 
+.normal {
+  font-weight: 400;
+}
+
 .primary-color {
   color: #9b0000;
 }
@@ -594,7 +621,10 @@ button {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100vw 31rem;
-  background-position: 0 6rem;
+  background-position: 0 4rem;
+  @media (max-width: 600px) {
+    background-size: 100vw 21rem;
+  }
 }
 .hero-content {
   position: relative;
@@ -613,6 +643,10 @@ button {
     position: relative;
     z-index: 1;
     min-height: 375rem;
+
+    @media (max-width: 600px) {
+      margin-top: -7rem;
+    }
 
     &:before {
       content: "";
@@ -640,7 +674,6 @@ button {
       font-size: 2rem;
 
       @media (max-width: 600px) {
-        font-size: 1.5rem;
         text-align: center;
         margin: 1rem auto;
       }
@@ -654,6 +687,10 @@ button {
         margin: 0 auto;
       }
     }
+  }
+
+  .white-bg {
+    background-color: #fff;
   }
 }
 
@@ -710,4 +747,49 @@ button {
 .spinner {
   display: block;
   margin: 0 auto;
+}
+
+.description {
+  margin-top: 1rem;
+  line-height: 2em;
+
+  pre {
+    white-space: break-spaces;
+  }
+
+  a {
+    color: #9b0000;
+  }
+}
+
+.view-cart {
+  color: #9b0000;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 1rem;
+}
+
+.tooltip {
+  position: relative;
+
+  .tooltiptext {
+    visibility: hidden;
+    width: max-content;
+    max-width: 40rem;
+    background-color: rgba(0, 0, 0, 0.766);
+    color: #fff;
+    padding: 0.5rem;
+    top: 1.5rem;
+    left: 10%;
+    position: absolute;
+    z-index: 1;
+
+    @media (max-width: 650px) {
+      width: 20rem;
+    }
+  }
+
+  &:hover .tooltiptext {
+    visibility: visible;
+  }
 }

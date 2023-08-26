@@ -17,6 +17,9 @@ interface DatePickerProps {
    */
   dropdownAlignment?: "left" | "right";
   placeholder?: string;
+  content?: React.ReactNode;
+  disablePastDays?: boolean;
+  dropdownTop?: boolean;
 }
 
 const DatePicker = (props: DatePickerProps) => {
@@ -31,7 +34,10 @@ const DatePicker = (props: DatePickerProps) => {
     className,
     iconAtLeft,
     placeholder,
-    dropdownAlignment = "left"
+    dropdownAlignment = "left",
+    content,
+    disablePastDays,
+    dropdownTop
   } = props;
 
   const dropDownRef = useRef<HTMLDivElement>(null);
@@ -83,6 +89,8 @@ const DatePicker = (props: DatePickerProps) => {
   const initialMonth = useMemo(() => (value || dayjs()).toDate(), [value]);
   const jsDateValue = useMemo(() => value?.toDate() || new Date(), [value]);
 
+  const isPastDay = (day: Date) => dayjs(day).isBefore(dayjs(), "day");
+
   return (
     <div
       className={[
@@ -101,39 +109,51 @@ const DatePicker = (props: DatePickerProps) => {
         ].join(" ")}
         ref={selectRef}
       >
-        {iconAtLeft && (
-          <img
-            alt="calendar"
-            className={styles.icon}
-            src="/icons/calender.svg"
-          />
-        )}
-        {shownValue ? (
-          <span className={styles["main-text"]}>{shownValue}</span>
+        {content ? (
+          <div>{content}</div>
         ) : (
-          <span className={styles.placeholder}>
-            {placeholder || "Select date"}
-          </span>
-        )}
-        {!iconAtLeft && (
-          <img
-            alt="calendar"
-            className={styles.icon}
-            src="/icons/calender.svg"
-          />
+          <>
+            {iconAtLeft && (
+              <img
+                alt="calendar"
+                className={styles.icon}
+                src="/icons/calender.svg"
+              />
+            )}
+            {shownValue ? (
+              <span className={styles["main-text"]}>{shownValue}</span>
+            ) : (
+              <span className={styles.placeholder}>
+                {placeholder || "Select date"}
+              </span>
+            )}
+            {!iconAtLeft && (
+              <img
+                alt="calendar"
+                className={styles.icon}
+                src="/icons/calender.svg"
+              />
+            )}
+          </>
         )}
       </div>
       <div
         className={[
           styles.dropdown,
           showDropdown && styles["show-dropdown"],
-          styles[dropdownAlignment]
+          styles[dropdownAlignment],
+          dropdownTop && styles["on-top"]
         ].join(" ")}
       >
         <DayPicker
           defaultMonth={initialMonth}
           selected={jsDateValue}
           onDayClick={handleDateSelect}
+          disabled={disablePastDays ? isPastDay : undefined}
+          modifiersClassNames={{
+            today: styles.today,
+            selected: styles.selected
+          }}
         />
       </div>
     </div>

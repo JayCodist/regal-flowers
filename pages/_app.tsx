@@ -2,8 +2,13 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/styles.scss";
-import Layout, { Toaster } from "../components/layout/Layout";
+import Layout, {
+  ConfirmModal,
+  ConfirmParams,
+  Toaster
+} from "../components/layout/Layout";
 import SettingsContext, {
+  Breadcrumb,
   NotifyType,
   SettingsControls
 } from "../utils/context/SettingsContext";
@@ -14,7 +19,11 @@ import {
   Settings,
   Stage
 } from "../utils/types/Core";
-import { currencyOptions, defaultCurrency } from "../utils/constants";
+import {
+  currencyOptions,
+  defaultBreadcrumb,
+  defaultCurrency
+} from "../utils/constants";
 import { Dayjs } from "dayjs";
 import User from "../utils/types/User";
 import AppStorage, {
@@ -22,13 +31,20 @@ import AppStorage, {
 } from "../utils/helpers/storage-helpers";
 import { performHandshake } from "../utils/helpers/data/core";
 import { getDefaultCurrency } from "../utils/helpers/type-conversions";
+import { Order } from "../utils/types/Order";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
   allCurrencies: currencyOptions,
   currentStage: 1,
   deliveryDate: null,
-  cartItems: []
+  cartItems: [],
+  shouldShowCart: false,
+  redirect:
+    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+  shouldShowAuthDropdown: false,
+  orderId: "",
+  order: null
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -36,6 +52,15 @@ const toasterDuration = {
   success: 3000,
   info: 4000,
   error: 5000
+};
+
+const defaultConfirmParams = {
+  body: "",
+  cancelText: "",
+  okText: "",
+  onCancel: () => {},
+  onOk: () => {},
+  title: ""
 };
 
 const App: FunctionComponent<AppProps> = props => {
@@ -46,7 +71,20 @@ const App: FunctionComponent<AppProps> = props => {
     message?: string;
     type?: NotifyType;
   }>({});
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmParams, setConfirmParams] = useState<ConfirmParams>(
+    defaultConfirmParams
+  );
   const [user, setUser] = useState<User | null>(null);
+  const [shouldShowCart, setShouldShowCart] = useState(false);
+  const [shouldShowAuthDropdown, setShouldShowAuthDropdown] = useState(false);
+  const [order, setOrder] = useState<Order | null>(null);
+  const [deliveryDate, setDeliveryDate] = useState<null | Dayjs>(null);
+  const [orderId, setOrderId] = useState("");
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>(defaultBreadcrumb);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [currentStage, setCurrentStage] = useState<Stage>(1);
 
   const initializeAppConfig = async () => {
     const savedCartItems = AppStorage.get<CartItem[]>(
@@ -62,7 +100,7 @@ const App: FunctionComponent<AppProps> = props => {
     if (defaultCurrencyName !== "NGN" && !fromStorage) {
       notify(
         "info",
-        `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
+        `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
         4000
       );
     }
@@ -72,11 +110,15 @@ const App: FunctionComponent<AppProps> = props => {
       currency: defaultCurrency,
       cartItems: savedCartItems || []
     });
+    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
+
+    setOrderId(savedOrderId || "");
     const { error, data } = await performHandshake();
     if (error || !data) {
       // Fail quietly and continue using the set constant values
     } else {
       setUser(data.user || null);
+
       AppStorage.save(AppStorageConstants.USER_DATA, data.user);
 
       const currencyValueMap: Partial<Record<AppCurrencyName, number>> =
@@ -95,7 +137,6 @@ const App: FunctionComponent<AppProps> = props => {
             currencyValueMap[defaultCurrency.name] ||
             defaultCurrency.conversionRate
         },
-        cartItems: savedCartItems || [],
         allCurrencies: settings.allCurrencies.map(currency => ({
           ...currency,
           conversionRate:
@@ -137,27 +178,53 @@ const App: FunctionComponent<AppProps> = props => {
     setShowToaster(false);
   };
 
+  const confirm = (params: ConfirmParams) => {
+    setConfirmParams(params);
+    setShowConfirm(true);
+  };
+
+  const dismissConfirm = () => {
+    setShowConfirm(false);
+    setConfirmParams(defaultConfirmParams);
+  };
+
+  useEffect(() => {
+    AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
+  }, [cartItems]);
+
   const settingsControls: SettingsControls = {
     currency: settings.currency,
     setCurrency: (currency: AppCurrency) => {
       setSettings({ ...settings, currency });
       AppStorage.save(AppStorageConstants.SAVED_CURRENCY, currency);
     },
-    currentStage: settings.currentStage,
-    setCurrentStage: (currentStage: Stage) =>
-      setSettings({ ...settings, currentStage }),
-    deliveryDate: settings.deliveryDate,
-    setDeliveryDate: (deliveryDate: Dayjs | null) =>
-      setSettings({ ...settings, deliveryDate }),
-    cartItems: settings.cartItems,
-    setCartItems: (cartItems: CartItem[]) => {
-      setSettings({ ...settings, cartItems });
-      AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
-    },
+    currentStage,
+    setCurrentStage,
+    deliveryDate,
+    setDeliveryDate,
+    cartItems,
+    setCartItems,
     allCurrencies: settings.allCurrencies,
+    shouldShowCart,
+    setShouldShowCart,
     notify,
     user,
-    setUser
+    setUser,
+    redirect: settings.redirect,
+    setRedirectUrl: (redirect: string) => {
+      setSettings({ ...settings, redirect });
+    },
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown,
+    orderId,
+    setOrderId,
+    order,
+    setOrder,
+    confirm,
+    breadcrumb,
+    setBreadcrumb,
+    orderLoading,
+    setOrderLoading
   };
 
   const headTags = (
@@ -173,6 +240,11 @@ const App: FunctionComponent<AppProps> = props => {
         {headTags}
         <Layout>
           <Component {...pageProps} />
+          <ConfirmModal
+            visible={showConfirm}
+            confirmParams={confirmParams}
+            cancel={dismissConfirm}
+          />
           <Toaster
             visible={showToaster}
             toasterParams={toasterParams}

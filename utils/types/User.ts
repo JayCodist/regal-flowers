@@ -11,6 +11,9 @@ export interface Recipient {
   state: LocationName;
   despatchLocation: string;
   adminNotes: string;
+  _id: string;
+  altPhoneCountryCode: string;
+  phoneCountryCode: string;
 }
 
 export default interface User {

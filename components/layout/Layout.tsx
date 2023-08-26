@@ -1,6 +1,5 @@
 import React, {
   FunctionComponent,
-  LegacyRef,
   MouseEvent as ReactMouseEvent,
   ReactNode,
   useContext,
@@ -11,13 +10,17 @@ import React, {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { allDesignOptions, footerContent, links } from "../../utils/constants";
+import { footerContent, links } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
 import { useRouter } from "next/router";
 import Button from "../button/Button";
-import { createOrder } from "../../utils/helpers/data/order";
+import {
+  createOrder,
+  getOrder,
+  updateOrder
+} from "../../utils/helpers/data/order";
 import dayjs from "dayjs";
 import ContextWrapper from "../context-wrapper/ContextWrapper";
 import AuthDropdown from "./AuthDropdown";
@@ -25,6 +28,13 @@ import useDeviceType from "../../utils/hooks/useDeviceType";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 import Input from "../input/Input";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
+import { CartItem, Design } from "../../utils/types/Core";
+import DatePicker from "../date-picker/DatePicker";
+import { ProductImage } from "../../utils/types/Product";
+import Modal from "../modal/Modal";
+import AppStorage, {
+  AppStorageConstants
+} from "../../utils/helpers/storage-helpers";
 
 const Layout: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const { pathname } = useRouter();
@@ -51,7 +61,7 @@ const Footer: FunctionComponent = () => {
   const deviceType = useDeviceType();
 
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} id="footer">
       <div className={styles["footer-wrapper"]}>
         <div className={styles.top}>
           <div>
@@ -88,6 +98,7 @@ const Footer: FunctionComponent = () => {
               className={`${
                 deviceType === "mobile" ? "flex between spaced column" : ""
               }`}
+              style={deviceType === "mobile" ? { width: "30%" } : {}}
             >
               <strong>Quick Links</strong>
               {footerContent.quickLinks.map(link => (
@@ -100,6 +111,7 @@ const Footer: FunctionComponent = () => {
               className={`${
                 deviceType === "mobile" ? "flex between spaced column" : ""
               }`}
+              style={deviceType === "mobile" ? { width: "65%" } : {}}
             >
               <strong>Get In Touch</strong>
               <div className="flex spaced-xl">
@@ -108,11 +120,15 @@ const Footer: FunctionComponent = () => {
                   src="/icons/footer/phone.svg"
                   alt="phone"
                 />
-                <img
-                  className="generic-icon medium"
-                  src="/icons/footer/whatsapp.svg"
-                  alt="whtasapp"
-                />
+                <Link href="https://wa.me/+2348188787788">
+                  <a>
+                    <img
+                      className="generic-icon medium"
+                      src="/icons/footer/whatsapp.svg"
+                      alt="whtasapp"
+                    />
+                  </a>
+                </Link>
               </div>
               {footerContent.phoneNumbers.map(number => (
                 <p key={number}>{number}</p>
@@ -140,8 +156,13 @@ const Footer: FunctionComponent = () => {
               <span>Account Name: </span> <strong>Regal Flowers Ltd</strong>
             </div>
             <strong>Paypal</strong>
-            <div className="flex spaced">
-              <span>Email:</span> <strong>regalflowerspaypal@gmail.com</strong>
+            <div
+              className={`flex spaced ${
+                deviceType === "mobile" ? "column" : ""
+              }`}
+            >
+              <span>Email:</span>{" "}
+              <strong>paypalpayments@regalflowers.com.ng</strong>
             </div>
             <strong>Bitcoin</strong>
             <div className="">
@@ -150,29 +171,45 @@ const Footer: FunctionComponent = () => {
             </div>
           </div>
         </div>
+        <br />
         <div>
-          <strong className="normal-text">Our Locations</strong>
-          <br />
-
           <div className={styles.middle}>
             <div>
-              <strong>Lagos Head Office</strong>
-              <p>81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos.</p>
-              <p className={styles.grayed}>Open 24/7</p>
+              <strong className="normal-text">Lagos Locations</strong>
+              <div className={styles.branches}>
+                <div className={styles.branch}>
+                  <strong>Head Office</strong>
+                  <p>81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos.</p>
+                  <p className={styles.grayed}>Open 24/7</p>
+                </div>
+                <div className={styles.branch}>
+                  <strong>VI Branch</strong>
+                  <p>
+                    133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island,
+                    Lagos.
+                  </p>
+                  <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+                </div>
+                <div className={styles.branch}>
+                  <strong>Airport Branch</strong>
+                  <p>Muritala Muhammad Airport2, Ikeja, Lagos.</p>
+                  <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+                </div>
+              </div>
             </div>
             <div>
-              <strong>Lagos Branch</strong>
-              <p>
-                133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island,
-                Lagos.
-              </p>
-              <p className={styles.grayed}> 8am-7pm (Everyday)</p>
+              <strong className="normal-text">Abuja Location</strong>
+              <div
+                className={deviceType === "mobile" ? "margin-left spaced" : ""}
+              >
+                <strong>Wuse 2 Branch</strong>
+                <p>
+                  5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja.
+                </p>
+                <p className={styles.grayed}>Open 24/7</p>
+              </div>
             </div>
-            <div>
-              <strong>Abuja</strong>
-              <p>5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja.</p>
-              <p className={styles.grayed}>Open 24/7</p>
-            </div>
+
             <div id={styles.newsletter}>
               <strong>Subscribe to Newsletter</strong>
               <div className="flex spaced">
@@ -185,16 +222,20 @@ const Footer: FunctionComponent = () => {
                 <Button className={styles["subsribe-btn"]}>Subscribe</Button>
               </div>
               <p className={`margin-top ${styles.grayed}`}>
-                We care about your data in our privacy policy
+                We care about your data
               </p>
             </div>
           </div>
         </div>
       </div>
       <div className={styles.bottom}>
-        <p>© 2022 Regal Flowers.</p>
+        <p>© 2023 Regal Flowers.</p>
 
-        <div className={`flex between spaced-xl ${styles["payment-icon"]}`}>
+        <div
+          className={`flex between ${
+            deviceType === "desktop" ? "spaced-xl" : "spaced"
+          } ${styles["payment-icon"]}`}
+        >
           <img
             src="/icons/visa.svg"
             alt="visa"
@@ -303,31 +344,54 @@ const CurrencyController = () => {
 };
 
 const Header: FunctionComponent = () => {
-  const [shouldShowCart, setShouldShowCart] = useState(false);
-  const [activeNav, setActiveNav] = useState("");
+  const [activeNavLink, setActiveNavLink] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
+  const [activeSublinkNav, setActiveSublinkNav] = useState("");
 
   const deviceType = useDeviceType();
 
-  const { currency, setCurrency, cartItems, user, allCurrencies } = useContext(
-    SettingsContext
-  );
+  const { pathname } = useRouter();
+  const _pathname = pathname.split("/")[1];
+
+  const {
+    currency,
+    setCurrency,
+    cartItems,
+    user,
+    allCurrencies,
+    setShouldShowCart,
+    shouldShowCart,
+    setOrder,
+    setCurrentStage,
+    setDeliveryDate,
+    orderId,
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown
+  } = useContext(SettingsContext);
+
+  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setShouldShowAuthDropdown(false);
+  });
+
+  const totalCartItems = useMemo(() => {
+    if (!cartItems.length) return 0;
+    return cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  }, [cartItems]);
 
   const handleActiveNav = (title: string, e: ReactMouseEvent) => {
-    setActiveNav(title === activeNav ? "" : title);
+    setActiveNavLink(title);
     e.stopPropagation();
   };
 
-  const excludedAreaRef = useOutsideClick(() => {
-    setActiveNav("");
-  });
-
   useEffect(() => {
-    if (!activeNav && showSidebar) {
-      setShowSidebar(false);
+    if (!orderId && _pathname !== "checkout") {
+      setOrder(null);
+      setCurrentStage(1);
+      setDeliveryDate(null);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeNav]);
+  }, [_pathname]);
 
   const accountAnchor = (
     <button className="flex column center-align">
@@ -342,7 +406,7 @@ const Header: FunctionComponent = () => {
           className={styles["control-icon"]}
         />
       )}
-      <span>Account</span>
+      {deviceType === "desktop" && <span>Account</span>}
     </button>
   );
 
@@ -371,7 +435,7 @@ const Header: FunctionComponent = () => {
                     <a
                       className={`flex center-align spaced ${styles.title}`}
                       onClick={() => {
-                        setActiveNav(link.title);
+                        setActiveNavLink(link.title);
                         !link.children.length && setShowSidebar(false);
                       }}
                     >
@@ -385,9 +449,10 @@ const Header: FunctionComponent = () => {
                   <div
                     className={`flex center-align spaced ${styles.title}`}
                     onClick={() => {
-                      setActiveNav(link.title);
+                      setActiveNavLink(link.title);
                       !link.children.length && setShowSidebar(false);
                     }}
+                    key={link.title}
                   >
                     <strong>{link.title}</strong>
                     {link.children.length > 0 && (
@@ -401,13 +466,13 @@ const Header: FunctionComponent = () => {
                     <div
                       className={[
                         styles["sub-link"],
-                        activeNav === link.title && styles.active
+                        activeNavLink === link.title && styles.active
                       ].join(" ")}
                     >
                       <div
                         className={styles.back}
                         onClick={() => {
-                          setActiveNav("");
+                          setActiveNavLink("");
                           setShowSidebar(true);
                         }}
                       >
@@ -416,11 +481,66 @@ const Header: FunctionComponent = () => {
                       </div>
 
                       {link.children.map((child, index) => (
-                        <Link href={child.url} key={index}>
-                          <a className={styles["sub-link-title"]}>
-                            {child.title && <p>{child.title}</p>}
-                          </a>
-                        </Link>
+                        <div key={index}>
+                          {child.url ? (
+                            <Link href={child.url} key={index}>
+                              <a
+                                className={styles["sub-link-title"]}
+                                onClick={() => {
+                                  setActiveNavLink("");
+                                  setShowSidebar(false);
+                                  setActiveSublinkNav("");
+                                }}
+                              >
+                                {child.title && <p>{child.title}</p>}
+                              </a>
+                            </Link>
+                          ) : (
+                            <div
+                              className={styles["sub-link-title"]}
+                              onClick={() => {
+                                setActiveSublinkNav(child.title);
+                              }}
+                              key={index}
+                            >
+                              <strong>{child.title}</strong>
+                              {child.children.length > 0 && (
+                                <div className={[styles.arrow].join(" ")}></div>
+                              )}
+                            </div>
+                          )}
+                          <div
+                            className={[
+                              styles["sub-child"],
+                              activeSublinkNav === child.title && styles.active
+                            ].join(" ")}
+                          >
+                            <div
+                              className={styles.back}
+                              onClick={() => {
+                                setActiveNavLink(link.title);
+                                setActiveSublinkNav("");
+                              }}
+                            >
+                              <div className={styles["back-arrow"]}></div>
+                              Back
+                            </div>
+                            {child.children.map((subChild, index) => (
+                              <Link href={subChild.url} key={index}>
+                                <a
+                                  className={styles["sub-link-title"]}
+                                  onClick={() => {
+                                    setActiveNavLink("");
+                                    setShowSidebar(false);
+                                    setActiveSublinkNav("");
+                                  }}
+                                >
+                                  {subChild.title && <p>{subChild.title}</p>}
+                                </a>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   )}
@@ -445,15 +565,11 @@ const Header: FunctionComponent = () => {
               <div
                 className={styles.link}
                 key={index}
-                ref={
-                  link.title === activeNav
-                    ? (excludedAreaRef as LegacyRef<HTMLDivElement>)
-                    : undefined
-                }
+                onMouseEnter={e => handleActiveNav(link.title, e)}
+                onMouseLeave={() => setActiveNavLink("")}
               >
                 <div
                   className={`flex center-align spaced  ${styles.title}`}
-                  onClick={e => handleActiveNav(link.title, e)}
                   key={link.title}
                   role="button"
                 >
@@ -470,7 +586,9 @@ const Header: FunctionComponent = () => {
                     <div
                       className={[
                         styles.arrow,
-                        activeNav === link.title && styles.active
+                        activeNavLink === link.title && activeNavLink
+                          ? styles.active
+                          : ""
                       ].join(" ")}
                     ></div>
                   )}
@@ -479,23 +597,28 @@ const Header: FunctionComponent = () => {
                   <div
                     className={[
                       styles["dropdown"],
-                      activeNav === link.title && styles.active
+                      activeNavLink === link.title && styles.active
                     ].join(" ")}
                   >
                     {link.subtitle && (
                       <p className={styles.subtitle}>{link.subtitle}</p>
                     )}
-                    <div className={[styles["sub-link"]].join(" ")}>
+                    <div
+                      className={[
+                        styles["sub-link"],
+                        link.children.some(child => child.children.length) &&
+                          styles.grid
+                      ].join(" ")}
+                    >
                       {link.children.map((child, index) => (
-                        <div
-                          className={[
-                            child.children.length && styles.grid
-                          ].join(" ")}
-                          key={index}
-                        >
+                        <div key={index}>
                           {child.url ? (
-                            <Link href={child.url} key={index}>
-                              <a onClick={() => setActiveNav("")}>
+                            <Link href={child.url}>
+                              <a
+                                onClick={() => {
+                                  setActiveNavLink("");
+                                }}
+                              >
                                 {child.title && (
                                   <span
                                     className={[
@@ -520,16 +643,20 @@ const Header: FunctionComponent = () => {
                               )}
                             </>
                           )}
-                          {child.children.map((grandChild, index) => (
-                            <Link href={grandChild.url} key={index}>
-                              <a
-                                className={styles["grand-title"]}
-                                onClick={() => setActiveNav("")}
-                              >
-                                {grandChild.title}
-                              </a>
-                            </Link>
-                          ))}
+                          <div className={styles["grand-children"]}>
+                            {child.children.map((grandChild, index) => (
+                              <Link href={grandChild.url} key={index}>
+                                <a
+                                  className={styles["grand-title"]}
+                                  onClick={() => {
+                                    setActiveNavLink("");
+                                  }}
+                                >
+                                  {grandChild.title}
+                                </a>
+                              </Link>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -544,21 +671,25 @@ const Header: FunctionComponent = () => {
             " "
           )}
         >
-          <button>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className={styles["control-icon"]}
-            >
-              <path
-                d="M8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8ZM8 10C5.33 10 0 11.34 0 14V16H16V14C16 11.34 10.67 10 8 10Z"
-                fill="#4B5563"
-              />
-            </svg>
-          </button>
+          <div>
+            <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
+              <div
+                className={[
+                  styles["auth-dropdown"],
+                  shouldShowAuthDropdown && styles.active
+                ].join(" ")}
+              >
+                <AuthDropdown />
+              </div>
+            </div>
+          </div>
+          <ContextWrapper
+            anchor={accountAnchor}
+            className={styles["auth-wrapper"]}
+          >
+            <AuthDropdown />
+          </ContextWrapper>
+
           <button
             className={[styles["cart-btn"]].join(" ")}
             onClick={() => {
@@ -582,11 +713,13 @@ const Header: FunctionComponent = () => {
               />
             </svg>
 
-            <span>{cartItems.length}</span>
+            <span>{totalCartItems}</span>
           </button>
         </div>
         <div className={styles["controls-area"]}>
-          <div className="flex spaced">
+          <div
+            className={["flex", "spaced", styles["currency-control"]].join(" ")}
+          >
             <span>Currency:</span>
             {allCurrencies.map(_currency => (
               <button
@@ -614,8 +747,8 @@ const Header: FunctionComponent = () => {
                 "center-align",
                 shouldShowCart && "primary-color"
               ].join(" ")}
-              onClick={e => {
-                setShouldShowCart(!shouldShowCart);
+              onMouseOver={e => {
+                setShouldShowCart(true);
                 e.stopPropagation();
               }}
             >
@@ -636,13 +769,16 @@ const Header: FunctionComponent = () => {
                 />
               </svg>
 
-              {cartItems.length ? (
-                <strong>Cart ({cartItems.length})</strong>
+              {totalCartItems ? (
+                <strong>Cart ({totalCartItems})</strong>
               ) : (
-                <span>Cart ({cartItems.length})</span>
+                <span>Cart ({totalCartItems})</span>
               )}
             </button>
-            <a className="flex column center-align" href="#contactSection">
+            <a
+              className="flex column center-align"
+              href={`${_pathname === "" ? "#contactSection" : "#footer"}`}
+            >
               <img
                 alt="phone"
                 src="/icons/phone.svg"
@@ -664,10 +800,12 @@ const Header: FunctionComponent = () => {
 interface CartContextProps {
   visible: boolean;
   cancel: () => void;
+  header?: "checkout" | "main";
+  cartItems?: CartItem[];
 }
 
 const CartContext: FunctionComponent<CartContextProps> = props => {
-  const { visible, cancel } = props;
+  const { visible, cancel, header = "main" } = props;
 
   const {
     cartItems,
@@ -675,14 +813,27 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     deliveryDate,
     setDeliveryDate,
     currency,
-    notify
+    notify,
+    orderId,
+    setOrderId,
+    setOrder,
+    setShouldShowCart,
+    currentStage,
+    confirm,
+    setOrderLoading
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
+
+  const totalCartItems = useMemo(() => {
+    if (!cartItems.length) return 0;
+    return cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  }, [cartItems]);
 
   const cartRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+  const { push } = router;
 
   const handleCloseCart = (e: MouseEvent) => {
     const cartBody = cartRef.current;
@@ -692,14 +843,60 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
-  const handleRemoveItemQuantity = (key: number) => {
-    const item = cartItems.find(item => item.key === key);
+  const fetchOrder = async (orderId: string) => {
+    setOrderLoading(true);
+    const { error, data, status } = await getOrder(orderId);
+
+    if (error) {
+      if (status === 404) {
+        setOrderId("");
+        setOrder(null);
+        setCartItems([]);
+        setDeliveryDate(null);
+        push("/");
+      }
+    } else {
+      const _isPaid =
+        /go\s*ahead/i.test(data?.paymentStatus || "") ||
+        /^paid/i.test(data?.paymentStatus || "");
+
+      if (!_isPaid) {
+        const _cartItems: CartItem[] =
+          data?.orderProducts?.map(item => ({
+            image: item.image as ProductImage,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            key: item.key,
+            // design: item.design,  //add design later
+            size: item.size,
+            description: item.description,
+            cartId: item.size || "" + item.key
+          })) || [];
+        setCartItems(_cartItems);
+      }
+
+      setOrder(data);
+      setDeliveryDate(data?.deliveryDate ? dayjs(data?.deliveryDate) : null);
+    }
+    setOrderLoading(false);
+  };
+
+  const handleRemoveItemQuantity = (key: string) => {
+    const item = cartItems.find(item => item.cartId === key);
     if (item) {
       if (item.quantity > 1) {
         setCartItems(
           cartItems.map(item => {
-            if (item.key === key) {
-              return { ...item, quantity: item.quantity - 1 };
+            if (item.cartId === key) {
+              return {
+                ...item,
+                quantity: item.quantity - 1,
+                design: item.design && {
+                  ...item.design,
+                  quantity: (item.design?.quantity as number) - 1
+                }
+              };
             }
             return item;
           })
@@ -708,13 +905,22 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
-  const handleAddItemQuantity = (key: number) => {
-    const item = cartItems.find(item => item.key === key);
+  const handleAddItemQuantity = (key: string) => {
+    const item = cartItems.find(item => item.cartId === key);
     if (item) {
       setCartItems(
         cartItems.map(item => {
-          if (item.key === key) {
-            return { ...item, quantity: item.quantity + 1 };
+          if (item.cartId === key) {
+            return {
+              ...item,
+              quantity: item.quantity + 1,
+              design:
+                item.design &&
+                ({
+                  ...item.design,
+                  quantity: (item.design?.quantity as number) + 1
+                } as Design)
+            };
           }
           return item;
         })
@@ -727,8 +933,23 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     0
   );
 
-  const handleRemoveItem = (key: number) => {
-    setCartItems(cartItems.filter(item => item.key !== key));
+  const handleRemoveItem = (key: string) => {
+    confirm({
+      title: "Delete item",
+      body: "Do you really want to delete this?",
+      onOk: () => {},
+      onCancel: () => {
+        setCartItems(prevState => {
+          if (prevState.length === 1) {
+            AppStorage.remove(AppStorageConstants.ORDER_ID);
+            setOrderId("");
+          }
+          return prevState.filter(item => item.cartId !== key);
+        });
+      },
+      okText: "Don't Delete",
+      cancelText: "Delete"
+    });
   };
 
   useEffect(() => {
@@ -746,7 +967,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 
     const { data, error, message } = await createOrder({
       cartItems,
-      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || ""
+      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || "",
+      currency: currency.name
     });
 
     setLoading(false);
@@ -754,19 +976,54 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       notify("error", `Unable to create order: ${message}`);
     } else if (data) {
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
+      setOrderId(data.id);
       router.push(`/checkout?orderId=${data.id}`);
-      setCartItems([]);
+      setShouldShowCart(false);
+    }
+  };
+
+  const handleUpdateOrder = async () => {
+    setLoading(true);
+
+    const { data, error, message } = await updateOrder({
+      cartItems,
+      deliveryDate: deliveryDate?.format("YYYY-MM-DD") || "",
+      id: orderId as string,
+      currency: currency.name
+    });
+
+    setLoading(false);
+    if (error) {
+      notify("error", `Unable to update order: ${message}`);
+    } else if (data) {
+      setOrder(data);
+      setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
+      header === "main" && router.push(`/checkout?orderId=${data.id}`);
+
+      setShouldShowCart(false);
     }
   };
 
   const designCharges = useMemo(() => {
     return cartItems.reduce((total, item) => {
-      const designOption = item.design
-        ? allDesignOptions.find(opt => opt.name === item.design)
-        : null;
-      return total + (designOption?.price || 0);
+      const designTotal =
+        item.design && item?.design.price * item.design.quantity;
+      return total + (designTotal || 0);
     }, 0);
   }, [cartItems]);
+
+  useEffect(() => {
+    if (orderId) {
+      fetchOrder(orderId);
+    } else {
+      const savedCartItems = AppStorage.get(AppStorageConstants.CART_ITEMS);
+      if (savedCartItems) {
+        setCartItems(savedCartItems);
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId, currentStage]);
 
   return (
     <div
@@ -786,7 +1043,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         ].join(" ")}
       >
         <div className={styles["cart-header"]}>
-          <h3 className="sub-heading bold">My Cart ({cartItems.length})</h3>
+          <h3 className="sub-heading bold">My Cart ({totalCartItems})</h3>
           <img
             src="/icons/cancel-cart.svg"
             className="generic-icon medium clickable"
@@ -799,7 +1056,20 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             <div className={styles["delivery-status"]}>
               <span>Pickup/Delivery date</span>
               <span>{deliveryDate?.format("D MMM YYYY") || "Not set yet"}</span>
-              <span className="underline primary-color">Edit</span>
+              {/* <span className="underline primary-color">Edit</span> */}
+              {!deliveryDate && (
+                <DatePicker
+                  value={deliveryDate}
+                  onChange={setDeliveryDate}
+                  format="D MMM YYYY"
+                  className={styles["delivery-date"]}
+                  placeholder="Edit"
+                  iconAtLeft
+                  content={<p className="underline primary-color">Edit</p>}
+                  dropdownAlignment="right"
+                  disablePastDays
+                />
+              )}
             </div>
           ) : (
             ""
@@ -810,8 +1080,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                 <img
                   src="/icons/delete-cart.svg"
                   alt="delete"
-                  className="generic-icon large margin-top spaced clickable"
-                  onClick={() => handleRemoveItem(item.key)}
+                  className="generic-icon medium margin-top spaced clickable"
+                  onClick={() => handleRemoveItem(item?.cartId)}
                 />
                 <div className="flex spaced align-center block">
                   <img
@@ -829,18 +1099,32 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                       <div className="flex center-align spaced-lg">
                         <div
                           className={styles.minus}
-                          onClick={() => handleRemoveItemQuantity(item.key)}
+                          onClick={() => handleRemoveItemQuantity(item.cartId)}
                         ></div>
                         <span className="small-text">{item.quantity}</span>
                         <div
                           className={styles.plus}
-                          onClick={() => handleAddItemQuantity(item.key)}
+                          onClick={() => handleAddItemQuantity(item.cartId)}
                         ></div>
                       </div>
                     </div>
-                    {item.size && <p>Size: {item.size}</p>}
+                    {item.size && (
+                      <p className="capitalize">Size: {item.size}</p>
+                    )}
                     {item.design && (
-                      <p className="vertical-margin">Design: {item.design}</p>
+                      <p className="vertical-margin capitalize">
+                        Design: {`${item.design.title}`} {"  "}
+                        {item.design.price ? (
+                          <span>
+                            {`+ ${getPriceDisplay(
+                              item.design.price,
+                              currency
+                            )} x ${item.design.quantity}`}
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -852,14 +1136,20 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           {cartItems.length ? (
             <>
               <div className="flex between center-align vertical-margin spaced">
-                <span className="small-text">Subtotal</span>
-                <strong className="small-text">
+                <span className="normal-text">Subtotal</span>
+                <strong className="normal-text">
                   {getPriceDisplay(total, currency)}
                 </strong>
               </div>
               <div className="flex between center-align margin-bottom spaced">
-                <span className="small-text">Total</span>
-                <strong className="small-text">
+                <span className="normal-text">Add-ons</span>
+                <strong className="normal-text">
+                  {getPriceDisplay(designCharges, currency)}
+                </strong>
+              </div>
+              <div className="flex between center-align margin-bottom spaced">
+                <span className="normal-text">Total</span>
+                <strong className="normal-text">
                   {getPriceDisplay(total + designCharges, currency)}
                 </strong>
               </div>
@@ -869,12 +1159,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           )}
           <Button
             responsive
-            className="margin-top spaced"
-            onClick={handleCreateOrder}
+            className="margin-top spaced capitalize"
+            onClick={orderId ? handleUpdateOrder : handleCreateOrder}
             loading={loading}
             disabled={!cartItems.length}
           >
-            Proceed to checkout ({getPriceDisplay(total, currency)})
+            {header === "main" ? "Proceed to checkout" : "Update Cart"} (
+            {getPriceDisplay(total + designCharges, currency)})
           </Button>
         </div>
       </div>
@@ -883,8 +1174,16 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
 };
 
 export const CheckoutHeader: FunctionComponent = () => {
-  // const [stage, setCurrentStage] = useState<number>(3);
-  const { currentStage } = useContext(SettingsContext);
+  const {
+    currentStage,
+    setShouldShowCart,
+    shouldShowCart,
+    shouldShowAuthDropdown,
+    setShouldShowAuthDropdown
+  } = useContext(SettingsContext);
+  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
+    setShouldShowAuthDropdown(false);
+  });
 
   const stages = [
     {
@@ -902,61 +1201,78 @@ export const CheckoutHeader: FunctionComponent = () => {
   ];
 
   return (
-    <header className={styles.header}>
-      <Link href="/">
-        <a>
-          <img
-            alt="regal flowers logo"
-            src="/icons/logo.png"
-            className={styles.logo}
-          />
-        </a>
-      </Link>
+    <>
+      <header className={styles.header}>
+        <Link href="/">
+          <a>
+            <img
+              alt="regal flowers logo"
+              src="/icons/logo.png"
+              className={styles.logo}
+            />
+          </a>
+        </Link>
 
-      <div className={styles["stage-wrapper"]}>
-        <div className="flex center margin-bottom">
-          {stages.map((_stage, index) => (
-            <div
-              key={index}
-              className={[
-                styles.progress,
-                currentStage === _stage.stage && styles.active
-              ].join(" ")}
-            >
-              {_stage.stage > 1 && (
-                <hr
-                  className={[
-                    styles["progress-bar"],
-                    currentStage >= _stage.stage && styles.active
-                  ].join(" ")}
-                />
-              )}
-              <span
+        <div className={styles["stage-wrapper"]}>
+          <div className="flex center margin-bottom">
+            {stages.map((_stage, index) => (
+              <div
+                key={index}
                 className={[
-                  styles.circle,
-                  currentStage > _stage.stage && styles.completed,
+                  styles.progress,
                   currentStage === _stage.stage && styles.active
                 ].join(" ")}
-              ></span>
-            </div>
-          ))}
+              >
+                {_stage.stage > 1 && (
+                  <hr
+                    className={[
+                      styles["progress-bar"],
+                      currentStage >= _stage.stage && styles.active
+                    ].join(" ")}
+                  />
+                )}
+                <span
+                  className={[
+                    styles.circle,
+                    currentStage > _stage.stage && styles.completed,
+                    currentStage === _stage.stage && styles.active
+                  ].join(" ")}
+                ></span>
+              </div>
+            ))}
+          </div>
+          <div className="flex around">
+            {stages.map((_stage, index) => (
+              <span
+                key={index}
+                className={[
+                  styles["stage-name"],
+                  currentStage === _stage.stage && styles.active,
+                  currentStage > _stage.stage && styles.completed
+                ].join(" ")}
+              >
+                {_stage.name}
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="flex around">
-          {stages.map((_stage, index) => (
-            <span
-              key={index}
-              className={[
-                styles["stage-name"],
-                currentStage === _stage.stage && styles.active,
-                currentStage > _stage.stage && styles.completed
-              ].join(" ")}
-            >
-              {_stage.name}
-            </span>
-          ))}
+      </header>
+      <CartContext
+        visible={shouldShowCart}
+        cancel={() => setShouldShowCart(false)}
+        header="checkout"
+      />
+      <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
+        <div
+          className={[
+            styles["auth-dropdown"],
+            shouldShowAuthDropdown && styles.active
+          ].join(" ")}
+        >
+          <AuthDropdown />
         </div>
       </div>
-    </header>
+    </>
   );
 };
 
@@ -997,6 +1313,71 @@ export const Toaster = (props: ToasterProps) => {
         <div className={styles.bar} />
       </div>
     </div>
+  );
+};
+
+export interface ConfirmParams {
+  title: string;
+  onOk: () => void;
+  body?: string;
+  okText?: string;
+  cancelText?: string;
+  onCancel?: () => void;
+}
+
+interface ConfirmModalProps {
+  cancel?: () => void;
+  confirmParams: ConfirmParams;
+  visible: boolean;
+}
+
+export const ConfirmModal = (props: ConfirmModalProps) => {
+  const [loading, setLoading] = useState(false);
+
+  const { visible, cancel, confirmParams } = props;
+  const {
+    okText = "Yes",
+    cancelText = "No",
+    onOk = () => {},
+    onCancel = () => {},
+    title = "Are you sure?",
+    body = "This action is irreversible"
+  } = confirmParams;
+
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      await onOk();
+    } catch (e) {
+      console.error(e);
+    }
+    setLoading(false);
+    cancel?.();
+  };
+
+  const handleCancel = () => {
+    onCancel();
+    cancel?.();
+  };
+
+  return (
+    <Modal visible={visible} isConfirm>
+      <h2 className={styles["confirm-title"]}>{title}</h2>
+      <p className={styles["confirm-body"]}>{body}</p>
+      <div className="flex vertical-margin end">
+        <Button type="accent" onClick={handleCancel}>
+          {cancelText}
+        </Button>
+        <Button
+          loading={loading}
+          type="primary"
+          onClick={handleClick}
+          className="margin-left spaced"
+        >
+          {okText}
+        </Button>
+      </div>
+    </Modal>
   );
 };
 

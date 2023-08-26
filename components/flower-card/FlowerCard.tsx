@@ -36,9 +36,14 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       onlyTitle
     } = props;
 
-    const { cartItems, setCartItems, notify, currency } = useContext(
-      SettingsContext
-    );
+    const {
+      cartItems,
+      setCartItems,
+      notify,
+      currency,
+      shouldShowCart,
+      setShouldShowCart
+    } = useContext(SettingsContext);
 
     const handleAddToCart = (e: MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -51,19 +56,54 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
         name: product.name,
         price: product.price,
         quantity: 1,
-        image: product.images[0]
+        image: {
+          src: product.images[0].src,
+          alt: product.images[0].alt
+        },
+        cartId: `${product.key}`
       };
 
       const _cartItem = cartItems.find(item => item.key === product?.key);
 
       if (!_cartItem) {
         setCartItems([...cartItems, cartItem]);
-        notify("success", "Item Added To Cart");
+        notify(
+          "success",
+          <p>
+            Item Added To Cart{" "}
+            <span
+              className="view-cart"
+              onClick={() => setShouldShowCart(!shouldShowCart)}
+            >
+              View Cart
+            </span>
+          </p>
+        );
       } else {
-        notify("info", "Item Already In Cart");
+        const _cartItems = cartItems.map(item => {
+          if (item.key === product.key) {
+            item.quantity += 1;
+          }
+          return item;
+        });
+        setCartItems(_cartItems);
+        notify(
+          "success",
+          <p>
+            Item Added To Cart{" "}
+            <span
+              className="view-cart"
+              onClick={() => setShouldShowCart(!shouldShowCart)}
+            >
+              View Cart
+            </span>
+          </p>
+        );
       }
       e.stopPropagation();
     };
+
+    const outOfStock = product && !product.sku && !product.variants.length;
 
     return (
       <Link href={url || "#"}>
@@ -81,25 +121,40 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
             />
           </div>
           <div className={styles.detail}>
-            <strong className={styles.name}>{name}</strong>
+            <strong
+              className={[styles.name, onlyTitle && styles["only-name"]].join(
+                " "
+              )}
+            >
+              {name}
+            </strong>
             {subTitle && <p className={styles.subtitle}>{subTitle}</p>}
             {!onlyTitle && (
               <div
-                className={`flex margin-top spaced ${
-                  price ? "between" : "center"
-                }`}
+                className={` ${price ? "between" : "center"} ${
+                  styles["price-btn-wrapper"]
+                } ${price ? styles.price : ""}`}
               >
                 {price && (
                   <div>
-                    <p className="smaller text-secondary">From</p>
+                    {product?.variants.length ? (
+                      <p className="smaller text-secondary">From</p>
+                    ) : (
+                      ""
+                    )}
                     <p className="bold">{getPriceDisplay(price, currency)}</p>
                   </div>
                 )}
                 <Button
                   className={`${styles["buy-btn"]}`}
                   onClick={e => cart && handleAddToCart(e)}
+                  disabled={outOfStock}
                 >
-                  {buttonText ? buttonText : "Buy Now"}
+                  {outOfStock
+                    ? "Out of Stock"
+                    : buttonText
+                    ? buttonText
+                    : "Buy Now"}
                 </Button>
               </div>
             )}

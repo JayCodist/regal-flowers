@@ -89,9 +89,18 @@
     background-color: rgba(0, 0, 0, 0.008);
   }
   .option:hover {
-    background-color: #d1b20423;
+    background-color: #ffdddd;
   }
   .option.initial:hover {
     background-color: inherit;
+  }
+}
+
+.selected {
+  background-color: #9b0000;
+  color: white;
+
+  &:hover {
+    background-color: #9b00007a;
   }
 }

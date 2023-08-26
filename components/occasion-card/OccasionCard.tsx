@@ -16,7 +16,7 @@ const OccasionCard: FunctionComponent<OccasionCardProps> = props => {
       <a className={[styles["occasion-card"], className].join(" ")}>
         <div className={styles.content}>
           <h2 className={styles.title}>{title}</h2>
-          <span className="flex spaced smaller center-align">
+          <span className={`flex spaced center-align ${styles.explore}`}>
             <h3 className={styles.explore}>Explore</h3>
             <img
               alt="arrow"

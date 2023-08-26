@@ -11,8 +11,11 @@ export const emailValidator: InputValidator = str => {
 };
 
 export const phoneValidator: InputValidator = str => {
-  if (str.length < 6) {
-    return "This field must have 6 or more characters";
+  if (str.length < 10) {
+    return "Enter a valid phone number";
+  }
+  if (!/^[+\d]+$/.test(str)) {
+    return "Please enter a valid phone number";
   }
   return "";
 };

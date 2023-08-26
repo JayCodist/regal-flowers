@@ -1,17 +1,37 @@
 import { ReactNode } from "react";
 import { Dayjs } from "dayjs";
-import { AppCurrencyName } from "./Core";
+import { AppCurrencyName, OrderItem } from "./Core";
 import { LocationName } from "./Regal";
 import { DeliveryLocationOption } from "../constants";
+import { ProductImage } from "./Product";
 
-interface OrderItem {
+interface OrderProduct {
   SKU?: string;
   name: string;
   quantity: number;
+  price: number;
+  image: ProductImage;
+  key: number;
+  size: string;
+  design: string;
+  description: string;
 }
 
+type OrderStatus = "created" | "processing";
+
+export type DeliveryDetails = {
+  state: string;
+  zone: string;
+  recipientPhone: string;
+  recipientAltPhone: string;
+  recipientName: string;
+  recipientAddress: string;
+  recidenceType: string;
+  cost: number;
+};
+
 export interface Order {
-  orderProducts?: OrderItem[];
+  orderProducts: OrderProduct[];
   paymentStatus?: PaymentStatus;
   orderID?: number;
   deliveryStatus?: DeliveryStatus;
@@ -19,6 +39,15 @@ export interface Order {
   id: string;
   amount: number;
   deliveryDate: string;
+  client: {
+    email: string;
+    firstName: string;
+    lastName: string;
+    phone: string;
+    name: string;
+  };
+  orderStatus: OrderStatus;
+  deliveryDetails: DeliveryDetails;
 }
 
 type PaymentStatus =
@@ -228,6 +257,7 @@ export interface CheckoutFormData {
   senderName: string;
   senderEmail: string;
   senderPhoneNumber: string;
+  senderCountryCode: string;
   senderPassword: string;
   freeAccount: boolean;
   coupon: string;
@@ -237,7 +267,9 @@ export interface CheckoutFormData {
   recipientName: string;
   deliveryDate: Dayjs | null;
   recipientPhoneNumber: string;
+  recipientCountryCode: string;
   recipientPhoneNumberAlt: string;
+  recipientCountryCodeAlt: string;
   residenceType: string;
   recipientHomeAddress: string;
   shouldSaveAddress: boolean;
@@ -249,6 +281,9 @@ export interface CheckoutFormData {
   cardNumber: string;
   cardCVV: string;
   state: LocationName;
+  zone: string;
+  currency: AppCurrencyName;
+  deliveryInstruction: string;
 }
 
 export type PaymentName =
