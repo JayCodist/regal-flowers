@@ -46,7 +46,11 @@ import {
 } from "../utils/helpers/data/payments";
 import useMonnify from "../utils/hooks/useMonnify";
 import Modal, { ModalProps } from "../components/modal/Modal";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  usePayPalScriptReducer
+} from "@paypal/react-paypal-js";
 import {
   CreateOrderActions,
   CreateOrderData,
@@ -218,6 +222,7 @@ const Checkout: FunctionComponent = () => {
     amount: Math.ceil((total || 0) / currency.conversionRate) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
     publicKey: "pk_live_1077b3af566a8ecdaaef2f5cb48b3486b0e6a521",
+    // publicKey: "pk_test_3840ef4162a5542a0b92ba1eca94147059df955d",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
   };
 
@@ -2942,23 +2947,59 @@ const PaypalModal: FunctionComponent<ModalProps & {
           options={{
             "client-id":
               "AfyoObBLl4cAk7XZWYPyHo0NTb9bD9gg-K7fJV5sAiI714s3l4LboJpLgz3YJCJ3EM1hJu7uKp4MclhE",
+            // "AThMy4XkWO0QL_8kt8gcpgC-exAPzAeSu_dR7wLPQzxeYjKtRCRcb_xfTelKOKjR9K56wHp-43FwBj6Y",
             currency: currencyRef.current?.name
             // "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
           }}
         >
-          <PayPalButtons
-            style={{
-              layout: "vertical",
-              shape: "pill",
-              label: "pay"
-            }}
-            className="vertical-margin spaced"
-            createOrder={handleSessionCreate}
-            onApprove={handleApprove}
+          <PaypalButtonsWrapper
+            handleApprove={handleApprove}
+            handleSessionCreate={handleSessionCreate}
           />
         </PayPalScriptProvider>
       )}
     </Modal>
+  );
+};
+
+interface PaypalButtonsWrapperProps {
+  handleSessionCreate: (
+    data: CreateOrderData,
+    actions: CreateOrderActions
+  ) => Promise<string>;
+  handleApprove: (
+    data: OnApproveData,
+    actions: OnApproveActions
+  ) => Promise<void>;
+}
+
+const PaypalButtonsWrapper = (props: PaypalButtonsWrapperProps) => {
+  const { handleApprove, handleSessionCreate } = props;
+  const [{ options }, dispatch] = usePayPalScriptReducer();
+  const { currency } = useContext(SettingsContext);
+
+  useEffect(() => {
+    dispatch({
+      type: "resetOptions",
+      value: {
+        ...options,
+        currency: currency.name
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currency]);
+
+  return (
+    <PayPalButtons
+      style={{
+        layout: "vertical",
+        shape: "pill",
+        label: "pay"
+      }}
+      className="vertical-margin spaced"
+      createOrder={handleSessionCreate}
+      onApprove={handleApprove}
+    />
   );
 };
 
