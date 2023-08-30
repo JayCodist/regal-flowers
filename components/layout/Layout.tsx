@@ -933,25 +933,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     0
   );
 
-  const handleRemoveItem = (key: string) => {
-    confirm({
-      title: "Delete item",
-      body: "Do you really want to delete this?",
-      onOk: () => {},
-      onCancel: () => {
-        setCartItems(prevState => {
-          if (prevState.length === 1) {
-            AppStorage.remove(AppStorageConstants.ORDER_ID);
-            setOrderId("");
-          }
-          return prevState.filter(item => item.cartId !== key);
-        });
-      },
-      okText: "Don't Delete",
-      cancelText: "Delete"
-    });
-  };
-
   useEffect(() => {
     if (visible) {
       document.addEventListener("mousedown", handleCloseCart);
@@ -982,11 +963,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     }
   };
 
-  const handleUpdateOrder = async () => {
+  const handleUpdateOrder = async (clearCartItems: boolean) => {
     setLoading(true);
 
     const { data, error, message } = await updateOrder({
-      cartItems,
+      cartItems: clearCartItems ? null : cartItems,
       deliveryDate: deliveryDate?.format("YYYY-MM-DD") || "",
       id: orderId as string,
       currency: currency.name
@@ -998,10 +979,37 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     } else if (data) {
       setOrder(data);
       setDeliveryDate(data.deliveryDate ? dayjs(data?.deliveryDate) : null);
-      header === "main" && router.push(`/checkout?orderId=${data.id}`);
+
+      if (header === "main" && !clearCartItems) {
+        router.push(`/checkout?orderId=${data.id}`);
+      }
+
+      if (clearCartItems && header === "checkout") {
+        router.push(`/`);
+      }
 
       setShouldShowCart(false);
     }
+  };
+
+  const handleRemoveItem = (key: string) => {
+    confirm({
+      title: "Delete item",
+      body: "Do you really want to delete this?",
+      onOk: () => {},
+      onCancel: () => {
+        if (cartItems.length === 1) {
+          handleUpdateOrder(true);
+          setCartItems([]);
+          return;
+        }
+        setCartItems(prevState => {
+          return prevState.filter(item => item.cartId !== key);
+        });
+      },
+      okText: "Don't Delete",
+      cancelText: "Delete"
+    });
   };
 
   const designCharges = useMemo(() => {
@@ -1160,7 +1168,9 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           <Button
             responsive
             className="margin-top spaced capitalize"
-            onClick={orderId ? handleUpdateOrder : handleCreateOrder}
+            onClick={() =>
+              orderId ? handleUpdateOrder(false) : handleCreateOrder()
+            }
             loading={loading}
             disabled={!cartItems.length}
           >

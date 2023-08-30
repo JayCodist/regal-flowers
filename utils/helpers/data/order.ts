@@ -169,10 +169,10 @@ export const createOrder: (payload: {
 };
 
 export const updateOrder: (payload: {
-  cartItems: CartItem[];
-  deliveryDate: string;
-  id: string;
-  currency: AppCurrencyName;
+  cartItems: CartItem[] | null;
+  deliveryDate?: string;
+  id?: string;
+  currency?: AppCurrencyName;
 }) => Promise<RequestResponse<Order>> = async ({
   cartItems,
   deliveryDate,
@@ -182,13 +182,15 @@ export const updateOrder: (payload: {
   try {
     const response = await restAPIInstance.put(`/v1/firebase/order/${id}`, {
       deliveryDate,
-      cartItems: cartItems.map(item => ({
-        key: item.key,
-        design: item.design?.name || "",
-        size: item.size || "",
-        quantity: item.quantity,
-        image: item.image
-      })),
+      cartItems: cartItems
+        ? cartItems.map(item => ({
+            key: item.key,
+            design: item.design?.name || "",
+            size: item.size || "",
+            quantity: item.quantity,
+            image: item.image
+          }))
+        : null,
       currency
     });
     return {

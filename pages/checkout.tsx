@@ -770,7 +770,7 @@ const Checkout: FunctionComponent = () => {
                               handleChange("senderCountryCode", value)
                             }
                             className="input-group half-width"
-                            countryCodePlaceholder="Country"
+                            countryCodePlaceholder="Code"
                           />
 
                           <div className="input-group half-width compact">
@@ -1119,7 +1119,7 @@ const Checkout: FunctionComponent = () => {
                                 }
                                 className="input-group"
                                 question="Receiver Phone number"
-                                countryCodePlaceholder="Country"
+                                countryCodePlaceholder="Code"
                               />
                             </div>
 
@@ -1135,7 +1135,7 @@ const Checkout: FunctionComponent = () => {
                                 }
                                 className="input-group"
                                 question="Enter alternative phone (if available)"
-                                countryCodePlaceholder="Country"
+                                countryCodePlaceholder="Code"
                               />
                               <div className="input-group">
                                 <span className="question">Residence Type</span>
@@ -1803,7 +1803,7 @@ const Checkout: FunctionComponent = () => {
                         handleChange("senderCountryCode", value)
                       }
                       className="input-group"
-                      countryCodePlaceholder="Country"
+                      countryCodePlaceholder="Code"
                     />
 
                     <div className="input-group">
@@ -2228,7 +2228,7 @@ const Checkout: FunctionComponent = () => {
                             }
                             className="input-group"
                             question="Receiver Phone number"
-                            countryCodePlaceholder="Country"
+                            countryCodePlaceholder="Code"
                           />
 
                           <PhoneInput
@@ -2242,7 +2242,7 @@ const Checkout: FunctionComponent = () => {
                             }
                             className="input-group"
                             question="Enter alternative phone (if available)"
-                            countryCodePlaceholder="Country"
+                            countryCodePlaceholder="Code"
                           />
                           <div className="input-group">
                             <span className="question">Residence Type</span>
