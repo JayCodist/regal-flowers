@@ -2946,8 +2946,7 @@ const PaypalModal: FunctionComponent<ModalProps & {
         <PayPalScriptProvider
           options={{
             "client-id":
-              "AfyoObBLl4cAk7XZWYPyHo0NTb9bD9gg-K7fJV5sAiI714s3l4LboJpLgz3YJCJ3EM1hJu7uKp4MclhE",
-            // "AThMy4XkWO0QL_8kt8gcpgC-exAPzAeSu_dR7wLPQzxeYjKtRCRcb_xfTelKOKjR9K56wHp-43FwBj6Y",
+              "AeJcTYsvBiyTnk5ndg-0KyWTMKqmqkpoCXaUNh7fJb7qvTkFIXdmcGK8t3zS_7AtWj4jAYbvYjOcKgke",
             currency: currencyRef.current?.name
             // "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
           }}
