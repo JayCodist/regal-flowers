@@ -88,7 +88,7 @@ const initialData: CheckoutFormData = {
   deliveryDate: null,
   recipientPhoneNumber: "",
   recipientPhoneNumberAlt: "",
-  shouldSaveAddress: true,
+  shouldSaveAddress: false,
   residenceType: "",
   recipientHomeAddress: "",
   additionalInfo: "",
@@ -270,7 +270,8 @@ const Checkout: FunctionComponent = () => {
         setFormData({
           ...formData,
           [key as string]: value,
-          pickUpLocation: ""
+          pickUpLocation: "",
+          shouldSaveAddress: true
         });
         return;
       }
