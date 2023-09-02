@@ -747,7 +747,7 @@ const Header: FunctionComponent = () => {
                 "center-align",
                 shouldShowCart && "primary-color"
               ].join(" ")}
-              onMouseOver={e => {
+              onClick={e => {
                 setShouldShowCart(true);
                 e.stopPropagation();
               }}

@@ -412,7 +412,8 @@ export const regalEmail = "info@regalflowers.com.ng";
 export const regalPhones = [
   "(+234) 7010 006665",
   "(+234) 7010 006664",
-  "(+234) 7011 992888"
+  "(+234) 7011 992888",
+  "(+234) 9112 000300"
 ];
 
 export const blogPosts: BlogPost[] = [
