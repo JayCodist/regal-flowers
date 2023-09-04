@@ -29,4 +29,5 @@ export default interface User {
   dob: string;
   createdAt: string;
   recipients: Recipient[];
+  phoneCountryCode: string;
 }
