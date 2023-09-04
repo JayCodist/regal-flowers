@@ -311,7 +311,6 @@ const Checkout: FunctionComponent = () => {
           selectedRecipient.altPhoneCountryCode
         ),
         recipientHomeAddress: selectedRecipient.address,
-        message: selectedRecipient.message,
         deliveryMethod: selectedRecipient.method,
         residenceType: selectedRecipient.residenceType,
         state: selectedRecipient.state,
@@ -452,7 +451,8 @@ const Checkout: FunctionComponent = () => {
         ...formData,
         senderName: user.name,
         senderEmail: user.email,
-        senderPhoneNumber: user.phone
+        senderPhoneNumber: user.phone,
+        senderCountryCode: user.phoneCountryCode
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -165,7 +165,12 @@ export const footerContent: FooterContent = {
     { title: "Our Blog", url: "/" },
     { title: "FAQ", url: "/faq" }
   ],
-  phoneNumbers: ["+234 701 000 6664", "+234 701 000 6665", "+234 701 199 2888"]
+  phoneNumbers: [
+    "+234 701 000 6664",
+    "+234 701 000 6665",
+    "+234 701 199 2888",
+    "+234 911 200 0300"
+  ]
 };
 
 export const aboutUsContent: {
