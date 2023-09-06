@@ -187,7 +187,7 @@ const Checkout: FunctionComponent = () => {
 
   const deviceType = useDeviceType();
 
-  const isBankTransfer = /Transfer/i.test(order?.paymentStatus || "");
+  const isBankTransfer = /but not seen yet/i.test(order?.paymentStatus || "");
 
   const total = useMemo(() => {
     const total =
@@ -232,8 +232,8 @@ const Checkout: FunctionComponent = () => {
     email: formData.senderEmail || placeholderEmail,
     amount: Math.ceil((total || 0) / currency.conversionRate) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
-    // publicKey: "pk_live_1077b3af566a8ecdaaef2f5cb48b3486b0e6a521",
-    publicKey: "pk_test_3840ef4162a5542a0b92ba1eca94147059df955d",
+    publicKey: "pk_live_1077b3af566a8ecdaaef2f5cb48b3486b0e6a521",
+    // publicKey: "pk_test_3840ef4162a5542a0b92ba1eca94147059df955d",
     channels: ["card", "bank", "ussd", "qr", "mobile_money"]
   };
 
@@ -1607,8 +1607,6 @@ const Checkout: FunctionComponent = () => {
                   <p className="sub-heading bold">Order Summary</p>
                   {isBankTransfer ? (
                     <p className="normal-text">
-                      Thanks for the payment. We would look out for it. Please
-                      note your order won’t be shipped until funds are received.
                       For any issues/enquiries, please email
                       <a
                         href="mailto:info@regalflowers.com.ng"
@@ -2738,9 +2736,7 @@ const Checkout: FunctionComponent = () => {
                     >
                       {isBankTransfer && (
                         <p>
-                          Thanks for the payment. We would look out for it.
-                          Please note your order won’t be shipped until funds
-                          are received. For any issues/enquiries, please email
+                          For any issues/enquiries, please email
                           <a
                             href="mailto:info@regalflowers.com.ng"
                             className="underline blue"
