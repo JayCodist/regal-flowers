@@ -30,6 +30,7 @@ import AppStorage, {
   AppStorageConstants
 } from "../utils/helpers/storage-helpers";
 import { performHandshake } from "../utils/helpers/data/core";
+import { getDefaultCurrency } from "../utils/helpers/type-conversions";
 import { Order } from "../utils/types/Order";
 
 const defaultSettings: Settings = {
@@ -86,15 +87,31 @@ const App: FunctionComponent<AppProps> = props => {
   const [currentStage, setCurrentStage] = useState<Stage>(1);
 
   const initializeAppConfig = async () => {
-    const savedCurrency = AppStorage.get<AppCurrency>(
-      AppStorageConstants.SAVED_CURRENCY
+    const savedCartItems = AppStorage.get<CartItem[]>(
+      AppStorageConstants.CART_ITEMS
     );
-    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
+
+    const { defaultCurrencyName, fromStorage } = getDefaultCurrency();
+    const defaultCurrency =
+      settings.allCurrencies.find(
+        currency => currency.name === defaultCurrencyName
+      ) || defaultSettings.currency;
+
+    if (defaultCurrencyName !== "NGN" && !fromStorage) {
+      notify(
+        "info",
+        `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
+        4000
+      );
+    }
 
     setSettings({
       ...settings,
-      currency: savedCurrency || defaultSettings.currency
+      currency: defaultCurrency,
+      cartItems: savedCartItems || []
     });
+    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
+
     setOrderId(savedOrderId || "");
     const { error, data } = await performHandshake();
     if (error || !data) {
@@ -112,15 +129,13 @@ const App: FunctionComponent<AppProps> = props => {
           }),
           {}
         ) || {};
-
-      const currentCurrency = savedCurrency || settings.currency;
       setSettings({
         ...settings,
         currency: {
-          ...currentCurrency,
+          ...defaultCurrency,
           conversionRate:
-            currencyValueMap[currentCurrency.name] ||
-            currentCurrency.conversionRate
+            currencyValueMap[defaultCurrency.name] ||
+            defaultCurrency.conversionRate
         },
         allCurrencies: settings.allCurrencies.map(currency => ({
           ...currency,
