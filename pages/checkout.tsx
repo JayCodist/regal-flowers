@@ -1533,9 +1533,15 @@ const Checkout: FunctionComponent = () => {
                       alt="completed"
                       className={`text-center ${styles["complete-image"]}`}
                     />
-                    <p className={styles["order-received"]}>
-                      Order Received Succesfully
-                    </p>
+                    {isBankTransfer ? (
+                      <p className={styles["order-received"]}>
+                        Order Received Pending Payment Confirmation
+                      </p>
+                    ) : (
+                      <p className={styles["order-received"]}>
+                        Order Received Succesfully
+                      </p>
+                    )}
                     <p className={styles["order-number"]}>
                       Order No:{" "}
                       <span className={styles.bold}>
@@ -2704,7 +2710,11 @@ const Checkout: FunctionComponent = () => {
                 <div>
                   <div className="text-center">
                     <div className={styles["order-received"]}>
-                      <p>Order Received Succesfully</p>
+                      {isBankTransfer ? (
+                        <p>Order Received Pending Payment Confirmation</p>
+                      ) : (
+                        <p>Order Received Succesfully</p>
+                      )}
                       <p className={styles["order-number"]}>
                         Order No:{" "}
                         <span
@@ -2726,6 +2736,21 @@ const Checkout: FunctionComponent = () => {
                     <div
                       className={`flex column center-align spaced normal-text ${styles["order-info"]}`}
                     >
+                      {isBankTransfer && (
+                        <p>
+                          Thanks for the payment. We would look out for it.
+                          Please note your order won’t be shipped until funds
+                          are received. For any issues/enquiries, please email
+                          <a
+                            href="mailto:info@regalflowers.com.ng"
+                            className="underline blue"
+                          >
+                            info@regalflowers.com.ng
+                          </a>{" "}
+                          or call/text/whatsapp +234 7011992888, +234
+                          7010006665, +234 7010006664
+                        </p>
+                      )}
                       <p>
                         Your order was received, please note your order number
                         in every correspondence with us.
@@ -2985,6 +3010,7 @@ const Checkout: FunctionComponent = () => {
         visible={showPaymentDetails}
         cancel={() => setShowPaymentDetails(false)}
         onCompleted={markAsPaid}
+        transferName={transferName}
       />
     </>
   );
@@ -3262,7 +3288,8 @@ const paymentDetailsInitialData = {
 
 const PaymentDetailsModal: FunctionComponent<ModalProps & {
   onCompleted: () => void;
-}> = ({ visible, cancel = () => {}, onCompleted }) => {
+  transferName: TransferName | null;
+}> = ({ visible, cancel = () => {}, onCompleted, transferName }) => {
   const [formData, setFormData] = useState(paymentDetailsInitialData);
   const [loading, setLoading] = useState(false);
   const { currency, orderId, notify } = useContext(SettingsContext);
@@ -3321,17 +3348,19 @@ const PaymentDetailsModal: FunctionComponent<ModalProps & {
             number
           />
         </div>
-        <div className="input-group vertical-margin spaced">
-          <span className="question">Account Name</span>
-          <Input
-            placeholder="Account Name"
-            value={formData.accountName}
-            onChange={value => handleChange("accountName", value)}
-            dimmed
-            required
-            responsive
-          />
-        </div>
+        {transferName !== "bitcoinTransfer" && (
+          <div className="input-group vertical-margin spaced">
+            <span className="question">Account Name</span>
+            <Input
+              placeholder="Account Name"
+              value={formData.accountName}
+              onChange={value => handleChange("accountName", value)}
+              dimmed
+              required
+              responsive
+            />
+          </div>
+        )}
         <div className="input-group">
           <span className="question">30digit Reference (if available)</span>
           <Input
