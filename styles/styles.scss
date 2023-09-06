@@ -793,3 +793,19 @@ button {
     visibility: visible;
   }
 }
+
+.center {
+  margin: 0 auto;
+}
+
+.copy-icon {
+  color: #9b0000;
+
+  &.active {
+    color: #22c55e;
+  }
+}
+
+.blue {
+  color: #2684ff;
+}

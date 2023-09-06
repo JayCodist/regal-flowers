@@ -17,6 +17,9 @@ export const getPriceDisplay: (
   ).toLocaleString()}`;
 };
 
+export const getNumber = (str: string | number) =>
+  Number(String(str).replace(/[^\d.]/g, "")) || 0;
+
 export function getValueInParentheses(str: string) {
   const startIndex = str.indexOf("(");
   const endIndex = str.indexOf(")");

@@ -4,7 +4,7 @@ import { Option } from "../components/select/Select";
 import { getPriceDisplay } from "./helpers/type-conversions";
 import { BooleanFilter } from "./helpers/type-helpers";
 import { AppCurrency, AppCurrencyName, AppLink } from "./types/Core";
-import { PaymentMethod } from "./types/Order";
+import { PaymentMethod, PaymentName } from "./types/Order";
 import { DesignOptionName, Gift } from "./types/Product";
 import {
   Service,
@@ -648,19 +648,49 @@ export const paymentMethods: PaymentMethod[] = [
   },
 
   {
-    title: "Bank Transfer",
-    paymentName: "monnify",
+    title: "Manual Transfer",
+    paymentName: "gtbTransfer",
     supportedCurrencies: ["NGN"],
     icon: (
+      <img src="./icons/gtbank.svg" className="generic-icon large" alt="gtb" />
+    ),
+    info: "Transfer Naira to GTB Bank"
+  },
+  {
+    title: "Manual Transfer",
+    paymentName: "bitcoinTransfer",
+    supportedCurrencies: ["USD"],
+    icon: (
       <img
-        src="/icons/monnify-logo.png"
-        className="generic-icon"
-        alt="monnify"
+        src="/icons/bitcoin-gold.svg"
+        className="generic-icon large"
+        alt="bitcoin"
       />
     ),
-    info: "Transfer with Monnify"
+    info: "Transfer Bitcoins (USD)"
+  },
+  {
+    title: "Manual Transfer",
+    paymentName: "natwestTransfer",
+    supportedCurrencies: ["GBP"],
+    icon: (
+      <img
+        src="./icons/natwest.svg"
+        className="generic-icon large"
+        alt="natwest"
+      />
+    ),
+    info: "Transfer Pounds to Natwest Bank"
   }
 ];
+
+export const gtbTransfer = {
+  bankName: "Guaranty Trust Bank (or GTBank)",
+  accountNumber: "0252862666",
+  accountName: "Regal Flowers Ltd"
+};
+
+export const bitcoinTransfer = "12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1";
 
 export const countryCodes = [
   {
