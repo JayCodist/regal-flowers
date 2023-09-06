@@ -18,6 +18,9 @@ export const getPriceDisplay: (
   ).toLocaleString()}`;
 };
 
+export const getNumber = (str: string | number) =>
+  Number(String(str).replace(/[^\d.]/g, "")) || 0;
+
 export const getDefaultCurrency: () => {
   defaultCurrencyName: AppCurrencyName;
   fromStorage: boolean;

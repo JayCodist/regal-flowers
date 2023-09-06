@@ -120,6 +120,10 @@
         opacity: 0.3;
         cursor: not-allowed;
       }
+
+      &.remove {
+        display: none;
+      }
     }
   }
 
@@ -450,6 +454,10 @@
         opacity: 0.3;
         cursor: not-allowed;
       }
+
+      &.remove {
+        display: none;
+      }
     }
   }
 
@@ -557,4 +565,36 @@
   text-align: right;
   margin-bottom: 1rem;
   overflow-wrap: anywhere;
+}
+
+.details-wrapper {
+  width: 50%;
+  .details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    & > :nth-child(2) {
+      word-wrap: break-word;
+      text-align: end;
+      margin-left: 1rem;
+    }
+
+    &.bitcoinTransfer {
+      display: block;
+
+      & > :nth-child(2) {
+        text-align: start;
+        margin-left: 0;
+      }
+    }
+  }
+
+  @media (max-width: 1200px) {
+    width: 70%;
+  }
+
+  @media (max-width: 650px) {
+    width: 90%;
+  }
 }

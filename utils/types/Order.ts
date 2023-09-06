@@ -291,7 +291,10 @@ export type PaymentName =
   | "googlePay"
   | "payPal"
   | "monnify"
-  | "manualTransfer";
+  | "manualTransfer"
+  | "gtbTransfer"
+  | "natwestTransfer"
+  | "bitcoinTransfer";
 
 export interface PaymentMethod {
   title: string;
