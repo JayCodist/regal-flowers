@@ -4,7 +4,7 @@ import { Option } from "../components/select/Select";
 import { getPriceDisplay } from "./helpers/type-conversions";
 import { BooleanFilter } from "./helpers/type-helpers";
 import { AppCurrency, AppCurrencyName, AppLink } from "./types/Core";
-import { PaymentMethod, PaymentName } from "./types/Order";
+import { PaymentMethod } from "./types/Order";
 import { DesignOptionName, Gift } from "./types/Product";
 import {
   Service,
