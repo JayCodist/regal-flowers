@@ -1,5 +1,5 @@
 import { AppCurrencyName, CartItem } from "../../types/Core";
-import { Order, CheckoutFormData } from "../../types/Order";
+import { Order, CheckoutFormData, PaymentName } from "../../types/Order";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 import AppStorage, { AppStorageConstants } from "../storage-helpers";
@@ -250,6 +250,38 @@ export const saveSenderInfo: (
       data: response.data as Order
     };
   } catch (err) {
+    return {
+      error: true,
+      message: (err as Error).message,
+      data: null
+    };
+  }
+};
+
+export const updatePaymentMethodDetails: (payload: {
+  currency: AppCurrencyName;
+  orderId: string;
+  paymentMethod: PaymentName;
+}) => Promise<RequestResponse<boolean>> = async ({
+  orderId,
+  currency,
+  paymentMethod
+}) => {
+  try {
+    const response = await restAPIInstance.put(
+      `/v1/firebase/order/update-payment-details/${orderId}`,
+      {
+        currency,
+        paymentMethod
+      }
+    );
+    return {
+      error: !response.data,
+      message: response.message,
+      data: response.data
+    };
+  } catch (err) {
+    console.error("Unable to update payment method ", err);
     return {
       error: true,
       message: (err as Error).message,
