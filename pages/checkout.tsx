@@ -3345,6 +3345,9 @@ const PaymentDetailsModal: FunctionComponent<ModalProps & {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (formData.amount === 0) {
+      return notify("error", `Amount Sent is required`);
+    }
     setLoading(true);
     const { error, message } = await manualTransferPayment({
       ...formData,
