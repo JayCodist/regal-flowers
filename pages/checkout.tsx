@@ -228,8 +228,10 @@ const Checkout: FunctionComponent = () => {
     AppStorage.remove(AppStorageConstants.CART_ITEMS);
   };
 
+  const refNumber = new Date().getTime().toString();
+
   const payStackConfig: PaystackProps = {
-    reference: `${order?.id}${currency.name}` as string,
+    reference: `${order?.id}-${refNumber}` as string,
     email: formData.senderEmail || placeholderEmail,
     amount: Math.ceil((total || 0) / currency.conversionRate) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
