@@ -32,7 +32,8 @@ import {
 import SettingsContext from "../utils/context/SettingsContext";
 import {
   saveSenderInfo,
-  updateCheckoutState
+  updateCheckoutState,
+  updatePaymentMethodDetails
 } from "../utils/helpers/data/order";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
 import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
@@ -227,8 +228,10 @@ const Checkout: FunctionComponent = () => {
     AppStorage.remove(AppStorageConstants.CART_ITEMS);
   };
 
+  const refNumber = new Date().getTime().toString();
+
   const payStackConfig: PaystackProps = {
-    reference: `${order?.id}${currency.name}` as string,
+    reference: `${order?.id}-${refNumber}` as string,
     email: formData.senderEmail || placeholderEmail,
     amount: Math.ceil((total || 0) / currency.conversionRate) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
@@ -684,7 +687,13 @@ const Checkout: FunctionComponent = () => {
           markAsPaid();
         }
       };
-      initializePayment(successHandler, () => {});
+      initializePayment(successHandler, async () => {
+        await updatePaymentMethodDetails({
+          orderId: _orderId as string,
+          currency: currency.name,
+          paymentMethod: "paystack"
+        });
+      });
     },
     monnify: () => {
       if (isMonnifyReady) {
@@ -1539,7 +1548,7 @@ const Checkout: FunctionComponent = () => {
                       </p>
                     ) : (
                       <p className={styles["order-received"]}>
-                        Order Received Succesfully
+                        Order Received Successfully
                       </p>
                     )}
                     <p className={styles["order-number"]}>
@@ -2711,7 +2720,7 @@ const Checkout: FunctionComponent = () => {
                       {isBankTransfer ? (
                         <p>Order Received Pending Payment Confirmation</p>
                       ) : (
-                        <p>Order Received Succesfully</p>
+                        <p>Order Received Successfully</p>
                       )}
                       <p className={styles["order-number"]}>
                         Order No:{" "}
@@ -3048,6 +3057,14 @@ const PaypalModal: FunctionComponent<ModalProps & {
   ) => {
     const response = await actions.order?.capture();
 
+    if (response?.status !== "COMPLETED") {
+      await updatePaymentMethodDetails({
+        orderId: order?.id as string,
+        currency: currency.name,
+        paymentMethod: "payPal"
+      });
+    }
+
     if (response?.status === "COMPLETED") {
       const { error, message } = await verifyPaypalPayment(data.orderID);
       if (error) {
@@ -3076,6 +3093,8 @@ const PaypalModal: FunctionComponent<ModalProps & {
           options={{
             "client-id":
               "AeJcTYsvBiyTnk5ndg-0KyWTMKqmqkpoCXaUNh7fJb7qvTkFIXdmcGK8t3zS_7AtWj4jAYbvYjOcKgke",
+            // "client-id":
+            //   "AThMy4XkWO0QL_8kt8gcpgC-exAPzAeSu_dR7wLPQzxeYjKtRCRcb_xfTelKOKjR9K56wHp-43FwBj6Y",
             currency: currencyRef.current?.name
             // "buyer-country": currencyRef.current?.name === "USD" ? "US" : "GB"
           }}
@@ -3136,6 +3155,27 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
   setShowPaymentDetails: () => void;
 }> = ({ visible, cancel = () => {}, transferName, setShowPaymentDetails }) => {
   const [textCopied, setTextCopied] = useState("");
+  const { currency } = useContext(SettingsContext);
+
+  const router = useRouter();
+  const {
+    query: { orderId }
+  } = router;
+
+  const handlePaymentMethodDetailsUpdate = async () => {
+    await updatePaymentMethodDetails({
+      orderId: orderId as string,
+      currency: currency.name,
+      paymentMethod: transferName as TransferName
+    });
+  };
+
+  useEffect(() => {
+    if (visible) {
+      handlePaymentMethodDetailsUpdate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible]);
 
   const handleCopy = async (text: string) => {
     try {
@@ -3222,13 +3262,15 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
               <strong className="primary-color">Bank:</strong>
               <span>Natwest Bank</span>
             </p>
-            <p className={[styles.details, "vertical-margin spaced"].join(" ")}>
+            <div
+              className={[styles.details, "vertical-margin spaced"].join(" ")}
+            >
               <strong className="primary-color">Account Number:</strong>
               <div className="flex spaced center-align">
                 <span>24323462</span>
                 {copyButton("24323462")}
               </div>
-            </p>
+            </div>
             <p className={styles.details}>
               <strong className="primary-color">Account Name:</strong>
               <span>Olaotan Oladitan</span>
@@ -3288,7 +3330,7 @@ const PaymentDetailsModal: FunctionComponent<ModalProps & {
 }> = ({ visible, cancel = () => {}, onCompleted, transferName }) => {
   const [formData, setFormData] = useState(paymentDetailsInitialData);
   const [loading, setLoading] = useState(false);
-  const { currency, orderId, notify } = useContext(SettingsContext);
+  const { currency, notify } = useContext(SettingsContext);
 
   const router = useRouter();
   const {
@@ -3305,11 +3347,14 @@ const PaymentDetailsModal: FunctionComponent<ModalProps & {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (formData.amount === 0) {
+      return notify("error", `Amount Sent is required`);
+    }
     setLoading(true);
     const { error, message } = await manualTransferPayment({
       ...formData,
       currency: currency.name,
-      orderId: orderId || (_orderId as string),
+      orderId: _orderId as string,
       amount: getNumber(formData.amount)
     });
     setLoading(false);
