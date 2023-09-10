@@ -228,8 +228,10 @@ const Checkout: FunctionComponent = () => {
     AppStorage.remove(AppStorageConstants.CART_ITEMS);
   };
 
+  const refNumber = new Date().getTime().toString();
+
   const payStackConfig: PaystackProps = {
-    reference: `${order?.id}${currency.name}` as string,
+    reference: `${order?.id}-${refNumber}` as string,
     email: formData.senderEmail || placeholderEmail,
     amount: Math.ceil((total || 0) / currency.conversionRate) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
@@ -3153,7 +3155,7 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
   setShowPaymentDetails: () => void;
 }> = ({ visible, cancel = () => {}, transferName, setShowPaymentDetails }) => {
   const [textCopied, setTextCopied] = useState("");
-  const { currency } = useContext(SettingsContext);
+  const { currency, order } = useContext(SettingsContext);
 
   const router = useRouter();
   const {
@@ -3219,7 +3221,8 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
       <p className="margin-bottom spaced normal-text">
         Please include your{" "}
         <strong className="checkout_order-number__6tLEv">
-          Order No: <strong className="primary-color">RWEB42987</strong>{" "}
+          Order No:{" "}
+          <strong className="primary-color">{order?.fullOrderId}</strong>{" "}
         </strong>{" "}
         as the payment reference/remark where possible.
       </p>
