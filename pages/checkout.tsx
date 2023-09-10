@@ -3155,7 +3155,7 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
   setShowPaymentDetails: () => void;
 }> = ({ visible, cancel = () => {}, transferName, setShowPaymentDetails }) => {
   const [textCopied, setTextCopied] = useState("");
-  const { currency } = useContext(SettingsContext);
+  const { currency, order } = useContext(SettingsContext);
 
   const router = useRouter();
   const {
@@ -3221,7 +3221,8 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
       <p className="margin-bottom spaced normal-text">
         Please include your{" "}
         <strong className="checkout_order-number__6tLEv">
-          Order No: <strong className="primary-color">RWEB42987</strong>{" "}
+          Order No:{" "}
+          <strong className="primary-color">{order?.fullOrderId}</strong>{" "}
         </strong>{" "}
         as the payment reference/remark where possible.
       </p>
