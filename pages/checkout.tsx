@@ -224,8 +224,10 @@ const Checkout: FunctionComponent = () => {
     setCartItems([]);
     setCurrentStage(3);
     setOrderId("");
+    setDeliveryDate(null);
     AppStorage.remove(AppStorageConstants.ORDER_ID);
     AppStorage.remove(AppStorageConstants.CART_ITEMS);
+    AppStorage.remove(AppStorageConstants.DELIVERY_DATE);
   };
 
   const refNumber = new Date().getTime().toString();

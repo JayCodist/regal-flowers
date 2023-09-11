@@ -363,7 +363,6 @@ const Header: FunctionComponent = () => {
     shouldShowCart,
     setOrder,
     setCurrentStage,
-    setDeliveryDate,
     orderId,
     shouldShowAuthDropdown,
     setShouldShowAuthDropdown
@@ -387,7 +386,6 @@ const Header: FunctionComponent = () => {
     if (!orderId && _pathname !== "checkout") {
       setOrder(null);
       setCurrentStage(1);
-      setDeliveryDate(null);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -999,13 +997,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       onOk: () => {},
       onCancel: () => {
         if (cartItems.length === 1) {
-          handleUpdateOrder(true);
           setCartItems([]);
+          if (orderId) {
+            handleUpdateOrder(true);
+          }
           return;
         }
-        setCartItems(prevState => {
-          return prevState.filter(item => item.cartId !== key);
-        });
+        setCartItems(cartItems.filter(item => item.cartId !== key));
       },
       okText: "Don't Delete",
       cancelText: "Delete"

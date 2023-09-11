@@ -24,7 +24,7 @@ import {
   defaultBreadcrumb,
   defaultCurrency
 } from "../utils/constants";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import User from "../utils/types/User";
 import AppStorage, {
   AppStorageConstants
@@ -90,6 +90,9 @@ const App: FunctionComponent<AppProps> = props => {
     const savedCartItems = AppStorage.get<CartItem[]>(
       AppStorageConstants.CART_ITEMS
     );
+    const savedDeliveryDate = AppStorage.get<Dayjs>(
+      AppStorageConstants.DELIVERY_DATE
+    );
 
     const { defaultCurrencyName, fromStorage } = getDefaultCurrency();
     const defaultCurrency =
@@ -107,12 +110,14 @@ const App: FunctionComponent<AppProps> = props => {
 
     setSettings({
       ...settings,
-      currency: defaultCurrency,
-      cartItems: savedCartItems || []
+      currency: defaultCurrency
     });
     const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
 
     setOrderId(savedOrderId || "");
+    setDeliveryDate(dayjs(savedDeliveryDate) || null);
+    setCartItems(savedCartItems || []);
+
     const { error, data } = await performHandshake();
     if (error || !data) {
       // Fail quietly and continue using the set constant values
@@ -188,10 +193,6 @@ const App: FunctionComponent<AppProps> = props => {
     setConfirmParams(defaultConfirmParams);
   };
 
-  useEffect(() => {
-    AppStorage.save(AppStorageConstants.CART_ITEMS, cartItems);
-  }, [cartItems]);
-
   const settingsControls: SettingsControls = {
     currency: settings.currency,
     setCurrency: (currency: AppCurrency) => {
@@ -201,9 +202,15 @@ const App: FunctionComponent<AppProps> = props => {
     currentStage,
     setCurrentStage,
     deliveryDate,
-    setDeliveryDate,
+    setDeliveryDate: (date: Dayjs | null) => {
+      AppStorage.save(AppStorageConstants.DELIVERY_DATE, date);
+      setDeliveryDate(date);
+    },
     cartItems,
-    setCartItems,
+    setCartItems: (items: CartItem[]) => {
+      setCartItems(items);
+      AppStorage.save(AppStorageConstants.CART_ITEMS, items);
+    },
     allCurrencies: settings.allCurrencies,
     shouldShowCart,
     setShouldShowCart,
