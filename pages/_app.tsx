@@ -32,6 +32,7 @@ import AppStorage, {
 import { performHandshake } from "../utils/helpers/data/core";
 import { getDefaultCurrency } from "../utils/helpers/type-conversions";
 import { Order } from "../utils/types/Order";
+import ProgressBar from "../components/progress-bar/ProgressBar";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
@@ -243,6 +244,7 @@ const App: FunctionComponent<AppProps> = props => {
 
   return (
     <SettingsContext.Provider value={settingsControls}>
+      <ProgressBar />
       <div suppressHydrationWarning className="app-wrapper">
         {headTags}
         <Layout>
