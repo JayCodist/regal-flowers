@@ -126,11 +126,42 @@ export const currencyOptions: AppCurrency[] = [
 interface FooterContent {
   aboutUs: string;
   socialIcons: { name: string; src: string; url: string }[];
-  quickLinks: { title: string; url: string }[];
+  quickLinks: { title: string; url: string; phoneNumber?: string }[];
   phoneNumbers: string[];
+  lagosBranch: OfficeAddress[];
+  abujaBranch: OfficeAddress[];
 }
 
 export const footerContent: FooterContent = {
+  lagosBranch: [
+    {
+      name: "Head Office",
+      url: "https://goo.gl/maps/cNB9Jx9sidQhJgtD6",
+      workingTimes: "24/7",
+      location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+    },
+    {
+      name: "VI Branch",
+      url: "https://goo.gl/maps/AsSEYaBUVV3NCRaa7",
+      workingTimes: "8am-7pm (Everyday)",
+      location:
+        "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos"
+    },
+    {
+      name: "Airport Branch",
+      url: "https://goo.gl/maps/5wQFMW5pR33n9k6G7",
+      workingTimes: "6am-7pm (Everyday)",
+      location: "Muritala Muhammed Airport2, Ikeja, Lagos"
+    }
+  ],
+  abujaBranch: [
+    {
+      name: "Abuja Office",
+      url: "https://goo.gl/maps/JAKrvZAe5vfh4czr9",
+      workingTimes: "24/7",
+      location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+    }
+  ],
   aboutUs:
     "Nigeria's most loved online flower shop with same day delivery in Lagos and Abuja",
   socialIcons: [
@@ -152,7 +183,7 @@ export const footerContent: FooterContent = {
     {
       name: "whatsapp",
       src: "/icons/footer/whatsapp.svg",
-      url: "https://wa.me/+2348188787788"
+      url: "https://wa.me/+2347011992888"
     }
   ],
   quickLinks: [
@@ -160,8 +191,8 @@ export const footerContent: FooterContent = {
       title: "Occasions",
       url: "/product-category/all"
     },
-    { title: "VIP Section", url: "/" },
-    { title: "Contact Us", url: "/" },
+    { title: "VIP Section", url: "/vip" },
+    { title: "Contact Us", url: "", phoneNumber: "+2347011992888" },
     { title: "Our Blog", url: "/" },
     { title: "FAQ", url: "/faq" }
   ],
@@ -391,24 +422,28 @@ export const regalHowItWorks: Service[] = [
 export const regalAddresses: OfficeAddress[] = [
   {
     name: "Lagos Head Office/Delivery Center",
-    location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos",
-    workingTimes: "24/7"
+    url: "https://goo.gl/maps/cNB9Jx9sidQhJgtD6",
+    workingTimes: "24/7",
+    location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
   },
   {
     name: "Lagos VI Branch",
+    url: "https://goo.gl/maps/AsSEYaBUVV3NCRaa7",
+    workingTimes: "8am-7pm (Everyday)",
     location:
-      "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos",
-    workingTimes: "8am-7pm (Everyday)"
+      "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos"
   },
   {
     name: "Lagos Ikeja MMA2 Airport Branch",
-    location: "Muritala Muhammed Airport2, Ikeja, Lagos",
-    workingTimes: "6am-7pm (Everyday)"
+    url: "https://goo.gl/maps/5wQFMW5pR33n9k6G7",
+    workingTimes: "6am-7pm (Everyday)",
+    location: "Muritala Muhammed Airport2, Ikeja, Lagos"
   },
   {
     name: "Abuja Office",
-    location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja",
-    workingTimes: "24/7"
+    url: "https://goo.gl/maps/JAKrvZAe5vfh4czr9",
+    workingTimes: "24/7",
+    location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
   }
 ];
 

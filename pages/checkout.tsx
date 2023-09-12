@@ -224,8 +224,10 @@ const Checkout: FunctionComponent = () => {
     setCartItems([]);
     setCurrentStage(3);
     setOrderId("");
+    setDeliveryDate(null);
     AppStorage.remove(AppStorageConstants.ORDER_ID);
     AppStorage.remove(AppStorageConstants.CART_ITEMS);
+    AppStorage.remove(AppStorageConstants.DELIVERY_DATE);
   };
 
   const refNumber = new Date().getTime().toString();
@@ -809,7 +811,7 @@ const Checkout: FunctionComponent = () => {
                               countryCodePlaceholder="Code"
                             />
 
-                            <div className="input-group half-width compact">
+                            <div className="input-group half-width">
                               <span className="question">
                                 Pickup/Delivery Date
                               </span>
@@ -823,7 +825,7 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           </div>
                           {!user && (
-                            <div className="input-group half-width">
+                            <div className="input-group half-width spaced-xl compact">
                               <span className="question">Create Password</span>
                               <Input
                                 name="password"

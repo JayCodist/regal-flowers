@@ -78,7 +78,7 @@ const Footer: FunctionComponent = () => {
             <div className="flex spaced-xl">
               {footerContent.socialIcons.map(icon => (
                 <Link key={icon.name} href={icon.url}>
-                  <a>
+                  <a target="_blank">
                     <img
                       alt={icon.name}
                       src={icon.src}
@@ -102,7 +102,10 @@ const Footer: FunctionComponent = () => {
             >
               <strong>Quick Links</strong>
               {footerContent.quickLinks.map(link => (
-                <Link key={link.title} href={link.url}>
+                <Link
+                  key={link.title}
+                  href={link.phoneNumber ? `tel:${link.phoneNumber}` : link.url}
+                >
                   <a>{link.title}</a>
                 </Link>
               ))}
@@ -115,12 +118,17 @@ const Footer: FunctionComponent = () => {
             >
               <strong>Get In Touch</strong>
               <div className="flex spaced-xl">
-                <img
-                  className="generic-icon medium"
-                  src="/icons/footer/phone.svg"
-                  alt="phone"
-                />
-                <Link href="https://wa.me/+2348188787788">
+                <Link href="tel:+2347011992888">
+                  <a>
+                    <img
+                      className="generic-icon medium"
+                      src="/icons/footer/phone.svg"
+                      alt="phone"
+                    />
+                  </a>
+                </Link>
+
+                <Link href="https://wa.me/+2347011992888">
                   <a>
                     <img
                       className="generic-icon medium"
@@ -131,7 +139,9 @@ const Footer: FunctionComponent = () => {
                 </Link>
               </div>
               {footerContent.phoneNumbers.map(number => (
-                <p key={number}>{number}</p>
+                <a key={number} href={`tel:${number}`}>
+                  {number}
+                </a>
               ))}
               <div className="flex spaced center-align">
                 <img
@@ -177,24 +187,15 @@ const Footer: FunctionComponent = () => {
             <div>
               <strong className="normal-text">Lagos Locations</strong>
               <div className={styles.branches}>
-                <div className={styles.branch}>
-                  <strong>Head Office</strong>
-                  <p>81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos.</p>
-                  <p className={styles.grayed}>Open 24/7</p>
-                </div>
-                <div className={styles.branch}>
-                  <strong>VI Branch</strong>
-                  <p>
-                    133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island,
-                    Lagos.
-                  </p>
-                  <p className={styles.grayed}> 8am-7pm (Everyday)</p>
-                </div>
-                <div className={styles.branch}>
-                  <strong>Airport Branch</strong>
-                  <p>Muritala Muhammad Airport2, Ikeja, Lagos.</p>
-                  <p className={styles.grayed}> 8am-7pm (Everyday)</p>
-                </div>
+                {footerContent.lagosBranch.map((branch, index) => (
+                  <div key={index} className={styles.branch}>
+                    <strong>{branch.name}</strong>
+                    <Link href={branch.url}>
+                      <a target="_blank">{branch.location}</a>
+                    </Link>
+                    <p className={styles.grayed}>{branch.workingTimes}</p>
+                  </div>
+                ))}
               </div>
             </div>
             <div>
@@ -363,7 +364,6 @@ const Header: FunctionComponent = () => {
     shouldShowCart,
     setOrder,
     setCurrentStage,
-    setDeliveryDate,
     orderId,
     shouldShowAuthDropdown,
     setShouldShowAuthDropdown
@@ -387,7 +387,6 @@ const Header: FunctionComponent = () => {
     if (!orderId && _pathname !== "checkout") {
       setOrder(null);
       setCurrentStage(1);
-      setDeliveryDate(null);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -999,13 +998,13 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       onOk: () => {},
       onCancel: () => {
         if (cartItems.length === 1) {
-          handleUpdateOrder(true);
           setCartItems([]);
+          if (orderId) {
+            handleUpdateOrder(true);
+          }
           return;
         }
-        setCartItems(prevState => {
-          return prevState.filter(item => item.cartId !== key);
-        });
+        setCartItems(cartItems.filter(item => item.cartId !== key));
       },
       okText: "Don't Delete",
       cancelText: "Delete"

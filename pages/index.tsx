@@ -99,6 +99,7 @@ const LandingPage: FunctionComponent<{
                 url={`/product/${flower.slug}`}
                 buttonText="Add to Cart"
                 cart={flower.variants?.length ? false : true}
+                product={flower}
               />
             ))}
           </div>
@@ -142,6 +143,7 @@ const LandingPage: FunctionComponent<{
                 url={`/product/${flower.slug}`}
                 buttonText="Add to Cart"
                 cart={flower.variants?.length ? false : true}
+                product={flower}
               />
             ))}
           </div>
@@ -497,11 +499,7 @@ const LandingPage: FunctionComponent<{
                       alt="location"
                     />
                     <span className="flex column spaced">
-                      <a
-                        href={`https://maps.google.com?q=${address.location}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
+                      <a href={address.url} target="_blank" rel="noreferrer">
                         {address.location}
                       </a>
                       <span className="grayed">{address.workingTimes}</span>
@@ -589,11 +587,7 @@ const LandingPage: FunctionComponent<{
                   alt="location"
                 />
                 <span className="flex column spaced">
-                  <a
-                    href={`https://maps.google.com?q=${address.location}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href={address.url} target="_blank" rel="noreferrer">
                     {address.location}
                   </a>
                   <span className="grayed">{address.workingTimes}</span>
