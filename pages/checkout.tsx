@@ -27,7 +27,8 @@ import {
   freeDeliveryThresholdVals,
   paymentMethods,
   pickupLocations,
-  placeholderEmail
+  placeholderEmail,
+  regalEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
 import {
@@ -1624,10 +1625,10 @@ const Checkout: FunctionComponent = () => {
                     <p className="normal-text">
                       For any issues/enquiries, please email
                       <a
-                        href="mailto:info@regalflowers.com.ng"
+                        href={`mailto:${regalEmail}`}
                         className="underline blue"
                       >
-                        info@regalflowers.com.ng
+                        {regalEmail}
                       </a>{" "}
                       or call/text/whatsapp +234 7011992888, +234 7010006665,
                       +234 7010006664
@@ -2753,10 +2754,10 @@ const Checkout: FunctionComponent = () => {
                         <p>
                           For any issues/enquiries, please email
                           <a
-                            href="mailto:info@regalflowers.com.ng"
+                            href={`mailto:${regalEmail}`}
                             className="underline blue"
                           >
-                            info@regalflowers.com.ng
+                            {regalEmail}
                           </a>{" "}
                           or call/text/whatsapp +234 7011992888, +234
                           7010006665, +234 7010006664
@@ -3315,8 +3316,8 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
       </Button>
       <p className="margin-top spaced text-center">
         For any issues/enquiries, please email{" "}
-        <a href="mailto:info@regalflowers.com.ng" className="underline blue">
-          info@regalflowers.com.ng
+        <a href={`mailto:${regalEmail}`} className="underline blue">
+          {regalEmail}
         </a>{" "}
         or <br />
         call/text/whatsapp +234 7011992888, +234 7010006665, +234 7010006664
