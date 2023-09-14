@@ -27,7 +27,8 @@ import {
   freeDeliveryThresholdVals,
   paymentMethods,
   pickupLocations,
-  placeholderEmail
+  placeholderEmail,
+  regalEmail
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
 import {
@@ -186,6 +187,8 @@ const Checkout: FunctionComponent = () => {
     orderLoading
   } = useContext(SettingsContext);
 
+  console.log("Delivery", deliveryDate);
+
   const deviceType = useDeviceType();
 
   const isBankTransfer = /but not seen yet/i.test(order?.paymentStatus || "");
@@ -224,8 +227,10 @@ const Checkout: FunctionComponent = () => {
     setCartItems([]);
     setCurrentStage(3);
     setOrderId("");
+    setDeliveryDate(null);
     AppStorage.remove(AppStorageConstants.ORDER_ID);
     AppStorage.remove(AppStorageConstants.CART_ITEMS);
+    AppStorage.remove(AppStorageConstants.DELIVERY_DATE);
   };
 
   const refNumber = new Date().getTime().toString();
@@ -809,7 +814,7 @@ const Checkout: FunctionComponent = () => {
                               countryCodePlaceholder="Code"
                             />
 
-                            <div className="input-group half-width compact">
+                            <div className="input-group half-width">
                               <span className="question">
                                 Pickup/Delivery Date
                               </span>
@@ -823,7 +828,9 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           </div>
                           {!user && (
-                            <div className="input-group half-width">
+                            <div
+                              className={`input-group spaced-xl compact ${styles["password"]}`}
+                            >
                               <span className="question">Create Password</span>
                               <Input
                                 name="password"
@@ -1618,10 +1625,10 @@ const Checkout: FunctionComponent = () => {
                     <p className="normal-text">
                       For any issues/enquiries, please email
                       <a
-                        href="mailto:info@regalflowers.com.ng"
+                        href={`mailto:${regalEmail}`}
                         className="underline blue"
                       >
-                        info@regalflowers.com.ng
+                        {regalEmail}
                       </a>{" "}
                       or call/text/whatsapp +234 7011992888, +234 7010006665,
                       +234 7010006664
@@ -2747,10 +2754,10 @@ const Checkout: FunctionComponent = () => {
                         <p>
                           For any issues/enquiries, please email
                           <a
-                            href="mailto:info@regalflowers.com.ng"
+                            href={`mailto:${regalEmail}`}
                             className="underline blue"
                           >
-                            info@regalflowers.com.ng
+                            {regalEmail}
                           </a>{" "}
                           or call/text/whatsapp +234 7011992888, +234
                           7010006665, +234 7010006664
@@ -3155,7 +3162,7 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
   setShowPaymentDetails: () => void;
 }> = ({ visible, cancel = () => {}, transferName, setShowPaymentDetails }) => {
   const [textCopied, setTextCopied] = useState("");
-  const { currency } = useContext(SettingsContext);
+  const { currency, order } = useContext(SettingsContext);
 
   const router = useRouter();
   const {
@@ -3221,7 +3228,8 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
       <p className="margin-bottom spaced normal-text">
         Please include your{" "}
         <strong className="checkout_order-number__6tLEv">
-          Order No: <strong className="primary-color">RWEB42987</strong>{" "}
+          Order No:{" "}
+          <strong className="primary-color">{order?.fullOrderId}</strong>{" "}
         </strong>{" "}
         as the payment reference/remark where possible.
       </p>
@@ -3308,8 +3316,8 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
       </Button>
       <p className="margin-top spaced text-center">
         For any issues/enquiries, please email{" "}
-        <a href="mailto:info@regalflowers.com.ng" className="underline blue">
-          info@regalflowers.com.ng
+        <a href={`mailto:${regalEmail}`} className="underline blue">
+          {regalEmail}
         </a>{" "}
         or <br />
         call/text/whatsapp +234 7011992888, +234 7010006665, +234 7010006664

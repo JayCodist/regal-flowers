@@ -25,6 +25,7 @@ export interface OfficeAddress {
   name: string;
   location: string;
   workingTimes: string;
+  url: string;
 }
 
 export interface BlogPost {

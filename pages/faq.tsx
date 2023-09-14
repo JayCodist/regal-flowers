@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { FunctionComponent, useState } from "react";
 import Button from "../components/button/Button";
 import FlowerCard from "../components/flower-card/FlowerCard";
-import { featuredSlugs } from "../utils/constants";
+import { featuredSlugs, paypalEmail, regalEmail } from "../utils/constants";
 import { getProductsBySlugs } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import styles from "./faq.module.scss";
@@ -81,10 +81,17 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 date, recipient's phone number and your optional message), and
                 pay using any of the methods below this page. We can also work
                 to suit your budget, desired colours, flower types etc.. Reach
-                us at <span>info@regalflowers.com.ng</span> or +234 (0)
-                7010006665, +234 (0) 7011992888 to make your order. For any
-                enquiries or to amend delivery details, message on the flowers
-                etc, feel free to reach out to us.
+                us at{" "}
+                <a
+                  href={`mailto:${regalEmail}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {regalEmail}
+                </a>{" "}
+                or +234 (0) 7010006665, +234 (0) 7011992888 to make your order.
+                For any enquiries or to amend delivery details, message on the
+                flowers etc, feel free to reach out to us.
               </p>
             </div>
             <div id="payment-methods" className="">
@@ -120,8 +127,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   Paypal to email{" "}
                 </strong>
                 <p className="normal-text">
-                  Email Address:{" "}
-                  <strong> paypalpayments@regalflowers.com.ng</strong>
+                  Email Address: <strong>{paypalEmail}</strong>
                 </p>
               </div>
               <p className="margin-buttton flex align-center spaced normal-text">

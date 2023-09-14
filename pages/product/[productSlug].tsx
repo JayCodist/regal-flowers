@@ -348,10 +348,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="smaller bold">Delivery</p>
                   <p>Estimated delivery time: 1 - 7 days</p>
-                </div>
+                </div> */}
               </div>
               <div
                 className={`${styles["social-icons"]} flex spaced center-align`}
@@ -417,10 +417,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   alt="truck"
                 />
               </div>
-              <div>
+              {/* <div>
                 <p className="smaller bold">Delivery</p>
                 <p>Estimated delivery time: 1 - 7 days</p>
-              </div>
+              </div> */}
             </div>
           )}
 
