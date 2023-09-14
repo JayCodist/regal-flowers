@@ -12,7 +12,7 @@ const ProgressBar = () => {
       setWidth(0);
       // Simulate progress (for demonstration purposes)
       const interval = setInterval(() => {
-        if (width < 100) {
+        if (width < 90) {
           setWidth(prevWidth => prevWidth + 10);
         } else {
           clearInterval(interval);
@@ -22,7 +22,10 @@ const ProgressBar = () => {
 
     // Subscribe to route changes
     Router.events.on("routeChangeStart", handleRouteChange);
-    Router.events.on("routeChangeComplete", () => setRouteChanged(true));
+    Router.events.on("routeChangeComplete", () => {
+      setRouteChanged(true);
+      setWidth(100);
+    });
 
     return () => {
       Router.events.off("routeChangeStart", handleRouteChange);
