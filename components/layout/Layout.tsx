@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { footerContent, links } from "../../utils/constants";
+import { footerContent, links, paypalEmail } from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -171,8 +171,7 @@ const Footer: FunctionComponent = () => {
                 deviceType === "mobile" ? "column" : ""
               }`}
             >
-              <span>Email:</span>{" "}
-              <strong>paypalpayments@regalflowers.com.ng</strong>
+              <span>Email:</span> <strong>{paypalEmail}</strong>
             </div>
             <strong>Bitcoin</strong>
             <div className="">
@@ -203,11 +202,13 @@ const Footer: FunctionComponent = () => {
               <div
                 className={deviceType === "mobile" ? "margin-left spaced" : ""}
               >
-                <strong>Wuse 2 Branch</strong>
-                <p>
-                  5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja.
+                <strong>{footerContent.abujaBranch.name}</strong>
+                <Link href={footerContent.abujaBranch.url}>
+                  <a target="_blank">{footerContent.abujaBranch.location}</a>
+                </Link>
+                <p className={styles.grayed}>
+                  {footerContent.abujaBranch.workingTimes}
                 </p>
-                <p className={styles.grayed}>Open 24/7</p>
               </div>
             </div>
 
@@ -992,23 +993,14 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const handleRemoveItem = (key: string) => {
-    confirm({
-      title: "Delete item",
-      body: "Do you really want to delete this?",
-      onOk: () => {},
-      onCancel: () => {
-        if (cartItems.length === 1) {
-          setCartItems([]);
-          if (orderId) {
-            handleUpdateOrder(true);
-          }
-          return;
-        }
-        setCartItems(cartItems.filter(item => item.cartId !== key));
-      },
-      okText: "Don't Delete",
-      cancelText: "Delete"
-    });
+    if (cartItems.length === 1) {
+      setCartItems([]);
+      if (orderId) {
+        handleUpdateOrder(true);
+      }
+      return;
+    }
+    setCartItems(cartItems.filter(item => item.cartId !== key));
   };
 
   const designCharges = useMemo(() => {

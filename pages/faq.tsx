@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { FunctionComponent, useState } from "react";
 import Button from "../components/button/Button";
 import FlowerCard from "../components/flower-card/FlowerCard";
-import { featuredSlugs } from "../utils/constants";
+import { featuredSlugs, paypalEmail } from "../utils/constants";
 import { getProductsBySlugs } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import styles from "./faq.module.scss";
@@ -120,8 +120,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   Paypal to email{" "}
                 </strong>
                 <p className="normal-text">
-                  Email Address:{" "}
-                  <strong> paypalpayments@regalflowers.com.ng</strong>
+                  Email Address: <strong>{paypalEmail}</strong>
                 </p>
               </div>
               <p className="margin-buttton flex align-center spaced normal-text">
