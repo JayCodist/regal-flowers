@@ -1,4 +1,3 @@
-// components/ProgressBar.js
 import { Router } from "next/router";
 import React, { useEffect, useState } from "react";
 import styles from "./ProgressBar.module.scss";
@@ -11,7 +10,6 @@ const ProgressBar = () => {
       setWidth(0);
       // Simulate progress (for demonstration purposes)
       const interval = setTimeout(() => {
-        console.log("width interval", width);
         if (width < 90) {
           setWidth(prevWidth => prevWidth + 10);
         } else {
@@ -31,7 +29,7 @@ const ProgressBar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router]);
 
-  if (width === 0 || width === 100) {
+  if (width === 0 || width >= 100) {
     return null;
   }
 
@@ -43,6 +41,11 @@ const ProgressBar = () => {
           width: `${width}%`
         }}
       ></div>
+      <img
+        src="/icons/rolling.svg"
+        alt="loading"
+        className="generic-icon margin-left"
+      />
     </div>
   );
 };

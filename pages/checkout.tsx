@@ -186,6 +186,8 @@ const Checkout: FunctionComponent = () => {
     orderLoading
   } = useContext(SettingsContext);
 
+  console.log("Delivery", deliveryDate);
+
   const deviceType = useDeviceType();
 
   const isBankTransfer = /but not seen yet/i.test(order?.paymentStatus || "");
@@ -825,7 +827,9 @@ const Checkout: FunctionComponent = () => {
                             </div>
                           </div>
                           {!user && (
-                            <div className="input-group half-width spaced-xl compact">
+                            <div
+                              className={`input-group spaced-xl compact ${styles["password"]}`}
+                            >
                               <span className="question">Create Password</span>
                               <Input
                                 name="password"

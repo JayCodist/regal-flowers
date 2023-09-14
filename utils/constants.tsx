@@ -129,7 +129,7 @@ interface FooterContent {
   quickLinks: { title: string; url: string; phoneNumber?: string }[];
   phoneNumbers: string[];
   lagosBranch: OfficeAddress[];
-  abujaBranch: OfficeAddress[];
+  abujaBranch: OfficeAddress;
 }
 
 export const footerContent: FooterContent = {
@@ -154,14 +154,12 @@ export const footerContent: FooterContent = {
       location: "Muritala Muhammed Airport2, Ikeja, Lagos"
     }
   ],
-  abujaBranch: [
-    {
-      name: "Abuja Office",
-      url: "https://goo.gl/maps/JAKrvZAe5vfh4czr9",
-      workingTimes: "24/7",
-      location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
-    }
-  ],
+  abujaBranch: {
+    name: "Abuja Office",
+    url: "https://goo.gl/maps/JAKrvZAe5vfh4czr9",
+    workingTimes: "24/7",
+    location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+  },
   aboutUs:
     "Nigeria's most loved online flower shop with same day delivery in Lagos and Abuja",
   socialIcons: [
@@ -2384,6 +2382,8 @@ export const links: AppLink[] = [
     children: []
   }
 ];
+
+export const paypalEmail = "paypalpayments@regalflowers.com.ng";
 
 export const tagsMap: Record<string, string[]> = {
   budget: ["vip", "regular"],
