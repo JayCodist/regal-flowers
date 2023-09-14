@@ -10,7 +10,12 @@ import React, {
 } from "react";
 import Link from "next/link";
 import styles from "./Layout.module.scss";
-import { footerContent, links, paypalEmail } from "../../utils/constants";
+import {
+  footerContent,
+  links,
+  paypalEmail,
+  regalEmail
+} from "../../utils/constants";
 import SettingsContext, {
   NotifyType
 } from "../../utils/context/SettingsContext";
@@ -149,7 +154,13 @@ const Footer: FunctionComponent = () => {
                   src="/icons/footer/message.svg"
                   alt="message"
                 />
-                <span>info@regalflowers.com.ng</span>
+                <a
+                  href={`mailto:${regalEmail}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {regalEmail}
+                </a>
               </div>
             </div>
           </div>
@@ -819,7 +830,6 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     setOrder,
     setShouldShowCart,
     currentStage,
-    confirm,
     setOrderLoading
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);

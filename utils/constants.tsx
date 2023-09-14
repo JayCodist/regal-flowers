@@ -2383,7 +2383,7 @@ export const links: AppLink[] = [
   }
 ];
 
-export const paypalEmail = "paypalpayments@regalflowers.com.ng";
+export const paypalEmail = "payments@regalflowers.com";
 
 export const tagsMap: Record<string, string[]> = {
   budget: ["vip", "regular"],
