@@ -116,7 +116,7 @@ const App: FunctionComponent<AppProps> = props => {
     const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
 
     setOrderId(savedOrderId || "");
-    setDeliveryDate(dayjs(savedDeliveryDate) || null);
+    setDeliveryDate(savedDeliveryDate ? dayjs(savedDeliveryDate) : null);
     setCartItems(savedCartItems || []);
 
     const { error, data } = await performHandshake();
