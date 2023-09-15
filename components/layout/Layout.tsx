@@ -812,7 +812,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     setOrder,
     setShouldShowCart,
     currentStage,
-    setOrderLoading
+    setOrderLoading,
+    setCurrentStage
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -981,6 +982,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       }
 
       setShouldShowCart(false);
+      setCurrentStage(1);
     }
   };
 
@@ -1227,7 +1229,7 @@ export const CheckoutHeader: FunctionComponent = () => {
                 <span
                   className={[
                     styles.circle,
-                    currentStage > _stage.stage && styles.completed,
+                    currentStage >= _stage.stage && styles.completed,
                     currentStage === _stage.stage && styles.active
                   ].join(" ")}
                 ></span>
