@@ -187,8 +187,6 @@ const Checkout: FunctionComponent = () => {
     orderLoading
   } = useContext(SettingsContext);
 
-  console.log("Delivery", deliveryDate);
-
   const deviceType = useDeviceType();
 
   const isBankTransfer = /but not seen yet/i.test(order?.paymentStatus || "");
@@ -2704,7 +2702,7 @@ const Checkout: FunctionComponent = () => {
                       ))}
                     </div>
 
-                    <p className={styles.security}>
+                    <div className={styles.security}>
                       {" "}
                       <div className={styles["lock-icon"]}>
                         <img
@@ -2715,7 +2713,7 @@ const Checkout: FunctionComponent = () => {
                       </div>{" "}
                       We protect your payment information using encryption to
                       provide bank-level security.
-                    </p>
+                    </div>
                   </div>
                 </div>
               )}
