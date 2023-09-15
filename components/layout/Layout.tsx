@@ -376,14 +376,8 @@ const Header: FunctionComponent = () => {
     shouldShowCart,
     setOrder,
     setCurrentStage,
-    orderId,
-    shouldShowAuthDropdown,
-    setShouldShowAuthDropdown
+    orderId
   } = useContext(SettingsContext);
-
-  const authDropdownRef = useOutsideClick<HTMLDivElement>(() => {
-    setShouldShowAuthDropdown(false);
-  });
 
   const totalCartItems = useMemo(() => {
     if (!cartItems.length) return 0;
@@ -682,18 +676,6 @@ const Header: FunctionComponent = () => {
             " "
           )}
         >
-          <div>
-            <div className={styles["auth-wrapper"]} ref={authDropdownRef}>
-              <div
-                className={[
-                  styles["auth-dropdown"],
-                  shouldShowAuthDropdown && styles.active
-                ].join(" ")}
-              >
-                <AuthDropdown />
-              </div>
-            </div>
-          </div>
           <ContextWrapper
             anchor={accountAnchor}
             className={styles["auth-wrapper"]}
@@ -830,7 +812,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     setOrder,
     setShouldShowCart,
     currentStage,
-    setOrderLoading
+    setOrderLoading,
+    setCurrentStage
   } = useContext(SettingsContext);
   const [loading, setLoading] = useState(false);
 
@@ -999,6 +982,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       }
 
       setShouldShowCart(false);
+      setCurrentStage(1);
     }
   };
 
@@ -1245,7 +1229,7 @@ export const CheckoutHeader: FunctionComponent = () => {
                 <span
                   className={[
                     styles.circle,
-                    currentStage > _stage.stage && styles.completed,
+                    currentStage >= _stage.stage && styles.completed,
                     currentStage === _stage.stage && styles.active
                   ].join(" ")}
                 ></span>
