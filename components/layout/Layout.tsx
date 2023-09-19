@@ -376,7 +376,8 @@ const Header: FunctionComponent = () => {
     shouldShowCart,
     setOrder,
     setCurrentStage,
-    orderId
+    orderId,
+    setDeliveryDate
   } = useContext(SettingsContext);
 
   const totalCartItems = useMemo(() => {
@@ -393,6 +394,7 @@ const Header: FunctionComponent = () => {
     if (!orderId && _pathname !== "checkout") {
       setOrder(null);
       setCurrentStage(1);
+      setDeliveryDate(null);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
