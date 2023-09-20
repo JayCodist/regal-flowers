@@ -38,6 +38,7 @@ import useOutsideClick from "../utils/hooks/useOutsideClick";
 import styles from "./filters.module.scss";
 import SettingsContext from "../utils/context/SettingsContext";
 import Radio from "../components/radio/Radio";
+import Input from "../components/input/Input";
 
 const giftMap: Record<string, string> = {
   "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears":
@@ -97,7 +98,7 @@ const ProductsPage: FunctionComponent<{
 
   const router = useRouter();
   const { query, isReady } = router;
-  const { selectedOccasion, shopBy } = query;
+  const { selectedOccasion, shopBy, search } = query;
   const [selectedFilter, setSelectedFilter] = useState<string[]>(["regular"]);
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
@@ -110,6 +111,7 @@ const ProductsPage: FunctionComponent<{
   const [sort, setSort] = useState<Sort>("name-asc");
   const [hasMore, setHasMore] = useState(false);
   const [shouldShowFilter, setShouldShowFilter] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   const filterDropdownRef = useOutsideClick<HTMLDivElement>(() => {
     setShouldShowFilter(false);
@@ -142,7 +144,12 @@ const ProductsPage: FunctionComponent<{
     "all"
   ].includes(categorySlug as string);
 
-  const hideFilters = isGiftPage || ["all"].includes(categorySlug as string);
+  const hideFilters =
+    isGiftPage || ["all"].includes(categorySlug as string) || search;
+
+  const handleSearch = (value: string) => {
+    setSearchText(value);
+  };
 
   const shuffleText = () => {
     if (count < JustToSayTexts.length - 1) {
@@ -201,10 +208,12 @@ const ProductsPage: FunctionComponent<{
     const params: FetchResourceParams<ProductFilterLogic> = {
       pageNumber: page,
       filter: filterParams,
-      sortLogic: sortParams
+      sortLogic: sortParams,
+      search: searchText ? searchText : (search as string)
     };
 
-    const response = await getProductsByCategory(params);
+    const searchOnly = search || searchText ? true : false;
+    const response = await getProductsByCategory(params, searchOnly);
     setProductsLoading(false);
     setInfiniteLoading(false);
     if (response.error) {
@@ -232,6 +241,13 @@ const ProductsPage: FunctionComponent<{
       : `/filters?shopBy=${newFilters.join(",")}`;
     router.push(url, undefined, { scroll: false });
   };
+
+  useEffect(() => {
+    if (isReady && search) {
+      setSearchText(search as string);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   useEffect(() => {
     if (isReady) {
@@ -296,7 +312,7 @@ const ProductsPage: FunctionComponent<{
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedOccasion, sort, shopBy]);
+  }, [categorySlug, selectedOccasion, sort, shopBy, search, searchText]);
 
   useEffect(() => {
     if (isReady) {
@@ -711,15 +727,30 @@ const ProductsPage: FunctionComponent<{
                 ))}
               </div>
             </div>
-            <div className="flex column">
-              <span>Sort: </span>
-              <Select
-                options={sortOptions}
-                value={sort}
-                onSelect={value => setSort(value as Sort)}
-                placeholder="Default"
-                className={styles["sort"]}
-              />
+            <div className="flex between center-align block">
+              <div className="flex column">
+                <span>Sort: </span>
+                <Select
+                  options={sortOptions}
+                  value={sort}
+                  onSelect={value => setSort(value as Sort)}
+                  placeholder="Default"
+                  className={styles["sort"]}
+                />
+              </div>
+              {search && (
+                <div className="input-group half-width">
+                  <span className="question">Search:</span>
+                  <Input
+                    name="name"
+                    placeholder="Search for products"
+                    value={searchText}
+                    onChange={value => handleSearch(value)}
+                    dimmed
+                    responsive
+                  />
+                </div>
+              )}
             </div>
           </div>
 

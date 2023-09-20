@@ -31,8 +31,9 @@ export const getProduct: (
 };
 
 export const getProductsByCategory: (
-  params?: FetchResourceParams<ProductFilterLogic>
-) => Promise<RequestResponse<Product[]>> = async params => {
+  params?: FetchResourceParams<ProductFilterLogic>,
+  searchOnly?: boolean
+) => Promise<RequestResponse<Product[]>> = async (params, searchOnly) => {
   const {
     category,
     productClass,
@@ -44,18 +45,20 @@ export const getProductsByCategory: (
     packages = []
   } = params?.filter as ProductFilterLogic;
   try {
+    const query = searchOnly
+      ? `&search=${params?.search}`
+      : `&categories=${category?.join(",")}&${
+          productClass ? `productClass=${productClass}` : ""
+        }&sortField=${params?.sortLogic?.sortField}&sortType=${
+          params?.sortLogic?.sortType
+        }&budget=${budget?.join(",")}&delivery=${delivery?.join(
+          ","
+        )}&design=${design?.join(",")}&flowerName=${flowerName?.join(
+          ","
+        )}&flowerType=${flowerType?.join(",")}&packages=${packages?.join(",")}`;
+
     const response = await restAPIInstance.get(
-      `/v1/wordpress/product/paginate?pageNumber=${
-        params?.pageNumber
-      }&categories=${category?.join(",")}&${
-        productClass ? `productClass=${productClass}` : ""
-      }&sortField=${params?.sortLogic?.sortField}&sortType=${
-        params?.sortLogic?.sortType
-      }&budget=${budget?.join(",")}&delivery=${delivery?.join(
-        ","
-      )}&design=${design?.join(",")}&flowerName=${flowerName?.join(
-        ","
-      )}&flowerType=${flowerType?.join(",")}&packages=${packages?.join(",")}`
+      `/v1/wordpress/product/paginate?pageNumber=${params?.pageNumber}${query}`
     );
     const data = filterInStockProducts(response.data.data);
     return {

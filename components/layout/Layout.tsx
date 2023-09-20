@@ -1,4 +1,5 @@
 import React, {
+  ChangeEvent,
   FunctionComponent,
   MouseEvent as ReactMouseEvent,
   ReactNode,
@@ -360,10 +361,12 @@ const Header: FunctionComponent = () => {
   const [activeNavLink, setActiveNavLink] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeSublinkNav, setActiveSublinkNav] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   const deviceType = useDeviceType();
 
-  const { pathname } = useRouter();
+  const { pathname, push } = useRouter();
   const _pathname = pathname.split("/")[1];
 
   const {
@@ -376,7 +379,8 @@ const Header: FunctionComponent = () => {
     shouldShowCart,
     setOrder,
     setCurrentStage,
-    orderId
+    orderId,
+    setDeliveryDate
   } = useContext(SettingsContext);
 
   const totalCartItems = useMemo(() => {
@@ -389,10 +393,36 @@ const Header: FunctionComponent = () => {
     e.stopPropagation();
   };
 
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchText(value);
+    if (value) {
+      push(`/filters?search=${value}`, undefined, { scroll: false });
+    } else {
+      push(
+        "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+        undefined,
+        { scroll: false }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (!searchText && _pathname === "filters") {
+      push(
+        "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+        undefined,
+        { scroll: false }
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchText]);
+
   useEffect(() => {
     if (!orderId && _pathname !== "checkout") {
       setOrder(null);
       setCurrentStage(1);
+      setDeliveryDate(null);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -565,65 +595,79 @@ const Header: FunctionComponent = () => {
           </a>
         </Link>
         {deviceType === "desktop" && (
-          <nav className={styles.nav}>
-            {links.map((link, index) => (
-              <div
-                className={styles.link}
-                key={index}
-                onMouseEnter={e => handleActiveNav(link.title, e)}
-                onMouseLeave={() => setActiveNavLink("")}
-              >
+          <div className="flex spaced center-align">
+            <nav className={styles.nav}>
+              {links.map((link, index) => (
                 <div
-                  className={`flex center-align spaced  ${styles.title}`}
-                  key={link.title}
-                  role="button"
+                  className={styles.link}
+                  key={index}
+                  onMouseEnter={e => handleActiveNav(link.title, e)}
+                  onMouseLeave={() => setActiveNavLink("")}
                 >
-                  {link.url ? (
-                    <Link href={link.url}>
-                      <a>
-                        <strong>{link.title}</strong>
-                      </a>
-                    </Link>
-                  ) : (
-                    <strong>{link.title}</strong>
-                  )}
+                  <div
+                    className={`flex center-align spaced  ${styles.title}`}
+                    key={link.title}
+                    role="button"
+                  >
+                    {link.url ? (
+                      <Link href={link.url}>
+                        <a>
+                          <strong>{link.title}</strong>
+                        </a>
+                      </Link>
+                    ) : (
+                      <strong>{link.title}</strong>
+                    )}
+                    {link.children.length > 0 && (
+                      <div
+                        className={[
+                          styles.arrow,
+                          activeNavLink === link.title && activeNavLink
+                            ? styles.active
+                            : ""
+                        ].join(" ")}
+                      ></div>
+                    )}
+                  </div>
                   {link.children.length > 0 && (
                     <div
                       className={[
-                        styles.arrow,
-                        activeNavLink === link.title && activeNavLink
-                          ? styles.active
-                          : ""
-                      ].join(" ")}
-                    ></div>
-                  )}
-                </div>
-                {link.children.length > 0 && (
-                  <div
-                    className={[
-                      styles["dropdown"],
-                      activeNavLink === link.title && styles.active
-                    ].join(" ")}
-                  >
-                    {link.subtitle && (
-                      <p className={styles.subtitle}>{link.subtitle}</p>
-                    )}
-                    <div
-                      className={[
-                        styles["sub-link"],
-                        link.children.some(child => child.children.length) &&
-                          styles.grid
+                        styles["dropdown"],
+                        activeNavLink === link.title && styles.active
                       ].join(" ")}
                     >
-                      {link.children.map((child, index) => (
-                        <div key={index}>
-                          {child.url ? (
-                            <Link href={child.url}>
-                              <a
-                                onClick={() => {
-                                  setActiveNavLink("");
-                                }}
-                              >
+                      {link.subtitle && (
+                        <p className={styles.subtitle}>{link.subtitle}</p>
+                      )}
+                      <div
+                        className={[
+                          styles["sub-link"],
+                          link.children.some(child => child.children.length) &&
+                            styles.grid
+                        ].join(" ")}
+                      >
+                        {link.children.map((child, index) => (
+                          <div key={index}>
+                            {child.url ? (
+                              <Link href={child.url}>
+                                <a
+                                  onClick={() => {
+                                    setActiveNavLink("");
+                                  }}
+                                >
+                                  {child.title && (
+                                    <span
+                                      className={[
+                                        child.children.length && styles.title
+                                      ].join(" ")}
+                                    >
+                                      {child.title}
+                                    </span>
+                                  )}
+                                </a>
+                              </Link>
+                            ) : (
+                              <>
                                 {child.title && (
                                   <span
                                     className={[
@@ -633,43 +677,71 @@ const Header: FunctionComponent = () => {
                                     {child.title}
                                   </span>
                                 )}
-                              </a>
-                            </Link>
-                          ) : (
-                            <>
-                              {child.title && (
-                                <span
-                                  className={[
-                                    child.children.length && styles.title
-                                  ].join(" ")}
-                                >
-                                  {child.title}
-                                </span>
-                              )}
-                            </>
-                          )}
-                          <div className={styles["grand-children"]}>
-                            {child.children.map((grandChild, index) => (
-                              <Link href={grandChild.url} key={index}>
-                                <a
-                                  className={styles["grand-title"]}
-                                  onClick={() => {
-                                    setActiveNavLink("");
-                                  }}
-                                >
-                                  {grandChild.title}
-                                </a>
-                              </Link>
-                            ))}
+                              </>
+                            )}
+                            <div className={styles["grand-children"]}>
+                              {child.children.map((grandChild, index) => (
+                                <Link href={grandChild.url} key={index}>
+                                  <a
+                                    className={styles["grand-title"]}
+                                    onClick={() => {
+                                      setActiveNavLink("");
+                                    }}
+                                  >
+                                    {grandChild.title}
+                                  </a>
+                                </Link>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </nav>
+                  )}
+                </div>
+              ))}
+            </nav>
+            <form
+              className={[
+                styles["search-wrapper"],
+                showSearch ? styles.active : ""
+              ].join(" ")}
+            >
+              <input
+                type="text"
+                onChange={handleSearch}
+                placeholder="Search for products"
+                value={searchText}
+                className={[
+                  styles["search-input"],
+                  showSearch ? styles.active : ""
+                ].join(" ")}
+              />
+              {showSearch ? (
+                <img
+                  alt="search"
+                  src="/icons/search-cancel.svg"
+                  className={`${styles["search-icon"]} generic-icon medium clickable`}
+                  onClick={() => {
+                    setShowSearch(false);
+                    // setSearchText("");
+                    // push(
+                    //   "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+                    // );
+                  }}
+                />
+              ) : (
+                <img
+                  alt="search"
+                  src="/icons/search.svg"
+                  className={`${styles["search-icon"]} generic-icon medium clickable`}
+                  onClick={() => {
+                    setShowSearch(true);
+                  }}
+                />
+              )}
+            </form>
+          </div>
         )}
         <div
           className={[styles["controls-area-mobile"], "flex spaced-lg"].join(
