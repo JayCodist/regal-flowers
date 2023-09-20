@@ -15,7 +15,7 @@ class MyDocument extends Document {
             content="regal flowers, regal, flowers, online flowers, fresh flowers, flowers delivery"
           />
           <meta name="author" content="jaycodist@gmail.com" />
-          <meta name="og:title" content="Afriland Properties" />
+          <meta name="og:title" content="Regal Flowers" />
           <meta
             name="og:description"
             content="Get fresh flowers, delivered today"
