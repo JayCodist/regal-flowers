@@ -12,7 +12,7 @@ export interface SortLogic {
 export interface FetchResourceParams<F = FilterLogic> {
   pageSize?: number;
   pageNumber?: number;
-  searchStr?: string;
+  search?: string;
   filter?: F;
   sortLogic?: SortLogic;
   mergeRecords?: boolean;
