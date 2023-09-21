@@ -33,7 +33,7 @@
     display: flex;
 
     &.active {
-      background-color: #f9fafb;
+      background-color: white;
       border: 0.1rem solid #e5e7eb;
       padding: 0.5rem 0.7rem;
       border-radius: 3rem;
@@ -75,6 +75,27 @@
 
     @media (min-width: 650px) {
       display: none;
+    }
+
+    .search-wrapper {
+      width: 80%;
+      max-width: 800%;
+      margin: 0 auto;
+      padding: 0.6rem;
+      background-color: white;
+      border: 0.1rem solid #e5e7eb;
+      border-radius: 3rem;
+
+      @media (min-width: 48px) {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+      }
+
+      .search-input {
+        width: 100%;
+        font-size: 1rem;
+      }
     }
 
     .arrow {
