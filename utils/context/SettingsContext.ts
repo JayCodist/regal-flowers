@@ -38,6 +38,8 @@ export interface SettingsControls extends Settings {
   setBreadcrumb: (breadcrumb: Breadcrumb) => void;
   orderLoading: boolean;
   setOrderLoading: (orderLoading: boolean) => void;
+  searchText: string;
+  setSearchText: (searchText: string) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -68,7 +70,9 @@ const SettingsContext = createContext<SettingsControls>({
   breadcrumb: { label: "", url: "" },
   setBreadcrumb: () => {},
   orderLoading: false,
-  setOrderLoading: () => {}
+  setOrderLoading: () => {},
+  searchText: "",
+  setSearchText: () => {}
 });
 
 export default SettingsContext;

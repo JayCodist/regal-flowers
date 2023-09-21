@@ -34,6 +34,7 @@ export interface Settings {
   shouldShowAuthDropdown: boolean;
   orderId: string;
   order: Order | null;
+  searchText: string;
 }
 
 export enum Stage {
