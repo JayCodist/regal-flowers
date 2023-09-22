@@ -20,7 +20,7 @@ const adaptCheckoutStateRecord = (
     orderData: {
       deliveryInstruction: record.deliveryInstruction,
       deliveryDate: record.deliveryDate?.format("YYYY-MM-DD"),
-      adminNotes: `TEST ${record.additionalInfo}`, // TODO: remove TEST
+      adminNotes: `${record.additionalInfo}`,
       deliveryMessage: record.message,
       despatchLocation: record.pickUpLocation,
       purpose: record.purpose,
