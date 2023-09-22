@@ -45,7 +45,8 @@ const defaultSettings: Settings = {
     "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
   shouldShowAuthDropdown: false,
   orderId: "",
-  order: null
+  order: null,
+  searchText: ""
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -86,6 +87,7 @@ const App: FunctionComponent<AppProps> = props => {
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>(defaultBreadcrumb);
   const [orderLoading, setOrderLoading] = useState(false);
   const [currentStage, setCurrentStage] = useState<Stage>(1);
+  const [searchText, setSearchText] = useState("");
 
   const initializeAppConfig = async () => {
     const savedCartItems = AppStorage.get<CartItem[]>(
@@ -232,7 +234,9 @@ const App: FunctionComponent<AppProps> = props => {
     breadcrumb,
     setBreadcrumb,
     orderLoading,
-    setOrderLoading
+    setOrderLoading,
+    searchText,
+    setSearchText
   };
 
   const headTags = (

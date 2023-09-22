@@ -1,5 +1,5 @@
 import React, {
-  ChangeEvent,
+  FormEvent,
   FunctionComponent,
   MouseEvent as ReactMouseEvent,
   ReactNode,
@@ -362,7 +362,8 @@ const Header: FunctionComponent = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const [activeSublinkNav, setActiveSublinkNav] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [searchText, setSearchText] = useState("");
+
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const deviceType = useDeviceType();
 
@@ -380,7 +381,9 @@ const Header: FunctionComponent = () => {
     setOrder,
     setCurrentStage,
     orderId,
-    setDeliveryDate
+    setDeliveryDate,
+    searchText,
+    setSearchText
   } = useContext(SettingsContext);
 
   const totalCartItems = useMemo(() => {
@@ -393,11 +396,15 @@ const Header: FunctionComponent = () => {
     e.stopPropagation();
   };
 
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchText(value);
-    if (value) {
-      push(`/filters?search=${value}`, undefined, { scroll: false });
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (deviceType === "mobile") {
+      setShowSidebar(false);
+    }
+
+    if (searchText) {
+      push(`/filters?search=${searchText}`, undefined, { scroll: false });
     } else {
       push(
         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
@@ -406,17 +413,6 @@ const Header: FunctionComponent = () => {
       );
     }
   };
-
-  useEffect(() => {
-    if (!searchText && _pathname === "filters") {
-      push(
-        "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
-        undefined,
-        { scroll: false }
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchText]);
 
   useEffect(() => {
     if (!orderId && _pathname !== "checkout") {
@@ -463,6 +459,29 @@ const Header: FunctionComponent = () => {
               showSidebar && styles.active
             ].join(" ")}
           >
+            <form
+              className={[styles["search-wrapper"]].join(" ")}
+              onSubmit={handleSearch}
+            >
+              <input
+                type="text"
+                onChange={e => {
+                  setSearchText(e.target.value);
+                }}
+                placeholder="Search for products"
+                value={searchText}
+                className={[styles["search-input"]].join(" ")}
+                ref={searchInputRef}
+              />
+              <img
+                alt="search"
+                src="/icons/search-cancel.svg"
+                className={`${styles["search-icon"]} generic-icon medium clickable`}
+                onClick={() => {
+                  setSearchText("");
+                }}
+              />
+            </form>
             {links.map((link, index) => (
               <div className={styles.link} key={index}>
                 {link.url ? (
@@ -706,16 +725,20 @@ const Header: FunctionComponent = () => {
                 styles["search-wrapper"],
                 showSearch ? styles.active : ""
               ].join(" ")}
+              onSubmit={handleSearch}
             >
               <input
                 type="text"
-                onChange={handleSearch}
+                onChange={e => {
+                  setSearchText(e.target.value);
+                }}
                 placeholder="Search for products"
                 value={searchText}
                 className={[
                   styles["search-input"],
                   showSearch ? styles.active : ""
                 ].join(" ")}
+                ref={searchInputRef}
               />
               {showSearch ? (
                 <img
@@ -724,10 +747,6 @@ const Header: FunctionComponent = () => {
                   className={`${styles["search-icon"]} generic-icon medium clickable`}
                   onClick={() => {
                     setShowSearch(false);
-                    // setSearchText("");
-                    // push(
-                    //   "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-                    // );
                   }}
                 />
               ) : (
@@ -737,6 +756,7 @@ const Header: FunctionComponent = () => {
                   className={`${styles["search-icon"]} generic-icon medium clickable`}
                   onClick={() => {
                     setShowSearch(true);
+                    searchInputRef.current?.focus();
                   }}
                 />
               )}

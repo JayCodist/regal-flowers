@@ -432,3 +432,12 @@
     color: #9b0000;
   }
 }
+
+.search-wrapper {
+  width: 48%;
+  margin-left: auto;
+
+  @media (max-width: 650px) {
+    width: 50%;
+  }
+}
