@@ -3,6 +3,13 @@
     "site": "regalflowers",
     "public": "out",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
+    "rewrites": [
+      {
+        "source": "/**", 
+        "dynamicLinks": true
+      }
+    ],
     "frameworksBackend": {
       "region": "europe-west1"
     },
