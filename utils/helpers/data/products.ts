@@ -36,7 +36,7 @@ export const getProductsByCategory: (
   try {
     let query = "";
     if (params?.search) {
-      query = `&search=${params?.search}`;
+      query = `&search=${params?.search.toLowerCase()}`;
     } else {
       const {
         category = [],
