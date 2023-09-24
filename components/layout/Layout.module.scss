@@ -361,11 +361,12 @@
       outline: none;
       background-color: transparent;
       padding: 0.2rem;
+      transition: 0.3s ease-out;
       &.active {
         color: white;
         background-color: #9b0000;
         border-radius: 1rem;
-        padding: 0.2rem;
+        padding: 0.2rem 0.8rem;
       }
     }
     .control-icon {
@@ -790,7 +791,6 @@
 }
 
 .footer {
-  font-size: 1.2rem;
   line-height: 1.7;
 
   @media (max-width: 650px) {
