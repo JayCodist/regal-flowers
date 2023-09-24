@@ -14,9 +14,9 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 92%;
+  font-size: 88%;
   @media (max-width: 1180px) {
-    font-size: 84%;
+    font-size: 82%;
   }
   @media (max-width: 1080px) {
     font-size: 77%;
@@ -38,22 +38,22 @@ html {
   }
 
   @media (min-width: 1500px) {
-    font-size: 88%;
+    font-size: 85%;
   }
   @media (min-width: 1700px) {
-    font-size: 130%;
+    font-size: 100%;
   }
   @media (min-width: 2000px) {
-    font-size: 150%;
+    font-size: 120%;
   }
   @media (min-width: 2500px) {
-    font-size: 200%;
+    font-size: 150%;
   }
   @media (min-width: 2800px) {
-    font-size: 215%;
+    font-size: 185%;
   }
   @media (min-width: 3000px) {
-    font-size: 225%;
+    font-size: 200%;
   }
 }
 * {
@@ -671,7 +671,7 @@ button {
       }
     }
     .featured-title {
-      font-size: 2rem;
+      font-size: 1.8rem;
 
       @media (max-width: 600px) {
         text-align: center;

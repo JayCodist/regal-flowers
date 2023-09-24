@@ -76,7 +76,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
@@ -120,7 +120,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/just-to-say-bouquets"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
@@ -175,7 +175,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/all"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
