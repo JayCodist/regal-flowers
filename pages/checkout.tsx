@@ -513,6 +513,11 @@ const Checkout: FunctionComponent = () => {
     const isDeliveryMethodComplete = validateDeliveryMethod();
     const isReceiverInfoComplete = validateReceiverInfo();
 
+    if (!deliveryDate) {
+      notify("error", "Please select a delivery date");
+      return;
+    }
+
     if (!isDeliveryMethodComplete || !isReceiverInfoComplete) {
       return;
     }
