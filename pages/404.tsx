@@ -9,7 +9,7 @@ function Custom404Page() {
   const deviceType = useDeviceType();
   return (
     <section className="">
-        <img src="/images/404.svg" alt="404" className={styles["hero-img"]} />
+      <img src="/images/404.svg" alt="404" className={styles["hero-img"]} />
       <div className={styles["popular-sections"]}>
         <h2 className={styles.title}>Popular Sections</h2>
         <div className={[styles.section, styles.wrap].join(" ")}>
