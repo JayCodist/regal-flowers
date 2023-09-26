@@ -367,7 +367,7 @@ const Header: FunctionComponent = () => {
 
   const deviceType = useDeviceType();
 
-  const { pathname, push } = useRouter();
+  const { pathname, push, query } = useRouter();
   const _pathname = pathname.split("/")[1];
 
   const {
@@ -419,6 +419,10 @@ const Header: FunctionComponent = () => {
       setOrder(null);
       setCurrentStage(1);
       setDeliveryDate(null);
+    }
+
+    if (!query.search) {
+      setSearchText("");
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -719,27 +723,52 @@ const Header: FunctionComponent = () => {
                   )}
                 </div>
               ))}
+              {!showSearch && (
+                <div className={styles.link} key="faq">
+                  <div
+                    className={`flex center-align spaced ${styles.title}`}
+                    role="button"
+                  >
+                    <strong>
+                      <Link href="/faq">
+                        <a>FAQ</a>
+                      </Link>
+                    </strong>
+                  </div>
+                </div>
+              )}
             </nav>
-            <form
+            <div
               className={[
                 styles["search-wrapper"],
                 showSearch ? styles.active : ""
               ].join(" ")}
-              onSubmit={handleSearch}
             >
-              <input
-                type="text"
-                onChange={e => {
-                  setSearchText(e.target.value);
-                }}
-                placeholder="Search for products"
-                value={searchText}
+              <form
                 className={[
-                  styles["search-input"],
+                  styles["search-form"],
                   showSearch ? styles.active : ""
                 ].join(" ")}
-                ref={searchInputRef}
-              />
+                onSubmit={handleSearch}
+                onClick={() => {
+                  setShowSearch(true);
+                  searchInputRef.current?.focus();
+                }}
+              >
+                <input
+                  type="text"
+                  onChange={e => {
+                    setSearchText(e.target.value);
+                  }}
+                  placeholder="Search for products"
+                  value={searchText}
+                  className={[
+                    styles["search-input"],
+                    showSearch ? styles.active : ""
+                  ].join(" ")}
+                  ref={searchInputRef}
+                />
+              </form>
               {showSearch ? (
                 <img
                   alt="search"
@@ -760,7 +789,7 @@ const Header: FunctionComponent = () => {
                   }}
                 />
               )}
-            </form>
+            </div>
           </div>
         )}
         <div

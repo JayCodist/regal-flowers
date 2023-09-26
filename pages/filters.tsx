@@ -198,7 +198,8 @@ const ProductsPage: FunctionComponent<{
     if (search) {
       params = {
         ...params,
-        search: search as string
+        searchValue: search as string,
+        searchField: "name"
       };
     } else {
       const shopByArray = String(shopBy).split(",");
@@ -370,6 +371,10 @@ const ProductsPage: FunctionComponent<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.asPath]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [search]);
 
   const hideHero = search;
 
@@ -797,6 +802,8 @@ const ProductsPage: FunctionComponent<{
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {productCategory === "vip"
                 ? "VIP Flower Arrangements"
+                : search
+                ? `Search Results for "${searchText}"`
                 : ` ${pageTitle} ${!isGiftPage && pageTitle ? "Flowers" : ""} ${
                     !isGiftPage && !pageTitle ? "All Occasion Flowers" : ""
                   }`}

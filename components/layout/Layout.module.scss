@@ -29,14 +29,19 @@
   }
 
   .search-wrapper {
-    max-width: 20rem;
+    max-width: 4rem;
     display: flex;
+    background-color: white;
+    border: 0.1rem solid #e5e7eb;
+    padding: 0.5rem 0.7rem;
+    border-radius: 3rem;
 
     &.active {
-      background-color: white;
-      border: 0.1rem solid #e5e7eb;
-      padding: 0.5rem 0.7rem;
-      border-radius: 3rem;
+      max-width: 20rem;
+    }
+
+    .search-form {
+      width: 100%;
     }
 
     .search-input {
@@ -48,10 +53,16 @@
       width: 0;
       font-weight: 600;
       padding-left: 0.5rem;
+      width: 10%;
+      vertical-align: middle;
 
       &.active {
         width: 100%;
       }
+    }
+
+    .search-icon {
+      margin-left: auto;
     }
   }
 

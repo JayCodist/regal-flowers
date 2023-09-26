@@ -391,8 +391,7 @@ export const giftItems: Gift[] = [
     name: "Giftsets",
     description: "Caravaggio Italian Giftsets are the ultimate luxury",
     image: "/images/sample-flowers/addon-group-4.png",
-    slug:
-      "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+    slug: "/product-category/gift-packs"
   }
 ];
 
@@ -2018,75 +2017,6 @@ export const productSampleData = {
 };
 
 export const links: AppLink[] = [
-  // {
-  //   url: "",
-  //   title: "Send To",
-  //   subtitle: "Send Flowers To",
-  //   children: [
-
-  //     {
-  //       title: "Lagos",
-  //       children: [],
-  //       url: "/locations/lagos"
-  //     },
-  //     {
-  //       title: "Abuja",
-  //       children: [],
-  //       url: "/locations/abuja"
-  //     },
-  //     {
-  //       title: "Other states",
-  //       children: [],
-  //       url: "/locations/other-locations"
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: "Valentine",
-  //   children: [
-  //     {
-  //       title: "Flowers",
-  //       children: [],
-  //       url:
-  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-  //     },
-  //     {
-  //       title: "Vip Flowers",
-  //       children: [],
-  //       url: "/vip"
-  //     },
-  //     {
-  //       title: "Gifts",
-  //       children: [],
-  //       url:
-  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
-  //     }
-  //   ],
-  //   url: ""
-  // },
-  // {
-  //   title: "Valentine",
-  //   children: [
-  //     {
-  //       title: "Flowers",
-  //       children: [],
-  //       url:
-  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-  //     },
-  //     {
-  //       title: "Vip Flowers",
-  //       children: [],
-  //       url: "/vip"
-  //     },
-  //     {
-  //       title: "Gifts",
-  //       children: [],
-  //       url:
-  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
-  //     }
-  //   ],
-  //   url: ""
-  // },
   {
     url: "",
     title: "Occasions",
@@ -2375,11 +2305,6 @@ export const links: AppLink[] = [
         children: []
       }
     ]
-  },
-  {
-    url: "/faq",
-    title: "FAQ",
-    children: []
   }
 ];
 
