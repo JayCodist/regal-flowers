@@ -1,12 +1,13 @@
 .hero-img {
-  height: 35rem;
+  height: 20rem;
   width: auto;
-  margin: 0 auto;
+  margin: 0 auto 2rem  auto;
   display: block;
 
   @media (max-width: 650px) {
     width: 100%;
     height: auto;
+    margin: 0 auto;
   }
 }
 
