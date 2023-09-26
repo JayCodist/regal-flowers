@@ -375,7 +375,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">Gifts to Include with Flowers</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+                url="/product-category/gift-packs"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -403,7 +403,7 @@ const LandingPage: FunctionComponent<{
 
           {deviceType === "mobile" && (
             <Button
-              url="/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+              url="/product-category/gift-packs"
               type="accent"
               minWidth
               className={styles["see-all"]}

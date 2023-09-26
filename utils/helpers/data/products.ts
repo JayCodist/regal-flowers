@@ -35,8 +35,10 @@ export const getProductsByCategory: (
 ) => Promise<RequestResponse<Product[]>> = async params => {
   try {
     let query = "";
-    if (params?.search) {
-      query = `&search=${params?.search.toLowerCase()}`;
+    if (params?.searchValue && params?.searchField) {
+      query = `&searchValue=${params?.searchValue.toLowerCase()}&searchField=${
+        params?.searchField
+      }`;
     } else {
       const {
         category = [],
