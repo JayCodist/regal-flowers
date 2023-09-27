@@ -71,7 +71,7 @@ export const breadcrumbItems: Breadcrumb[] = [
     url: "scented-candles",
     label: "Scented Candles"
   },
-  { url: "cascadingdropping-bouquets", label: "Cascading Bridal Bouquets" },
+  { url: "cascading-bridal-bouquets", label: "Cascading Bridal Bouquets" },
   {
     url: "accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
     label: "Accessories & Boutonnieress"
@@ -1753,7 +1753,7 @@ export const otherOccasions: {
 }[] = [
   {
     title: "Cascading Bouquets & ",
-    url: "/product-category/cascadingdropping-bouquets"
+    url: "/product-category/cascading-bridal-bouquets"
   },
   {
     title: "Accessories & Boutonnieres",
@@ -1790,7 +1790,7 @@ export const bridalOccasionFilters: Filter[] = [
       {
         name: "Cascading Bridal Bouquets",
         tag: "cascading bridal bouquets",
-        link: "/product-category/cascadingdropping-bouquets"
+        link: "/product-category/cascading-bridal-bouquets"
       },
       {
         name: "Accessories & Boutonnieres",
@@ -2097,7 +2097,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Cascading Bridal Bouquets",
-            url: "/product-category/cascadingdropping-bouquets",
+            url: "/product-category/cascading-bridal-bouquets",
             children: []
           },
           {

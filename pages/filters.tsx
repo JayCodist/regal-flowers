@@ -81,7 +81,7 @@ const ProductsPage: FunctionComponent<{
   const { productCategory = "occasion", categorySlug, productClass } = props;
 
   const bridalCategories = [
-    "cascadingdropping-bouquets",
+    "cascading-bridal-bouquets",
     "accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
     "bridal-bouquets"
   ];
