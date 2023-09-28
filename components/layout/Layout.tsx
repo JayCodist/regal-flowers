@@ -974,7 +974,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
         /^paid/i.test(data?.paymentStatus || "");
 
-      if (!_isPaid) {
+      const savedCartItems = AppStorage.get(AppStorageConstants.CART_ITEMS);
+      const shouldUpdateSavedCartItems =
+        !_isPaid && (!savedCartItems || header === "checkout");
+
+      if (shouldUpdateSavedCartItems) {
         const _cartItems: CartItem[] =
           data?.orderProducts?.map(item => ({
             image: item.image as ProductImage,
@@ -988,6 +992,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             cartId: item.size || "" + item.key
           })) || [];
         setCartItems(_cartItems);
+      } else {
+        setCartItems(savedCartItems);
       }
 
       setOrder(data);
@@ -1048,7 +1054,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   );
 
   useEffect(() => {
-    if (visible) {
+    if (visible && header !== "checkout") {
       document.addEventListener("mousedown", handleCloseCart);
     }
     return () => {
@@ -1131,8 +1137,10 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       fetchOrder(orderId);
     } else {
       const savedCartItems = AppStorage.get(AppStorageConstants.CART_ITEMS);
+      console.log("cart items 2");
       if (savedCartItems) {
         setCartItems(savedCartItems);
+        console.log("cart items 3");
       }
     }
 
