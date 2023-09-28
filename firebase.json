@@ -25,6 +25,6 @@
         ]
       }
     ],
-    "trailingSlash": true
+    "trailingSlash": false
   }
 }
