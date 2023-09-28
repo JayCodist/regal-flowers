@@ -1457,12 +1457,7 @@ const Checkout: FunctionComponent = () => {
                           {getPriceDisplay(subTotal || 0, currency)}
                         </span>
                       </div>
-                      <div className="flex between vertical-margin">
-                        <span className="normal-text">Add-Ons total</span>
-                        <span className="normal-text bold">
-                          {getPriceDisplay(0, currency)}
-                        </span>
-                      </div>
+
                       {formData.deliveryMethod === "delivery" && (
                         <div className="flex between">
                           <span className="normal-text">Delivery Charge</span>
@@ -1810,10 +1805,7 @@ const Checkout: FunctionComponent = () => {
                       <strong>Subtotal</strong>
                       <span>{getPriceDisplay(subTotal || 0, currency)}</span>
                     </div>
-                    <div className="flex between  margin-bottom spaced">
-                      <strong>Add-Ons total</strong>
-                      <span>{getPriceDisplay(0, currency)}</span>
-                    </div>
+
                     <div className="flex between  margin-bottom spaced">
                       <div>
                         <strong>Delivery Charge</strong>
@@ -2937,12 +2929,7 @@ const Checkout: FunctionComponent = () => {
                           {getPriceDisplay(subTotal, currency)}
                         </span>
                       </div>
-                      <div className="flex between margin-bottom spaced">
-                        <strong className={styles.grayed}>Add-Ons total</strong>
-                        <span className={styles["detail-value"]}>
-                          {getPriceDisplay(0, currency)}
-                        </span>
-                      </div>
+
                       <div className="flex between margin-bottom spaced">
                         <div>
                           <strong className={styles.grayed}>

@@ -62,7 +62,7 @@ export const breadcrumbItems: Breadcrumb[] = [
     label: "Teddy Bears"
   },
   {
-    url: "gift-packs",
+    url: "gifts",
     label: "Gift Packs"
   },
   { url: "perfumes", label: "Perfumes" },
@@ -391,7 +391,7 @@ export const giftItems: Gift[] = [
     name: "Giftsets",
     description: "Caravaggio Italian Giftsets are the ultimate luxury",
     image: "/images/sample-flowers/addon-group-4.png",
-    slug: "/product-category/gift-packs"
+    slug: "/product-category/gifts"
   }
 ];
 
@@ -1707,7 +1707,7 @@ export const gifts: { title: string; url: string; category?: string }[] = [
   },
   {
     title: "Giftsets",
-    url: "/product-category/gift-packs",
+    url: "/product-category/gifts",
     category: "Giftsets"
   },
   {
@@ -2039,7 +2039,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2060,7 +2060,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2081,7 +2081,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2295,7 +2295,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/gifts",
         title: "Giftsets",
         children: []
       },
