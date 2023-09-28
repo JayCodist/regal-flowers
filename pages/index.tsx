@@ -76,7 +76,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
@@ -120,7 +120,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/just-to-say-bouquets"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
@@ -175,7 +175,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/all"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
@@ -375,7 +375,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">Gifts to Include with Flowers</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+                url="/product-category/gift-packs"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -403,7 +403,7 @@ const LandingPage: FunctionComponent<{
 
           {deviceType === "mobile" && (
             <Button
-              url="/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+              url="/product-category/gift-packs"
               type="accent"
               minWidth
               className={styles["see-all"]}

@@ -31,34 +31,37 @@ export const getProduct: (
 };
 
 export const getProductsByCategory: (
-  params?: FetchResourceParams<ProductFilterLogic>,
-  searchOnly?: boolean
-) => Promise<RequestResponse<Product[]>> = async (params, searchOnly) => {
-  const {
-    category,
-    productClass,
-    budget = [],
-    delivery = [],
-    design = [],
-    flowerName = [],
-    flowerType = [],
-    packages = []
-  } = params?.filter as ProductFilterLogic;
+  params?: FetchResourceParams<ProductFilterLogic>
+) => Promise<RequestResponse<Product[]>> = async params => {
   try {
-    const query = searchOnly
-      ? `&search=${params?.search}`
-      : `&categories=${category?.join(",")}&${
-          productClass ? `productClass=${productClass}` : ""
-        }&sortField=${params?.sortLogic?.sortField}&sortType=${
-          params?.sortLogic?.sortType
-        }&budget=${budget?.join(",")}&delivery=${delivery?.join(
-          ","
-        )}&design=${design?.join(",")}&flowerName=${flowerName?.join(
-          ","
-        )}&flowerType=${flowerType?.join(",")}&packages=${packages?.join(",")}`;
+    let query = "";
+    if (params?.searchValue && params?.searchField) {
+      query = `&searchValue=${params?.searchValue.toLowerCase()}&searchField=${
+        params?.searchField
+      }`;
+    } else {
+      const {
+        category = [],
+        productClass,
+        budget = [],
+        delivery = [],
+        design = [],
+        flowerName = [],
+        flowerType = [],
+        packages = []
+      } = params?.filter as ProductFilterLogic;
+
+      query = `&categories=${category?.join(",")}&${
+        productClass ? `productClass=${productClass}` : ""
+      }&budget=${budget?.join(",")}&delivery=${delivery?.join(
+        ","
+      )}&design=${design?.join(",")}&flowerName=${flowerName?.join(
+        ","
+      )}&flowerType=${flowerType?.join(",")}&packages=${packages?.join(",")}`;
+    }
 
     const response = await restAPIInstance.get(
-      `/v1/wordpress/product/paginate?pageNumber=${params?.pageNumber}${query}`
+      `/v1/wordpress/product/paginate?pageNumber=${params?.pageNumber}&sortField=${params?.sortLogic?.sortField}&sortType=${params?.sortLogic?.sortType}${query}`
     );
     const data = filterInStockProducts(response.data.data);
     return {

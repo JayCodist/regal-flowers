@@ -71,7 +71,7 @@ export const breadcrumbItems: Breadcrumb[] = [
     url: "scented-candles",
     label: "Scented Candles"
   },
-  { url: "cascadingdropping-bouquets", label: "Cascading Bridal Bouquets" },
+  { url: "cascading-bridal-bouquets", label: "Cascading Bridal Bouquets" },
   {
     url: "accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
     label: "Accessories & Boutonnieress"
@@ -391,8 +391,7 @@ export const giftItems: Gift[] = [
     name: "Giftsets",
     description: "Caravaggio Italian Giftsets are the ultimate luxury",
     image: "/images/sample-flowers/addon-group-4.png",
-    slug:
-      "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+    slug: "/product-category/gift-packs"
   }
 ];
 
@@ -1754,7 +1753,7 @@ export const otherOccasions: {
 }[] = [
   {
     title: "Cascading Bouquets & ",
-    url: "/product-category/cascadingdropping-bouquets"
+    url: "/product-category/cascading-bridal-bouquets"
   },
   {
     title: "Accessories & Boutonnieres",
@@ -1791,7 +1790,7 @@ export const bridalOccasionFilters: Filter[] = [
       {
         name: "Cascading Bridal Bouquets",
         tag: "cascading bridal bouquets",
-        link: "/product-category/cascadingdropping-bouquets"
+        link: "/product-category/cascading-bridal-bouquets"
       },
       {
         name: "Accessories & Boutonnieres",
@@ -2018,75 +2017,6 @@ export const productSampleData = {
 };
 
 export const links: AppLink[] = [
-  // {
-  //   url: "",
-  //   title: "Send To",
-  //   subtitle: "Send Flowers To",
-  //   children: [
-
-  //     {
-  //       title: "Lagos",
-  //       children: [],
-  //       url: "/locations/lagos"
-  //     },
-  //     {
-  //       title: "Abuja",
-  //       children: [],
-  //       url: "/locations/abuja"
-  //     },
-  //     {
-  //       title: "Other states",
-  //       children: [],
-  //       url: "/locations/other-locations"
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: "Valentine",
-  //   children: [
-  //     {
-  //       title: "Flowers",
-  //       children: [],
-  //       url:
-  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-  //     },
-  //     {
-  //       title: "Vip Flowers",
-  //       children: [],
-  //       url: "/vip"
-  //     },
-  //     {
-  //       title: "Gifts",
-  //       children: [],
-  //       url:
-  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
-  //     }
-  //   ],
-  //   url: ""
-  // },
-  // {
-  //   title: "Valentine",
-  //   children: [
-  //     {
-  //       title: "Flowers",
-  //       children: [],
-  //       url:
-  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-  //     },
-  //     {
-  //       title: "Vip Flowers",
-  //       children: [],
-  //       url: "/vip"
-  //     },
-  //     {
-  //       title: "Gifts",
-  //       children: [],
-  //       url:
-  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
-  //     }
-  //   ],
-  //   url: ""
-  // },
   {
     url: "",
     title: "Occasions",
@@ -2167,7 +2097,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Cascading Bridal Bouquets",
-            url: "/product-category/cascadingdropping-bouquets",
+            url: "/product-category/cascading-bridal-bouquets",
             children: []
           },
           {
@@ -2375,11 +2305,6 @@ export const links: AppLink[] = [
         children: []
       }
     ]
-  },
-  {
-    url: "/faq",
-    title: "FAQ",
-    children: []
   }
 ];
 

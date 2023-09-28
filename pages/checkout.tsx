@@ -513,6 +513,11 @@ const Checkout: FunctionComponent = () => {
     const isDeliveryMethodComplete = validateDeliveryMethod();
     const isReceiverInfoComplete = validateReceiverInfo();
 
+    if (!deliveryDate) {
+      notify("error", "Please select a delivery date");
+      return;
+    }
+
     if (!isDeliveryMethodComplete || !isReceiverInfoComplete) {
       return;
     }
@@ -3063,11 +3068,6 @@ const PaypalModal: FunctionComponent<ModalProps & {
     const response = await actions.order?.capture();
 
     if (response?.status !== "COMPLETED") {
-      await updatePaymentMethodDetails({
-        orderId: order?.id as string,
-        currency: currency.name,
-        paymentMethod: "payPal"
-      });
     }
 
     if (response?.status === "COMPLETED") {
@@ -3088,8 +3088,23 @@ const PaypalModal: FunctionComponent<ModalProps & {
       ?.supportedCurrencies.includes(currency.name);
   }, [currency]);
 
+  const updatePaypalPaymentDetails = async () => {
+    await updatePaymentMethodDetails({
+      orderId: order?.id as string,
+      currency: currency.name,
+      paymentMethod: "payPal"
+    });
+  };
+
   return (
-    <Modal visible={visible} cancel={cancel} className="scrollable">
+    <Modal
+      visible={visible}
+      cancel={() => {
+        updatePaypalPaymentDetails();
+        cancel?.();
+      }}
+      className="scrollable"
+    >
       <h1 className="title thin margin-bottom spaced">
         Complete Paypal Payment
       </h1>
