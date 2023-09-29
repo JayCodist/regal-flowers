@@ -11,6 +11,7 @@ export interface ProductVariant {
   price: number;
   class: "regular" | "vip";
   design: DesignOption[];
+  sku: string;
 }
 
 export type DesignOptionName =

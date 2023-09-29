@@ -989,7 +989,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             // design: item.design,  //add design later
             size: item.size,
             description: item.description,
-            cartId: item.size || "" + item.key
+            SKU: item.SKU || ""
           })) || [];
         setCartItems(_cartItems);
       } else {
@@ -1003,12 +1003,12 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const handleRemoveItemQuantity = (key: string) => {
-    const item = cartItems.find(item => item.cartId === key);
+    const item = cartItems.find(item => item.SKU === key);
     if (item) {
       if (item.quantity > 1) {
         setCartItems(
           cartItems.map(item => {
-            if (item.cartId === key) {
+            if (item.SKU === key) {
               return {
                 ...item,
                 quantity: item.quantity - 1,
@@ -1026,11 +1026,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const handleAddItemQuantity = (key: string) => {
-    const item = cartItems.find(item => item.cartId === key);
+    const item = cartItems.find(item => item.SKU === key);
     if (item) {
       setCartItems(
         cartItems.map(item => {
-          if (item.cartId === key) {
+          if (item.SKU === key) {
             return {
               ...item,
               quantity: item.quantity + 1,
@@ -1121,7 +1121,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       }
       return;
     }
-    setCartItems(cartItems.filter(item => item.cartId !== key));
+    setCartItems(cartItems.filter(item => item.SKU !== key));
   };
 
   const designCharges = useMemo(() => {
@@ -1137,10 +1137,8 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       fetchOrder(orderId);
     } else {
       const savedCartItems = AppStorage.get(AppStorageConstants.CART_ITEMS);
-      console.log("cart items 2");
       if (savedCartItems) {
         setCartItems(savedCartItems);
-        console.log("cart items 3");
       }
     }
 
@@ -1203,7 +1201,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                   src="/icons/delete-cart.svg"
                   alt="delete"
                   className="generic-icon medium margin-top spaced clickable"
-                  onClick={() => handleRemoveItem(item?.cartId)}
+                  onClick={() => handleRemoveItem(item?.SKU)}
                 />
                 <div className="flex spaced align-center block">
                   <img
@@ -1221,12 +1219,12 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                       <div className="flex center-align spaced-lg">
                         <div
                           className={styles.minus}
-                          onClick={() => handleRemoveItemQuantity(item.cartId)}
+                          onClick={() => handleRemoveItemQuantity(item.SKU)}
                         ></div>
                         <span className="small-text">{item.quantity}</span>
                         <div
                           className={styles.plus}
-                          onClick={() => handleAddItemQuantity(item.cartId)}
+                          onClick={() => handleAddItemQuantity(item.SKU)}
                         ></div>
                       </div>
                     </div>
