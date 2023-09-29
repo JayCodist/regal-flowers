@@ -60,7 +60,7 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
           src: product.images[0].src,
           alt: product.images[0].alt
         },
-        cartId: `${product.key}`
+        SKU: product.sku
       };
 
       const _cartItem = cartItems.find(item => item.key === product?.key);

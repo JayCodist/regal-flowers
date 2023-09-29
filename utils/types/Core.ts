@@ -67,7 +67,7 @@ export interface CartItem {
   size?: string;
   design?: Design | null;
   addonsTotal?: number;
-  cartId: string;
+  SKU: string;
 }
 
 export type OrderItem = Omit<CartItem, "cartId" | "amount"> & {
