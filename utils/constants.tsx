@@ -2813,7 +2813,7 @@ export const allDeliveryLocationZones: Record<
         ? "highAbuja-zone1"
         : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
         ? "freeAbujaVals-zone1"
-        : "mediumAbujaVals-zone1"
+        : "highAbujaVals-zone1"
     },
     {
       label: (
@@ -2830,7 +2830,7 @@ export const allDeliveryLocationZones: Record<
         ? "highAbuja-zone2"
         : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
         ? "freeAbujaVals-zone2"
-        : "mediumAbujaVals-zone2"
+          : "highAbujaVals-zone2"
     },
     {
       label: (
@@ -2973,14 +2973,27 @@ export const allDeliveryLocationOptions: Record<
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
-        label: `${getPriceDisplay(30000, currency)} - Valentine Orders BELOW ${
+        label: `${getPriceDisplay(20000, currency)} - Valentine Orders BELOW ${
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
         ].toLocaleString()} (or please pickup instead)`,
         name: "mediumAbujaVals",
+        amount: 20000
+      },
+
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(30000, currency)} - Valentine Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (or please pickup instead)`,
+        name: "highAbujaVals",
         amount: 30000
       },
+
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
