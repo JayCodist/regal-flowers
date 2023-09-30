@@ -463,29 +463,6 @@ const Header: FunctionComponent = () => {
               showSidebar && styles.active
             ].join(" ")}
           >
-            <form
-              className={[styles["search-wrapper"]].join(" ")}
-              onSubmit={handleSearch}
-            >
-              <input
-                type="text"
-                onChange={e => {
-                  setSearchText(e.target.value);
-                }}
-                placeholder="Search for products"
-                value={searchText}
-                className={[styles["search-input"]].join(" ")}
-                ref={searchInputRef}
-              />
-              <img
-                alt="search"
-                src="/icons/search-cancel.svg"
-                className={`${styles["search-icon"]} generic-icon medium clickable`}
-                onClick={() => {
-                  setSearchText("");
-                }}
-              />
-            </form>
             {links.map((link, index) => (
               <div className={styles.link} key={index}>
                 {link.url ? (
@@ -605,6 +582,29 @@ const Header: FunctionComponent = () => {
                 </div>
               </div>
             ))}
+            <form
+              className={[styles["search-wrapper"]].join(" ")}
+              onSubmit={handleSearch}
+            >
+              <input
+                type="text"
+                onChange={e => {
+                  setSearchText(e.target.value);
+                }}
+                placeholder="Search for products"
+                value={searchText}
+                className={[styles["search-input"]].join(" ")}
+                ref={searchInputRef}
+              />
+              <img
+                alt="search"
+                src="/icons/search-cancel.svg"
+                className={`${styles["search-icon"]} generic-icon medium clickable`}
+                onClick={() => {
+                  setSearchText("");
+                }}
+              />
+            </form>
           </nav>
         )}
         <Link href="/">
@@ -620,109 +620,114 @@ const Header: FunctionComponent = () => {
         {deviceType === "desktop" && (
           <div className="flex spaced center-align">
             <nav className={styles.nav}>
-              {links.map((link, index) => (
-                <div
-                  className={styles.link}
-                  key={index}
-                  onMouseEnter={e => handleActiveNav(link.title, e)}
-                  onMouseLeave={() => setActiveNavLink("")}
-                >
-                  <div
-                    className={`flex center-align spaced  ${styles.title}`}
-                    key={link.title}
-                    role="button"
-                  >
-                    {link.url ? (
-                      <Link href={link.url}>
-                        <a>
-                          <strong>{link.title}</strong>
-                        </a>
-                      </Link>
-                    ) : (
-                      <strong>{link.title}</strong>
-                    )}
-                    {link.children.length > 0 && (
-                      <div
-                        className={[
-                          styles.arrow,
-                          activeNavLink === link.title && activeNavLink
-                            ? styles.active
-                            : ""
-                        ].join(" ")}
-                      ></div>
-                    )}
-                  </div>
-                  {link.children.length > 0 && (
+              {links.map(
+                (link, index) =>
+                  link.title !== "FAQ" && (
                     <div
-                      className={[
-                        styles["dropdown"],
-                        activeNavLink === link.title && styles.active
-                      ].join(" ")}
+                      className={styles.link}
+                      key={index}
+                      onMouseEnter={e => handleActiveNav(link.title, e)}
+                      onMouseLeave={() => setActiveNavLink("")}
                     >
-                      {link.subtitle && (
-                        <p className={styles.subtitle}>{link.subtitle}</p>
-                      )}
                       <div
-                        className={[
-                          styles["sub-link"],
-                          link.children.some(child => child.children.length) &&
-                            styles.grid
-                        ].join(" ")}
+                        className={`flex center-align spaced  ${styles.title}`}
+                        key={link.title}
+                        role="button"
                       >
-                        {link.children.map((child, index) => (
-                          <div key={index}>
-                            {child.url ? (
-                              <Link href={child.url}>
-                                <a
-                                  onClick={() => {
-                                    setActiveNavLink("");
-                                  }}
-                                >
-                                  {child.title && (
-                                    <span
-                                      className={[
-                                        child.children.length && styles.title
-                                      ].join(" ")}
-                                    >
-                                      {child.title}
-                                    </span>
-                                  )}
-                                </a>
-                              </Link>
-                            ) : (
-                              <>
-                                {child.title && (
-                                  <span
-                                    className={[
-                                      child.children.length && styles.title
-                                    ].join(" ")}
-                                  >
-                                    {child.title}
-                                  </span>
-                                )}
-                              </>
-                            )}
-                            <div className={styles["grand-children"]}>
-                              {child.children.map((grandChild, index) => (
-                                <Link href={grandChild.url} key={index}>
-                                  <a
-                                    className={styles["grand-title"]}
-                                    onClick={() => {
-                                      setActiveNavLink("");
-                                    }}
-                                  >
-                                    {grandChild.title}
-                                  </a>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
+                        {link.url ? (
+                          <Link href={link.url}>
+                            <a>
+                              <strong>{link.title}</strong>
+                            </a>
+                          </Link>
+                        ) : (
+                          <strong>{link.title}</strong>
+                        )}
+                        {link.children.length > 0 && (
+                          <div
+                            className={[
+                              styles.arrow,
+                              activeNavLink === link.title && activeNavLink
+                                ? styles.active
+                                : ""
+                            ].join(" ")}
+                          ></div>
+                        )}
                       </div>
+                      {link.children.length > 0 && (
+                        <div
+                          className={[
+                            styles["dropdown"],
+                            activeNavLink === link.title && styles.active
+                          ].join(" ")}
+                        >
+                          {link.subtitle && (
+                            <p className={styles.subtitle}>{link.subtitle}</p>
+                          )}
+                          <div
+                            className={[
+                              styles["sub-link"],
+                              link.children.some(
+                                child => child.children.length
+                              ) && styles.grid
+                            ].join(" ")}
+                          >
+                            {link.children.map((child, index) => (
+                              <div key={index}>
+                                {child.url ? (
+                                  <Link href={child.url}>
+                                    <a
+                                      onClick={() => {
+                                        setActiveNavLink("");
+                                      }}
+                                    >
+                                      {child.title && (
+                                        <span
+                                          className={[
+                                            child.children.length &&
+                                              styles.title
+                                          ].join(" ")}
+                                        >
+                                          {child.title}
+                                        </span>
+                                      )}
+                                    </a>
+                                  </Link>
+                                ) : (
+                                  <>
+                                    {child.title && (
+                                      <span
+                                        className={[
+                                          child.children.length && styles.title
+                                        ].join(" ")}
+                                      >
+                                        {child.title}
+                                      </span>
+                                    )}
+                                  </>
+                                )}
+                                <div className={styles["grand-children"]}>
+                                  {child.children.map((grandChild, index) => (
+                                    <Link href={grandChild.url} key={index}>
+                                      <a
+                                        className={styles["grand-title"]}
+                                        onClick={() => {
+                                          setActiveNavLink("");
+                                        }}
+                                      >
+                                        {grandChild.title}
+                                      </a>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                  )
+              )}
               {!showSearch && (
                 <div className={styles.link} key="faq">
                   <div
@@ -974,7 +979,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
         /go\s*ahead/i.test(data?.paymentStatus || "") ||
         /^paid/i.test(data?.paymentStatus || "");
 
-      if (!_isPaid) {
+      const savedCartItems = AppStorage.get(AppStorageConstants.CART_ITEMS);
+      const shouldUpdateSavedCartItems =
+        !_isPaid && (!savedCartItems || header === "checkout");
+
+      if (shouldUpdateSavedCartItems) {
         const _cartItems: CartItem[] =
           data?.orderProducts?.map(item => ({
             image: item.image as ProductImage,
@@ -985,9 +994,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
             // design: item.design,  //add design later
             size: item.size,
             description: item.description,
-            cartId: item.size || "" + item.key
+            SKU: item.SKU || ""
           })) || [];
         setCartItems(_cartItems);
+      } else {
+        setCartItems(savedCartItems);
       }
 
       setOrder(data);
@@ -997,12 +1008,12 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const handleRemoveItemQuantity = (key: string) => {
-    const item = cartItems.find(item => item.cartId === key);
+    const item = cartItems.find(item => item.SKU === key);
     if (item) {
       if (item.quantity > 1) {
         setCartItems(
           cartItems.map(item => {
-            if (item.cartId === key) {
+            if (item.SKU === key) {
               return {
                 ...item,
                 quantity: item.quantity - 1,
@@ -1020,11 +1031,11 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   };
 
   const handleAddItemQuantity = (key: string) => {
-    const item = cartItems.find(item => item.cartId === key);
+    const item = cartItems.find(item => item.SKU === key);
     if (item) {
       setCartItems(
         cartItems.map(item => {
-          if (item.cartId === key) {
+          if (item.SKU === key) {
             return {
               ...item,
               quantity: item.quantity + 1,
@@ -1048,7 +1059,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
   );
 
   useEffect(() => {
-    if (visible) {
+    if (visible && header !== "checkout") {
       document.addEventListener("mousedown", handleCloseCart);
     }
     return () => {
@@ -1115,7 +1126,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
       }
       return;
     }
-    setCartItems(cartItems.filter(item => item.cartId !== key));
+    setCartItems(cartItems.filter(item => item.SKU !== key));
   };
 
   const designCharges = useMemo(() => {
@@ -1195,7 +1206,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                   src="/icons/delete-cart.svg"
                   alt="delete"
                   className="generic-icon medium margin-top spaced clickable"
-                  onClick={() => handleRemoveItem(item?.cartId)}
+                  onClick={() => handleRemoveItem(item?.SKU)}
                 />
                 <div className="flex spaced align-center block">
                   <img
@@ -1213,12 +1224,12 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                       <div className="flex center-align spaced-lg">
                         <div
                           className={styles.minus}
-                          onClick={() => handleRemoveItemQuantity(item.cartId)}
+                          onClick={() => handleRemoveItemQuantity(item.SKU)}
                         ></div>
                         <span className="small-text">{item.quantity}</span>
                         <div
                           className={styles.plus}
-                          onClick={() => handleAddItemQuantity(item.cartId)}
+                          onClick={() => handleAddItemQuantity(item.SKU)}
                         ></div>
                       </div>
                     </div>

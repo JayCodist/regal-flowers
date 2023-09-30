@@ -51,7 +51,8 @@ const giftMap: Record<string, string> = {
   "gift-packs": "gift-packs",
   perfumes: "perfumes",
   balloons: "balloons",
-  "scented-candles": "scented-candles"
+  "scented-candles": "scented-candles",
+  gifts: "gifts"
 };
 
 type ProductClass = "vip" | "regular";
@@ -864,7 +865,7 @@ const ProductsPage: FunctionComponent<{
               </span>
               {deviceType === "desktop" && (
                 <Button
-                  url="/product-category/gift-packs"
+                  url="/product-category/gifts"
                   className="flex spaced center center-align"
                   type="transparent"
                 >
@@ -891,7 +892,7 @@ const ProductsPage: FunctionComponent<{
             </div>
             {deviceType === "mobile" && (
               <Button
-                url="/product-category/gift-packs"
+                url="/product-category/gifts"
                 type="accent"
                 minWidth
                 className={styles["see-all"]}
