@@ -24,13 +24,15 @@ import {
   defaultBreadcrumb,
   defaultCurrency
 } from "../utils/constants";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import User from "../utils/types/User";
 import AppStorage, {
   AppStorageConstants
 } from "../utils/helpers/storage-helpers";
 import { performHandshake } from "../utils/helpers/data/core";
+import { getDefaultCurrency } from "../utils/helpers/type-conversions";
 import { Order } from "../utils/types/Order";
+import ProgressBar from "../components/progress-bar/ProgressBar";
 
 const defaultSettings: Settings = {
   currency: defaultCurrency,
@@ -43,7 +45,8 @@ const defaultSettings: Settings = {
     "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
   shouldShowAuthDropdown: false,
   orderId: "",
-  order: null
+  order: null,
+  searchText: ""
 };
 
 let toasterTimer: ReturnType<typeof setTimeout>;
@@ -82,18 +85,42 @@ const App: FunctionComponent<AppProps> = props => {
   const [orderId, setOrderId] = useState("");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [breadcrumb, setBreadcrumb] = useState<Breadcrumb>(defaultBreadcrumb);
+  const [orderLoading, setOrderLoading] = useState(false);
+  const [currentStage, setCurrentStage] = useState<Stage>(1);
+  const [searchText, setSearchText] = useState("");
 
   const initializeAppConfig = async () => {
-    const savedCurrency = AppStorage.get<AppCurrency>(
-      AppStorageConstants.SAVED_CURRENCY
+    const savedCartItems = AppStorage.get<CartItem[]>(
+      AppStorageConstants.CART_ITEMS
     );
-    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
+    const savedDeliveryDate = AppStorage.get<Dayjs>(
+      AppStorageConstants.DELIVERY_DATE
+    );
+
+    const { defaultCurrencyName, fromStorage } = getDefaultCurrency();
+    const defaultCurrency =
+      settings.allCurrencies.find(
+        currency => currency.name === defaultCurrencyName
+      ) || defaultSettings.currency;
+
+    if (defaultCurrencyName !== "NGN" && !fromStorage) {
+      notify(
+        "info",
+        `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
+        4000
+      );
+    }
 
     setSettings({
       ...settings,
-      currency: savedCurrency || defaultSettings.currency
+      currency: defaultCurrency
     });
+    const savedOrderId = AppStorage.get<string>(AppStorageConstants.ORDER_ID);
+
     setOrderId(savedOrderId || "");
+    setDeliveryDate(savedDeliveryDate ? dayjs(savedDeliveryDate) : null);
+    setCartItems(savedCartItems || []);
+
     const { error, data } = await performHandshake();
     if (error || !data) {
       // Fail quietly and continue using the set constant values
@@ -110,15 +137,13 @@ const App: FunctionComponent<AppProps> = props => {
           }),
           {}
         ) || {};
-
-      const currentCurrency = savedCurrency || settings.currency;
       setSettings({
         ...settings,
         currency: {
-          ...currentCurrency,
+          ...defaultCurrency,
           conversionRate:
-            currencyValueMap[currentCurrency.name] ||
-            currentCurrency.conversionRate
+            currencyValueMap[defaultCurrency.name] ||
+            defaultCurrency.conversionRate
         },
         allCurrencies: settings.allCurrencies.map(currency => ({
           ...currency,
@@ -177,13 +202,20 @@ const App: FunctionComponent<AppProps> = props => {
       setSettings({ ...settings, currency });
       AppStorage.save(AppStorageConstants.SAVED_CURRENCY, currency);
     },
-    currentStage: settings.currentStage,
-    setCurrentStage: (currentStage: Stage) =>
-      setSettings({ ...settings, currentStage }),
+    currentStage,
+    setCurrentStage,
     deliveryDate,
-    setDeliveryDate,
+    setDeliveryDate: (date: Dayjs | null) => {
+      if (!isNaN(date?.valueOf() as number)) {
+        AppStorage.save(AppStorageConstants.DELIVERY_DATE, date);
+        setDeliveryDate(date);
+      }
+    },
     cartItems,
-    setCartItems,
+    setCartItems: (items: CartItem[]) => {
+      setCartItems(items);
+      AppStorage.save(AppStorageConstants.CART_ITEMS, items);
+    },
     allCurrencies: settings.allCurrencies,
     shouldShowCart,
     setShouldShowCart,
@@ -202,7 +234,11 @@ const App: FunctionComponent<AppProps> = props => {
     setOrder,
     confirm,
     breadcrumb,
-    setBreadcrumb
+    setBreadcrumb,
+    orderLoading,
+    setOrderLoading,
+    searchText,
+    setSearchText
   };
 
   const headTags = (
@@ -214,6 +250,7 @@ const App: FunctionComponent<AppProps> = props => {
 
   return (
     <SettingsContext.Provider value={settingsControls}>
+      <ProgressBar />
       <div suppressHydrationWarning className="app-wrapper">
         {headTags}
         <Layout>

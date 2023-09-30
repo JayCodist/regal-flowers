@@ -60,7 +60,7 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
           src: product.images[0].src,
           alt: product.images[0].alt
         },
-        cartId: `${product.key}`
+        SKU: product.sku
       };
 
       const _cartItem = cartItems.find(item => item.key === product?.key);
@@ -102,6 +102,8 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
       }
       e.stopPropagation();
     };
+
+    const outOfStock = product && !product.sku && !product.variants.length;
 
     return (
       <Link href={url || "#"}>
@@ -146,8 +148,13 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
                 <Button
                   className={`${styles["buy-btn"]}`}
                   onClick={e => cart && handleAddToCart(e)}
+                  disabled={outOfStock}
                 >
-                  {buttonText ? buttonText : "Buy Now"}
+                  {outOfStock
+                    ? "Out of Stock"
+                    : buttonText
+                    ? buttonText
+                    : "Buy Now"}
                 </Button>
               </div>
             )}

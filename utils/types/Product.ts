@@ -11,6 +11,7 @@ export interface ProductVariant {
   price: number;
   class: "regular" | "vip";
   design: DesignOption[];
+  sku: string;
 }
 
 export type DesignOptionName =
@@ -56,6 +57,7 @@ interface Product {
   class: "regular" | "vip";
   designNote: string;
   design: string;
+  inStock: boolean;
 }
 
 export interface Gift {

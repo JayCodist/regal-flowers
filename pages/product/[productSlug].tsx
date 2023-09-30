@@ -16,11 +16,13 @@ interface Size {
   name: string;
   price: number;
   designOptions?: DesignOption[];
+  sku: string;
 }
 
 const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const { product } = props;
 
+  const outOfStock = product && !product.sku && !product.variants.length;
   const [activeSlide, setActiveSlide] = useState<number>(0);
   const [descriptionTab] = useState("product description");
   const [sizeType, setsizeType] = useState("regular");
@@ -75,8 +77,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   }, []);
 
   const handleAddToCart = () => {
-    const productKey = `${product.key}${selectedSize?.name ||
-      ""}${selectedDesign?.name || ""}`.replace(/\s/g, "");
     const cartItem: CartItem = {
       key: product.key,
       name: product.name,
@@ -95,11 +95,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         src: product.images[0].src,
         alt: product.images[0].alt
       },
-      cartId: productKey
+      SKU: selectedSize?.sku as string
     };
 
-    const existingCartItem = cartItems.find(item => item.cartId === productKey);
-    const existingDesign = existingCartItem?.design;
+    const existingCartItem = cartItems.find(
+      item => item.SKU === selectedSize?.sku
+    );
+    // const existingDesign = existingCartItem?.design;
 
     if (!existingCartItem) {
       setCartItems([...cartItems, cartItem]);
@@ -116,7 +118,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         </p>
       );
     } else {
-      if (existingCartItem.size !== selectedSize?.name) {
+      if (existingCartItem.SKU !== selectedSize?.sku) {
         setCartItems([...cartItems, cartItem]);
         notify(
           "success",
@@ -130,9 +132,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             </span>
           </p>
         );
-      } else if (existingCartItem.name === selectedSize?.name) {
+      } else if (existingCartItem.SKU === selectedSize?.sku) {
         const newCartItem = cartItems.map(item => {
-          if (item.key === existingCartItem?.key) {
+          if (item.SKU === existingCartItem?.SKU) {
             return {
               ...item,
               quantity: item.quantity + 1
@@ -155,53 +157,58 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             </span>
           </p>
         );
-      } else if (existingDesign?.name === selectedDesign?.name) {
-        const newCartItem = cartItems.map(item => {
-          if (item.key === existingCartItem?.key) {
-            return {
-              ...item,
-              quantity: item.quantity + 1,
-              design: {
-                ...item.design,
-                quantity: (item.design?.quantity as number) + 1
-              }
-            };
-          } else {
-            return item;
-          }
-        }) as CartItem[];
-        setCartItems(newCartItem);
-        notify(
-          "success",
-          <p>
-            Item Added To Cart{" "}
-            <span
-              className="view-cart"
-              onClick={() => setShouldShowCart(!shouldShowCart)}
-            >
-              View Cart
-            </span>
-          </p>
-        );
-      } else if (
-        existingDesign?.name !== selectedDesign?.name &&
-        selectedDesign
-      ) {
-        setCartItems([...cartItems, cartItem]);
-
-        notify(
-          "success",
-          <p>
-            Item Added To Cart{" "}
-            <span
-              className="view-cart"
-              onClick={() => setShouldShowCart(!shouldShowCart)}
-            >
-              View Cart
-            </span>
-          </p>
-        );
       }
+      // else if (existingDesign?.name === selectedDesign?.name) {
+      //   console.log("new item 3");
+      //   const newCartItem = cartItems.map(item => {
+      //     if (item.SKU === existingCartItem?.SKU) {
+      //       return {
+      //         ...item,
+      //         quantity: item.quantity + 1,
+      //         design: {
+      //           ...item.design,
+      //           quantity: (item.design?.quantity as number) + 1
+      //         }
+      //       };
+      //     } else {
+      //       return item;
+      //     }
+      //   }) as CartItem[];
+      //   setCartItems(newCartItem);
+      //   notify(
+      //     "success",
+      //     <p>
+      //       Item Added To Cart{" "}
+      //       <span
+      //         className="view-cart"
+      //         onClick={() => setShouldShowCart(!shouldShowCart)}
+      //       >
+      //         View Cart
+      //       </span>
+      //     </p>
+      //   );
+      // }
+
+      // else if (
+      //   existingDesign?.name !== selectedDesign?.name &&
+      //   selectedDesign
+      // ) {
+      //   console.log("new item 4");
+      //   setCartItems([...cartItems, cartItem]);
+
+      //   notify(
+      //     "success",
+      //     <p>
+      //       Item Added To Cart{" "}
+      //       <span
+      //         className="view-cart"
+      //         onClick={() => setShouldShowCart(!shouldShowCart)}
+      //       >
+      //         View Cart
+      //       </span>
+      //     </p>
+      //   );
+      // }
     }
     setSelectedSize(null);
     setSelectedDesign(null);
@@ -347,10 +354,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   />
                 </div>
 
-                <div>
+                {/* <div>
                   <p className="smaller bold">Delivery</p>
                   <p>Estimated delivery time: 1 - 7 days</p>
-                </div>
+                </div> */}
               </div>
               <div
                 className={`${styles["social-icons"]} flex spaced center-align`}
@@ -416,10 +423,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   alt="truck"
                 />
               </div>
-              <div>
+              {/* <div>
                 <p className="smaller bold">Delivery</p>
                 <p>Estimated delivery time: 1 - 7 days</p>
-              </div>
+              </div> */}
             </div>
           )}
 
@@ -456,12 +463,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                             setSelectedSize({
                               name: variant.name,
                               price: variant.price,
-                              designOptions: variant.design
+                              designOptions: variant.design,
+                              sku: variant.sku
                             });
                             setProductPrice(variant.price);
                           }}
                         >
-                          {variant.name.slice(1)} |{" "}
+                          {variant.name} |{" "}
                           {getPriceDisplay(variant.price, currency)}
                         </span>
                       ))}
@@ -495,12 +503,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                               setSelectedSize({
                                 name: variant.name,
                                 price: variant.price,
-                                designOptions: variant.design
+                                designOptions: variant.design,
+                                sku: variant.sku
                               });
                               setProductPrice(variant.price);
                             }}
                           >
-                            {variant.name.slice(1).replace(/Vip/i, "VIP")} |
+                            {variant.name.replace(/Vip/i, "VIP")} |
                             {getPriceDisplay(variant.price, currency)}
                           </span>
                         );
@@ -628,7 +637,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               "vertical-margin"}`}
           >
             <Button
-              disabled={cannotBuy}
+              disabled={cannotBuy || outOfStock}
               className={` spaced ${deviceType == "desktop" &&
                 "vertical-margin"}`}
               responsive
@@ -641,7 +650,12 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   : ""
               }
             >
-              Add to Cart {getPriceDisplay(total || productPrice, currency)}
+              {outOfStock
+                ? "Out Of Stock"
+                : `Add to Cart ${getPriceDisplay(
+                    total || productPrice,
+                    currency
+                  )}`}
             </Button>
           </div>
         </div>

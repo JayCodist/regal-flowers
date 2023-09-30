@@ -1,5 +1,5 @@
-import { CartItem } from "../../types/Core";
-import { Order, CheckoutFormData } from "../../types/Order";
+import { AppCurrencyName, CartItem } from "../../types/Core";
+import { Order, CheckoutFormData, PaymentName } from "../../types/Order";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
 import AppStorage, { AppStorageConstants } from "../storage-helpers";
@@ -18,8 +18,9 @@ const adaptCheckoutStateRecord = (
     shouldSaveAddress: record.shouldSaveAddress,
     deliveryLocation: record.deliveryLocation,
     orderData: {
+      deliveryInstruction: record.deliveryInstruction,
       deliveryDate: record.deliveryDate?.format("YYYY-MM-DD"),
-      adminNotes: `TEST ${record.additionalInfo}`, // TODO: remove TEST
+      adminNotes: `${record.additionalInfo}`,
       deliveryMessage: record.message,
       despatchLocation: record.pickUpLocation,
       purpose: record.purpose,
@@ -119,13 +120,15 @@ export const getOrder: (
       data: response.data as Order
     };
   } catch (err) {
-    if ((err as Error).message === "Order not found") {
+    if ((err as any).status === 404) {
       AppStorage.remove(AppStorageConstants.ORDER_ID);
+      AppStorage.remove(AppStorageConstants.CART_ITEMS);
     }
     return {
       error: true,
       message: (err as Error).message,
-      data: null
+      data: null,
+      status: (err as any).status
     };
   }
 };
@@ -133,7 +136,12 @@ export const getOrder: (
 export const createOrder: (payload: {
   cartItems: CartItem[];
   deliveryDate: string;
-}) => Promise<RequestResponse<Order>> = async ({ cartItems, deliveryDate }) => {
+  currency: AppCurrencyName;
+}) => Promise<RequestResponse<Order>> = async ({
+  cartItems,
+  deliveryDate,
+  currency
+}) => {
   try {
     const response = await restAPIInstance.post(`/v1/firebase/order/create`, {
       deliveryDate,
@@ -143,7 +151,8 @@ export const createOrder: (payload: {
         size: item.size || "",
         quantity: item.quantity,
         image: item.image
-      }))
+      })),
+      currency
     });
     AppStorage.save(AppStorageConstants.ORDER_ID, response.data.id);
     return {
@@ -160,24 +169,29 @@ export const createOrder: (payload: {
 };
 
 export const updateOrder: (payload: {
-  cartItems: CartItem[];
-  deliveryDate: string;
-  id: string;
+  cartItems: CartItem[] | null;
+  deliveryDate?: string;
+  id?: string;
+  currency?: AppCurrencyName;
 }) => Promise<RequestResponse<Order>> = async ({
   cartItems,
   deliveryDate,
-  id
+  id,
+  currency
 }) => {
   try {
     const response = await restAPIInstance.put(`/v1/firebase/order/${id}`, {
       deliveryDate,
-      cartItems: cartItems.map(item => ({
-        key: item.key,
-        design: item.design?.name || "",
-        size: item.size || "",
-        quantity: item.quantity,
-        image: item.image
-      }))
+      cartItems: cartItems
+        ? cartItems.map(item => ({
+            key: item.key,
+            design: item.design?.name || "",
+            size: item.size || "",
+            quantity: item.quantity,
+            image: item.image
+          }))
+        : null,
+      currency
     });
     return {
       error: false,
@@ -199,7 +213,7 @@ export const updateCheckoutState: (
   try {
     const response = await restAPIInstance.put(
       `/v1/firebase/order/checkout-order/${id}`,
-      adaptCheckoutStateRecord(formData)
+      { ...adaptCheckoutStateRecord(formData), currency: formData.currency }
     );
     return {
       error: false,
@@ -236,6 +250,38 @@ export const saveSenderInfo: (
       data: response.data as Order
     };
   } catch (err) {
+    return {
+      error: true,
+      message: (err as Error).message,
+      data: null
+    };
+  }
+};
+
+export const updatePaymentMethodDetails: (payload: {
+  currency: AppCurrencyName;
+  orderId: string;
+  paymentMethod: PaymentName;
+}) => Promise<RequestResponse<boolean>> = async ({
+  orderId,
+  currency,
+  paymentMethod
+}) => {
+  try {
+    const response = await restAPIInstance.put(
+      `/v1/firebase/order/update-payment-details/${orderId}`,
+      {
+        currency,
+        paymentMethod
+      }
+    );
+    return {
+      error: !response.data,
+      message: response.message,
+      data: response.data
+    };
+  } catch (err) {
+    console.error("Unable to update payment method ", err);
     return {
       error: true,
       message: (err as Error).message,

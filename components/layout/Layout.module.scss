@@ -28,6 +28,44 @@
     width: auto;
   }
 
+  .search-wrapper {
+    max-width: 4rem;
+    display: flex;
+    background-color: white;
+    border: 0.1rem solid #e5e7eb;
+    padding: 0.5rem 0.7rem;
+    border-radius: 3rem;
+
+    &.active {
+      max-width: 20rem;
+    }
+
+    .search-form {
+      width: 100%;
+    }
+
+    .search-input {
+      border: none;
+      outline: none;
+      padding: 0rem;
+      font-size: 0.9rem;
+      transition: 0.3s ease-out;
+      width: 0;
+      font-weight: 600;
+      padding-left: 0.5rem;
+      width: 10%;
+      vertical-align: middle;
+
+      &.active {
+        width: 100%;
+      }
+    }
+
+    .search-icon {
+      margin-left: auto;
+    }
+  }
+
   .mobile-sidebar {
     opacity: 0;
     visibility: hidden;
@@ -48,6 +86,22 @@
 
     @media (min-width: 650px) {
       display: none;
+    }
+
+    .search-wrapper {
+      width: 90%;
+      max-width: 800%;
+      margin: 0 auto;
+      padding: 0.8rem;
+      background-color: white;
+      border: 0.1rem solid #d6d6d6;
+      border-radius: 3rem;
+      margin-top: 4rem;
+
+      .search-input {
+        width: 100%;
+        font-size: 1.3rem;
+      }
     }
 
     .arrow {
@@ -297,6 +351,7 @@
     .auth-wrapper {
       @media (max-width: 650px) {
         right: -4rem;
+        margin-top: -0.8rem;
       }
     }
   }
@@ -312,11 +367,12 @@
       outline: none;
       background-color: transparent;
       padding: 0.2rem;
+      transition: 0.3s ease-out;
       &.active {
         color: white;
         background-color: #9b0000;
         border-radius: 1rem;
-        padding: 0.2rem;
+        padding: 0.2rem 0.8rem;
       }
     }
     .control-icon {
@@ -741,7 +797,6 @@
 }
 
 .footer {
-  font-size: 1.2rem;
   line-height: 1.7;
 
   @media (max-width: 650px) {
@@ -900,7 +955,7 @@
     }
 
     &.active {
-      top: 5rem;
+      top: 6rem;
       opacity: 1;
       z-index: 8;
     }

@@ -16,6 +16,21 @@ import {
 } from "./types/Regal";
 import { Breadcrumb } from "./context/SettingsContext";
 
+export const pickupLocations: Record<string, JSX.Element> = {
+  Lagos: (
+    <p>
+      <strong>Lagos Pickup Address</strong> - 81b, Lafiaji Way, Dolphin Estate,
+      Ikoyi, Lagos
+    </p>
+  ),
+  Abuja: (
+    <p>
+      <strong>Abuja Pickup Address</strong> - 5, Nairobi Street, off Aminu Kano
+      Crescent, Wuse 2, Abuja
+    </p>
+  )
+};
+
 export const breadcrumbItems: Breadcrumb[] = [
   {
     url:
@@ -47,16 +62,16 @@ export const breadcrumbItems: Breadcrumb[] = [
     label: "Teddy Bears"
   },
   {
-    url: "gift-packs",
+    url: "gifts",
     label: "Gift Packs"
   },
   { url: "perfumes", label: "Perfumes" },
   { url: "balloons", label: "Balloons" },
   {
-    url: "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
-    label: "All Gifts"
+    url: "scented-candles",
+    label: "Scented Candles"
   },
-  { url: "cascadingdropping-bouquets", label: "Cascading Bridal Bouquets" },
+  { url: "cascading-bridal-bouquets", label: "Cascading Bridal Bouquets" },
   {
     url: "accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
     label: "Accessories & Boutonnieress"
@@ -104,18 +119,47 @@ export const defaultRedirect = {
 
 export const currencyOptions: AppCurrency[] = [
   { ...defaultCurrency },
-  { name: "USD", conversionRate: 453, sign: "$" },
-  { name: "GBP", conversionRate: 561, sign: "£" }
+  { name: "USD", conversionRate: 700, sign: "$" },
+  { name: "GBP", conversionRate: 890, sign: "£" }
 ];
 
 interface FooterContent {
   aboutUs: string;
   socialIcons: { name: string; src: string; url: string }[];
-  quickLinks: { title: string; url: string }[];
+  quickLinks: { title: string; url: string; phoneNumber?: string }[];
   phoneNumbers: string[];
+  lagosBranch: OfficeAddress[];
+  abujaBranch: OfficeAddress;
 }
 
 export const footerContent: FooterContent = {
+  lagosBranch: [
+    {
+      name: "Head Office",
+      url: "https://goo.gl/maps/cNB9Jx9sidQhJgtD6",
+      workingTimes: "24/7",
+      location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+    },
+    {
+      name: "VI Branch",
+      url: "https://goo.gl/maps/AsSEYaBUVV3NCRaa7",
+      workingTimes: "8am-7pm (Everyday)",
+      location:
+        "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos"
+    },
+    {
+      name: "Airport Branch",
+      url: "https://goo.gl/maps/5wQFMW5pR33n9k6G7",
+      workingTimes: "6am-7pm (Everyday)",
+      location: "Muritala Muhammed Airport2, Ikeja, Lagos"
+    }
+  ],
+  abujaBranch: {
+    name: "Abuja Office",
+    url: "https://goo.gl/maps/JAKrvZAe5vfh4czr9",
+    workingTimes: "24/7",
+    location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+  },
   aboutUs:
     "Nigeria's most loved online flower shop with same day delivery in Lagos and Abuja",
   socialIcons: [
@@ -137,7 +181,7 @@ export const footerContent: FooterContent = {
     {
       name: "whatsapp",
       src: "/icons/footer/whatsapp.svg",
-      url: "https://wa.me/+2348188787788"
+      url: "https://wa.me/+2347011992888"
     }
   ],
   quickLinks: [
@@ -145,12 +189,17 @@ export const footerContent: FooterContent = {
       title: "Occasions",
       url: "/product-category/all"
     },
-    { title: "VIP Section", url: "/" },
-    { title: "Contact Us", url: "/" },
+    { title: "VIP Section", url: "/vip" },
+    { title: "Contact Us", url: "", phoneNumber: "+2347011992888" },
     { title: "Our Blog", url: "/" },
     { title: "FAQ", url: "/faq" }
   ],
-  phoneNumbers: ["+234 701 000 6664", "+234 701 000 6665", "+234 701 199 2888"]
+  phoneNumbers: [
+    "+234 701 000 6664",
+    "+234 701 000 6665",
+    "+234 701 199 2888",
+    "+234 911 200 0300"
+  ]
 };
 
 export const aboutUsContent: {
@@ -342,8 +391,7 @@ export const giftItems: Gift[] = [
     name: "Giftsets",
     description: "Caravaggio Italian Giftsets are the ultimate luxury",
     image: "/images/sample-flowers/addon-group-4.png",
-    slug:
-      "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+    slug: "/product-category/gift-packs "
   }
 ];
 
@@ -371,24 +419,28 @@ export const regalHowItWorks: Service[] = [
 export const regalAddresses: OfficeAddress[] = [
   {
     name: "Lagos Head Office/Delivery Center",
-    location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos",
-    workingTimes: "24/7"
+    url: "https://goo.gl/maps/cNB9Jx9sidQhJgtD6",
+    workingTimes: "24/7",
+    location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
   },
   {
     name: "Lagos VI Branch",
+    url: "https://goo.gl/maps/AsSEYaBUVV3NCRaa7",
+    workingTimes: "8am-7pm (Everyday)",
     location:
-      "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos",
-    workingTimes: "8am-7pm (Everyday)"
+      "133, Ahmadu Bello Way, Silverbird Galleria, Victoria Island, Lagos"
   },
   {
     name: "Lagos Ikeja MMA2 Airport Branch",
-    location: "Muritala Muhammed Airport2, Ikeja, Lagos",
-    workingTimes: "6am-7pm (Everyday)"
+    url: "https://goo.gl/maps/5wQFMW5pR33n9k6G7",
+    workingTimes: "6am-7pm (Everyday)",
+    location: "Muritala Muhammed Airport2, Ikeja, Lagos"
   },
   {
     name: "Abuja Office",
-    location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja",
-    workingTimes: "24/7"
+    url: "https://goo.gl/maps/JAKrvZAe5vfh4czr9",
+    workingTimes: "24/7",
+    location: "5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
   }
 ];
 
@@ -397,7 +449,8 @@ export const regalEmail = "info@regalflowers.com.ng";
 export const regalPhones = [
   "(+234) 7010 006665",
   "(+234) 7010 006664",
-  "(+234) 7011 992888"
+  "(+234) 7011 992888",
+  "(+234) 9112 000300"
 ];
 
 export const blogPosts: BlogPost[] = [
@@ -444,7 +497,7 @@ export const deliveryStates: Option[] = [
 
 export const paymentMethods: PaymentMethod[] = [
   {
-    title: "PayPal",
+    title: "PayPal or Credit/Debit Cards",
     paymentName: "payPal",
     supportedCurrencies: ["USD", "GBP"],
     icon: (
@@ -462,7 +515,7 @@ export const paymentMethods: PaymentMethod[] = [
         />
       </svg>
     ),
-    info: "Credit/Dedit Cards - You don't need to own a Paypal account.",
+    info: "You don't need to own a Paypal account.",
     other: [
       {
         icon: (
@@ -553,7 +606,7 @@ export const paymentMethods: PaymentMethod[] = [
         />
       </svg>
     ),
-    info: "Credit/Dedit Cards",
+    info: "Credit/Debit Cards",
     other: [
       {
         icon: (
@@ -627,19 +680,49 @@ export const paymentMethods: PaymentMethod[] = [
   },
 
   {
-    title: "Bank Transfer",
-    paymentName: "monnify",
+    title: "Manual Transfer",
+    paymentName: "gtbTransfer",
     supportedCurrencies: ["NGN"],
     icon: (
+      <img src="./icons/gtbank.svg" className="generic-icon large" alt="gtb" />
+    ),
+    info: "Transfer Naira to GTB Bank"
+  },
+  {
+    title: "Manual Transfer",
+    paymentName: "bitcoinTransfer",
+    supportedCurrencies: ["USD"],
+    icon: (
       <img
-        src="/icons/monnify-logo.png"
-        className="generic-icon"
-        alt="monnify"
+        src="/icons/bitcoin-gold.svg"
+        className="generic-icon large"
+        alt="bitcoin"
       />
     ),
-    info: "Transfer with Monnify"
+    info: "Transfer Bitcoins (USD)"
+  },
+  {
+    title: "Manual Transfer",
+    paymentName: "natwestTransfer",
+    supportedCurrencies: ["GBP"],
+    icon: (
+      <img
+        src="./icons/natwest.svg"
+        className="generic-icon large"
+        alt="natwest"
+      />
+    ),
+    info: "Transfer Pounds to Natwest Bank"
   }
 ];
+
+export const gtbTransfer = {
+  bankName: "Guaranty Trust Bank (or GTBank)",
+  accountNumber: "0252862666",
+  accountName: "Regal Flowers Ltd"
+};
+
+export const bitcoinTransfer = "12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1";
 
 export const countryCodes = [
   {
@@ -1624,14 +1707,13 @@ export const gifts: { title: string; url: string; category?: string }[] = [
   },
   {
     title: "Giftsets",
-    url: "/product-category/gift-packs",
+    url: "/product-category/gift-packs ",
     category: "Giftsets"
   },
   {
-    title: "All Gifts",
-    url:
-      "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears",
-    category: "All Gifts"
+    title: "Scented Candles",
+    url: "/product-category/scented-candles",
+    category: "Scented Candles"
   }
 ];
 
@@ -1671,7 +1753,7 @@ export const otherOccasions: {
 }[] = [
   {
     title: "Cascading Bouquets & ",
-    url: "/product-category/cascadingdropping-bouquets"
+    url: "/product-category/cascading-bridal-bouquets"
   },
   {
     title: "Accessories & Boutonnieres",
@@ -1708,7 +1790,7 @@ export const bridalOccasionFilters: Filter[] = [
       {
         name: "Cascading Bridal Bouquets",
         tag: "cascading bridal bouquets",
-        link: "/product-category/cascadingdropping-bouquets"
+        link: "/product-category/cascading-bridal-bouquets"
       },
       {
         name: "Accessories & Boutonnieres",
@@ -1935,75 +2017,6 @@ export const productSampleData = {
 };
 
 export const links: AppLink[] = [
-  // {
-  //   url: "",
-  //   title: "Send To",
-  //   subtitle: "Send Flowers To",
-  //   children: [
-
-  //     {
-  //       title: "Lagos",
-  //       children: [],
-  //       url: "/locations/lagos"
-  //     },
-  //     {
-  //       title: "Abuja",
-  //       children: [],
-  //       url: "/locations/abuja"
-  //     },
-  //     {
-  //       title: "Other states",
-  //       children: [],
-  //       url: "/locations/other-locations"
-  //     }
-  //   ]
-  // },
-  // {
-  //   title: "Valentine",
-  //   children: [
-  //     {
-  //       title: "Flowers",
-  //       children: [],
-  //       url:
-  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-  //     },
-  //     {
-  //       title: "Vip Flowers",
-  //       children: [],
-  //       url: "/vip"
-  //     },
-  //     {
-  //       title: "Gifts",
-  //       children: [],
-  //       url:
-  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
-  //     }
-  //   ],
-  //   url: ""
-  // },
-  // {
-  //   title: "Valentine",
-  //   children: [
-  //     {
-  //       title: "Flowers",
-  //       children: [],
-  //       url:
-  //         "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-  //     },
-  //     {
-  //       title: "Vip Flowers",
-  //       children: [],
-  //       url: "/vip"
-  //     },
-  //     {
-  //       title: "Gifts",
-  //       children: [],
-  //       url:
-  //         "/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
-  //     }
-  //   ],
-  //   url: ""
-  // },
   {
     url: "",
     title: "Occasions",
@@ -2026,7 +2039,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2047,7 +2060,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2068,7 +2081,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2084,7 +2097,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Cascading Bridal Bouquets",
-            url: "/product-category/cascadingdropping-bouquets",
+            url: "/product-category/cascading-bridal-bouquets",
             children: []
           },
           {
@@ -2282,18 +2295,25 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/gift-packs ",
         title: "Giftsets",
+        children: []
+      },
+      {
+        url: "/product-category/scented-candles",
+        title: "Scented Candles",
         children: []
       }
     ]
   },
   {
-    url: "/faq",
     title: "FAQ",
+    url: "/faq",
     children: []
   }
 ];
+
+export const paypalEmail = "payments@regalflowers.com";
 
 export const tagsMap: Record<string, string[]> = {
   budget: ["vip", "regular"],
@@ -2367,12 +2387,12 @@ export const featuredSlugs: Record<LocationName, string[]> = {
 export const popularSections: Occasion[] = [
   {
     title: "Fresh Flowers",
-    url: `/filters?filter=${encodeURIComponent("Fresh Flowers")}`,
+    url: `/filters?shopBy=${encodeURIComponent("fresh flowers")}`,
     image: "/images/popular-fresh.jpg"
   },
   {
     title: "Forever Roses",
-    url: `/filters?filter=${encodeURIComponent("Forever Roses")}`,
+    url: `/filters?shopBy=${encodeURIComponent("forever roses")}`,
     image: "/images/popular-forever.jpg"
   },
   {
@@ -2382,7 +2402,7 @@ export const popularSections: Occasion[] = [
   },
   {
     title: "Bundled Products",
-    url: `/filters?filter=${encodeURIComponent("Bundled Products")}`,
+    url: `/filters?shopBy=${encodeURIComponent("bundled products")}`,
     image: "/images/popular-bundled.jpg"
   }
   // {
@@ -2614,13 +2634,13 @@ export const sortOptions: Option[] = [
 export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
   USD: 185,
   GBP: 150,
-  NGN: 85000
+  NGN: 100000
 };
 
 export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
   USD: 255,
   GBP: 210,
-  NGN: 115000
+  NGN: 150000
 };
 
 export interface DeliveryLocationOption {
@@ -2631,82 +2651,84 @@ export interface DeliveryLocationOption {
 
 export const allDeliveryLocationZones: Record<
   LocationName,
-  (amount?: number, currency?: AppCurrency, deliveryDate?: Dayjs) => Option[]
+  (amount: number, currency: AppCurrency, deliveryDate: Dayjs) => Option[]
 > = {
-  lagos: (amount = 0, currency, deliveryDate) => [
-    {
-      label: (
-        <p>
-          <strong>ZONE 1</strong>
-          <br /> Not sure or need us to reach the recipient to confirm address
-        </p>
-      ),
-      value: !["13-02", "14-02", "15-02"].includes(
-        deliveryDate?.format("DD-MM") || ""
-      )
-        ? "highLagos-zone1"
-        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
-        ? "freeLagosVals-zone1"
-        : "mediumLagosVals-zone1"
-    },
-    {
-      label: (
-        <p>
-          <strong>ZONE 2</strong>
-          <br />
-          <strong>Island</strong> (Ibeju Lekki, Badore, Free Trade Zone, Epe)
-          <br />
-          <br />
-          <strong>Mainland</strong> (Idimu, Badagry, Ikorodu, Alaba/Ojo, Ikotun,
-          Festac, Ikotun, Iyana-Ipaja, Egbeda, Apapa, Badagry, Abule Egba, and
-          similar environs)
-        </p>
-      ),
-      value: !["13-02", "14-02", "15-02"].includes(
-        deliveryDate?.format("DD-MM") || ""
-      )
-        ? "highLagos-zone2"
-        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
-        ? "freeLagosVals-zone2"
-        : "mediumLagosVals-zone2"
-    },
-    {
-      label: (
-        <p>
-          <strong>ZONE 3</strong>
-          <br />
-          <strong>Island</strong>(Ikoyi, Victoria Island, Lagos Island, Lekki
-          Phase 1 up to Ajah)
-          <br />
-          <br />
-          <strong>Mainland</strong>(Yaba, Surulere, Mushin, Anthony, Ogudu,
-          Magodo, Omole, Gbagada, Ilupeju, Maryland, Maryland, Ikeja, Opebi,
-          Ogba)
-        </p>
-      ),
-      value:
-        (amount || 0) >=
-        (["13-02", "14-02", "15-02"].includes(
+  lagos: (amount = 0, currency, deliveryDate) => {
+    return [
+      {
+        label: (
+          <p>
+            <strong>ZONE 1</strong>
+            <br /> Not sure or need us to reach the recipient to confirm address
+          </p>
+        ),
+        value: !["13-02", "14-02", "15-02"].includes(
           deliveryDate?.format("DD-MM") || ""
         )
-          ? freeDeliveryThresholdVals
-          : freeDeliveryThreshold)[currency?.name || "NGN"]
-          ? `freeLagos${
-              ["13-02", "14-02", "15-02"].includes(
-                deliveryDate?.format("DD-MM") || ""
-              )
-                ? "Vals"
-                : ""
-            }-zone3`
-          : `mediumLagos${
-              ["13-02", "14-02", "15-02"].includes(
-                deliveryDate?.format("DD-MM") || ""
-              )
-                ? "Vals"
-                : ""
-            }-zone3`
-    }
-  ],
+          ? "highLagos-zone1"
+          : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+          ? "freeLagosVals-zone1"
+          : "highLagosVals-zone1"
+      },
+      {
+        label: (
+          <p>
+            <strong>ZONE 2</strong>
+            <br />
+            <strong>Island</strong> (Ibeju Lekki, Badore, Free Trade Zone, Epe)
+            <br />
+            <br />
+            <strong>Mainland</strong> (Idimu, Badagry, Ikorodu, Alaba/Ojo,
+            Ikotun, Festac, Ikotun, Iyana-Ipaja, Egbeda, Apapa, Badagry, Abule
+            Egba, and similar environs)
+          </p>
+        ),
+        value: !["13-02", "14-02", "15-02"].includes(
+          deliveryDate?.format("DD-MM") || ""
+        )
+          ? "highLagos-zone2"
+          : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+          ? "freeLagosVals-zone2"
+          : "highLagosVals-zone2"
+      },
+      {
+        label: (
+          <p>
+            <strong>ZONE 3</strong>
+            <br />
+            <strong>Island</strong>(Ikoyi, Victoria Island, Lagos Island, Lekki
+            Phase 1 up to Ajah)
+            <br />
+            <br />
+            <strong>Mainland</strong>(Yaba, Surulere, Mushin, Anthony, Ogudu,
+            Magodo, Omole, Gbagada, Ilupeju, Maryland, Maryland, Ikeja, Opebi,
+            Ogba)
+          </p>
+        ),
+        value:
+          (amount || 0) >=
+          (["13-02", "14-02", "15-02"].includes(
+            deliveryDate?.format("DD-MM") || ""
+          )
+            ? freeDeliveryThresholdVals
+            : freeDeliveryThreshold)[currency?.name || "NGN"]
+            ? `freeLagos${
+                ["13-02", "14-02", "15-02"].includes(
+                  deliveryDate?.format("DD-MM") || ""
+                )
+                  ? "Vals"
+                  : ""
+              }-zone3`
+            : `mediumLagos${
+                ["13-02", "14-02", "15-02"].includes(
+                  deliveryDate?.format("DD-MM") || ""
+                )
+                  ? "Vals"
+                  : ""
+              }-zone3`
+      }
+    ];
+  },
   abuja: (amount, currency, deliveryDate) => [
     {
       label: (
@@ -2721,7 +2743,7 @@ export const allDeliveryLocationZones: Record<
         ? "highAbuja-zone1"
         : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
         ? "freeAbujaVals-zone1"
-        : "mediumAbujaVals-zone1"
+        : "highAbujaVals-zone1"
     },
     {
       label: (
@@ -2738,7 +2760,7 @@ export const allDeliveryLocationZones: Record<
         ? "highAbuja-zone2"
         : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
         ? "freeAbujaVals-zone2"
-        : "mediumAbujaVals-zone2"
+          : "highAbujaVals-zone2"
     },
     {
       label: (
@@ -2771,7 +2793,8 @@ export const allDeliveryLocationZones: Record<
                 : ""
             }-zone3`
     }
-  ]
+  ],
+  "other-locations": () => []
 };
 
 export const allDeliveryLocationOptions: Record<
@@ -2818,14 +2841,27 @@ export const allDeliveryLocationOptions: Record<
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
-        label: `${getPriceDisplay(15000, currency)} - Valentine Orders BELOW ${
+        label: `${getPriceDisplay(20000, currency)} - Valentine Orders BELOW ${
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
         ].toLocaleString()} (or please pickup instead)`,
         name: "mediumLagosVals",
-        amount: 15000
+        amount: 20000
       },
+
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(30000, currency)} - Valentine Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (or please pickup instead)`,
+        name: "highLagosVals",
+        amount: 30000
+      },
+
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
@@ -2867,14 +2903,27 @@ export const allDeliveryLocationOptions: Record<
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
-        label: `${getPriceDisplay(15000, currency)} - Valentine Orders BELOW ${
+        label: `${getPriceDisplay(20000, currency)} - Valentine Orders BELOW ${
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
         ].toLocaleString()} (or please pickup instead)`,
         name: "mediumAbujaVals",
-        amount: 15000
+        amount: 20000
       },
+
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(30000, currency)} - Valentine Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (or please pickup instead)`,
+        name: "highAbujaVals",
+        amount: 30000
+      },
+
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {

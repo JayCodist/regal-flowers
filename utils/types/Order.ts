@@ -282,6 +282,8 @@ export interface CheckoutFormData {
   cardCVV: string;
   state: LocationName;
   zone: string;
+  currency: AppCurrencyName;
+  deliveryInstruction: string;
 }
 
 export type PaymentName =
@@ -289,7 +291,10 @@ export type PaymentName =
   | "googlePay"
   | "payPal"
   | "monnify"
-  | "manualTransfer";
+  | "manualTransfer"
+  | "gtbTransfer"
+  | "natwestTransfer"
+  | "bitcoinTransfer";
 
 export interface PaymentMethod {
   title: string;

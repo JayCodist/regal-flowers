@@ -1,5 +1,6 @@
 import { Option } from "../../components/select/Select";
-import { AppCurrency } from "../types/Core";
+import { AppCurrency, AppCurrencyName } from "../types/Core";
+import AppStorage, { AppStorageConstants } from "./storage-helpers";
 import { CheckoutFormData } from "../types/Order";
 
 export const getOptionsFromArray: (
@@ -12,9 +13,36 @@ export const getPriceDisplay: (
   price: number,
   currency: AppCurrency
 ) => string = (price, currency) => {
-  return `${currency.sign || ""}${Math.round(
+  return `${currency.sign || ""}${Math.ceil(
     price / currency.conversionRate
   ).toLocaleString()}`;
+};
+
+export const getNumber = (str: string | number) =>
+  Number(String(str).replace(/[^\d.]/g, "")) || 0;
+
+export const getDefaultCurrency: () => {
+  defaultCurrencyName: AppCurrencyName;
+  fromStorage: boolean;
+} = () => {
+  const savedCurrency = AppStorage.get<AppCurrency>(
+    AppStorageConstants.SAVED_CURRENCY
+  );
+  if (savedCurrency) {
+    return { defaultCurrencyName: savedCurrency.name, fromStorage: true };
+  }
+  const timezoneCurrencyMap: Record<string, AppCurrencyName> = {
+    GB: "GBP",
+    "GB-Eire": "GBP",
+    "Europe/Belfast": "GBP",
+    "Europe/London": "GBP",
+    "Africa/Lagos": "NGN"
+  };
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  return {
+    defaultCurrencyName: timezoneCurrencyMap[timezone] || "USD",
+    fromStorage: false
+  };
 };
 
 export function getValueInParentheses(str: string) {
@@ -33,7 +61,7 @@ export function getAddress(str: string) {
   }
 }
 
-function removeCountryCode(phoneNumber: string, countryCode: string) {
+export function removeCountryCode(phoneNumber = "", countryCode = "") {
   if (phoneNumber.startsWith(countryCode)) {
     phoneNumber = phoneNumber.slice(countryCode.length);
   }
@@ -75,6 +103,7 @@ export const adaptCheckOutFomData: (
     additionalInfo: record.adminNotes,
     pickUpLocation: record.despatchLocation,
     zone: record.deliveryDetails.zone,
-    state: record.deliveryDetails.state
+    state: record.deliveryDetails.state,
+    deliveryInstruction: record.deliveryInstruction
   };
 };

@@ -76,7 +76,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
@@ -99,6 +99,7 @@ const LandingPage: FunctionComponent<{
                 url={`/product/${flower.slug}`}
                 buttonText="Add to Cart"
                 cart={flower.variants?.length ? false : true}
+                product={flower}
               />
             ))}
           </div>
@@ -119,7 +120,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/just-to-say-bouquets"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
@@ -142,6 +143,7 @@ const LandingPage: FunctionComponent<{
                 url={`/product/${flower.slug}`}
                 buttonText="Add to Cart"
                 cart={flower.variants?.length ? false : true}
+                product={flower}
               />
             ))}
           </div>
@@ -173,7 +175,7 @@ const LandingPage: FunctionComponent<{
             {deviceType === "desktop" && (
               <Button
                 url="/product-category/all"
-                className="flex spaced center center-align"
+                className="flex spaced center-align"
                 type="transparent"
               >
                 <h3 className="red margin-right">See All</h3>
@@ -373,7 +375,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">Gifts to Include with Flowers</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+                url="/product-category/gifts"
                 className="flex spaced center center-align"
                 type="transparent"
               >
@@ -401,7 +403,7 @@ const LandingPage: FunctionComponent<{
 
           {deviceType === "mobile" && (
             <Button
-              url="/product-category/gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears"
+              url="/product-category/gifts"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -497,11 +499,7 @@ const LandingPage: FunctionComponent<{
                       alt="location"
                     />
                     <span className="flex column spaced">
-                      <a
-                        href={`https://maps.google.com?q=${address.location}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
+                      <a href={address.url} target="_blank" rel="noreferrer">
                         {address.location}
                       </a>
                       <span className="grayed">{address.workingTimes}</span>
@@ -559,7 +557,7 @@ const LandingPage: FunctionComponent<{
                 type="accent"
                 className={styles["hello-btn"]}
                 padded
-                url="https://wa.me/+2348188787788"
+                url="https://wa.me/+2347011992888"
               >
                 <img
                   src="/icons/whatsapp-green.svg"
@@ -589,11 +587,7 @@ const LandingPage: FunctionComponent<{
                   alt="location"
                 />
                 <span className="flex column spaced">
-                  <a
-                    href={`https://maps.google.com?q=${address.location}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href={address.url} target="_blank" rel="noreferrer">
                     {address.location}
                   </a>
                   <span className="grayed">{address.workingTimes}</span>

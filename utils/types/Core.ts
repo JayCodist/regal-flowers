@@ -34,6 +34,7 @@ export interface Settings {
   shouldShowAuthDropdown: boolean;
   orderId: string;
   order: Order | null;
+  searchText: string;
 }
 
 export enum Stage {
@@ -66,7 +67,7 @@ export interface CartItem {
   size?: string;
   design?: Design | null;
   addonsTotal?: number;
-  cartId: string;
+  SKU: string;
 }
 
 export type OrderItem = Omit<CartItem, "cartId" | "amount"> & {

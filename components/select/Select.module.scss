@@ -131,6 +131,15 @@ $placeholder: rgba(0, 0, 0, 0.6);
       font-weight: bold;
     }
   }
+  .gray-white {
+    &:nth-child(odd) {
+      background-color: white;
+    }
+
+    &:nth-child(even) {
+      background-color: rgb(196 198 201);
+    }
+  }
   .option.initial {
     color: $placeholder;
   }

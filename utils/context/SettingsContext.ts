@@ -1,5 +1,5 @@
 import { Dayjs } from "dayjs";
-import { Dispatch, SetStateAction, createContext } from "react";
+import { createContext } from "react";
 import { AppCurrency, CartItem, Settings, Stage } from "../types/Core";
 import User from "../types/User";
 import { Order } from "../types/Order";
@@ -18,7 +18,7 @@ export interface SettingsControls extends Settings {
   setCurrentStage: (stage: Stage) => void;
   deliveryDate: Dayjs | null;
   setDeliveryDate: (deliveryDate: Dayjs | null) => void;
-  setCartItems: Dispatch<SetStateAction<CartItem[]>>;
+  setCartItems: (cartItems: CartItem[]) => void;
   cartItems: CartItem[];
   notify: (type: NotifyType, message: any, duration?: number) => void;
   user: User | null;
@@ -36,6 +36,10 @@ export interface SettingsControls extends Settings {
   confirm: (confirmParams: ConfirmParams) => void;
   breadcrumb: Breadcrumb;
   setBreadcrumb: (breadcrumb: Breadcrumb) => void;
+  orderLoading: boolean;
+  setOrderLoading: (orderLoading: boolean) => void;
+  searchText: string;
+  setSearchText: (searchText: string) => void;
 }
 
 const SettingsContext = createContext<SettingsControls>({
@@ -64,7 +68,11 @@ const SettingsContext = createContext<SettingsControls>({
   setOrder: () => {},
   confirm: () => {},
   breadcrumb: { label: "", url: "" },
-  setBreadcrumb: () => {}
+  setBreadcrumb: () => {},
+  orderLoading: false,
+  setOrderLoading: () => {},
+  searchText: "",
+  setSearchText: () => {}
 });
 
 export default SettingsContext;
