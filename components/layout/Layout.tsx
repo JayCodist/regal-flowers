@@ -998,7 +998,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           })) || [];
         setCartItems(_cartItems);
       } else {
-        setCartItems(savedCartItems);
+        setCartItems(savedCartItems || []);
       }
 
       setOrder(data);
@@ -1143,7 +1143,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     } else {
       const savedCartItems = AppStorage.get(AppStorageConstants.CART_ITEMS);
       if (savedCartItems) {
-        setCartItems(savedCartItems);
+        setCartItems(savedCartItems || []);
       }
     }
 
