@@ -391,7 +391,7 @@ export const giftItems: Gift[] = [
     name: "Giftsets",
     description: "Caravaggio Italian Giftsets are the ultimate luxury",
     image: "/images/sample-flowers/addon-group-4.png",
-    slug: "/product-category/gifts"
+    slug: "/product-category/gift-packs "
   }
 ];
 
@@ -1707,7 +1707,7 @@ export const gifts: { title: string; url: string; category?: string }[] = [
   },
   {
     title: "Giftsets",
-    url: "/product-category/gifts",
+    url: "/product-category/gift-packs ",
     category: "Giftsets"
   },
   {
@@ -2295,7 +2295,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/gifts",
+        url: "/product-category/gift-packs ",
         title: "Giftsets",
         children: []
       },
@@ -2305,6 +2305,11 @@ export const links: AppLink[] = [
         children: []
       }
     ]
+  },
+  {
+    title: "FAQ",
+    url: "/faq",
+    children: []
   }
 ];
 

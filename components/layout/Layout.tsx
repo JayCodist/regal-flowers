@@ -463,29 +463,6 @@ const Header: FunctionComponent = () => {
               showSidebar && styles.active
             ].join(" ")}
           >
-            <form
-              className={[styles["search-wrapper"]].join(" ")}
-              onSubmit={handleSearch}
-            >
-              <input
-                type="text"
-                onChange={e => {
-                  setSearchText(e.target.value);
-                }}
-                placeholder="Search for products"
-                value={searchText}
-                className={[styles["search-input"]].join(" ")}
-                ref={searchInputRef}
-              />
-              <img
-                alt="search"
-                src="/icons/search-cancel.svg"
-                className={`${styles["search-icon"]} generic-icon medium clickable`}
-                onClick={() => {
-                  setSearchText("");
-                }}
-              />
-            </form>
             {links.map((link, index) => (
               <div className={styles.link} key={index}>
                 {link.url ? (
@@ -605,6 +582,29 @@ const Header: FunctionComponent = () => {
                 </div>
               </div>
             ))}
+            <form
+              className={[styles["search-wrapper"]].join(" ")}
+              onSubmit={handleSearch}
+            >
+              <input
+                type="text"
+                onChange={e => {
+                  setSearchText(e.target.value);
+                }}
+                placeholder="Search for products"
+                value={searchText}
+                className={[styles["search-input"]].join(" ")}
+                ref={searchInputRef}
+              />
+              <img
+                alt="search"
+                src="/icons/search-cancel.svg"
+                className={`${styles["search-icon"]} generic-icon medium clickable`}
+                onClick={() => {
+                  setSearchText("");
+                }}
+              />
+            </form>
           </nav>
         )}
         <Link href="/">
@@ -620,109 +620,114 @@ const Header: FunctionComponent = () => {
         {deviceType === "desktop" && (
           <div className="flex spaced center-align">
             <nav className={styles.nav}>
-              {links.map((link, index) => (
-                <div
-                  className={styles.link}
-                  key={index}
-                  onMouseEnter={e => handleActiveNav(link.title, e)}
-                  onMouseLeave={() => setActiveNavLink("")}
-                >
-                  <div
-                    className={`flex center-align spaced  ${styles.title}`}
-                    key={link.title}
-                    role="button"
-                  >
-                    {link.url ? (
-                      <Link href={link.url}>
-                        <a>
-                          <strong>{link.title}</strong>
-                        </a>
-                      </Link>
-                    ) : (
-                      <strong>{link.title}</strong>
-                    )}
-                    {link.children.length > 0 && (
-                      <div
-                        className={[
-                          styles.arrow,
-                          activeNavLink === link.title && activeNavLink
-                            ? styles.active
-                            : ""
-                        ].join(" ")}
-                      ></div>
-                    )}
-                  </div>
-                  {link.children.length > 0 && (
+              {links.map(
+                (link, index) =>
+                  link.title !== "FAQ" && (
                     <div
-                      className={[
-                        styles["dropdown"],
-                        activeNavLink === link.title && styles.active
-                      ].join(" ")}
+                      className={styles.link}
+                      key={index}
+                      onMouseEnter={e => handleActiveNav(link.title, e)}
+                      onMouseLeave={() => setActiveNavLink("")}
                     >
-                      {link.subtitle && (
-                        <p className={styles.subtitle}>{link.subtitle}</p>
-                      )}
                       <div
-                        className={[
-                          styles["sub-link"],
-                          link.children.some(child => child.children.length) &&
-                            styles.grid
-                        ].join(" ")}
+                        className={`flex center-align spaced  ${styles.title}`}
+                        key={link.title}
+                        role="button"
                       >
-                        {link.children.map((child, index) => (
-                          <div key={index}>
-                            {child.url ? (
-                              <Link href={child.url}>
-                                <a
-                                  onClick={() => {
-                                    setActiveNavLink("");
-                                  }}
-                                >
-                                  {child.title && (
-                                    <span
-                                      className={[
-                                        child.children.length && styles.title
-                                      ].join(" ")}
-                                    >
-                                      {child.title}
-                                    </span>
-                                  )}
-                                </a>
-                              </Link>
-                            ) : (
-                              <>
-                                {child.title && (
-                                  <span
-                                    className={[
-                                      child.children.length && styles.title
-                                    ].join(" ")}
-                                  >
-                                    {child.title}
-                                  </span>
-                                )}
-                              </>
-                            )}
-                            <div className={styles["grand-children"]}>
-                              {child.children.map((grandChild, index) => (
-                                <Link href={grandChild.url} key={index}>
-                                  <a
-                                    className={styles["grand-title"]}
-                                    onClick={() => {
-                                      setActiveNavLink("");
-                                    }}
-                                  >
-                                    {grandChild.title}
-                                  </a>
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
+                        {link.url ? (
+                          <Link href={link.url}>
+                            <a>
+                              <strong>{link.title}</strong>
+                            </a>
+                          </Link>
+                        ) : (
+                          <strong>{link.title}</strong>
+                        )}
+                        {link.children.length > 0 && (
+                          <div
+                            className={[
+                              styles.arrow,
+                              activeNavLink === link.title && activeNavLink
+                                ? styles.active
+                                : ""
+                            ].join(" ")}
+                          ></div>
+                        )}
                       </div>
+                      {link.children.length > 0 && (
+                        <div
+                          className={[
+                            styles["dropdown"],
+                            activeNavLink === link.title && styles.active
+                          ].join(" ")}
+                        >
+                          {link.subtitle && (
+                            <p className={styles.subtitle}>{link.subtitle}</p>
+                          )}
+                          <div
+                            className={[
+                              styles["sub-link"],
+                              link.children.some(
+                                child => child.children.length
+                              ) && styles.grid
+                            ].join(" ")}
+                          >
+                            {link.children.map((child, index) => (
+                              <div key={index}>
+                                {child.url ? (
+                                  <Link href={child.url}>
+                                    <a
+                                      onClick={() => {
+                                        setActiveNavLink("");
+                                      }}
+                                    >
+                                      {child.title && (
+                                        <span
+                                          className={[
+                                            child.children.length &&
+                                              styles.title
+                                          ].join(" ")}
+                                        >
+                                          {child.title}
+                                        </span>
+                                      )}
+                                    </a>
+                                  </Link>
+                                ) : (
+                                  <>
+                                    {child.title && (
+                                      <span
+                                        className={[
+                                          child.children.length && styles.title
+                                        ].join(" ")}
+                                      >
+                                        {child.title}
+                                      </span>
+                                    )}
+                                  </>
+                                )}
+                                <div className={styles["grand-children"]}>
+                                  {child.children.map((grandChild, index) => (
+                                    <Link href={grandChild.url} key={index}>
+                                      <a
+                                        className={styles["grand-title"]}
+                                        onClick={() => {
+                                          setActiveNavLink("");
+                                        }}
+                                      >
+                                        {grandChild.title}
+                                      </a>
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              ))}
+                  )
+              )}
               {!showSearch && (
                 <div className={styles.link} key="faq">
                   <div
