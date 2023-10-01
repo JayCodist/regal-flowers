@@ -1,5 +1,9 @@
 .hero-bg {
   background-image: url("/images/landing-bg.png");
+
+  @media (max-width: 600px) {
+    background-size: 100vw 21rem;
+  }
   &.lagos {
     background-image: url("/images/landing-bg-lagos.png");
     .title {
@@ -407,6 +411,10 @@
 
   h3 {
     font-size: 1.3rem;
+  }
+
+  @media (max-width: 650px) {
+    margin: auto;
   }
 }
 

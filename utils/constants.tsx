@@ -62,7 +62,7 @@ export const breadcrumbItems: Breadcrumb[] = [
     label: "Teddy Bears"
   },
   {
-    url: "gift-packs",
+    url: "gifts",
     label: "Gift Packs"
   },
   { url: "perfumes", label: "Perfumes" },
@@ -391,7 +391,7 @@ export const giftItems: Gift[] = [
     name: "Giftsets",
     description: "Caravaggio Italian Giftsets are the ultimate luxury",
     image: "/images/sample-flowers/addon-group-4.png",
-    slug: "/product-category/gift-packs"
+    slug: "/product-category/gift-packs "
   }
 ];
 
@@ -1707,7 +1707,7 @@ export const gifts: { title: string; url: string; category?: string }[] = [
   },
   {
     title: "Giftsets",
-    url: "/product-category/gift-packs",
+    url: "/product-category/gift-packs ",
     category: "Giftsets"
   },
   {
@@ -2039,7 +2039,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2060,7 +2060,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2081,7 +2081,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Gifts",
-            url: "/product-category/gift-packs",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -2295,7 +2295,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/gift-packs",
+        url: "/product-category/gift-packs ",
         title: "Giftsets",
         children: []
       },
@@ -2305,6 +2305,11 @@ export const links: AppLink[] = [
         children: []
       }
     ]
+  },
+  {
+    title: "FAQ",
+    url: "/faq",
+    children: []
   }
 ];
 
@@ -2635,7 +2640,7 @@ export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
 export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
   USD: 255,
   GBP: 210,
-  NGN: 115000
+  NGN: 150000
 };
 
 export interface DeliveryLocationOption {
@@ -2663,7 +2668,7 @@ export const allDeliveryLocationZones: Record<
           ? "highLagos-zone1"
           : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
           ? "freeLagosVals-zone1"
-          : "mediumLagosVals-zone1"
+          : "highLagosVals-zone1"
       },
       {
         label: (
@@ -2684,7 +2689,7 @@ export const allDeliveryLocationZones: Record<
           ? "highLagos-zone2"
           : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
           ? "freeLagosVals-zone2"
-          : "mediumLagosVals-zone2"
+          : "highLagosVals-zone2"
       },
       {
         label: (
@@ -2738,7 +2743,7 @@ export const allDeliveryLocationZones: Record<
         ? "highAbuja-zone1"
         : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
         ? "freeAbujaVals-zone1"
-        : "mediumAbujaVals-zone1"
+        : "highAbujaVals-zone1"
     },
     {
       label: (
@@ -2755,7 +2760,7 @@ export const allDeliveryLocationZones: Record<
         ? "highAbuja-zone2"
         : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
         ? "freeAbujaVals-zone2"
-        : "mediumAbujaVals-zone2"
+          : "highAbujaVals-zone2"
     },
     {
       label: (
@@ -2836,14 +2841,27 @@ export const allDeliveryLocationOptions: Record<
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
-        label: `${getPriceDisplay(15000, currency)} - Valentine Orders BELOW ${
+        label: `${getPriceDisplay(20000, currency)} - Valentine Orders BELOW ${
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
         ].toLocaleString()} (or please pickup instead)`,
         name: "mediumLagosVals",
-        amount: 15000
+        amount: 20000
       },
+
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(30000, currency)} - Valentine Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (or please pickup instead)`,
+        name: "highLagosVals",
+        amount: 30000
+      },
+
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
@@ -2885,14 +2903,27 @@ export const allDeliveryLocationOptions: Record<
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
-        label: `${getPriceDisplay(15000, currency)} - Valentine Orders BELOW ${
+        label: `${getPriceDisplay(20000, currency)} - Valentine Orders BELOW ${
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
         ].toLocaleString()} (or please pickup instead)`,
         name: "mediumAbujaVals",
-        amount: 15000
+        amount: 20000
       },
+
+      ["13-02", "14-02", "15-02"].includes(
+        deliveryDate?.format("DD-MM") || ""
+      ) && {
+        label: `${getPriceDisplay(30000, currency)} - Valentine Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdVals[
+          currency.name
+        ].toLocaleString()} (or please pickup instead)`,
+        name: "highAbujaVals",
+        amount: 30000
+      },
+
       ["13-02", "14-02", "15-02"].includes(
         deliveryDate?.format("DD-MM") || ""
       ) && {
