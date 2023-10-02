@@ -104,11 +104,12 @@ const App: FunctionComponent<AppProps> = props => {
       ) || defaultSettings.currency;
 
     if (defaultCurrencyName !== "NGN" && !fromStorage) {
-      notify(
+      setTimeout(() => notify(
         "info",
         `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
         4000
-      );
+      ), 2000)
+
     }
 
     setSettings({

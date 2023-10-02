@@ -123,6 +123,8 @@ export const currencyOptions: AppCurrency[] = [
   { name: "GBP", conversionRate: 890, sign: "£" }
 ];
 
+
+
 interface FooterContent {
   aboutUs: string;
   socialIcons: { name: string; src: string; url: string }[];
