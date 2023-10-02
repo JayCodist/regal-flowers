@@ -42,7 +42,7 @@ export const getDefaultCurrency: () => {
 
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const defaultCurrencyName = timezoneCurrencyMap[timezone] || "USD"
-  const savedCurrencyObj = currencyOptions.find(currencyOption => currencyOption.name == defaultCurrencyName)
+  const savedCurrencyObj = currencyOptions.find(currencyOption => currencyOption.name === defaultCurrencyName)
   AppStorage.save(AppStorageConstants.SAVED_CURRENCY, savedCurrencyObj)
   return {
     defaultCurrencyName,
