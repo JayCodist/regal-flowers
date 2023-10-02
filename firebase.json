@@ -21,10 +21,20 @@
         "source": "/product-category/funeral-flowers",
         "destination": "/product-category/funeral-amp-condolence",
         "type": 301
+      },      
+      {
+        "source": "/product-category/love-romance-birthday-anniversary-just-to-say-flowers",
+        "destination": "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+        "type": 301
       },
       {
-        "source": "/product-category/love-romance-birthday-anniversary-just-to-say-flowerss",
+        "source": "/product-category/love-romance-birthday-anniversary-just-to-say-flowerssssss",
         "destination": "/product-category/birthday-anniversary-love-romance-mothers-day-and-valentine-flowers",
+        "type": 301
+      },      
+      {
+        "source": "/product-category/birthday-anniversary-love-romance-mothers-day-and-valentine-flowersssss",
+        "destination": "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
         "type": 301
       }
     ],
