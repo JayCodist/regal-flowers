@@ -108,7 +108,7 @@ const App: FunctionComponent<AppProps> = props => {
         "info",
         `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
         4000
-      ), 2000)
+      ), 8000)
 
     }
 
