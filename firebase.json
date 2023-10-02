@@ -11,6 +11,13 @@
         "dynamicLinks": true
       }
     ],
+    "redirects": [
+      {
+        "source": "/product/vip-ferrero-rocher-roses-bouquet-bouquet-of-roses-and-ferrero-rocher-chocolatui",
+        "destination": "/product/vip-ferrero-rocher-roses-bouquet-bouquet-of-roses-and-ferrero-rocher-chocolates",
+        "type": 301
+      }
+    ],
     "frameworksBackend": {
       "region": "europe-west1"
     },
