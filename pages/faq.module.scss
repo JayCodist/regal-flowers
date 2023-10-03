@@ -73,6 +73,14 @@
       margin-left: 0;
       width: 100%;
     }
+
+    .link {
+      color: #9b0000;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .payment-info {

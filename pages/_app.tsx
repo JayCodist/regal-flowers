@@ -41,8 +41,7 @@ const defaultSettings: Settings = {
   deliveryDate: null,
   cartItems: [],
   shouldShowCart: false,
-  redirect:
-    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+  redirect: "/product-category/flowers-for-love-birthday-anniversary-etc",
   shouldShowAuthDropdown: false,
   orderId: "",
   order: null,

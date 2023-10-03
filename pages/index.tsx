@@ -75,7 +75,7 @@ const LandingPage: FunctionComponent<{
             <h2 className="featured-title">{bestSellers[locationName]}</h2>
             {deviceType === "desktop" && (
               <Button
-                url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+                url="/product-category/flowers-for-love-birthday-anniversary-etc"
                 className="flex spaced center-align"
                 type="transparent"
               >
@@ -105,7 +105,7 @@ const LandingPage: FunctionComponent<{
           </div>
           {deviceType === "mobile" && (
             <Button
-              url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+              url="/product-category/flowers-for-love-birthday-anniversary-etc"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -149,7 +149,7 @@ const LandingPage: FunctionComponent<{
           </div>
           {deviceType === "mobile" && (
             <Button
-              url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+              url="/product-category/flowers-for-love-birthday-anniversary-etc"
               type="accent"
               minWidth
               className={styles["see-all"]}
@@ -445,7 +445,7 @@ const LandingPage: FunctionComponent<{
             </span>
             <Button
               padded
-              url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+              url="/product-category/flowers-for-love-birthday-anniversary-etc"
             >
               Send Flowers
             </Button>
@@ -470,7 +470,7 @@ const LandingPage: FunctionComponent<{
             </span>
             <Button
               padded
-              url="/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+              url="/product-category/flowers-for-love-birthday-anniversary-etc"
             >
               Send Flowers
             </Button>
@@ -778,7 +778,7 @@ const LandingPage: FunctionComponent<{
               <br /> <br />
               We opened our Abuja branch in 2021 and it is also open for
               walk-ins 24 hours. We offer delivery of fresh flowers everywhere
-              in Auja, including in Wuse 2, Maitama, Central Area, Garki, Jabi,
+              in Abuja, including in Wuse 2, Maitama, Central Area, Garki, Jabi,
               Asokoro, Gwarinpa, Jahi, Lokogoma, Apo, Life Camp, Lugbe, Dawaki,
               Abuja Municipal Area Council etcetera.
               <br /> <br />
@@ -789,31 +789,23 @@ const LandingPage: FunctionComponent<{
             </p>
             <p className="normal-text">
               We stock flowers for various occasions such as{" "}
-              <Link href="/product-category/just-to-say-bouquets">
-                <a className={styles.red}> Birthday Flowers</a>
-              </Link>
-              ,
-              <Link href="/product-category/just-to-say-bouquets">
-                <a className={styles.red}> Romantic Flowers</a>
-              </Link>
-              ,{" "}
-              <Link href="/product-category/anniversary-flowers">
-                <a className={styles.red}> Anniversary Flowers</a>
+              <Link href="/product-category/flowers-for-love-birthday-anniversary-etc">
+                <a className={styles.red}>
+                  Birthday Flowers, Romantic Flowers, Anniversary Flowers
+                </a>
               </Link>
               , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
-              <Link href="/product-category/funeral-amp-condolence">
-                <a className={styles.red}> Funeral Wreaths</a>
+              <Link href="/product-category/funeral-and-condolence">
+                <a className={styles.red}>
+                  {" "}
+                  Funeral Wreaths, Condolence Flowers
+                </a>
               </Link>{" "}
-              ,{" "}
-              <Link href="/product-category/funeral-amp-condolence">
-                <a className={styles.red}> Condolence Flowers</a>
-              </Link>{" "}
-              ,{" "}
               <Link href="/product-category/bridal-bouquets">
                 <a className={styles.red}>Bridal Bouquets</a>
               </Link>{" "}
-              , and of course,
-              <Link href="/product-category/anniversary-flowers">
+              , and of course,{" "}
+              <Link href="/product-category/valentines-day-flowers-and-gifts">
                 <a className={styles.red}> Valentine’s Day flowers</a>
               </Link>{" "}
               available
@@ -821,9 +813,9 @@ const LandingPage: FunctionComponent<{
               <br />
               And finally, there are suitable options for all budgets, so when
               you see a design you like, you can simply pick the size that suits
-              your budget. Want to go all out too? We got you, with our
+              your budget. Want to go all out too? We got you, with our{" "}
               <Link href="/vip">
-                <a className={styles.red}> VIP</a>
+                <a className={styles.red}>VIP</a>
               </Link>{" "}
               Category of roses.
             </p>
@@ -924,7 +916,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
       <Button
         padded
         url={`/product-category/${occasion?.name ||
-          "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"}`}
+          "flowers-for-love-birthday-anniversary-etc"}`}
         className={styles["occasion-submit"]}
       >
         Send Flowers
