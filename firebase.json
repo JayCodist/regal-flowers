@@ -126,9 +126,19 @@
         "source": "/product-category/flowers-love-birthday-anniversary-etc",
         "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
         "type": 301
-      },   
+      },   love-and-romance    
       {
         "source": "/product-category/birthday-anniversary-love-romance-mothers-day-and-valentine-flowers",
+        "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
+        "type": 301
+      },    
+      {
+        "source": "/product-category/love-and-romance",
+        "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
+        "type": 301
+      },     
+      {
+        "source": "/product-category/birthday-flowers",
         "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
         "type": 301
       },      
