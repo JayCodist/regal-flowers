@@ -23,7 +23,7 @@ import {
   giftItems,
   gifts,
   occasions,
-  otherOccasions,
+  occasionsPageTitle,
   sortOptions,
   tagsMap
 } from "../utils/constants";
@@ -76,10 +76,18 @@ type Sort = "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
 const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
-  categorySlug?: string;
+  categorySlug: string;
   productClass?: ProductClass;
+  categoryName?: string;
 }> = props => {
-  const { productCategory = "occasion", categorySlug, productClass } = props;
+  const {
+    productCategory = "occasion",
+    categorySlug,
+    productClass,
+    categoryName
+  } = props;
+
+  console.log("categoryName", categoryName);
 
   const bridalCategories = [
     "cascading-bridal-bouquets",
@@ -105,7 +113,6 @@ const ProductsPage: FunctionComponent<{
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
-  const [pageTitle, setPageTitle] = useState("");
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
@@ -148,11 +155,14 @@ const ProductsPage: FunctionComponent<{
   const hideFilterInfo = [
     ...bridalCategories,
     ...funeralCategories,
-    "all"
+    "all",
+    "plants"
   ].includes(categorySlug as string);
 
+  const hideFilterList = ["all", "plants"];
+
   const hideFilters =
-    isGiftPage || ["all"].includes(categorySlug as string) || search;
+    isGiftPage || hideFilterList.includes(categorySlug as string) || search;
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -335,28 +345,6 @@ const ProductsPage: FunctionComponent<{
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categorySlug, selectedOccasion, sort, shopBy, search]);
-
-  useEffect(() => {
-    if (isReady) {
-      const occasionTitle = occasions.find(
-        item => item.url === `/product-category/${categorySlug}`
-      )?.title;
-      const giftTitle = gifts.find(
-        item => item.url === `/product-category/${categorySlug}`
-      )?.title;
-      const otherTitle = otherOccasions.find(
-        item => item.url === `/product-category/${categorySlug}`
-      )?.title;
-      const title = occasionTitle || giftTitle || otherTitle;
-
-      if (title) {
-        setPageTitle(title);
-      }
-
-      setFilterCategories(_filterCategories);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, isReady]);
 
   useEffect(() => {
     if (isReady) {
@@ -801,13 +789,7 @@ const ProductsPage: FunctionComponent<{
 
           <div>
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
-              {productCategory === "vip"
-                ? "VIP Flower Arrangements"
-                : search
-                ? `Search Results for "${searchText}"`
-                : ` ${pageTitle} ${!isGiftPage && pageTitle ? "Flowers" : ""} ${
-                    !isGiftPage && !pageTitle ? "All Occasion Flowers" : ""
-                  }`}
+              {occasionsPageTitle[categorySlug as string] || ""}
             </h1>
 
             <div className={[styles.products].join(" ")}>

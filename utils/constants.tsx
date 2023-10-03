@@ -1717,6 +1717,28 @@ export const gifts: { title: string; url: string; category?: string }[] = [
   }
 ];
 
+export const occasionsPageTitle: Record<string, string> = {
+  "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers":
+    "Love, Birthdays & Anniversary Flowers",
+  "just-to-say-bouquets": "Just to Say Flowers",
+  "bridal-bouquets": "Bridal Bouquets & Accessories Flowers",
+  "funeral-amp-condolence": "Funeral & Condolence Flowers",
+  all: "All Occasions Flowers",
+  "cascading-bridal-bouquets": "Cascading Bouquets & Accessories Flowers",
+  "accessories-boutonnieres-bridesmaids-flowers-amp-corsages":
+    "Accessories & Boutonnieres Flowers",
+  plants: "Plants",
+  vip: "VIP Flower Arrangements",
+  "chocolate-and-biscuits": "Chocolates and Biscuits",
+  "cakes-and-cupcakes": "Cakes and Cupcakes",
+  "teddy-bears": "Teddy Bears",
+  balloons: "Balloons",
+  "wine-and-champagne": "Wine and Champagne",
+  perfumes: "Perfumes",
+  "gift-packs": "Giftsets",
+  "scented-candles": "Scented Candles"
+};
+
 export const occasions: { title: string; url: string; category?: string }[] = [
   {
     title: "Love, Birthdays & Anniversary",
@@ -1743,22 +1765,6 @@ export const occasions: { title: string; url: string; category?: string }[] = [
   {
     title: "All Occasions",
     url: "/product-category/all"
-  }
-];
-
-export const otherOccasions: {
-  title: string;
-  url: string;
-  category?: string;
-}[] = [
-  {
-    title: "Cascading Bouquets & ",
-    url: "/product-category/cascading-bridal-bouquets"
-  },
-  {
-    title: "Accessories & Boutonnieres",
-    url:
-      "/product-category/accessories-boutonnieres-bridesmaids-flowers-amp-corsages"
   }
 ];
 
@@ -2020,7 +2026,7 @@ export const links: AppLink[] = [
   {
     url: "",
     title: "Occasions",
-    subtitle: "Select Occassion",
+    subtitle: "Select Occasion",
     children: [
       {
         title: "Romance, Birthdays & Anniversary",
@@ -2760,7 +2766,7 @@ export const allDeliveryLocationZones: Record<
         ? "highAbuja-zone2"
         : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
         ? "freeAbujaVals-zone2"
-          : "highAbujaVals-zone2"
+        : "highAbujaVals-zone2"
     },
     {
       label: (
