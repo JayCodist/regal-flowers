@@ -49,7 +49,8 @@ const giftMap: Record<string, string> = {
   "teddy-bears": "teddy-bears",
   "wine-and-champagne": "wine-and-champagne",
   "gift-packs": "gift-packs",
-  perfumes: "perfumes",
+  "perfumes-eau-de-toilette-cologne-and-parfums":
+    "perfumes-eau-de-toilette-cologne-and-parfums",
   balloons: "balloons",
   "scented-candles": "scented-candles",
   gifts: "gifts"
@@ -78,16 +79,8 @@ const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
   categorySlug: string;
   productClass?: ProductClass;
-  categoryName?: string;
 }> = props => {
-  const {
-    productCategory = "occasion",
-    categorySlug,
-    productClass,
-    categoryName
-  } = props;
-
-  console.log("categoryName", categoryName);
+  const { productCategory = "occasion", categorySlug, productClass } = props;
 
   const bridalCategories = [
     "cascading-bridal-bouquets",
@@ -95,7 +88,7 @@ const ProductsPage: FunctionComponent<{
     "bridal-bouquets"
   ];
 
-  const funeralCategories = ["funeral-amp-condolence"];
+  const funeralCategories = ["funeral-and-condolence"];
 
   const _filterCategories =
     categorySlug === "all"
@@ -156,10 +149,10 @@ const ProductsPage: FunctionComponent<{
     ...bridalCategories,
     ...funeralCategories,
     "all",
-    "plants"
+    "indoor-plants-and-cactus"
   ].includes(categorySlug as string);
 
-  const hideFilterList = ["all", "plants"];
+  const hideFilterList = ["all", "indoor-plants-and-cactus"];
 
   const hideFilters =
     isGiftPage || hideFilterList.includes(categorySlug as string) || search;
@@ -336,6 +329,13 @@ const ProductsPage: FunctionComponent<{
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOccasion]);
+
+  useEffect(() => {
+    if (isReady) {
+      setFilterCategories(_filterCategories);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categorySlug, isReady]);
 
   useEffect(() => {
     if (isReady) {
@@ -582,7 +582,8 @@ const ProductsPage: FunctionComponent<{
                             <a
                               className={[
                                 styles["filter-link"],
-                                child.link.includes(categorySlug as string)
+                                child.link ===
+                                `/product-category/${categorySlug}`
                                   ? styles.active
                                   : ""
                               ].join(" ")}
@@ -710,7 +711,15 @@ const ProductsPage: FunctionComponent<{
                               </>
                             ) : child.link ? (
                               <Link href={child.link}>
-                                <a className={styles["filter-link"]}>
+                                <a
+                                  className={[
+                                    styles["filter-link"],
+                                    child.link ===
+                                    `/product-category/${categorySlug}`
+                                      ? styles.active
+                                      : ""
+                                  ].join(" ")}
+                                >
                                   {child.name}
                                 </a>
                               </Link>
@@ -789,7 +798,9 @@ const ProductsPage: FunctionComponent<{
 
           <div>
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
-              {occasionsPageTitle[categorySlug as string] || ""}
+              {search
+                ? `Search Results for "${searchText}"`
+                : occasionsPageTitle[categorySlug as string] || "All Occasions"}
             </h1>
 
             <div className={[styles.products].join(" ")}>
@@ -1023,11 +1034,11 @@ const ProductsPage: FunctionComponent<{
                   <a className={styles.red}> Anniversary Flowers</a>
                 </Link>
                 , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
-                <Link href="/product-category/funeral-amp-condolence">
+                <Link href="/product-category/funeral-and-condolence">
                   <a className={styles.red}> Funeral Wreaths</a>
                 </Link>{" "}
                 ,{" "}
-                <Link href="/product-category/funeral-amp-condolence">
+                <Link href="/product-category/funeral-and-condolence">
                   <a className={styles.red}> Condolence Flowers</a>
                 </Link>{" "}
                 ,{" "}
