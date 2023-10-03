@@ -334,7 +334,7 @@ const ProductsPage: FunctionComponent<{
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedOccasion, sort, shopBy, search]);
+  }, [categorySlug, selectedOccasion, sort, shopBy, search, isReady]);
 
   useEffect(() => {
     if (isReady) {
