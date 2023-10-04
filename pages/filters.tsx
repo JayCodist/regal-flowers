@@ -23,7 +23,7 @@ import {
   giftItems,
   gifts,
   occasions,
-  otherOccasions,
+  occasionsPageTitle,
   sortOptions,
   tagsMap
 } from "../utils/constants";
@@ -49,7 +49,8 @@ const giftMap: Record<string, string> = {
   "teddy-bears": "teddy-bears",
   "wine-and-champagne": "wine-and-champagne",
   "gift-packs": "gift-packs",
-  perfumes: "perfumes",
+  "perfumes-eau-de-toilette-cologne-and-parfums":
+    "perfumes-eau-de-toilette-cologne-and-parfums",
   balloons: "balloons",
   "scented-candles": "scented-candles",
   gifts: "gifts"
@@ -76,7 +77,7 @@ type Sort = "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
 const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
-  categorySlug?: string;
+  categorySlug: string;
   productClass?: ProductClass;
 }> = props => {
   const { productCategory = "occasion", categorySlug, productClass } = props;
@@ -87,7 +88,7 @@ const ProductsPage: FunctionComponent<{
     "bridal-bouquets"
   ];
 
-  const funeralCategories = ["funeral-amp-condolence"];
+  const funeralCategories = ["funeral-and-condolence"];
 
   const _filterCategories =
     categorySlug === "all"
@@ -105,7 +106,6 @@ const ProductsPage: FunctionComponent<{
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
-  const [pageTitle, setPageTitle] = useState("");
 
   const [infiniteLoading, setInfiniteLoading] = useState(false);
   const [productsLoading, setProductsLoading] = useState(false);
@@ -148,11 +148,14 @@ const ProductsPage: FunctionComponent<{
   const hideFilterInfo = [
     ...bridalCategories,
     ...funeralCategories,
-    "all"
+    "all",
+    "indoor-plants-and-cactus"
   ].includes(categorySlug as string);
 
+  const hideFilterList = ["all", "indoor-plants-and-cactus"];
+
   const hideFilters =
-    isGiftPage || ["all"].includes(categorySlug as string) || search;
+    isGiftPage || hideFilterList.includes(categorySlug as string) || search;
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -329,34 +332,19 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
+      setFilterCategories(_filterCategories);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categorySlug, isReady]);
+
+  useEffect(() => {
+    if (isReady) {
       setPage(1);
       fetchProductCategory();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, selectedOccasion, sort, shopBy, search]);
-
-  useEffect(() => {
-    if (isReady) {
-      const occasionTitle = occasions.find(
-        item => item.url === `/product-category/${categorySlug}`
-      )?.title;
-      const giftTitle = gifts.find(
-        item => item.url === `/product-category/${categorySlug}`
-      )?.title;
-      const otherTitle = otherOccasions.find(
-        item => item.url === `/product-category/${categorySlug}`
-      )?.title;
-      const title = occasionTitle || giftTitle || otherTitle;
-
-      if (title) {
-        setPageTitle(title);
-      }
-
-      setFilterCategories(_filterCategories);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categorySlug, isReady]);
+  }, [categorySlug, selectedOccasion, sort, shopBy, search, isReady]);
 
   useEffect(() => {
     if (isReady) {
@@ -594,7 +582,8 @@ const ProductsPage: FunctionComponent<{
                             <a
                               className={[
                                 styles["filter-link"],
-                                child.link.includes(categorySlug as string)
+                                child.link ===
+                                `/product-category/${categorySlug}`
                                   ? styles.active
                                   : ""
                               ].join(" ")}
@@ -722,7 +711,15 @@ const ProductsPage: FunctionComponent<{
                               </>
                             ) : child.link ? (
                               <Link href={child.link}>
-                                <a className={styles["filter-link"]}>
+                                <a
+                                  className={[
+                                    styles["filter-link"],
+                                    child.link ===
+                                    `/product-category/${categorySlug}`
+                                      ? styles.active
+                                      : ""
+                                  ].join(" ")}
+                                >
                                   {child.name}
                                 </a>
                               </Link>
@@ -801,13 +798,9 @@ const ProductsPage: FunctionComponent<{
 
           <div>
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
-              {productCategory === "vip"
-                ? "VIP Flower Arrangements"
-                : search
+              {search
                 ? `Search Results for "${searchText}"`
-                : ` ${pageTitle} ${!isGiftPage && pageTitle ? "Flowers" : ""} ${
-                    !isGiftPage && !pageTitle ? "All Occasion Flowers" : ""
-                  }`}
+                : occasionsPageTitle[categorySlug as string] || "All Occasions"}
             </h1>
 
             <div className={[styles.products].join(" ")}>
@@ -1041,11 +1034,11 @@ const ProductsPage: FunctionComponent<{
                   <a className={styles.red}> Anniversary Flowers</a>
                 </Link>
                 , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
-                <Link href="/product-category/funeral-amp-condolence">
+                <Link href="/product-category/funeral-and-condolence">
                   <a className={styles.red}> Funeral Wreaths</a>
                 </Link>{" "}
                 ,{" "}
-                <Link href="/product-category/funeral-amp-condolence">
+                <Link href="/product-category/funeral-and-condolence">
                   <a className={styles.red}> Condolence Flowers</a>
                 </Link>{" "}
                 ,{" "}

@@ -41,8 +41,7 @@ const defaultSettings: Settings = {
   deliveryDate: null,
   cartItems: [],
   shouldShowCart: false,
-  redirect:
-    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+  redirect: "/product-category/flowers-for-love-birthday-anniversary-etc",
   shouldShowAuthDropdown: false,
   orderId: "",
   order: null,
@@ -104,11 +103,12 @@ const App: FunctionComponent<AppProps> = props => {
       ) || defaultSettings.currency;
 
     if (defaultCurrencyName !== "NGN" && !fromStorage) {
-      notify(
+      setTimeout(() => notify(
         "info",
         `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
         4000
-      );
+      ), 8000)
+
     }
 
     setSettings({

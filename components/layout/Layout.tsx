@@ -386,6 +386,8 @@ const Header: FunctionComponent = () => {
     setSearchText
   } = useContext(SettingsContext);
 
+  const linksToHide = ["faq", "plants"];
+
   const totalCartItems = useMemo(() => {
     if (!cartItems.length) return 0;
     return cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -407,7 +409,7 @@ const Header: FunctionComponent = () => {
       push(`/filters?search=${searchText}`, undefined, { scroll: false });
     } else {
       push(
-        "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+        "/product-category/flowers-for-love-birthday-anniversary-etc",
         undefined,
         { scroll: false }
       );
@@ -622,7 +624,7 @@ const Header: FunctionComponent = () => {
             <nav className={styles.nav}>
               {links.map(
                 (link, index) =>
-                  link.title !== "FAQ" && (
+                  !linksToHide.includes(link.title.toLocaleLowerCase()) && (
                     <div
                       className={styles.link}
                       key={index}
@@ -728,20 +730,24 @@ const Header: FunctionComponent = () => {
                     </div>
                   )
               )}
-              {!showSearch && (
-                <div className={styles.link} key="faq">
-                  <div
-                    className={`flex center-align spaced ${styles.title}`}
-                    role="button"
-                  >
-                    <strong>
-                      <Link href="/faq">
-                        <a>FAQ</a>
-                      </Link>
-                    </strong>
-                  </div>
-                </div>
-              )}
+              {!showSearch &&
+                links.map(
+                  (link, index) =>
+                    linksToHide.includes(link.title.toLocaleLowerCase()) && (
+                      <div className={styles.link} key={index}>
+                        <div
+                          className={`flex center-align spaced ${styles.title}`}
+                          role="button"
+                        >
+                          <strong>
+                            <Link href={link.url}>
+                              <a>{link.title}</a>
+                            </Link>
+                          </strong>
+                        </div>
+                      </div>
+                    )
+                )}
             </nav>
             <div
               className={[
@@ -998,7 +1004,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
           })) || [];
         setCartItems(_cartItems);
       } else {
-        setCartItems(savedCartItems);
+        setCartItems(savedCartItems || []);
       }
 
       setOrder(data);
@@ -1143,7 +1149,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
     } else {
       const savedCartItems = AppStorage.get(AppStorageConstants.CART_ITEMS);
       if (savedCartItems) {
-        setCartItems(savedCartItems);
+        setCartItems(savedCartItems || []);
       }
     }
 

@@ -2,6 +2,7 @@ import { Option } from "../../components/select/Select";
 import { AppCurrency, AppCurrencyName } from "../types/Core";
 import AppStorage, { AppStorageConstants } from "./storage-helpers";
 import { CheckoutFormData } from "../types/Order";
+import { currencyOptions } from "../constants";
 
 export const getOptionsFromArray: (
   strArray: string[] | number[]
@@ -38,9 +39,13 @@ export const getDefaultCurrency: () => {
     "Europe/London": "GBP",
     "Africa/Lagos": "NGN"
   };
+
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const defaultCurrencyName = timezoneCurrencyMap[timezone] || "USD"
+  const savedCurrencyObj = currencyOptions.find(currencyOption => currencyOption.name === defaultCurrencyName)
+  AppStorage.save(AppStorageConstants.SAVED_CURRENCY, savedCurrencyObj)
   return {
-    defaultCurrencyName: timezoneCurrencyMap[timezone] || "USD",
+    defaultCurrencyName,
     fromStorage: false
   };
 };

@@ -33,14 +33,13 @@ export const pickupLocations: Record<string, JSX.Element> = {
 
 export const breadcrumbItems: Breadcrumb[] = [
   {
-    url:
-      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    url: "flowers-for-love-birthday-anniversary-etc",
     label: "Romance, Birthdays & Anniversary"
   },
   { url: "just-to-say-bouquets", label: "Just To Say Hi, Sorry, Thank You" },
   { url: "get-well-soon", label: "Get Well Soon" },
   { url: "bridal-bouquets", label: "Bridal" },
-  { url: "funeral-amp-condolence", label: "Funeral & Condolence" },
+  { url: "funeral-and-condolence", label: "Funeral & Condolence" },
   { url: "event-amp-centerpiece", label: "Events & Centerpiece" },
   { url: "fathers-day-flowers", label: "Father's Day" },
   { url: "mothers-day-flowers", label: "Mother's Day" },
@@ -65,7 +64,7 @@ export const breadcrumbItems: Breadcrumb[] = [
     url: "gifts",
     label: "Gift Packs"
   },
-  { url: "perfumes", label: "Perfumes" },
+  { url: "perfumes-eau-de-toilette-cologne-and-parfums", label: "Perfumes" },
   { url: "balloons", label: "Balloons" },
   {
     url: "scented-candles",
@@ -80,27 +79,24 @@ export const breadcrumbItems: Breadcrumb[] = [
 ];
 
 export const defaultBreadcrumb: Breadcrumb = {
-  url:
-    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+  url: "/product-category/flowers-for-love-birthday-anniversary-etc",
   label: "Romance, Birthdays & Anniversary"
 };
 
 export const allOccasionOptions: Option[] = [
   {
-    value:
-      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    value: "flowers-for-love-birthday-anniversary-etc",
     label: "Romance, Birthdays & Anniversary"
   },
   { value: "just-to-say-bouquets", label: "Just To Say Hi, Sorry, Thank You" },
   { value: "get-well-soon", label: "Get Well Soon" },
   { value: "bridal-bouquets", label: "Bridal" },
-  { value: "funeral-amp-condolence", label: "Funeral & Condolence" },
+  { value: "funeral-and-condolence", label: "Funeral & Condolence" },
   { value: "event-amp-centerpiece", label: "Events & Centerpiece" },
   { value: "fathers-day-flowers", label: "Father's Day" },
   { value: "mothers-day-flowers", label: "Mother's Day" },
   {
-    value:
-      "birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    value: "valentines-day-flowers-and-gifts",
     label: "Valentine's Day"
   }
 ];
@@ -113,8 +109,7 @@ export const defaultCurrency: AppCurrency = {
 
 export const defaultRedirect = {
   title: "Love, Birthdays & Anniversary",
-  url:
-    "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+  url: "/product-category/flowers-for-love-birthday-anniversary-etc"
 };
 
 export const currencyOptions: AppCurrency[] = [
@@ -122,6 +117,8 @@ export const currencyOptions: AppCurrency[] = [
   { name: "USD", conversionRate: 700, sign: "$" },
   { name: "GBP", conversionRate: 890, sign: "£" }
 ];
+
+
 
 interface FooterContent {
   aboutUs: string;
@@ -192,7 +189,10 @@ export const footerContent: FooterContent = {
     { title: "VIP Section", url: "/vip" },
     { title: "Contact Us", url: "", phoneNumber: "+2347011992888" },
     { title: "Our Blog", url: "/" },
-    { title: "FAQ", url: "/faq" }
+    {
+      title: "FAQ",
+      url: "/faq-how-to-buy-fresh-flowers-and-gifts-in-lagos-and-abuja"
+    }
   ],
   phoneNumbers: [
     "+234 701 000 6664",
@@ -331,8 +331,7 @@ export const regalFeatures: Service[] = [
 export const regalOccasions: Occasion[] = [
   {
     title: "Love, Birthdays & Anniversary Flowers",
-    url:
-      "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    url: "/product-category/flowers-for-love-birthday-anniversary-etc",
     image: "/images/occasions-love-bday.png"
   },
   {
@@ -1702,7 +1701,7 @@ export const gifts: { title: string; url: string; category?: string }[] = [
   },
   {
     title: "Perfumes",
-    url: "/product-category/perfumes",
+    url: "/product-category/perfumes-eau-de-toilette-cologne-and-parfums",
     category: "perfumes"
   },
   {
@@ -1717,11 +1716,37 @@ export const gifts: { title: string; url: string; category?: string }[] = [
   }
 ];
 
+export const occasionsPageTitle: Record<string, string> = {
+  "flowers-for-love-birthday-anniversary-etc":
+    "Love, Birthdays & Anniversary Flowers",
+  "just-to-say-bouquets": "Just to Say Flowers",
+  "bridal-bouquets": "Bridal Bouquets & Accessories Flowers",
+  "funeral-and-condolence": "Funeral & Condolence Flowers",
+  all: "All Occasions Flowers",
+  "cascading-bridal-bouquets": "Cascading Bouquets & Accessories Flowers",
+  "accessories-boutonnieres-bridesmaids-flowers-amp-corsages":
+    "Accessories & Boutonnieres Flowers",
+  "indoor-plants-and-cactus": "Plants",
+  vip: "VIP Flower Arrangements",
+  "chocolate-and-biscuits": "Chocolates and Biscuits",
+  "cakes-and-cupcakes": "Cakes and Cupcakes",
+  "teddy-bears": "Teddy Bears",
+  balloons: "Balloons",
+  "wine-and-champagne": "Wine and Champagne",
+  "perfumes-eau-de-toilette-cologne-and-parfums": "Perfumes",
+  "gift-packs": "Giftsets",
+  "scented-candles": "Scented Candles",
+  roses: "Roses",
+  chrysanthemums: "Chrysanthemums",
+  lilies: "Lilies",
+  "million-stars": "Million Stars",
+  "forever-roses-preserved-roses": "Forever Roses"
+};
+
 export const occasions: { title: string; url: string; category?: string }[] = [
   {
     title: "Love, Birthdays & Anniversary",
-    url:
-      "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+    url: "/product-category/flowers-for-love-birthday-anniversary-etc",
     category: "Anniversary Flowers"
   },
   {
@@ -1737,28 +1762,12 @@ export const occasions: { title: string; url: string; category?: string }[] = [
   },
   {
     title: "Funeral & Condolence",
-    url: "/product-category/funeral-amp-condolence",
+    url: "/product-category/funeral-and-condolence",
     category: "Funeral %26amp; Condolence"
   },
   {
     title: "All Occasions",
     url: "/product-category/all"
-  }
-];
-
-export const otherOccasions: {
-  title: string;
-  url: string;
-  category?: string;
-}[] = [
-  {
-    title: "Cascading Bouquets & ",
-    url: "/product-category/cascading-bridal-bouquets"
-  },
-  {
-    title: "Accessories & Boutonnieres",
-    url:
-      "/product-category/accessories-boutonnieres-bridesmaids-flowers-amp-corsages"
   }
 ];
 
@@ -1810,7 +1819,7 @@ export const funeralOccasion: Filter[] = [
       {
         name: "Wreaths & Flowers",
         tag: "",
-        link: "/product-category/funeral-amp-condolence"
+        link: "/product-category/funeral-and-condolence"
       },
       {
         name: "VIP Section",
@@ -1844,10 +1853,6 @@ export const filtersCatgories: Filter[] = [
       {
         name: "Forever Roses",
         tag: "forever roses"
-      },
-      {
-        name: "Plants",
-        tag: "plants"
       }
     ],
     limit: 3,
@@ -2020,7 +2025,7 @@ export const links: AppLink[] = [
   {
     url: "",
     title: "Occasions",
-    subtitle: "Select Occassion",
+    subtitle: "Select Occasion",
     children: [
       {
         title: "Romance, Birthdays & Anniversary",
@@ -2028,8 +2033,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Flowers",
-            url:
-              "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
+            url: "/product-category/flowers-for-love-birthday-anniversary-etc",
             children: []
           },
           {
@@ -2114,7 +2118,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Wreaths & Flowers",
-            url: "/product-category/funeral-amp-condolence",
+            url: "/product-category/funeral-and-condolence",
             children: []
           },
           {
@@ -2130,8 +2134,8 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "VIP Statements",
-            url: "/vip",
+            title: "Valentine's Day",
+            url: "/product-category/valentines-day-flowers-and-gifts",
             children: []
           },
           {
@@ -2189,12 +2193,7 @@ export const links: AppLink[] = [
           },
           {
             title: "Forever Roses",
-            url: "/filters?shopBy=forever+roses",
-            children: []
-          },
-          {
-            title: "Plants",
-            url: "/filters?shopBy=plants",
+            url: "/product-category/forever-roses-preserved-roses",
             children: []
           }
         ]
@@ -2205,7 +2204,7 @@ export const links: AppLink[] = [
         children: [
           {
             title: "View Bundled Products",
-            url: "/filters?shopBy=bundled products",
+            url: "/product-category/packages-and-bundled-products",
             children: []
           }
         ]
@@ -2227,22 +2226,32 @@ export const links: AppLink[] = [
         children: [
           {
             title: "Roses",
-            url: "/filters?shopBy=roses",
+            url: "/product-category/roses",
             children: []
           },
           {
             title: "Chrysanthemums",
-            url: "/filters?shopBy=chrysanthemums",
+            url: "/product-category/chrysanthemums",
             children: []
           },
           {
             title: "Lilies",
-            url: "/filters?shopBy=lilies",
+            url: "/product-category/lilies",
             children: []
           },
           {
             title: "Million Stars",
-            url: "/filters?shopBy=million+stars",
+            url: "/product-category/million-stars",
+            children: []
+          },
+          {
+            title: "Gerbera",
+            url: "/product-category/gerbera-flowers",
+            children: []
+          },
+          {
+            title: "Carnations",
+            url: "/product-category/carnations",
             children: []
           },
           {
@@ -2290,7 +2299,7 @@ export const links: AppLink[] = [
         children: []
       },
       {
-        url: "/product-category/perfumes",
+        url: "/product-category/perfumes-eau-de-toilette-cologne-and-parfums",
         title: "Perfumes",
         children: []
       },
@@ -2307,8 +2316,13 @@ export const links: AppLink[] = [
     ]
   },
   {
+    url: "/product-category/indoor-plants-and-cactus",
+    title: "Plants",
+    children: []
+  },
+  {
     title: "FAQ",
-    url: "/faq",
+    url: "/faq-how-to-buy-fresh-flowers-and-gifts-in-lagos-and-abuja",
     children: []
   }
 ];
@@ -2317,7 +2331,7 @@ export const paypalEmail = "payments@regalflowers.com";
 
 export const tagsMap: Record<string, string[]> = {
   budget: ["vip", "regular"],
-  flowerType: ["forever roses", "fresh flowers", "plants"],
+  flowerType: ["forever roses", "fresh flowers"],
   design: ["box arrangements", "bouquets", "others", "wrapped bouquet"],
   packages: ["bundled products"],
   delivery: ["same day delivery"],
@@ -2392,7 +2406,7 @@ export const popularSections: Occasion[] = [
   },
   {
     title: "Forever Roses",
-    url: `/filters?shopBy=${encodeURIComponent("forever roses")}`,
+    url: `/product-category/forever-roses-preserved-roses`,
     image: "/images/popular-forever.jpg"
   },
   {
@@ -2402,7 +2416,7 @@ export const popularSections: Occasion[] = [
   },
   {
     title: "Bundled Products",
-    url: `/filters?shopBy=${encodeURIComponent("bundled products")}`,
+    url: "/product-category/packages-and-bundled-products",
     image: "/images/popular-bundled.jpg"
   }
   // {
@@ -2760,7 +2774,7 @@ export const allDeliveryLocationZones: Record<
         ? "highAbuja-zone2"
         : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
         ? "freeAbujaVals-zone2"
-          : "highAbujaVals-zone2"
+        : "highAbujaVals-zone2"
     },
     {
       label: (

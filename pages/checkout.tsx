@@ -1589,7 +1589,7 @@ const Checkout: FunctionComponent = () => {
                       className={styles["shopping-btn"]}
                       onClick={() =>
                         router.push(
-                          "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers"
+                          "/product-category/flowers-for-love-birthday-anniversary-etc"
                         )
                       }
                     >
