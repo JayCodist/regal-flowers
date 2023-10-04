@@ -1460,7 +1460,7 @@ const Checkout: FunctionComponent = () => {
 
                       {formData.deliveryMethod === "delivery" && (
                         <div className="flex between">
-                          <span className="normal-text">Delivery Charge</span>
+                          <span className="normal-text">Delivery</span>
                           <span className="normal-text bold">
                             {getPriceDisplay(
                               formData.deliveryLocation?.amount || 0,
@@ -1808,7 +1808,7 @@ const Checkout: FunctionComponent = () => {
 
                     <div className="flex between  margin-bottom spaced">
                       <div>
-                        <strong>Delivery Charge</strong>
+                        <strong>Delivery</strong>
                       </div>
                       <span>
                         {getPriceDisplay(
@@ -2590,7 +2590,7 @@ const Checkout: FunctionComponent = () => {
                   </button>
                   <div className={`${styles.border} padded`}>
                     <div className="flex between ">
-                      <span className="normal-text">Order Total</span>
+                      <span className="normal-text">Sub Total</span>
                       <span className="normal-text bold">
                         {getPriceDisplay(subTotal, currency)}
                       </span>
@@ -2609,7 +2609,7 @@ const Checkout: FunctionComponent = () => {
                     <br />
                     <hr className="hr" />
                     <div className="flex between vertical-margin">
-                      <span className="normal-text">Sum Total</span>
+                      <span className="normal-text">Total</span>
                       <span className="normal-text bold">
                         {getPriceDisplay(total || 0, currency)}
                       </span>
@@ -2932,9 +2932,7 @@ const Checkout: FunctionComponent = () => {
 
                       <div className="flex between margin-bottom spaced">
                         <div>
-                          <strong className={styles.grayed}>
-                            Delivery Charge
-                          </strong>
+                          <strong className={styles.grayed}>Delivery</strong>
                         </div>
                         <span className={styles["detail-value"]}>
                           {getPriceDisplay(
