@@ -47,6 +47,26 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
   );
+const Platform = {
+ TWITTER: "twitter",
+ WHATSAPP: "whatsapp",
+ FACEBOOK: "facebook"
+}
+  const handleShare = (platform:string) => {
+    const currentURL = encodeURIComponent(`https://regalflowers.com.ng/product/${product.slug}`);
+    if (platform === Platform.TWITTER){
+      const twitterShareLink = `https://twitter.com/intent/tweet?url=${currentURL}&text=Check%20out%20this%20combo!`;
+      window.open(twitterShareLink, '_blank');
+    } else if (platform === Platform.FACEBOOK){
+  
+      const facebookShareLink = `https://www.facebook.com/sharer/sharer.php?u=${currentURL}`;
+      window.open(facebookShareLink, '_blank');
+    } else{
+      const whatsappShareLink = `whatsapp://send?text=Check%20out%20this%20combo!%20${currentURL}`;
+      window.open(whatsappShareLink, '_blank');
+    }
+
+  };
 
   const shouldShowVipSizes = product.variants?.some(
     variant => variant.class === "vip"
@@ -358,13 +378,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               >
                 <span>Share: </span>
                 <span className={`${styles["social-icon"]}`}>
-                  <img src="/icons/twitter.svg" alt="twitter" />
+                  <img src="/icons/twitter.svg" alt="twitter" onClick={() => handleShare(Platform.TWITTER)} /> 
                 </span>
                 <span className={`${styles["social-icon"]}`}>
-                  <img src="/icons/whatsapp.svg" alt="whatsapp" />
+                  <img src="/icons/whatsapp.svg" alt="whatsapp" onClick={() => handleShare(Platform.WHATSAPP)} />
                 </span>
                 <span className={`${styles["social-icon"]}`}>
-                  <img src="/icons/facebook.svg" alt="facebook" />
+                  <img src="/icons/facebook.svg" alt="facebook" onClick={() => handleShare(Platform.FACEBOOK)} />
                 </span>
               </div>
             </>
