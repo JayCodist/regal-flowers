@@ -1272,12 +1272,7 @@ const CartContext: FunctionComponent<CartContextProps> = props => {
                   {getPriceDisplay(total, currency)}
                 </strong>
               </div>
-              <div className="flex between center-align margin-bottom spaced">
-                <span className="normal-text">Add-ons</span>
-                <strong className="normal-text">
-                  {getPriceDisplay(designCharges, currency)}
-                </strong>
-              </div>
+
               <div className="flex between center-align margin-bottom spaced">
                 <span className="normal-text">Total</span>
                 <strong className="normal-text">
