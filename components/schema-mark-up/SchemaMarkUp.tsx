@@ -83,8 +83,6 @@ const SchemaMarkup = ({}: SchemaMarkupProps) => {
       "http://facebook.com/RegalFlowersNG/",
       "https://www.linkedin.com/company/regalflowers-com-ng/"
     ],
-    acceptsCurrency: ["NGN", "USD", "GBP"],
-    servesCuisine: "Fresh Flowers",
     hasMap: [
       "https://goo.gl/maps/cNB9Jx9sidQhJgtD6",
       "https://goo.gl/maps/AsSEYaBUVV3NCRaa7",
@@ -123,21 +121,7 @@ const SchemaMarkup = ({}: SchemaMarkupProps) => {
         name: "Roses"
       }
     ],
-    logo: "/icons/logo.png",
-    breadcrumb: {
-      "@context": "http://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          item: {
-            "@id": "https://regalflowers.com.ng",
-            name: "Home"
-          }
-        }
-      ]
-    }
+    logo: "/icons/logo.png"
   };
 
   return (
