@@ -287,10 +287,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   return (
     <>
       <Meta
-        title="Same Day Flower Delivery in Lagos and Abuja, Nigeria | Regal Flowers"
-        description="Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria."
-        image="/images/popular-bundled.jpg"
-        imageAlt="Regal Flowers"
+        title={`${product.name} - Regal Flowers`}
+        description={product.description}
+        image={product.images[0].src}
+        imageAlt={product.images[0].alt}
       >
         <SchemaMarkup
           properties={{
