@@ -7,7 +7,7 @@ const ProgressBar = () => {
   const [routeChanged, setRouteChanged] = useState(false);
 
   useEffect(() => {
-    const handleRouteChange = () => {
+    const handleRouteChangeStart = () => {
       setRouteChanged(false);
       setWidth(0);
       // Simulate progress (for demonstration purposes)
@@ -20,16 +20,22 @@ const ProgressBar = () => {
       }, 1000);
     };
 
-    // Subscribe to route changes
-    Router.events.on("routeChangeStart", handleRouteChange);
-    Router.events.on("routeChangeComplete", () => {
+    const handleRouteChangeComplete = () => {
+      console.log("route change completed");
       setRouteChanged(true);
       setWidth(100);
-    });
+    };
+
+    // Subscribe to route changes
+    Router.events.on("routeChangeStart", handleRouteChangeStart);
+    Router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    Router.events.on("routeChangeError", err =>
+      console.log("Unable to navigate: ", err)
+    );
 
     return () => {
-      Router.events.off("routeChangeStart", handleRouteChange);
-      Router.events.off("routeChangeComplete", handleRouteChange);
+      Router.events.off("routeChangeStart", handleRouteChangeStart);
+      Router.events.off("routeChangeComplete", handleRouteChangeComplete);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Router]);
