@@ -47,6 +47,26 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
   );
+  const Platform = {
+    TWITTER: "twitter",
+    WHATSAPP: "whatsapp",
+    FACEBOOK: "facebook"
+  }
+  const handleShare = (platform: string) => {
+    const currentURL = encodeURIComponent(`https://regalflowers.com.ng/product/${product.slug}`);
+    if (platform === Platform.TWITTER) {
+      const twitterShareLink = `https://twitter.com/intent/tweet?url=${currentURL}&text=Check%20out%20this%20combo!`;
+      window.open(twitterShareLink, '_blank');
+    } else if (platform === Platform.FACEBOOK) {
+
+      const facebookShareLink = `https://www.facebook.com/sharer/sharer.php?u=${currentURL}`;
+      window.open(facebookShareLink, '_blank');
+    } else {
+      const whatsappShareLink = `whatsapp://send?text=Check%20out%20this%20combo!%20${currentURL}`;
+      window.open(whatsappShareLink, '_blank');
+    }
+
+  };
 
   const shouldShowVipSizes = product.variants?.some(
     variant => variant.class === "vip"
@@ -85,11 +105,11 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       size: selectedSize?.name,
       design: selectedDesign
         ? {
-            quantity: 1,
-            name: selectedDesign?.name as DesignOptionName,
-            price: selectedDesign?.price as number,
-            title: selectedDesign?.title as string
-          }
+          quantity: 1,
+          name: selectedDesign?.name as DesignOptionName,
+          price: selectedDesign?.price as number,
+          title: selectedDesign?.title as string
+        }
         : null,
       quantity: 1,
       image: {
@@ -277,17 +297,15 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         </span>
       </div>
       <div
-        className={`${
-          styles["product-content"]
-        } flex spaced-xl between ${deviceType === "mobile" && "column"}`}
+        className={`${styles["product-content"]
+          } flex spaced-xl between ${deviceType === "mobile" && "column"}`}
       >
         <div className={styles["slider-wrapper"]}>
           <div className={styles.slider}>
             <button
               onClick={handlePreviousCLick}
-              className={`${styles["btn-arrow"]}  ${
-                styles["left"]
-              } ${activeSlide <= 1 && "disabled"}`}
+              className={`${styles["btn-arrow"]}  ${styles["left"]
+                } ${activeSlide <= 1 && "disabled"}`}
             >
               <img
                 src="/icons/chevron-left.svg"
@@ -308,9 +326,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             ))}
             <button
               onClick={handleNextCLick}
-              className={`${styles["btn-arrow"]} ${
-                styles["right"]
-              } ${activeSlide >= product.images.length - 1 && "disabled"}`}
+              className={`${styles["btn-arrow"]} ${styles["right"]
+                } ${activeSlide >= product.images.length - 1 && "disabled"}`}
             >
               <img
                 src="/icons/chevron-right.svg"
@@ -353,22 +370,24 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   <p>Estimated delivery time: 1 - 7 days</p>
                 </div> */}
               </div>
-              <div
-                className={`${styles["social-icons"]} flex spaced center-align`}
-              >
-                <span>Share: </span>
-                <span className={`${styles["social-icon"]}`}>
-                  <img src="/icons/twitter.svg" alt="twitter" />
-                </span>
-                <span className={`${styles["social-icon"]}`}>
-                  <img src="/icons/whatsapp.svg" alt="whatsapp" />
-                </span>
-                <span className={`${styles["social-icon"]}`}>
-                  <img src="/icons/facebook.svg" alt="facebook" />
-                </span>
-              </div>
             </>
+
           )}
+          <div
+            className={`${styles["social-icons"]} flex spaced center-align`}
+          >
+            <span>Share: </span>
+            <span className={`${styles["social-icon"]}`}>
+              <img src="/icons/twitter.svg" alt="twitter" onClick={() => handleShare(Platform.TWITTER)} />
+            </span>
+            <span className={`${styles["social-icon"]}`}>
+              <img src="/icons/whatsapp.svg" alt="whatsapp" onClick={() => handleShare(Platform.WHATSAPP)} />
+            </span>
+            <span className={`${styles["social-icon"]}`}>
+              <img src="/icons/facebook.svg" alt="facebook" onClick={() => handleShare(Platform.FACEBOOK)} />
+            </span>
+          </div>
+
         </div>
 
         <div className={styles.padding}>
@@ -451,7 +470,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                           className={[
                             styles.size,
                             selectedSize?.name === variant.name &&
-                              styles["selected-size"]
+                            styles["selected-size"]
                           ].join(" ")}
                           onClick={() => {
                             setSelectedSize({
@@ -473,9 +492,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 <>
                   <button
                     onClick={() => setsizeType("vip")}
-                    className={`${styles["tab-title"]} ${
-                      sizeType === "vip" ? styles.active : null
-                    }`}
+                    className={`${styles["tab-title"]} ${sizeType === "vip" ? styles.active : null
+                      }`}
                   >
                     VIP Sizes
                   </button>
@@ -490,7 +508,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                             className={[
                               styles.size,
                               selectedSize?.name === variant.name &&
-                                styles["selected-size"]
+                              styles["selected-size"]
                             ].join(" ")}
                             onClick={() => {
                               setSelectedSize({
@@ -534,7 +552,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                         className={[
                           styles.design,
                           selectedDesign?.name === designOption.name &&
-                            styles["selected-design"]
+                          styles["selected-design"]
                         ].join(" ")}
                         onClick={() => setSelectedDesign(designOption)}
                       >
@@ -589,9 +607,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   >
                     <p className="bold">{group.name}</p>
                     <svg
-                      className={`${
-                        group.name === addonGroup ? styles.arrow : null
-                      }`}
+                      className={`${group.name === addonGroup ? styles.arrow : null
+                        }`}
                       width="8"
                       height="12"
                       viewBox="0 0 8 12"
@@ -636,18 +653,17 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               onClick={() => handleAddToCart()}
               tooltip={
                 cannotBuy
-                  ? `You must select a budget${
-                      product.designOptions ? " and design" : ""
-                    } first`
+                  ? `You must select a budget${product.designOptions ? " and design" : ""
+                  } first`
                   : ""
               }
             >
               {outOfStock
                 ? "Out Of Stock"
                 : `Add to Cart ${getPriceDisplay(
-                    total || productPrice,
-                    currency
-                  )}`}
+                  total || productPrice,
+                  currency
+                )}`}
             </Button>
           </div>
         </div>
