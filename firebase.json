@@ -16,6 +16,11 @@
         "source": "/contact-us",
         "destination": "/#contactSection",
         "type": 301
+      },         
+      {
+        "source": "/about-us",
+        "destination": "/#aboutUs",
+        "type": 301
       },     
       {
         "source": "/faqs-how-to-order-and-delivery-information",
