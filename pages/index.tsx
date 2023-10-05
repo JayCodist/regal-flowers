@@ -40,6 +40,15 @@ import Link from "next/dist/client/link";
 import SchemaMarkup from "../components/schema-mark-up/SchemaMarkUp";
 import Meta from "../components/meta/Meta";
 
+const schemaProperties = {
+  "@type": "LocalBusiness",
+  name: "Regal Flowers",
+  url: "https://regalflowers.com.ng",
+  description:
+    "Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria.",
+  image: "/images/popular-bundled.jpg"
+};
+
 const LandingPage: FunctionComponent<{
   locationName: LocationName;
   featuredBirthday?: Product[];
@@ -64,7 +73,7 @@ const LandingPage: FunctionComponent<{
         image="/images/popular-bundled.jpg"
         imageAlt="Regal Flowers"
       >
-        <SchemaMarkup />
+        <SchemaMarkup properties={schemaProperties} />
       </Meta>
 
       <section className="page-content">

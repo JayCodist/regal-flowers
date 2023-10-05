@@ -2,12 +2,10 @@ interface SchemaMarkupProps {
   properties?: Record<string, any>;
 }
 
-const SchemaMarkup = ({}: SchemaMarkupProps) => {
+const SchemaMarkup = ({ properties }: SchemaMarkupProps) => {
   const schema = {
     "@context": "http://schema.org",
-    "@type": "LocalBusiness",
-    name: "Regal Flowers",
-    url: "https://regalflowers.com.ng",
+
     telephone: [
       "+234 701 000 6664",
       "+234 701 000 6665",
@@ -75,9 +73,7 @@ const SchemaMarkup = ({}: SchemaMarkupProps) => {
       "Bank Transfer"
     ],
     priceRange: "₦",
-    description:
-      "Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria.",
-    image: "/images/popular-bundled.jpg",
+
     sameAs: [
       "https://instagram.com/regalflowers.com.ng",
       "http://facebook.com/RegalFlowersNG/",
@@ -121,7 +117,8 @@ const SchemaMarkup = ({}: SchemaMarkupProps) => {
         name: "Roses"
       }
     ],
-    logo: "/icons/logo.png"
+    logo: "/icons/logo.png",
+    ...properties
   };
 
   return (
