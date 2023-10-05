@@ -1,6 +1,7 @@
 .product {
   padding: 2rem 4rem;
   padding-top: 3rem;
+
   .temporary-notes {
     min-height: 3rem;
   }
@@ -16,12 +17,16 @@
 
   .product-content {
     margin-bottom: 3rem;
-    & > div {
+
+    &>div {
       flex-basis: 51%;
+
       &.slider-wrapper {
         flex-basis: 45%;
       }
+
       margin-left: 1.2rem;
+
       &:first-child {
         margin-left: 0;
       }
@@ -30,11 +35,14 @@
     @media (max-width: 650px) {
       flex-direction: column;
       margin-bottom: 1rem;
-      & > div {
+
+      &>div {
         flex-basis: 100%;
+
         &.slider-wrapper {
           flex-basis: 100%;
         }
+
         margin: 0;
         margin-top: 1.2rem;
 
@@ -44,6 +52,7 @@
       }
     }
   }
+
   .slider-wrapper {
     .slider {
       overflow: hidden;
@@ -106,6 +115,7 @@
         }
       }
     }
+
     .images {
       width: 100%;
       display: flex;
@@ -126,9 +136,11 @@
     height: 2.2rem;
     border-radius: 50%;
     z-index: 1;
+
     &.left {
       left: 1rem;
     }
+
     &.right {
       right: 1rem;
     }
@@ -145,6 +157,7 @@
     width: 24.7%;
     height: 9vw;
     object-fit: cover;
+
     &:hover {
       opacity: 1;
     }
@@ -173,12 +186,14 @@
       z-index: -1;
     }
   }
+
   .tab-title {
     padding-bottom: 0.4rem;
     transition: 0.3s ease-out;
     border-bottom: 0.15rem solid #9b0000;
     font-weight: 700;
   }
+
   .delivery {
     background-color: #f9fafb;
     padding: 1.2rem;
@@ -197,6 +212,11 @@
   }
 
   .social-icons {
+    @media (max-width: 650px) {
+      margin: 15px 0 0 25px;
+
+    }
+
     .social-icon {
       height: 2rem;
       width: 2rem;
@@ -204,6 +224,21 @@
       display: inline-flex;
       justify-content: center;
       align-items: center;
+
+      @media (max-width: 650px) {
+        height: 1.3rem;
+        width: 1.3rem;
+
+        img {
+          height: 1.3rem;
+          width: 1.3rem;
+        }
+      }
+    }
+
+    .social-icon:hover {
+      cursor: pointer;
+      transform: scale(1.2);
     }
   }
 
@@ -216,6 +251,7 @@
     background-color: #f9fafb;
     padding: 1rem;
     margin-bottom: 1rem;
+
     .size {
       padding: 0.5rem;
       border: 0.1rem solid #d1d5db;
@@ -274,6 +310,7 @@
         }
       }
     }
+
     .menu-dropdown {
       // height: 0;
       transition: 0.4s ease-out;
@@ -285,16 +322,20 @@
         transition: 0.4s ease-out;
       }
     }
+
     .menu-child {
       text-align: center;
+
       &:not(:last-child) {
         margin-right: 1rem;
       }
+
       img {
         height: 10rem;
       }
     }
   }
+
   .design {
     border: 0.1rem solid #e5e7eb;
     padding: 1.5rem 0.2rem 0.7rem;
@@ -319,9 +360,11 @@
       height: 8rem;
     }
   }
+
   .buy-now {
     width: 35%;
   }
+
   .add-to-cart {
     width: 60%;
   }

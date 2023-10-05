@@ -3,7 +3,13 @@ import Link from "next/link";
 import React, { FunctionComponent, useState } from "react";
 import Button from "../components/button/Button";
 import FlowerCard from "../components/flower-card/FlowerCard";
-import { featuredSlugs, paypalEmail, regalEmail } from "../utils/constants";
+import {
+  featuredSlugs,
+  footerContent,
+  gifts,
+  paypalEmail,
+  regalEmail
+} from "../utils/constants";
 import { getProductsBySlugs } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import styles from "./faq.module.scss";
@@ -19,7 +25,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
     <section className={styles.wrapper}>
       <div className={[styles["hero-bg"], "hero-bg"].join(" ")}>
         <div className="hero-content flex column center center-align">
-          <h1 className={styles.title}>Frequently Asked Questions</h1>
+          <p className={styles.title}>Frequently Asked Questions</p>
         </div>
       </div>
       <div className={styles.container}>
@@ -35,7 +41,8 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   className={`${activeContent === "how-it-works" &&
                     "primary-color"}`}
                 >
-                  <span className="margin-right">1</span> How it works
+                  <span className="margin-right">1</span> How to order flowers
+                  and gifts for delivery
                 </p>
               </a>
             </Link>
@@ -65,12 +72,19 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
           </ol>
           <div className={styles["linked-content"]}>
             <div id="how-it-works">
-              <p className={`${styles.title}`}>How it works</p>
-              <p className="title small bold margin-bottom">
-                How to order flowers and gifts for delivery?
-              </p>
+              <h1 className={`${styles.title}`}>
+                How to order flowers and gifts for delivery in Lagos and Abuja,
+                Nigeria
+              </h1>
               <p className="margin-bottom spaced normal-text">
-                For delivery of fresh flowers in Lagos, Nigeria or fresh flowers
+                For delivery of{" "}
+                <Link href="/product-category/flowers-for-love-birthday-anniversary-etc">
+                  <a className={styles.link}>fresh flowers</a>
+                </Link>{" "}
+                in Lagos, Nigeria or{" "}
+                <Link href="/">
+                  <a className={styles.link}>fresh flowers</a>
+                </Link>{" "}
                 in Abuja, Nigeria:
               </p>
               <p className="normal-text">
@@ -79,17 +93,53 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 Non-Naira card or Paypal). Proceed to checkout where you fill in
                 the delivery details (include the preferred pickup/delivery
                 date, recipient's phone number and your optional message), and
-                pay using any of the methods below this page. We can also work
-                to suit your budget, desired colours, flower types etc.. Reach
-                us at{" "}
-                <a
-                  href={`mailto:${regalEmail}`}
-                  target="_blank"
-                  rel="noreferrer"
+                pay using any of the payment methods.
+                <br /> <br /> We can also work to suit your budget, desired
+                colours, flower types etc. Reach us at{" "}
+                <div
+                  className={`${"flex between spaced column"} vertical-margin spaced`}
                 >
-                  {regalEmail}
-                </a>{" "}
-                or +234 (0) 7010006665, +234 (0) 7011992888 to make your order.
+                  <div className="flex spaced-xl">
+                    <Link href="tel:+2347011992888">
+                      <a>
+                        <img
+                          className="generic-icon medium"
+                          src="/icons/footer/phone.svg"
+                          alt="phone"
+                        />
+                      </a>
+                    </Link>
+
+                    <Link href="https://wa.me/+2347011992888">
+                      <a>
+                        <img
+                          className="generic-icon medium"
+                          src="/icons/footer/whatsapp.svg"
+                          alt="whtasapp"
+                        />
+                      </a>
+                    </Link>
+                  </div>
+                  {footerContent.phoneNumbers.map(number => (
+                    <a key={number} href={`tel:${number}`}>
+                      {number}
+                    </a>
+                  ))}
+                  <div className="flex spaced center-align">
+                    <img
+                      className="generic-icon"
+                      src="/icons/footer/message.svg"
+                      alt="message"
+                    />
+                    <a
+                      href={`mailto:${regalEmail}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {regalEmail}
+                    </a>
+                  </div>
+                </div>{" "}
                 For any enquiries or to amend delivery details, message on the
                 flowers etc, feel free to reach out to us.
               </p>
@@ -127,7 +177,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   Paypal to email{" "}
                 </strong>
                 <p className="normal-text">
-                  Email Address: <strong>{paypalEmail}</strong>
+                  Paypal Payment Address: <strong>{paypalEmail}</strong>
                 </p>
               </div>
               <p className="margin-buttton flex align-center spaced normal-text">
@@ -155,15 +205,6 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 <p className="normal-text">
                   Naira Account: <strong> 0252862666</strong>
                 </p>
-                <p className="normal-text">
-                  Pounds Account: <strong> 0252862862</strong>
-                </p>
-                <p className="normal-text">
-                  USD Account: <strong> 0252862673</strong>
-                </p>
-                <p className="normal-text">
-                  Euros Account: <strong> 0252862680</strong>
-                </p>
               </div>
               <p className="margin-buttton flex align-center spaced normal-text">
                 <img
@@ -172,10 +213,14 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   alt="paypal"
                 />{" "}
                 <span>
-                  Bitcoins, Wallet Address{" "}
+                  <strong className="primary-color normal-text">
+                    Bitcoins
+                  </strong>
+                  <br /> Wallet Address{" "}
                   <strong>12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1</strong>{" "}
                 </span>
               </p>
+              <br />
               <p className="margin-buttton normal-text">
                 Of course, we are only a call/email away should you require any
                 assistance.
@@ -189,20 +234,33 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
               </p>
               <p className="margin-bottom spaced normal-text">
                 Yes, we usually offer same day flower delivery in Lagos, Nigeria
-                and Abuja, Nigeria However, we encourage you to order flowers
-                and gifts as soon as possible due to traffic congestion, and to
-                ensure we don’t run out of stock for the day.
+                and Abuja, Nigeria However, we encourage you to{" "}
+                <Link href="/product-category/flowers-for-love-birthday-anniversary-etc">
+                  <a className={styles.link}>order flowers</a>
+                </Link>{" "}
+                and{" "}
+                <Link href="/product-category/gifts">
+                  <a className={styles.link}>gifts</a>
+                </Link>{" "}
+                as soon as possible due to traffic congestion, and to ensure we
+                don’t run out of stock for the day.
               </p>
               <p className="title small bold margin-bottom ">
                 Is a flower delivery in Lagos, Nigeria and Abuja, Nigeria
                 possible on weekends and public holidays?
               </p>
               <p className="margin-bottom normal-text">
-                Yes, <a className="primary-color">Regalflowers.com.ng</a>{" "}
+                Yes,{" "}
+                <Link href="/">
+                  <a className={styles.link}>Regalflowers.com.ng</a>
+                </Link>{" "}
                 delivers flowers on all days INCLUDING Saturdays, Sundays, and
-                Public Holidays. Can't come in? You can always buy flowers in
-                Lagos, Nigeria and Abuja, Nigeria from our online store or by
-                phone or WhatsApp and get them delivered.
+                Public Holidays. Can't come in? You can always{" "}
+                <Link href="/">
+                  <a className={styles.link}> buy flowers in Lagos</a>
+                </Link>{" "}
+                , Nigeria and Abuja, Nigeria from our online store or by phone
+                or WhatsApp and get them delivered.
               </p>
               <p className="title small bold margin-bottom ">
                 Do you deliver flowers outside Lagos, Nigeria and Abuja, Nigeria
@@ -227,9 +285,16 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
               <p className="margin-bottom normal-text">
                 When our delivery partners (typically Uber and other 3rd party
                 delivery agents), get to the destination, they usually need to
-                communicate with the recipient to collect the flowers and gifts,
-                or to confirm who the recipient would prefer the driver drop the
-                items with.
+                communicate with the recipient to collect the{" "}
+                <Link href="/product-category/just-to-say-bouquets">
+                  <a className={styles.link}>flowers</a>
+                </Link>{" "}
+                and{" "}
+                <Link href="/product-category/gifts">
+                  <a className={styles.link}>gifts</a>
+                </Link>{" "}
+                , or to confirm who the recipient would prefer the driver drop
+                the items with.
               </p>
               <p className="normal-text">
                 In addition, as a security precaution many offices and
@@ -243,12 +308,18 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 Who do you deliver the items to?
               </p>
               <p className="normal-text">
-                Our flower delivery in Lagos, Nigeria and Abuja, Nigeria is
-                typically delivered directly to the intended recipient. However,
-                if they are unavailable for any reason (meeting, phone off, not
-                picking their calls etc), or if they request we do so, we would
-                deliver to their receptionist, security guard, household staff,
-                friend or colleague at the delivery point.
+                Our{" "}
+                <Link href="/">
+                  <a className={styles.link}>
+                    flower delivery in Abuja, Nigeria
+                  </a>
+                </Link>{" "}
+                and Lagos, Nigeria is typically delivered directly to the
+                intended recipient. However, if they are unavailable for any
+                reason (meeting, phone off, not picking their calls etc), or if
+                they request we do so, we would deliver to their receptionist,
+                security guard, household staff, friend or colleague at the
+                delivery point.
               </p>
               <p className="title small bold vertical-margin">
                 What happens if the recipient doesn't pickup their phone, and
@@ -270,9 +341,20 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 by email.
               </p>
               <p className="normal-text">
-                Due to the perishable nature of flowers and some gifts (cakes,
-                cupcakes), items returned to our flower shop in Lagos, Nigeria
-                and Abuja, Nigeria would be held for a limited amount of time
+                Due to the perishable nature of flowers and some gifts (
+                {gifts.map((gift, index) => (
+                  <>
+                    <Link href={gift.url} key={index}>
+                      <a className={styles.link}>{gift.title}</a>
+                    </Link>
+                    ,{" "}
+                  </>
+                ))}
+                ), items returned to our{" "}
+                <Link href="/">
+                  <a className={styles.link}>flower shop in Abuja, Nigeria</a>
+                </Link>{" "}
+                and Lagos, Nigeria would be held for a limited amount of time
                 and might eventually wither at the buyers expense.
               </p>
             </div>
