@@ -68,13 +68,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       `https://regalflowers.com.ng/product/${product.slug}`
     );
     if (platform === Platform.TWITTER) {
-      const twitterShareLink = `https://twitter.com/intent/tweet?url=${currentURL}&text=Check%20out%20this%20combo!`;
+      const twitterShareLink = `https://twitter.com/intent/tweet?url=${currentURL}`;
       window.open(twitterShareLink, "_blank");
     } else if (platform === Platform.FACEBOOK) {
       const facebookShareLink = `https://www.facebook.com/sharer/sharer.php?u=${currentURL}`;
       window.open(facebookShareLink, "_blank");
     } else {
-      const whatsappShareLink = `whatsapp://send?text=Check%20out%20this%20combo!%20${currentURL}`;
+      const whatsappShareLink = `whatsapp://send?${currentURL}`;
       window.open(whatsappShareLink, "_blank");
     }
   };
@@ -287,7 +287,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   return (
     <>
       <Meta
-        title={`${product.name} - Regal Flowers`}
+        title={`${product.name} ${product.subtitle}|Regal Flowers`}
         description={product.description}
         image={product.images[0].src}
         imageAlt={product.images[0].alt}
