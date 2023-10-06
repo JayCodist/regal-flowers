@@ -9,7 +9,7 @@ import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import useDeviceType from "../../utils/hooks/useDeviceType";
-import { DesignOption } from "../../utils/constants";
+import { DesignOption, regalWebsiteUrl } from "../../utils/constants";
 import Link from "next/dist/client/link";
 import Meta from "../../components/meta/Meta";
 import SchemaMarkup from "../../components/schema-mark-up/SchemaMarkUp";
@@ -291,6 +291,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
         description={product.description}
         image={product.images[0].src}
         imageAlt={product.images[0].alt}
+        canonicalUrl={`${regalWebsiteUrl}/${product.slug}`}
       >
         <SchemaMarkup
           properties={{
@@ -298,7 +299,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             name: product.name,
             description: product.description,
             image: product.images[0].src,
-            url: `https://regalflowers.com.ng/product/${product.slug}`,
+            url: `${regalWebsiteUrl}/${product.slug}`,
             offers: {
               "@type": "Offer",
               price: String(total || productPrice),
