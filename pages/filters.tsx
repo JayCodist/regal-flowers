@@ -24,6 +24,7 @@ import {
   gifts,
   occasions,
   occasionsPageTitle,
+  regalWebsiteUrl,
   sortOptions,
   tagsMap
 } from "../utils/constants";
@@ -40,6 +41,7 @@ import styles from "./filters.module.scss";
 import SettingsContext from "../utils/context/SettingsContext";
 import Radio from "../components/radio/Radio";
 import Input from "../components/input/Input";
+import Meta from "../components/meta/Meta";
 
 const giftMap: Record<string, string> = {
   "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears":
@@ -368,705 +370,724 @@ const ProductsPage: FunctionComponent<{
   const hideHero = search;
 
   return (
-    <section className={styles.filters} ref={rootRef}>
-      {!hideHero && (
-        <div
-          className={[
-            styles["hero-bg"],
-            productCategory === "occasion" && styles["occasion-bg"],
-            productCategory === "vip" && styles["vip-bg"]
-          ].join(" ")}
-        >
-          <div className={`hero-content flex column center center-align `}>
-            {productCategory === "occasion" && deviceType === "desktop" && (
-              <div
-                className={[
-                  styles["occasion-wrapper"],
-                  isGiftPage && styles["gifts-wrapper"]
-                ].join(" ")}
-              >
-                {(isGiftPage ? gifts : occasions).map((occasion, index) => {
-                  return (
-                    <Link href={occasion.url} key={index}>
-                      <a
-                        className={[
-                          styles["occasion"],
-                          isGiftPage && styles["gift-occasion"],
-
-                          categorySlug === occasion.url.split("/")[2] &&
-                            styles["active"]
-                        ].join(" ")}
-                        onClick={() => {
-                          router.push(occasion.url, undefined, {
-                            scroll: false
-                          });
-                        }}
-                      >
-                        <strong>
-                          {occasion.title}
-                          <br />
-                          {occasion.title === "Just to Say" && (
-                            <span>{JustToSayText}</span>
-                          )}{" "}
-                        </strong>
-                      </a>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-            {productCategory === "occasion" && deviceType === "mobile" && (
-              <div className={styles["occasions-mobile"]}>
-                <div
-                  className={`margin-bottom spaced ${
-                    styles.occasions
-                  } ${giftMap[categorySlug || ""] && styles["gifts-category"]}`}
-                >
-                  {(isGiftPage ? gifts : occasions)
-                    .slice(0, isGiftPage ? 4 : 3)
-                    .map((occasion, index) => {
-                      return (
-                        <Link href={occasion.url} key={index}>
-                          <a
-                            className={[
-                              styles["occasion"],
-                              isGiftPage && styles["gift-occasion"],
-
-                              categorySlug === occasion.url.split("/")[2] &&
-                                styles["active"]
-                            ].join(" ")}
-                            onClick={() => {
-                              router.push(occasion.url, undefined, {
-                                scroll: false
-                              });
-                            }}
-                          >
-                            <strong>
-                              {occasion.title}
-                              <br />
-                              {occasion.title === "Just to Say" && (
-                                <span>{JustToSayText}</span>
-                              )}{" "}
-                            </strong>
-                          </a>
-                        </Link>
-                      );
-                    })}
-                </div>
+    <>
+      {router.pathname === "/filters" && (
+        <Meta
+          canonicalUrl={`${regalWebsiteUrl}/product-category/flowers-for-love-birthday-anniversary-etc`}
+        ></Meta>
+      )}
+      <section className={styles.filters} ref={rootRef}>
+        {!hideHero && (
+          <div
+            className={[
+              styles["hero-bg"],
+              productCategory === "occasion" && styles["occasion-bg"],
+              productCategory === "vip" && styles["vip-bg"]
+            ].join(" ")}
+          >
+            <div className={`hero-content flex column center center-align `}>
+              {productCategory === "occasion" && deviceType === "desktop" && (
                 <div
                   className={[
-                    styles.occasions,
-                    isGiftPage && styles["gifts-categor"]
+                    styles["occasion-wrapper"],
+                    isGiftPage && styles["gifts-wrapper"]
                   ].join(" ")}
                 >
-                  {(isGiftPage ? gifts : occasions)
-                    .slice(isGiftPage ? 4 : 3)
-                    .map((occasion, index) => {
-                      return (
-                        <Link href={occasion.url} key={index}>
-                          <a
-                            className={[
-                              styles["occasion"],
-                              isGiftPage && styles["gift-occasion"],
+                  {(isGiftPage ? gifts : occasions).map((occasion, index) => {
+                    return (
+                      <Link href={occasion.url} key={index}>
+                        <a
+                          className={[
+                            styles["occasion"],
+                            isGiftPage && styles["gift-occasion"],
 
-                              categorySlug === occasion.url.split("/")[2] &&
-                                styles["active"]
-                            ].join(" ")}
-                            onClick={() => {
-                              router.push(occasion.url, undefined, {
-                                scroll: false
-                              });
-                            }}
-                          >
-                            <strong>
-                              {occasion.title}
-                              <br />
-                              {occasion.title === "Just to Say" && (
-                                <span>{JustToSayText}</span>
-                              )}{" "}
-                            </strong>
-                          </a>
-                        </Link>
-                      );
-                    })}
+                            categorySlug === occasion.url.split("/")[2] &&
+                              styles["active"]
+                          ].join(" ")}
+                          onClick={() => {
+                            router.push(occasion.url, undefined, {
+                              scroll: false
+                            });
+                          }}
+                        >
+                          <strong>
+                            {occasion.title}
+                            <br />
+                            {occasion.title === "Just to Say" && (
+                              <span>{JustToSayText}</span>
+                            )}{" "}
+                          </strong>
+                        </a>
+                      </Link>
+                    );
+                  })}
                 </div>
-              </div>
-            )}
-            {productCategory === "vip" && (
-              <div className={styles["vip-wrapper"]}>
-                <strong className={styles["wow"]}>Wow Them</strong>
-                <h1 className="primary-color">
-                  Go All-Out With VIP Flower Arrangements
-                </h1>
-                <p className={styles["info"]}>
-                  All VIP Orders Come With a Complimentary Gift
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-      <div
-        className={`${styles["content"]} flex ${deviceType === "desktop" &&
-          "spaced-xl"}`}
-      >
-        {!hideFilters && (
-          <div className={styles["left-side"]}>
-            {!hideFilterInfo && (
-              <div className="vertical-margin spaced">
-                <span className={`bold margin-right ${styles["sub-title"]}`}>
-                  Filters ({selectedFilter.length})
-                </span>
-                <button className="primary-color" onClick={handleClearFIlter}>
-                  Clear Filters
-                </button>
-              </div>
-            )}
-
-            <div className={styles["filters-sidebar"]}>
-              {filterCategories.map((filter, index) => (
-                <div key={index} className="vertical-margin spaced">
-                  <p className="bold vertical-margin spaced">{filter.name}</p>
-                  <div>
-                    {(filter.viewMore
-                      ? filter.options
-                      : filter.options.slice(0, filter.limit)
-                    ).map((child, i) => (
-                      <div key={i} className="margin-bottom">
-                        {filter.name === "Budget" ? (
-                          <>
-                            <div className="margin-bottom">
-                              <Radio
-                                label="Regular"
-                                onChange={() => {
-                                  const newFilters = [
-                                    ...selectedFilter.filter(filter => {
-                                      return filter !== "vip";
-                                    }),
-                                    "regular"
-                                  ];
-                                  setSelectedFilter(newFilters);
-                                  const url = categorySlug
-                                    ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
-                                        ","
-                                      )}`
-                                    : `/filters?shopBy=${newFilters.join(",")}`;
-                                  router.push(url, undefined, {
-                                    scroll: false
-                                  });
-                                }}
-                                checked={selectedFilter.includes("regular")}
-                              />
-                            </div>
-
-                            <Radio
-                              label="VIP"
-                              onChange={() => {
-                                const newFilters = [
-                                  ...selectedFilter.filter(filter => {
-                                    return filter !== "regular";
-                                  }),
-                                  "vip"
-                                ];
-                                setSelectedFilter(newFilters);
-                                const url = `/filters?shopBy=${newFilters.join(
-                                  ","
-                                )}`;
-                                router.push(url, undefined, { scroll: false });
-                              }}
-                              checked={selectedFilter.includes("vip")}
-                            />
-                          </>
-                        ) : child.link ? (
-                          <Link href={child.link}>
+              )}
+              {productCategory === "occasion" && deviceType === "mobile" && (
+                <div className={styles["occasions-mobile"]}>
+                  <div
+                    className={`margin-bottom spaced ${
+                      styles.occasions
+                    } ${giftMap[categorySlug || ""] &&
+                      styles["gifts-category"]}`}
+                  >
+                    {(isGiftPage ? gifts : occasions)
+                      .slice(0, isGiftPage ? 4 : 3)
+                      .map((occasion, index) => {
+                        return (
+                          <Link href={occasion.url} key={index}>
                             <a
                               className={[
-                                styles["filter-link"],
-                                child.link ===
-                                `/product-category/${categorySlug}`
-                                  ? styles.active
-                                  : ""
+                                styles["occasion"],
+                                isGiftPage && styles["gift-occasion"],
+
+                                categorySlug === occasion.url.split("/")[2] &&
+                                  styles["active"]
                               ].join(" ")}
+                              onClick={() => {
+                                router.push(occasion.url, undefined, {
+                                  scroll: false
+                                });
+                              }}
                             >
-                              {child.name}
+                              <strong>
+                                {occasion.title}
+                                <br />
+                                {occasion.title === "Just to Say" && (
+                                  <span>{JustToSayText}</span>
+                                )}{" "}
+                              </strong>
                             </a>
                           </Link>
-                        ) : (
-                          <Checkbox
-                            onChange={() => handleFilterChange(child)}
-                            text={child.name}
-                            checked={selectedFilter.includes(child.tag || "")}
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  {filter.limit < filter.options.length && (
-                    <button
-                      className={styles["btn-view"]}
-                      onClick={() => {
-                        setFilterCategories(prev =>
-                          prev.map((item, _index) => {
-                            if (index === _index) {
-                              return {
-                                ...item,
-                                viewMore: !item.viewMore
-                              };
-                            }
-                            return item;
-                          })
                         );
-                      }}
-                    >
-                      {!filter.viewMore ? "View More" : "View Less"}
-                    </button>
-                  )}
+                      })}
+                  </div>
+                  <div
+                    className={[
+                      styles.occasions,
+                      isGiftPage && styles["gifts-categor"]
+                    ].join(" ")}
+                  >
+                    {(isGiftPage ? gifts : occasions)
+                      .slice(isGiftPage ? 4 : 3)
+                      .map((occasion, index) => {
+                        return (
+                          <Link href={occasion.url} key={index}>
+                            <a
+                              className={[
+                                styles["occasion"],
+                                isGiftPage && styles["gift-occasion"],
+
+                                categorySlug === occasion.url.split("/")[2] &&
+                                  styles["active"]
+                              ].join(" ")}
+                              onClick={() => {
+                                router.push(occasion.url, undefined, {
+                                  scroll: false
+                                });
+                              }}
+                            >
+                              <strong>
+                                {occasion.title}
+                                <br />
+                                {occasion.title === "Just to Say" && (
+                                  <span>{JustToSayText}</span>
+                                )}{" "}
+                              </strong>
+                            </a>
+                          </Link>
+                        );
+                      })}
+                  </div>
                 </div>
-              ))}
+              )}
+              {productCategory === "vip" && (
+                <div className={styles["vip-wrapper"]}>
+                  <strong className={styles["wow"]}>Wow Them</strong>
+                  <h1 className="primary-color">
+                    Go All-Out With VIP Flower Arrangements
+                  </h1>
+                  <p className={styles["info"]}>
+                    All VIP Orders Come With a Complimentary Gift
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         )}
-        <div className={styles["product-wrapper"]}>
-          <div className="flex between block center-align">
-            {!hideFilters && (
-              <div className={styles["filter-mobile"]} ref={filterDropdownRef}>
-                <span>Filters: </span>
-                <button
-                  className={styles.btn}
-                  onClick={() => setShouldShowFilter(!shouldShowFilter)}
-                >
-                  <h3 className="margin-right">
-                    Filter{!hideFilterInfo && `(${selectedFilter.length})`}
-                  </h3>
-                  <img
-                    alt="filter"
-                    className="generic-icon medium"
-                    src="/icons/filter.svg"
-                  />
-                </button>
-                <div
-                  className={[
-                    styles["filters-dropdown"],
-                    shouldShowFilter && styles.active
-                  ].join(" ")}
-                >
-                  {filterCategories.map((filter, index) => (
-                    <div key={index} className="vertical-margin spaced">
-                      <p className="bold vertical-margin spaced">
-                        {filter.name}
-                      </p>
-                      <div>
-                        {(filter.viewMore
-                          ? filter.options
-                          : filter.options.slice(0, filter.limit)
-                        ).map((child, index) => (
-                          <div key={index} className="margin-bottom">
-                            {filter.name === "Budget" ? (
-                              <>
-                                <div className="margin-bottom">
-                                  <Radio
-                                    label="Regular"
-                                    onChange={() => {
-                                      const newFilters = [
-                                        ...selectedFilter.filter(filter => {
-                                          return filter !== "vip";
-                                        }),
-                                        "regular"
-                                      ];
-                                      setSelectedFilter(newFilters);
-                                      const url = categorySlug
-                                        ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
-                                            ","
-                                          )}`
-                                        : `/filters?shopBy=${newFilters.join(
-                                            ","
-                                          )}`;
-                                      router.push(url, undefined, {
-                                        scroll: false
-                                      });
-                                    }}
-                                    checked={selectedFilter.includes("regular")}
-                                  />
-                                </div>
+        <div
+          className={`${styles["content"]} flex ${deviceType === "desktop" &&
+            "spaced-xl"}`}
+        >
+          {!hideFilters && (
+            <div className={styles["left-side"]}>
+              {!hideFilterInfo && (
+                <div className="vertical-margin spaced">
+                  <span className={`bold margin-right ${styles["sub-title"]}`}>
+                    Filters ({selectedFilter.length})
+                  </span>
+                  <button className="primary-color" onClick={handleClearFIlter}>
+                    Clear Filters
+                  </button>
+                </div>
+              )}
 
+              <div className={styles["filters-sidebar"]}>
+                {filterCategories.map((filter, index) => (
+                  <div key={index} className="vertical-margin spaced">
+                    <p className="bold vertical-margin spaced">{filter.name}</p>
+                    <div>
+                      {(filter.viewMore
+                        ? filter.options
+                        : filter.options.slice(0, filter.limit)
+                      ).map((child, i) => (
+                        <div key={i} className="margin-bottom">
+                          {filter.name === "Budget" ? (
+                            <>
+                              <div className="margin-bottom">
                                 <Radio
-                                  label="VIP"
+                                  label="Regular"
                                   onChange={() => {
                                     const newFilters = [
                                       ...selectedFilter.filter(filter => {
-                                        return filter !== "regular";
+                                        return filter !== "vip";
                                       }),
-                                      "vip"
+                                      "regular"
                                     ];
                                     setSelectedFilter(newFilters);
-                                    const url = `/filters?shopBy=${newFilters.join(
-                                      ","
-                                    )}`;
+                                    const url = categorySlug
+                                      ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                          ","
+                                        )}`
+                                      : `/filters?shopBy=${newFilters.join(
+                                          ","
+                                        )}`;
                                     router.push(url, undefined, {
                                       scroll: false
                                     });
                                   }}
-                                  checked={selectedFilter.includes("vip")}
+                                  checked={selectedFilter.includes("regular")}
                                 />
-                              </>
-                            ) : child.link ? (
-                              <Link href={child.link}>
-                                <a
-                                  className={[
-                                    styles["filter-link"],
-                                    child.link ===
-                                    `/product-category/${categorySlug}`
-                                      ? styles.active
-                                      : ""
-                                  ].join(" ")}
-                                >
-                                  {child.name}
-                                </a>
-                              </Link>
-                            ) : (
-                              <Checkbox
-                                onChange={() => handleFilterChange(child)}
-                                text={child.name}
-                                checked={selectedFilter.includes(
-                                  child.tag || ""
-                                )}
+                              </div>
+
+                              <Radio
+                                label="VIP"
+                                onChange={() => {
+                                  const newFilters = [
+                                    ...selectedFilter.filter(filter => {
+                                      return filter !== "regular";
+                                    }),
+                                    "vip"
+                                  ];
+                                  setSelectedFilter(newFilters);
+                                  const url = `/filters?shopBy=${newFilters.join(
+                                    ","
+                                  )}`;
+                                  router.push(url, undefined, {
+                                    scroll: false
+                                  });
+                                }}
+                                checked={selectedFilter.includes("vip")}
                               />
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                      {filter.limit < filter.options.length && (
-                        <button
-                          className={styles["btn-view"]}
-                          onClick={() => {
-                            setFilterCategories(prev =>
-                              prev.map((item, _index) => {
-                                if (index === _index) {
-                                  return {
-                                    ...item,
-                                    viewMore: !item.viewMore
-                                  };
-                                }
-                                return item;
-                              })
-                            );
-                          }}
-                        >
-                          {!filter.viewMore ? "View More" : "View Less"}
-                        </button>
-                      )}
+                            </>
+                          ) : child.link ? (
+                            <Link href={child.link}>
+                              <a
+                                className={[
+                                  styles["filter-link"],
+                                  child.link ===
+                                  `/product-category/${categorySlug}`
+                                    ? styles.active
+                                    : ""
+                                ].join(" ")}
+                              >
+                                {child.name}
+                              </a>
+                            </Link>
+                          ) : (
+                            <Checkbox
+                              onChange={() => handleFilterChange(child)}
+                              text={child.name}
+                              checked={selectedFilter.includes(child.tag || "")}
+                            />
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                    {filter.limit < filter.options.length && (
+                      <button
+                        className={styles["btn-view"]}
+                        onClick={() => {
+                          setFilterCategories(prev =>
+                            prev.map((item, _index) => {
+                              if (index === _index) {
+                                return {
+                                  ...item,
+                                  viewMore: !item.viewMore
+                                };
+                              }
+                              return item;
+                            })
+                          );
+                        }}
+                      >
+                        {!filter.viewMore ? "View More" : "View Less"}
+                      </button>
+                    )}
+                  </div>
+                ))}
               </div>
-            )}
-            <div
-              className={`flex between center-align ${
-                hideFilters ? "block" : ""
-              }`}
-            >
-              <div className={`input-group ${styles.sort}`}>
-                <span className="question">Sort: </span>
-                <Select
-                  options={sortOptions}
-                  value={sort}
-                  onSelect={value => setSort(value as Sort)}
-                  placeholder="Default"
-                  className={styles["sort"]}
-                />
-              </div>
-              {search && (
-                <form
-                  onSubmit={handleSearch}
-                  className={`input-group ${styles["search-wrapper"]}`}
-                >
-                  <span className="question normal-text">Search:</span>
-                  <Input
-                    name="name"
-                    placeholder="Search for products"
-                    value={searchText}
-                    onChange={value => {
-                      setSearchText(value);
-                    }}
-                    dimmed
-                    responsive
-                  />
-                </form>
-              )}
             </div>
-          </div>
-
-          <div>
-            <h1 className={`${styles.title} bold vertical-margin spaced`}>
-              {search
-                ? `Search Results for "${searchText}"`
-                : (occasionsPageTitle &&
-                    occasionsPageTitle[categorySlug || ""]) ||
-                  "All Occasions"}
-            </h1>
-
-            <div className={[styles.products].join(" ")}>
-              {productsLoading && (
-                <div className={styles.spinner}>
-                  <img src="/images/spinner.svg" alt="spinner" />
-                </div>
-              )}
-              {products?.map((product, index, arr) => (
-                <FlowerCard
-                  key={index}
-                  name={product.name.split("–")[0]}
-                  image={product.images[0].src}
-                  price={product.price}
-                  buttonText="Add to Cart"
-                  subTitle={product.subtitle || product.name.split("–")[1]}
-                  url={`/product/${product.slug}`}
-                  mode={`${
-                    deviceType === "desktop"
-                      ? hideFilters
-                        ? "four-x-grid"
-                        : "three-x-grid"
-                      : "two-x-grid"
-                  }`}
-                  ref={
-                    index === arr.length - 1
-                      ? ele => {
-                          if (ele && hasMore && !productsLoading) {
-                            setLastProductEleRef(ele);
-                          }
-                        }
-                      : null
-                  }
-                  product={product}
-                  cart={product.variants?.length ? false : true}
-                />
-              ))}
-            </div>
-          </div>
-          {infiniteLoading && hasMore && (
-            <img
-              src="/images/spinner.svg"
-              alt="spinner"
-              className="generic-icon xl spinner"
-            />
           )}
+          <div className={styles["product-wrapper"]}>
+            <div className="flex between block center-align">
+              {!hideFilters && (
+                <div
+                  className={styles["filter-mobile"]}
+                  ref={filterDropdownRef}
+                >
+                  <span>Filters: </span>
+                  <button
+                    className={styles.btn}
+                    onClick={() => setShouldShowFilter(!shouldShowFilter)}
+                  >
+                    <h3 className="margin-right">
+                      Filter{!hideFilterInfo && `(${selectedFilter.length})`}
+                    </h3>
+                    <img
+                      alt="filter"
+                      className="generic-icon medium"
+                      src="/icons/filter.svg"
+                    />
+                  </button>
+                  <div
+                    className={[
+                      styles["filters-dropdown"],
+                      shouldShowFilter && styles.active
+                    ].join(" ")}
+                  >
+                    {filterCategories.map((filter, index) => (
+                      <div key={index} className="vertical-margin spaced">
+                        <p className="bold vertical-margin spaced">
+                          {filter.name}
+                        </p>
+                        <div>
+                          {(filter.viewMore
+                            ? filter.options
+                            : filter.options.slice(0, filter.limit)
+                          ).map((child, index) => (
+                            <div key={index} className="margin-bottom">
+                              {filter.name === "Budget" ? (
+                                <>
+                                  <div className="margin-bottom">
+                                    <Radio
+                                      label="Regular"
+                                      onChange={() => {
+                                        const newFilters = [
+                                          ...selectedFilter.filter(filter => {
+                                            return filter !== "vip";
+                                          }),
+                                          "regular"
+                                        ];
+                                        setSelectedFilter(newFilters);
+                                        const url = categorySlug
+                                          ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
+                                              ","
+                                            )}`
+                                          : `/filters?shopBy=${newFilters.join(
+                                              ","
+                                            )}`;
+                                        router.push(url, undefined, {
+                                          scroll: false
+                                        });
+                                      }}
+                                      checked={selectedFilter.includes(
+                                        "regular"
+                                      )}
+                                    />
+                                  </div>
+
+                                  <Radio
+                                    label="VIP"
+                                    onChange={() => {
+                                      const newFilters = [
+                                        ...selectedFilter.filter(filter => {
+                                          return filter !== "regular";
+                                        }),
+                                        "vip"
+                                      ];
+                                      setSelectedFilter(newFilters);
+                                      const url = `/filters?shopBy=${newFilters.join(
+                                        ","
+                                      )}`;
+                                      router.push(url, undefined, {
+                                        scroll: false
+                                      });
+                                    }}
+                                    checked={selectedFilter.includes("vip")}
+                                  />
+                                </>
+                              ) : child.link ? (
+                                <Link href={child.link}>
+                                  <a
+                                    className={[
+                                      styles["filter-link"],
+                                      child.link ===
+                                      `/product-category/${categorySlug}`
+                                        ? styles.active
+                                        : ""
+                                    ].join(" ")}
+                                  >
+                                    {child.name}
+                                  </a>
+                                </Link>
+                              ) : (
+                                <Checkbox
+                                  onChange={() => handleFilterChange(child)}
+                                  text={child.name}
+                                  checked={selectedFilter.includes(
+                                    child.tag || ""
+                                  )}
+                                />
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        {filter.limit < filter.options.length && (
+                          <button
+                            className={styles["btn-view"]}
+                            onClick={() => {
+                              setFilterCategories(prev =>
+                                prev.map((item, _index) => {
+                                  if (index === _index) {
+                                    return {
+                                      ...item,
+                                      viewMore: !item.viewMore
+                                    };
+                                  }
+                                  return item;
+                                })
+                              );
+                            }}
+                          >
+                            {!filter.viewMore ? "View More" : "View Less"}
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div
+                className={`flex between center-align ${
+                  hideFilters ? "block" : ""
+                }`}
+              >
+                <div className={`input-group ${styles.sort}`}>
+                  <span className="question">Sort: </span>
+                  <Select
+                    options={sortOptions}
+                    value={sort}
+                    onSelect={value => setSort(value as Sort)}
+                    placeholder="Default"
+                    className={styles["sort"]}
+                  />
+                </div>
+                {search && (
+                  <form
+                    onSubmit={handleSearch}
+                    className={`input-group ${styles["search-wrapper"]}`}
+                  >
+                    <span className="question normal-text">Search:</span>
+                    <Input
+                      name="name"
+                      placeholder="Search for products"
+                      value={searchText}
+                      onChange={value => {
+                        setSearchText(value);
+                      }}
+                      dimmed
+                      responsive
+                    />
+                  </form>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <h1 className={`${styles.title} bold vertical-margin spaced`}>
+                {search
+                  ? `Search Results for "${searchText}"`
+                  : (occasionsPageTitle &&
+                      occasionsPageTitle[categorySlug || ""]) ||
+                    "All Occasions"}
+              </h1>
+
+              <div className={[styles.products].join(" ")}>
+                {productsLoading && (
+                  <div className={styles.spinner}>
+                    <img src="/images/spinner.svg" alt="spinner" />
+                  </div>
+                )}
+                {products?.map((product, index, arr) => (
+                  <FlowerCard
+                    key={index}
+                    name={product.name.split("–")[0]}
+                    image={product.images[0].src}
+                    price={product.price}
+                    buttonText="Add to Cart"
+                    subTitle={product.subtitle || product.name.split("–")[1]}
+                    url={`/product/${product.slug}`}
+                    mode={`${
+                      deviceType === "desktop"
+                        ? hideFilters
+                          ? "four-x-grid"
+                          : "three-x-grid"
+                        : "two-x-grid"
+                    }`}
+                    ref={
+                      index === arr.length - 1
+                        ? ele => {
+                            if (ele && hasMore && !productsLoading) {
+                              setLastProductEleRef(ele);
+                            }
+                          }
+                        : null
+                    }
+                    product={product}
+                    cart={product.variants?.length ? false : true}
+                  />
+                ))}
+              </div>
+            </div>
+            {infiniteLoading && hasMore && (
+              <img
+                src="/images/spinner.svg"
+                alt="spinner"
+                className="generic-icon xl spinner"
+              />
+            )}
+          </div>
         </div>
-      </div>
-      <div className={styles.gifts}>
-        {!isGiftPage && (
-          <>
-            <div className="flex between margin-bottom spaced">
-              <span className={styles.title}>
-                Gifts to Include with Flowers
-              </span>
-              {deviceType === "desktop" && (
+        <div className={styles.gifts}>
+          {!isGiftPage && (
+            <>
+              <div className="flex between margin-bottom spaced">
+                <span className={styles.title}>
+                  Gifts to Include with Flowers
+                </span>
+                {deviceType === "desktop" && (
+                  <Button
+                    url="/product-category/gifts"
+                    className="flex spaced center center-align"
+                    type="transparent"
+                  >
+                    <h3 className="red margin-right">See All</h3>
+                    <img
+                      alt="arrow"
+                      className="generic-icon xsmall"
+                      src="/icons/arrow-right.svg"
+                    />
+                  </Button>
+                )}
+              </div>
+              <div className="flex between vertical-margin spaced wrap">
+                {giftItems.map((gift, index) => (
+                  <FlowerCard
+                    key={index}
+                    name={gift.name}
+                    image={gift.image}
+                    subTitle={gift.description}
+                    buttonText="See More"
+                    url={gift.slug}
+                  />
+                ))}
+              </div>
+              {deviceType === "mobile" && (
                 <Button
                   url="/product-category/gifts"
-                  className="flex spaced center center-align"
-                  type="transparent"
+                  type="accent"
+                  minWidth
+                  className={styles["see-all"]}
                 >
                   <h3 className="red margin-right">See All</h3>
-                  <img
-                    alt="arrow"
-                    className="generic-icon xsmall"
-                    src="/icons/arrow-right.svg"
-                  />
                 </Button>
-              )}
-            </div>
-            <div className="flex between vertical-margin spaced wrap">
-              {giftItems.map((gift, index) => (
-                <FlowerCard
-                  key={index}
-                  name={gift.name}
-                  image={gift.image}
-                  subTitle={gift.description}
-                  buttonText="See More"
-                  url={gift.slug}
-                />
-              ))}
-            </div>
-            {deviceType === "mobile" && (
-              <Button
-                url="/product-category/gifts"
-                type="accent"
-                minWidth
-                className={styles["see-all"]}
-              >
-                <h3 className="red margin-right">See All</h3>
-              </Button>
-            )}{" "}
-          </>
-        )}
-        <div className={styles.stories}>
-          <h1 className={`text-center ${styles.title}`}>
-            Flower Delivery for all Occasions
-          </h1>
+              )}{" "}
+            </>
+          )}
+          <div className={styles.stories}>
+            <h1 className={`text-center ${styles.title}`}>
+              Flower Delivery for all Occasions
+            </h1>
 
-          <div className={[styles["about-section"]].join(" ")}>
-            <div>
-              <p className="title small bold margin-bottom">
-                {aboutUsContent.howItBegan.title}
-              </p>
-              <p className="normal-text">
-                It was a Sunday morning, the year was 2016, in the vibrant city
-                of Lagos, Nigeria, and our founder, reeling from the very recent
-                heartbreak of his relationship (Hint: She left him) was
-                determined to get his girlfriend back.
-                <br />
-                <br />
-                She was traveling to Abuja, Nigeria that afternoon, and he
-                wanted to buy fresh flowers for her so he decided to check
-                prices of bouquet of flowers online. He specifically wanted
-                flower shops in Lagos or Abuja that could deliver a bouquet of{" "}
-                <Link href="/products/classic-red-roses-luxurious-bouquet-of-red-roses">
-                  <a className={styles.red}>red roses</a>
-                </Link>{" "}
-                and chocolates to her the same day.
-                <br />
-                <br />
-                He searched high and low, and while he found some online flower
-                delivery shops in Lagos and Abuja, Nigeria, he couldn’t find one
-                that ticked all the right boxes.
-                <br />
-                <br />
-                The flower shops he found either didn’t look reputable enough
-                (after all he was already heartbroken, he couldn’t afford to
-                lose his money too, and this is Nigeria, where you have to be
-                vigilant), were not picking up or returning his calls, or they
-                didn’t have enough options for various budgets.
-                <br />
-                <br />
-                He finally found one that claimed to be open 24 hours on their
-                Google Maps, and when they also didn’t pick up the phone, he
-                drove down there, only to meet it closed. Ouch.
-                <br />
-                <br />
-                No, he eventually didn’t get her back, and No, it wasn't because
-                he couldn't send her the red roses and chocolates.
-                <br />
-                <br />
-                Instead, it was, as the dictionary would say, irreconcilable
-                differences, and they remain friends, but he instead gained the
-                passion for flowers and gifts that would eventually see him open
-                his own online and walk-in fresh flower shop in Lagos and Abuja,
-                Nigeria.
-                <br />
-                An online flower shop that would precisely tick all the right
-                boxes.
-              </p>
-              <p className="title small bold vertical-margin">
-                {aboutUsContent.openingHour.title}
-              </p>
-              <p className="normal-text">
-                Our flower shops in Lagos (Ikoyi Head office) and Abuja (Wuse 2
-                Branch) are open 24 hours not only for website orders but also
-                for walk-ins. We once had a client take us up on the offer by
-                walking in by 3 am. He was on his way to pick up his wife at the
-                airport and wanted to buy red roses to welcome her. He was
-                shocked we were actually open.
-                <br />
-                <br />
-                Many clients are often surprised that unlike others out there,
-                it is not just a slogan for us.
-                <br />
-                <br />
-                Regal Flowers and Gifts is also open every day of the year
-                including weekends and public holidays (yes, Christmas, Easter,
-                and New Year's Day too). We are badass like that
-              </p>
-            </div>
-            <div>
-              <p className="title small bold margin-bottom">
-                {aboutUsContent.reputation.title}
-              </p>
-              <p className="normal-text">
-                Once you place your order, you can completely relax, as we
-                deliver on time, and you can walk into any of our branches
-                anytime. We have the highest rating (4.97 stars on average) and
-                the highest number of Google Reviews in Nigeria (over 1000
-                reviews from our 4 branches).
-                <br />
-                <br />
-                Regal Flowers has delivered to over 10,000 people including
-                various celebrities and 2 Nigerian Presidents. We have very
-                likely delivered roses for and to someone you know.
-                <br />
-                <br />
-                Furthermore, the flowers are always fresh and imported into
-                Nigeria every week from rose farms across the world. You can
-                definitely say Regal flowers is your plug for reputable and
-                premium fresh flowers in Nigeria.
-              </p>
-              <p className="title small bold vertical-margin">
-                {aboutUsContent.deliveryTime.title}
-              </p>
-              <p className="normal-text">
-                We offer fast and same-day delivery of{" "}
-                <Link href="/product-category/just-to-say-bouquets">
-                  <a className={styles.red}>flower bouquets</a>
-                </Link>{" "}
-                and gifts everywhere in Lagos and Abuja. <br /> <br />
-                Some locations we offer delivery of fresh flowers in Lagos
-                include Ikoyi, Victoria Island, Ikeja, Lekki Phase 1, Chevron,
-                Lekki, Ajah, Ikate, Sangotedo, Gbagada, Yaba, Surulere, Ilupeju,
-                Magodo, Maryland, Opebi, Ogba, Ogudu, Allen Avenue.
-                <br /> <br />
-                We opened our Abuja branch in 2021 and it is also open for
-                walk-ins 24 hours. We offer delivery of fresh flowers everywhere
-                in Auja, including in Wuse 2, Maitama, Central Area, Garki,
-                Jabi, Asokoro, Gwarinpa, Jahi, Lokogoma, Apo, Life Camp, Lugbe,
-                Dawaki, Abuja Municipal Area Council etcetera.
-                <br /> <br />
-                In essence, we deliver EVERYWHERE in Lagos and Abuja
-              </p>
-              <p className="title small bold vertical-margin">
-                {aboutUsContent.budget.title}
-              </p>
-              <p className="normal-text">
-                We stock flowers for various occasions such as{" "}
-                <Link href="/product-category/just-to-say-bouquets">
-                  <a className={styles.red}> Birthday Flowers</a>
-                </Link>
-                ,
-                <Link href="/product-category/just-to-say-bouquets">
-                  <a className={styles.red}> Romantic Flowers</a>
-                </Link>
-                ,{" "}
-                <Link href="/product-category/anniversary-flowers">
-                  <a className={styles.red}> Anniversary Flowers</a>
-                </Link>
-                , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
-                <Link href="/product-category/funeral-and-condolence">
-                  <a className={styles.red}> Funeral Wreaths</a>
-                </Link>{" "}
-                ,{" "}
-                <Link href="/product-category/funeral-and-condolence">
-                  <a className={styles.red}> Condolence Flowers</a>
-                </Link>{" "}
-                ,{" "}
-                <Link href="/product-category/bridal-bouquets">
-                  <a className={styles.red}>Bridal Bouquets</a>
-                </Link>{" "}
-                , and of course,
-                <Link href="/product-category/anniversary-flowers">
-                  <a className={styles.red}> Valentine’s Day flowers</a>
-                </Link>{" "}
-                available
-                <br />
-                <br />
-                And finally, there are suitable options for all budgets, so when
-                you see a design you like, you can simply pick the size that
-                suits your budget. Want to go all out too? We got you, with our
-                <Link href="/vip">
-                  <a className={styles.red}> VIP</a>
-                </Link>{" "}
-                Category of roses.
-              </p>
+            <div className={[styles["about-section"]].join(" ")}>
+              <div>
+                <p className="title small bold margin-bottom">
+                  {aboutUsContent.howItBegan.title}
+                </p>
+                <p className="normal-text">
+                  It was a Sunday morning, the year was 2016, in the vibrant
+                  city of Lagos, Nigeria, and our founder, reeling from the very
+                  recent heartbreak of his relationship (Hint: She left him) was
+                  determined to get his girlfriend back.
+                  <br />
+                  <br />
+                  She was traveling to Abuja, Nigeria that afternoon, and he
+                  wanted to buy fresh flowers for her so he decided to check
+                  prices of bouquet of flowers online. He specifically wanted
+                  flower shops in Lagos or Abuja that could deliver a bouquet of{" "}
+                  <Link href="/products/classic-red-roses-luxurious-bouquet-of-red-roses">
+                    <a className={styles.red}>red roses</a>
+                  </Link>{" "}
+                  and chocolates to her the same day.
+                  <br />
+                  <br />
+                  He searched high and low, and while he found some online
+                  flower delivery shops in Lagos and Abuja, Nigeria, he couldn’t
+                  find one that ticked all the right boxes.
+                  <br />
+                  <br />
+                  The flower shops he found either didn’t look reputable enough
+                  (after all he was already heartbroken, he couldn’t afford to
+                  lose his money too, and this is Nigeria, where you have to be
+                  vigilant), were not picking up or returning his calls, or they
+                  didn’t have enough options for various budgets.
+                  <br />
+                  <br />
+                  He finally found one that claimed to be open 24 hours on their
+                  Google Maps, and when they also didn’t pick up the phone, he
+                  drove down there, only to meet it closed. Ouch.
+                  <br />
+                  <br />
+                  No, he eventually didn’t get her back, and No, it wasn't
+                  because he couldn't send her the red roses and chocolates.
+                  <br />
+                  <br />
+                  Instead, it was, as the dictionary would say, irreconcilable
+                  differences, and they remain friends, but he instead gained
+                  the passion for flowers and gifts that would eventually see
+                  him open his own online and walk-in fresh flower shop in Lagos
+                  and Abuja, Nigeria.
+                  <br />
+                  An online flower shop that would precisely tick all the right
+                  boxes.
+                </p>
+                <p className="title small bold vertical-margin">
+                  {aboutUsContent.openingHour.title}
+                </p>
+                <p className="normal-text">
+                  Our flower shops in Lagos (Ikoyi Head office) and Abuja (Wuse
+                  2 Branch) are open 24 hours not only for website orders but
+                  also for walk-ins. We once had a client take us up on the
+                  offer by walking in by 3 am. He was on his way to pick up his
+                  wife at the airport and wanted to buy red roses to welcome
+                  her. He was shocked we were actually open.
+                  <br />
+                  <br />
+                  Many clients are often surprised that unlike others out there,
+                  it is not just a slogan for us.
+                  <br />
+                  <br />
+                  Regal Flowers and Gifts is also open every day of the year
+                  including weekends and public holidays (yes, Christmas,
+                  Easter, and New Year's Day too). We are badass like that
+                </p>
+              </div>
+              <div>
+                <p className="title small bold margin-bottom">
+                  {aboutUsContent.reputation.title}
+                </p>
+                <p className="normal-text">
+                  Once you place your order, you can completely relax, as we
+                  deliver on time, and you can walk into any of our branches
+                  anytime. We have the highest rating (4.97 stars on average)
+                  and the highest number of Google Reviews in Nigeria (over 1000
+                  reviews from our 4 branches).
+                  <br />
+                  <br />
+                  Regal Flowers has delivered to over 10,000 people including
+                  various celebrities and 2 Nigerian Presidents. We have very
+                  likely delivered roses for and to someone you know.
+                  <br />
+                  <br />
+                  Furthermore, the flowers are always fresh and imported into
+                  Nigeria every week from rose farms across the world. You can
+                  definitely say Regal flowers is your plug for reputable and
+                  premium fresh flowers in Nigeria.
+                </p>
+                <p className="title small bold vertical-margin">
+                  {aboutUsContent.deliveryTime.title}
+                </p>
+                <p className="normal-text">
+                  We offer fast and same-day delivery of{" "}
+                  <Link href="/product-category/just-to-say-bouquets">
+                    <a className={styles.red}>flower bouquets</a>
+                  </Link>{" "}
+                  and gifts everywhere in Lagos and Abuja. <br /> <br />
+                  Some locations we offer delivery of fresh flowers in Lagos
+                  include Ikoyi, Victoria Island, Ikeja, Lekki Phase 1, Chevron,
+                  Lekki, Ajah, Ikate, Sangotedo, Gbagada, Yaba, Surulere,
+                  Ilupeju, Magodo, Maryland, Opebi, Ogba, Ogudu, Allen Avenue.
+                  <br /> <br />
+                  We opened our Abuja branch in 2021 and it is also open for
+                  walk-ins 24 hours. We offer delivery of fresh flowers
+                  everywhere in Auja, including in Wuse 2, Maitama, Central
+                  Area, Garki, Jabi, Asokoro, Gwarinpa, Jahi, Lokogoma, Apo,
+                  Life Camp, Lugbe, Dawaki, Abuja Municipal Area Council
+                  etcetera.
+                  <br /> <br />
+                  In essence, we deliver EVERYWHERE in Lagos and Abuja
+                </p>
+                <p className="title small bold vertical-margin">
+                  {aboutUsContent.budget.title}
+                </p>
+                <p className="normal-text">
+                  We stock flowers for various occasions such as{" "}
+                  <Link href="/product-category/just-to-say-bouquets">
+                    <a className={styles.red}> Birthday Flowers</a>
+                  </Link>
+                  ,
+                  <Link href="/product-category/just-to-say-bouquets">
+                    <a className={styles.red}> Romantic Flowers</a>
+                  </Link>
+                  ,{" "}
+                  <Link href="/product-category/anniversary-flowers">
+                    <a className={styles.red}> Anniversary Flowers</a>
+                  </Link>
+                  , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
+                  <Link href="/product-category/funeral-and-condolence">
+                    <a className={styles.red}> Funeral Wreaths</a>
+                  </Link>{" "}
+                  ,{" "}
+                  <Link href="/product-category/funeral-and-condolence">
+                    <a className={styles.red}> Condolence Flowers</a>
+                  </Link>{" "}
+                  ,{" "}
+                  <Link href="/product-category/bridal-bouquets">
+                    <a className={styles.red}>Bridal Bouquets</a>
+                  </Link>{" "}
+                  , and of course,
+                  <Link href="/product-category/anniversary-flowers">
+                    <a className={styles.red}> Valentine’s Day flowers</a>
+                  </Link>{" "}
+                  available
+                  <br />
+                  <br />
+                  And finally, there are suitable options for all budgets, so
+                  when you see a design you like, you can simply pick the size
+                  that suits your budget. Want to go all out too? We got you,
+                  with our
+                  <Link href="/vip">
+                    <a className={styles.red}> VIP</a>
+                  </Link>{" "}
+                  Category of roses.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

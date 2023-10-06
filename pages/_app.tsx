@@ -244,18 +244,10 @@ const App: FunctionComponent<AppProps> = props => {
     setSearchText
   };
 
-  const headTags = (
-    <Head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Regal Flowers</title>
-    </Head>
-  );
-
   return (
     <SettingsContext.Provider value={settingsControls}>
       <ProgressBar />
       <div suppressHydrationWarning className="app-wrapper">
-        {headTags}
         <Layout>
           <Component {...pageProps} />
           <ConfirmModal

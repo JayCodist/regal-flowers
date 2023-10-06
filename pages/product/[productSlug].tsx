@@ -287,11 +287,11 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   return (
     <>
       <Meta
-        title={`${product.name} ${product.subtitle}|Regal Flowers`}
+        title={`${product.name} - ${product.subtitle} | Regal Flowers`}
         description={product.description}
         image={product.images[0].src}
         imageAlt={product.images[0].alt}
-        canonicalUrl={`${regalWebsiteUrl}/${product.slug}`}
+        canonicalUrl={`${regalWebsiteUrl}/product/${product.slug}`}
       >
         <SchemaMarkup
           properties={{

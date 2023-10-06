@@ -11,7 +11,9 @@ const CategoryPage: FunctionComponent<{
 }> = ({ category }) => {
   return (
     <>
-      <Meta canonicalUrl={`${regalWebsiteUrl}/${category.slug}`}></Meta>
+      <Meta
+        canonicalUrl={`${regalWebsiteUrl}/product-category/${category.slug}`}
+      ></Meta>
       <ProductsPage productCategory="occasion" categorySlug={category.slug} />
     </>
   );
