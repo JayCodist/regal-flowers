@@ -14,11 +14,11 @@ const CategoryPage: FunctionComponent<{
       <Meta
         canonicalUrl={`${regalWebsiteUrl}/product-category/${category.slug}`}
         description={
-          occasionsPageMetaData[category.slug].description &&
+          occasionsPageMetaData[category.slug] &&
           occasionsPageMetaData[category.slug].description
         }
         title={
-          occasionsPageMetaData[category.slug].title &&
+          occasionsPageMetaData[category.slug] &&
           occasionsPageMetaData[category.slug].title
         }
       ></Meta>
