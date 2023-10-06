@@ -1,21 +1,32 @@
 import { GetStaticPaths, GetStaticProps } from "next";
 import { FunctionComponent } from "react";
-import { getCategories } from "../../utils/helpers/data/category";
+import { getCategories, getCategory } from "../../utils/helpers/data/category";
 import ProductsPage from "../filters";
+import { Category } from "../../utils/types/Category";
 
 const CategoryPage: FunctionComponent<{
-  categorySlug: string;
-}> = ({ categorySlug }) => {
+  category: Category;
+}> = ({ category }) => {
   return (
-    <ProductsPage productCategory="occasion" categorySlug={categorySlug} />
+    <ProductsPage productCategory="occasion" categorySlug={category.slug} />
   );
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const categorySlug = params?.categorySlug as string;
+
+  const { error, message, data } = await getCategory(categorySlug);
+
+  if (error) {
+    console.error("Unable to fetch Category", message);
+
+    return {
+      props: {}
+    };
+  }
   return {
     props: {
-      categorySlug
+      category: data
     }
   };
 };
