@@ -33,7 +33,7 @@ const Meta = ({
           description
             ? description
             : "Fresh flowers vendors. Delivery throughout Nigeria"
-        }}`}
+        }`}
       />
 
       {/* Open Graph Meta Tags */}
