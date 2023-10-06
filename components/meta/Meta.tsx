@@ -13,7 +13,7 @@ interface MetaProps {
 
 const Meta = ({
   canonicalUrl,
-  title = "Regal Flowers",
+  title,
   description,
   image,
   children,
@@ -24,9 +24,17 @@ const Meta = ({
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta charSet="UTF-8" />
-      <title>Regal Flowers</title>
+      <title>{title ? title : "Regal Flowers"}</title>
 
       {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      <meta
+        name="description"
+        content={`${
+          description
+            ? description
+            : "Fresh flowers vendors. Delivery throughout Nigeria"
+        }}`}
+      />
 
       {/* Open Graph Meta Tags */}
       {title && <meta property="og:title" content={title} />}
