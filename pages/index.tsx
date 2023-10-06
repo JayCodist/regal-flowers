@@ -20,7 +20,8 @@ import {
   allOccasionOptions,
   giftItems,
   bestSellersRomance,
-  defaultBreadcrumb
+  defaultBreadcrumb,
+  regalWebsiteUrl
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -147,6 +148,7 @@ const LandingPage: FunctionComponent<{
         description="Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria."
         image="/images/popular-bundled.jpg"
         imageAlt="Regal Flowers"
+        canonicalUrl={`${regalWebsiteUrl}`}
       >
         <SchemaMarkup properties={schemaProperties} />
       </Meta>
@@ -938,7 +940,9 @@ const FlowerDeliveryInput: FunctionComponent = () => {
   const [occasion, setOccasion] = useState<Category>({
     name: "",
     id: "",
-    slug: ""
+    slug: "",
+    image: "",
+    description: ""
   });
   const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
   const [occassionOptions, setOccassionOptions] = useState<
@@ -980,7 +984,9 @@ const FlowerDeliveryInput: FunctionComponent = () => {
       {
         name: _selectedOccasion,
         id: value,
-        slug: ""
+        slug: "",
+        image: "",
+        description: ""
       } || null
     );
   };
