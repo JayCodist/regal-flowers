@@ -800,7 +800,9 @@ const ProductsPage: FunctionComponent<{
             <h1 className={`${styles.title} bold vertical-margin spaced`}>
               {search
                 ? `Search Results for "${searchText}"`
-                : occasionsPageTitle[categorySlug as string] || "All Occasions"}
+                : (occasionsPageTitle &&
+                    occasionsPageTitle[categorySlug || ""]) ||
+                  "All Occasions"}
             </h1>
 
             <div className={[styles.products].join(" ")}>

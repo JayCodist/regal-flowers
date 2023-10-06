@@ -68,13 +68,13 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
       `https://regalflowers.com.ng/product/${product.slug}`
     );
     if (platform === Platform.TWITTER) {
-      const twitterShareLink = `https://twitter.com/intent/tweet?url=${currentURL}`;
+      const twitterShareLink = `https://twitter.com/intent/tweet?url=${currentURL}&text=Check%20out%20this%20combo!`;
       window.open(twitterShareLink, "_blank");
     } else if (platform === Platform.FACEBOOK) {
       const facebookShareLink = `https://www.facebook.com/sharer/sharer.php?u=${currentURL}`;
       window.open(facebookShareLink, "_blank");
     } else {
-      const whatsappShareLink = `whatsapp://send?${currentURL}`;
+      const whatsappShareLink = `whatsapp://send?text=Check%20out%20this%20combo!%20${currentURL}`;
       window.open(whatsappShareLink, "_blank");
     }
   };
