@@ -11,10 +11,6 @@ class MyDocument extends Document {
             content="width=device-width, initial-scale=1.0"
           />
           <meta
-            name="description"
-            content="Fresh flowers vendors. Delivery throughout Nigeria"
-          />
-          <meta
             name="keywords"
             content="regal flowers, regal, flowers, online flowers, fresh flowers, flowers delivery"
           />

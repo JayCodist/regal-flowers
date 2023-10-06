@@ -153,7 +153,7 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
     <>
       <Meta
         title="Frequently Asked Questions - Regal Flowers"
-        description="Find answers to common questions about Regal Flowers, flower orders, and more."
+        description="How to Order Flowers and Gifts in Lagos and Abuja and Delivery Information | Regal Flowers & Gifts"
         canonicalUrl={`${regalWebsiteUrl}/faq-how-to-buy-fresh-flowers-and-gifts-in-lagos-and-abuja`}
         url={`${regalWebsiteUrl}/faq-how-to-buy-fresh-flowers-and-gifts-in-lagos-and-abuja`}
         image="/images/popular-bundled.jpg"

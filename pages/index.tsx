@@ -174,7 +174,7 @@ const LandingPage: FunctionComponent<{
   return (
     <>
       <Meta
-        title="Same Day Flower Delivery in Lagos and Abuja, Nigeria | Regal Flowers"
+        title="Regal Flowers | Same Day Flower Delivery Shop in Lagos and Abuja, Nigeria"
         description="Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria."
         image="/images/popular-bundled.jpg"
         imageAlt="Regal Flowers"
