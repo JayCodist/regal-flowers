@@ -122,7 +122,37 @@ const schemaProperties = {
       contactType: "customer service",
       url: "https://wa.me/+2347011992888"
     }
-  ]
+  ],
+  sameAs: [
+    "https://instagram.com/regalflowers.com.ng",
+    "http://facebook.com/RegalFlowersNG/",
+    "https://www.linkedin.com/company/regalflowers-com-ng/"
+  ],
+  potentialAction: [
+    {
+      "@type": "ViewAction",
+      target:
+        "https://regalflowers.com.ng/product-category/flowers-for-love-birthday-anniversary-etc",
+      name: "Love, Birthday, Anniversary Flowers"
+    },
+    {
+      "@type": "ViewAction",
+      target: "https://regalflowers.com.ng/product-category/gifts",
+      name: "Gifts to Include"
+    },
+    {
+      "@type": "ViewAction",
+      target:
+        "https://regalflowers.com.ng/product-category/just-to-say-bouquets",
+      name: "Popular Options"
+    },
+    {
+      "@type": "ViewAction",
+      target: "https://regalflowers.com.ng/product-category/roses",
+      name: "Roses"
+    }
+  ],
+  logo: "/icons/logo.png"
 };
 
 const LandingPage: FunctionComponent<{
