@@ -15,6 +15,19 @@ const CategoryPage: FunctionComponent<{
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const categorySlug = params?.categorySlug as string;
 
+  if (categorySlug === "all") {
+    return {
+      props: {
+        category: {
+          name: "All",
+          slug: "all",
+          description: "All Products",
+          image: ""
+        }
+      }
+    };
+  }
+
   const { error, message, data } = await getCategory(categorySlug);
 
   if (error) {
