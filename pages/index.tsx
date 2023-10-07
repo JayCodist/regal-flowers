@@ -47,7 +47,11 @@ const schemaProperties = {
   url: "https://regalflowers.com.ng",
   description:
     "Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria.",
-  image: "/images/popular-bundled.jpg",
+  image: [
+    "/images/popular-bundled.jpg",
+    "/images/occasions-love-bday.png",
+    "/images/calligraphy.jpg"
+  ],
   telephone: [
     "+234 701 000 6664",
     "+234 701 000 6665",
