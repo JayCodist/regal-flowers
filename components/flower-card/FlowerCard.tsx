@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Img from "next/image";
 import React, { forwardRef, MouseEvent, useContext } from "react";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
@@ -6,6 +7,8 @@ import { CartItem } from "../../utils/types/Core";
 import Product from "../../utils/types/Product";
 import Button from "../button/Button";
 import styles from "./FlowerCard.module.scss";
+import useDeviceType from "../../utils/hooks/useDeviceType";
+import { getMobileImageUrl } from "../../utils/helpers/formatters";
 
 interface IFlowerCardProps {
   buttonText?: string;
@@ -105,6 +108,8 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
 
     const outOfStock = product && !product.sku && !product.variants.length;
 
+    const deviceType = useDeviceType();
+
     return (
       <Link href={url || "#"}>
         <a
@@ -114,9 +119,11 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
           ref={ref}
         >
           <div className={styles["img-wrapper"]}>
-            <img
+            <Img
               className={styles["flower-image"]}
-              src={image}
+              src={deviceType === "mobile" ? getMobileImageUrl(image) : image}
+              height={deviceType === "mobile" ? 800 : 2500}
+              width={deviceType === "mobile" ? 800 : 2500}
               alt="featured flower"
             />
           </div>
