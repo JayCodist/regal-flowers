@@ -7,21 +7,14 @@ class MyDocument extends Document {
         <Head>
           <link rel="shortcut icon" href="/icons/favicon.png" />
           <meta
-            name="description"
-            content="Fresh flowers vendors. Delivery throughout Nigeria"
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
           />
           <meta
             name="keywords"
             content="regal flowers, regal, flowers, online flowers, fresh flowers, flowers delivery"
           />
           <meta name="author" content="jaycodist@gmail.com" />
-          <meta name="og:title" content="Regal Flowers" />
-          <meta
-            name="og:description"
-            content="Get fresh flowers, delivered today"
-          />
-          <meta name="og:url" content="https://regalflowers.com.ng" />
-          <meta property="og:image" content="/icons.logo.png" />
           <script
             dangerouslySetInnerHTML={{
               __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

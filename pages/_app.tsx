@@ -1,6 +1,5 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { AppProps } from "next/app";
-import Head from "next/head";
 import "../styles/styles.scss";
 import Layout, {
   ConfirmModal,
@@ -103,12 +102,15 @@ const App: FunctionComponent<AppProps> = props => {
       ) || defaultSettings.currency;
 
     if (defaultCurrencyName !== "NGN" && !fromStorage) {
-      setTimeout(() => notify(
-        "info",
-        `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
-        4000
-      ), 8000)
-
+      setTimeout(
+        () =>
+          notify(
+            "info",
+            `Based on your location, the site has been set to ${defaultCurrencyName} (${defaultCurrency.sign}) to enable foreign Credit/Debit Cards and Paypal`,
+            4000
+          ),
+        8000
+      );
     }
 
     setSettings({
@@ -241,18 +243,10 @@ const App: FunctionComponent<AppProps> = props => {
     setSearchText
   };
 
-  const headTags = (
-    <Head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Regal Flowers</title>
-    </Head>
-  );
-
   return (
     <SettingsContext.Provider value={settingsControls}>
       <ProgressBar />
       <div suppressHydrationWarning className="app-wrapper">
-        {headTags}
         <Layout>
           <Component {...pageProps} />
           <ConfirmModal

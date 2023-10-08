@@ -118,8 +118,6 @@ export const currencyOptions: AppCurrency[] = [
   { name: "GBP", conversionRate: 890, sign: "£" }
 ];
 
-
-
 interface FooterContent {
   aboutUs: string;
   socialIcons: { name: string; src: string; url: string }[];
@@ -2993,3 +2991,105 @@ export const allDesignOptions: DesignOption[] = [
     price: 0
   }
 ];
+
+export const regalWebsiteUrl = "https://regalflowers.com.ng";
+
+export const occasionsPageMetaData: Record<
+  string,
+  { title: string; description: string }
+> = {
+  "flowers-for-love-birthday-anniversary-etc": {
+    title: "Flowers for Romance, Birthday, Anniversary etc | Regal Flowers",
+    description:
+      "Choose from our delightful assortment of Birthday, Anniversary, Romantic Flowers, Valentine’s Flowers, or Mother’s Day Flowers…and don’t forget to add a gift too"
+  },
+  "just-to-say-bouquets": {
+    title: "Flowers to Say Sorry, Thank You, Congrats, Happy Mothers Day etc",
+    description:
+      "Say it with flowers. Various flowers to say, Thank You, I am Sorry, Congratulations and more"
+  },
+  "bridal-bouquets": {
+    title: "Bridal Bouquets For The Bride and Bridal train | Regal Flowers",
+    description: ""
+  },
+  "funeral-and-condolence": {
+    title:
+      "Funeral Wreaths And Condolence Flowers To Say Goodbye | Regal Flowers",
+    description: ""
+  },
+  all: {
+    title: "",
+    description: ""
+  },
+  "cascading-bridal-bouquets": {
+    title:
+      "Cascading Bridal Bouquets With Fresh Flowers Or Roses | Regal Flowers",
+    description: ""
+  },
+  "accessories-boutonnieres-bridesmaids-flowers-amp-corsages": {
+    title:
+      "Fresh flower bridal train and groomsmen accessories | Regal Flowers",
+    description: ""
+  },
+  "indoor-plants-and-cactus": {
+    title: "",
+    description:
+      "Indoor Plants ranging from cactus plants, lucky bamboo and more are always a great addition to aid the ambience of a place. They make a great gift for friends, family and loved ones."
+  },
+  vip: {
+    title: "",
+    description: ""
+  },
+  "chocolate-and-biscuits": {
+    title: "",
+    description: ""
+  },
+  "cakes-and-cupcakes": {
+    title: "",
+    description: ""
+  },
+  "teddy-bears": {
+    title: "",
+    description: ""
+  },
+  balloons: {
+    title: "",
+    description: ""
+  },
+  "wine-and-champagne": {
+    title: "",
+    description: ""
+  },
+  "perfumes-eau-de-toilette-cologne-and-parfums": {
+    title: "",
+    description: ""
+  },
+  "gift-packs": {
+    title: "",
+    description: ""
+  },
+  "scented-candles": {
+    title: "",
+    description: ""
+  },
+  roses: {
+    title: "",
+    description: ""
+  },
+  chrysanthemums: {
+    title: "",
+    description: ""
+  },
+  lilies: {
+    title: "",
+    description: ""
+  },
+  "million-stars": {
+    title: "",
+    description: ""
+  },
+  "forever-roses-preserved-roses": {
+    title: "",
+    description: ""
+  }
+};

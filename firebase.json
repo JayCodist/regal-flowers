@@ -18,7 +18,12 @@
         "type": 301
       },         
       {
-        "source": "/about-us",
+        "source": "/about/",
+        "destination": "/#aboutUs",
+        "type": 301
+      },         
+      {
+        "source": "/about-us/",
         "destination": "/#aboutUs",
         "type": 301
       },     
@@ -46,7 +51,7 @@
         "source": "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/chocolate-and-biscuits",
         "destination": "/product-category/chocolate-and-biscuits",
         "type": 301
-      }, 
+      },  
       {
         "source": "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/cakes-and-cupcakes",
         "destination": "/product-category/cakes-and-cupcakes",
@@ -101,6 +106,11 @@
         "source": "/product-category/bridal-bouquets/cascading-bridal-bouquets",
         "destination": "/product-category/cascading-bridal-bouquets",
         "type": 301
+      },        
+      {
+        "source": "/product-category/bridal-bouquets/cascading-dropping-bouquets/",
+        "destination": "/product-category/cascading-bridal-bouquets",
+        "type": 301
       },      
       {
         "source": "/product-category/bridal-bouquets/accessories-boutonnieres-bridesmaids-flowers-corsages",
@@ -144,6 +154,11 @@
       },     
       {
         "source": "/product-category/birthday-flowers",
+        "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
+        "type": 301
+      },
+      {
+        "source": "/product-tag/",
         "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
         "type": 301
       },      
