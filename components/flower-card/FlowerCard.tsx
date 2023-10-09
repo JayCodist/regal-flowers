@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Img from "next/image";
 import React, { forwardRef, MouseEvent, useContext } from "react";
 import SettingsContext from "../../utils/context/SettingsContext";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
@@ -119,11 +118,11 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
           ref={ref}
         >
           <div className={styles["img-wrapper"]}>
-            <Img
+            <img
               className={styles["flower-image"]}
               src={deviceType === "mobile" ? getMobileImageUrl(image) : image}
-              height={deviceType === "mobile" ? 800 : 2500}
-              width={deviceType === "mobile" ? 800 : 2500}
+              height={deviceType === "mobile" ? 800 : 2000}
+              width={deviceType === "mobile" ? 800 : 2000}
               alt="featured flower"
             />
           </div>
