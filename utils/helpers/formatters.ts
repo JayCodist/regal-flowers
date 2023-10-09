@@ -12,6 +12,9 @@ export const getMobileImageUrl = (str: string) => {
     return str;
   }
   const urlSegments = str.split("/");
-  const path = urlSegments.pop();
-  return `${urlSegments.join("/")}/mobile-${path}`;
+  const path = urlSegments
+    .pop()
+    ?.split(".")
+    .slice(0, -1);
+  return `${urlSegments.join("/")}/mobile-${path}.webp`;
 };
