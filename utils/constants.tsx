@@ -494,7 +494,7 @@ export const deliveryStates: Option[] = [
 
 export const paymentMethods: PaymentMethod[] = [
   {
-    title: "PayPal or Credit/Debit Cards",
+    title: "Credit/Debit Cards or Paypal",
     paymentName: "payPal",
     supportedCurrencies: ["USD", "GBP"],
     icon: (
@@ -512,7 +512,7 @@ export const paymentMethods: PaymentMethod[] = [
         />
       </svg>
     ),
-    info: "Credit/Debit Cards or PayPal",
+    info: "You don't need to own a Paypal account.",
     other: [
       {
         icon: (
