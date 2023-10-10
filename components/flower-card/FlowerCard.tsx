@@ -6,6 +6,8 @@ import { CartItem } from "../../utils/types/Core";
 import Product from "../../utils/types/Product";
 import Button from "../button/Button";
 import styles from "./FlowerCard.module.scss";
+import useDeviceType from "../../utils/hooks/useDeviceType";
+import { getMobileImageUrl } from "../../utils/helpers/formatters";
 
 interface IFlowerCardProps {
   buttonText?: string;
@@ -105,6 +107,8 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
 
     const outOfStock = product && !product.sku && !product.variants.length;
 
+    const deviceType = useDeviceType();
+
     return (
       <Link href={url || "#"}>
         <a
@@ -116,7 +120,9 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
           <div className={styles["img-wrapper"]}>
             <img
               className={styles["flower-image"]}
-              src={image}
+              src={deviceType === "mobile" ? getMobileImageUrl(image) : image}
+              height={deviceType === "mobile" ? 800 : 2000}
+              width={deviceType === "mobile" ? 800 : 2000}
               alt="featured flower"
             />
           </div>
