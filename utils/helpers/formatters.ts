@@ -6,3 +6,15 @@ export const formatPhoneNumber = (str: string | undefined) => {
     .replace(/^\+?2340*/, "");
   return output;
 };
+
+export const getMobileImageUrl = (str: string) => {
+  if (str.startsWith("/")) {
+    return str;
+  }
+  const urlSegments = str.split("/");
+  const path = urlSegments
+    .pop()
+    ?.split(".")
+    .slice(0, -1);
+  return `${urlSegments.join("/")}/mobile-${path}.webp`;
+};
