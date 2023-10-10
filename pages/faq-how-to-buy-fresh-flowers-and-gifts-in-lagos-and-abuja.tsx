@@ -17,7 +17,7 @@ import styles from "./faq.module.scss";
 import Meta from "../components/meta/Meta";
 import SchemaMarkup from "../components/schema-mark-up/SchemaMarkUp";
 
-type ContentLink = "how-it-works" | "payment-methods" | "delivery";
+type ContentLink = "how-it-works" | "payment-methods" | "delivery" | "whyRegal";
 
 const schemaProperties = {
   "@type": "FAQPage",
@@ -205,6 +205,18 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                       "primary-color"}`}
                   >
                     <span className="margin-right">3</span> Delivery
+                  </p>
+                </a>
+              </Link>
+              <Link href="#whyRegal">
+                <a onClick={() => setActiveContent("whyRegal")}>
+                  <p
+                    className={`${activeContent === "whyRegal" &&
+                      "primary-color"}`}
+                  >
+                    <span className="margin-right">4</span> Why do people call
+                    Regal Flowers the best Flower Shop in Lagos and Abuja,
+                    Nigeria
                   </p>
                 </a>
               </Link>
@@ -497,6 +509,55 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                   </Link>{" "}
                   and Lagos, Nigeria would be held for a limited amount of time
                   and might eventually wither at the buyers expense.
+                </p>
+              </div>
+              <div id="whyRegal">
+                <p className={`${styles.title}`}>
+                  Why do people call Regal Flowers the best Flower Shop in Lagos
+                  and Abuja, Nigeria
+                </p>
+                <p className="title small bold vertical-margin">
+                  Why Are We Seen as the Best Flower Shop in Lagos
+                </p>
+                <p className="normal-text">
+                  Why Are We Seen as the Best Flower Shop in Lagos Regal Flowers
+                  is widely recognized as the best flower shop in Lagos,
+                  Nigeria. We have the highest number of reviews and also the
+                  highest reviewed flower shop in the country across our
+                  branches. Our commitment to quality, same-day delivery, and
+                  our extensive selection of fresh flowers and gifts sets us
+                  apart. We've also had the privilege of delivering to various
+                  celebrities, including two Nigerian Presidents. Additionally,
+                  we are open 24 hours, making it convenient for you to choose
+                  and send flowers at any time.
+                </p>
+                <p className="title small bold vertical-margin">
+                  Why Are We Seen as the Best Flower Shop in Abuja
+                </p>
+                <p className="normal-text">
+                  Regal Flowers is also recognized as the best flower shop in
+                  Abuja, Nigeria. We are known for our exceptional service,
+                  high-quality flowers, and a wide range of gift options. Our
+                  reputation as the best flower shop in Abuja is backed by
+                  numerous positive reviews from satisfied customers.
+                  Additionally, we offer 24-hour service, making it convenient
+                  for you to shop for flowers and gifts at any time.
+                </p>
+                <p className="title small bold vertical-margin">
+                  Why are Flowers so Expensive in Lagos and Abuja, Nigeria
+                </p>
+                <p className="normal-text">
+                  Flowers can be expensive in Lagos and Abuja, Nigeria due to
+                  factors such as import costs, transportation, unsteady
+                  electricity, and the high cost of refrigeration. However, at
+                  Regal Flowers, we strive to offer competitive prices while
+                  ensuring the freshest and most beautiful flowers for our
+                  customers. You can read more about this on our blog:{" "}
+                  <Link href="/">
+                    <a className={styles.link}>
+                      Why Are Flowers So Expensive in Nigeria?
+                    </a>
+                  </Link>
                 </p>
               </div>
             </div>
