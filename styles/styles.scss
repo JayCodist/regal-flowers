@@ -757,6 +757,12 @@ button {
   a {
     color: #9b0000;
   }
+
+  &.category {
+    h2 {
+      margin: 1.5rem auto;
+    }
+  }
 }
 
 .view-cart {

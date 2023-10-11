@@ -7,4 +7,6 @@ export interface Category {
   shortDescription: string;
   altImage: string;
   title: string;
+  topHeading: string;
+  bottomHeading: string;
 }

@@ -14,7 +14,6 @@ import Checkbox from "../components/checkbox/Checkbox";
 import FlowerCard from "../components/flower-card/FlowerCard";
 import {
   FilterOption,
-  aboutUsContent,
   breadcrumbItems,
   bridalOccasionFilters,
   defaultBreadcrumb,
@@ -381,6 +380,22 @@ const ProductsPage: FunctionComponent<{
   }, [search]);
 
   const hideHero = search;
+
+  useEffect(() => {
+    if (category) {
+      const categoryDescription = document.getElementById(
+        "category-description"
+      );
+      if (categoryDescription) {
+        categoryDescription.innerHTML = category?.description.replace(
+          "<p>&nbsp;</p>",
+          ""
+        );
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -857,8 +872,10 @@ const ProductsPage: FunctionComponent<{
               <h1 className={`${styles.title} bold vertical-margin spaced`}>
                 {search
                   ? `Search Results for "${searchText}"`
-                  : (occasionsPageTitle &&
-                      occasionsPageTitle[categorySlug || ""]) ||
+                  : (category?.topHeading
+                      ? category.topHeading
+                      : occasionsPageTitle &&
+                        occasionsPageTitle[categorySlug || ""]) ||
                     "All Occasions"}
               </h1>
 
@@ -956,173 +973,13 @@ const ProductsPage: FunctionComponent<{
           )}
           <div className={styles.stories}>
             <p className={`text-center ${styles.title}`}>
-              Flower Delivery for all Occasions
+              {category?.bottomHeading || "Flower Delivery for all Occasions"}
             </p>
 
-            <div className={[styles["about-section"]].join(" ")}>
-              <div>
-                <p className="title small bold margin-bottom">
-                  {aboutUsContent.howItBegan.title}
-                </p>
-                <p className="normal-text">
-                  It was a Sunday morning, the year was 2016, in the vibrant
-                  city of Lagos, Nigeria, and our founder, reeling from the very
-                  recent heartbreak of his relationship (Hint: She left him) was
-                  determined to get his girlfriend back.
-                  <br />
-                  <br />
-                  She was traveling to Abuja, Nigeria that afternoon, and he
-                  wanted to buy fresh flowers for her so he decided to check
-                  prices of bouquet of flowers online. He specifically wanted
-                  flower shops in Lagos or Abuja that could deliver a bouquet of{" "}
-                  <Link href="/products/classic-red-roses-luxurious-bouquet-of-red-roses">
-                    <a className={styles.red}>red roses</a>
-                  </Link>{" "}
-                  and chocolates to her the same day.
-                  <br />
-                  <br />
-                  He searched high and low, and while he found some online
-                  flower delivery shops in Lagos and Abuja, Nigeria, he couldn’t
-                  find one that ticked all the right boxes.
-                  <br />
-                  <br />
-                  The flower shops he found either didn’t look reputable enough
-                  (after all he was already heartbroken, he couldn’t afford to
-                  lose his money too, and this is Nigeria, where you have to be
-                  vigilant), were not picking up or returning his calls, or they
-                  didn’t have enough options for various budgets.
-                  <br />
-                  <br />
-                  He finally found one that claimed to be open 24 hours on their
-                  Google Maps, and when they also didn’t pick up the phone, he
-                  drove down there, only to meet it closed. Ouch.
-                  <br />
-                  <br />
-                  No, he eventually didn’t get her back, and No, it wasn't
-                  because he couldn't send her the red roses and chocolates.
-                  <br />
-                  <br />
-                  Instead, it was, as the dictionary would say, irreconcilable
-                  differences, and they remain friends, but he instead gained
-                  the passion for flowers and gifts that would eventually see
-                  him open his own online and walk-in fresh flower shop in Lagos
-                  and Abuja, Nigeria.
-                  <br />
-                  An online flower shop that would precisely tick all the right
-                  boxes.
-                </p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.openingHour.title}
-                </p>
-                <p className="normal-text">
-                  Our flower shops in Lagos (Ikoyi Head office) and Abuja (Wuse
-                  2 Branch) are open 24 hours not only for website orders but
-                  also for walk-ins. We once had a client take us up on the
-                  offer by walking in by 3 am. He was on his way to pick up his
-                  wife at the airport and wanted to buy red roses to welcome
-                  her. He was shocked we were actually open.
-                  <br />
-                  <br />
-                  Many clients are often surprised that unlike others out there,
-                  it is not just a slogan for us.
-                  <br />
-                  <br />
-                  Regal Flowers and Gifts is also open every day of the year
-                  including weekends and public holidays (yes, Christmas,
-                  Easter, and New Year's Day too). We are badass like that
-                </p>
-              </div>
-              <div>
-                <p className="title small bold margin-bottom">
-                  {aboutUsContent.reputation.title}
-                </p>
-                <p className="normal-text">
-                  Once you place your order, you can completely relax, as we
-                  deliver on time, and you can walk into any of our branches
-                  anytime. We have the highest rating (4.97 stars on average)
-                  and the highest number of Google Reviews in Nigeria (over 1000
-                  reviews from our 4 branches).
-                  <br />
-                  <br />
-                  Regal Flowers has delivered to over 10,000 people including
-                  various celebrities and 2 Nigerian Presidents. We have very
-                  likely delivered roses for and to someone you know.
-                  <br />
-                  <br />
-                  Furthermore, the flowers are always fresh and imported into
-                  Nigeria every week from rose farms across the world. You can
-                  definitely say Regal flowers is your plug for reputable and
-                  premium fresh flowers in Nigeria.
-                </p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.deliveryTime.title}
-                </p>
-                <p className="normal-text">
-                  We offer fast and same-day delivery of{" "}
-                  <Link href="/product-category/just-to-say-bouquets">
-                    <a className={styles.red}>flower bouquets</a>
-                  </Link>{" "}
-                  and gifts everywhere in Lagos and Abuja. <br /> <br />
-                  Some locations we offer delivery of fresh flowers in Lagos
-                  include Ikoyi, Victoria Island, Ikeja, Lekki Phase 1, Chevron,
-                  Lekki, Ajah, Ikate, Sangotedo, Gbagada, Yaba, Surulere,
-                  Ilupeju, Magodo, Maryland, Opebi, Ogba, Ogudu, Allen Avenue.
-                  <br /> <br />
-                  We opened our Abuja branch in 2021 and it is also open for
-                  walk-ins 24 hours. We offer delivery of fresh flowers
-                  everywhere in Auja, including in Wuse 2, Maitama, Central
-                  Area, Garki, Jabi, Asokoro, Gwarinpa, Jahi, Lokogoma, Apo,
-                  Life Camp, Lugbe, Dawaki, Abuja Municipal Area Council
-                  etcetera.
-                  <br /> <br />
-                  In essence, we deliver EVERYWHERE in Lagos and Abuja
-                </p>
-                <p className="title small bold vertical-margin">
-                  {aboutUsContent.budget.title}
-                </p>
-                <p className="normal-text">
-                  We stock flowers for various occasions such as{" "}
-                  <Link href="/product-category/just-to-say-bouquets">
-                    <a className={styles.red}> Birthday Flowers</a>
-                  </Link>
-                  ,
-                  <Link href="/product-category/just-to-say-bouquets">
-                    <a className={styles.red}> Romantic Flowers</a>
-                  </Link>
-                  ,{" "}
-                  <Link href="/product-category/anniversary-flowers">
-                    <a className={styles.red}> Anniversary Flowers</a>
-                  </Link>
-                  , Mothers’ Day Flowers, Get Well Soon Flowers,{" "}
-                  <Link href="/product-category/funeral-and-condolence">
-                    <a className={styles.red}> Funeral Wreaths</a>
-                  </Link>{" "}
-                  ,{" "}
-                  <Link href="/product-category/funeral-and-condolence">
-                    <a className={styles.red}> Condolence Flowers</a>
-                  </Link>{" "}
-                  ,{" "}
-                  <Link href="/product-category/bridal-bouquets">
-                    <a className={styles.red}>Bridal Bouquets</a>
-                  </Link>{" "}
-                  , and of course,
-                  <Link href="/product-category/anniversary-flowers">
-                    <a className={styles.red}> Valentine’s Day flowers</a>
-                  </Link>{" "}
-                  available
-                  <br />
-                  <br />
-                  And finally, there are suitable options for all budgets, so
-                  when you see a design you like, you can simply pick the size
-                  that suits your budget. Want to go all out too? We got you,
-                  with our
-                  <Link href="/vip">
-                    <a className={styles.red}> VIP</a>
-                  </Link>{" "}
-                  Category of roses.
-                </p>
-              </div>
-            </div>
+            <p
+              id="category-description"
+              className="description category normal-text"
+            ></p>
           </div>
         </div>
       </section>
