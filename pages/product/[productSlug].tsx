@@ -288,7 +288,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     <>
       <Meta
         title={`${product.name} - ${product.subtitle} | Regal Flowers`}
-        description={product.description}
+        description={product.pageDescription}
         image={product.images[0].src}
         imageAlt={product.images[0].alt}
         canonicalUrl={`${regalWebsiteUrl}/product/${product.slug}`}

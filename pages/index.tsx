@@ -976,7 +976,10 @@ const FlowerDeliveryInput: FunctionComponent = () => {
     id: "",
     slug: "",
     image: "",
-    description: ""
+    description: "",
+    altImage: "",
+    shortDescription: "",
+    title: ""
   });
   const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
   const [occassionOptions, setOccassionOptions] = useState<
@@ -1020,7 +1023,10 @@ const FlowerDeliveryInput: FunctionComponent = () => {
         id: value,
         slug: "",
         image: "",
-        description: ""
+        description: "",
+        altImage: "",
+        shortDescription: "",
+        title: ""
       } || null
     );
   };
