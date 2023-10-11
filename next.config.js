@@ -1,9 +1,5 @@
 module.exports = {
-  reactStrictMode: true,
-  i18n: {
-    locales: ["en"],
-    defaultLocale: "en"
-  }
+  reactStrictMode: true
   // images: {
   //   domains: ["storage.googleapis.com"],
   //   unoptimized: true
