@@ -4,4 +4,7 @@ export interface Category {
   slug: string;
   description: string;
   image: string;
+  shortDescription: string;
+  altImage: string;
+  title: string;
 }

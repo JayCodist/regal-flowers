@@ -58,6 +58,7 @@ interface Product {
   designNote: string;
   design: string;
   inStock: boolean;
+  pageDescription: string;
 }
 
 export interface Gift {

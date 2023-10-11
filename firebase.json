@@ -9,11 +9,16 @@
         "source": "**",
         "destination": "/404.html",
         "dynamicLinks": true
-      }
+      } 
     ],
     "redirects": [       
       {
         "source": "/contact-us",
+        "destination": "/#contactSection",
+        "type": 301
+      },               
+      {
+        "source": "/contact/",
         "destination": "/#contactSection",
         "type": 301
       },         
@@ -122,6 +127,16 @@
         "destination": "/product-category/event-amp-centerpiece",
         "type": 301
       },
+      {
+        "source": "/size/xxx-large/",
+        "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
+        "type": 301
+      },  
+      {
+        "source": "/products/",
+        "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
+        "type": 301
+      },  
       {
         "source": "/product-category/birthday-flowers-anniversary-flowers-love-amp-romance-flowers-valentine-flowers-mothers-day-flowers",
         "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",

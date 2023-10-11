@@ -3,26 +3,17 @@ import { FunctionComponent } from "react";
 import { getCategories, getCategory } from "../../utils/helpers/data/category";
 import ProductsPage from "../filters";
 import { Category } from "../../utils/types/Category";
-import Meta from "../../components/meta/Meta";
-import { occasionsPageMetaData, regalWebsiteUrl } from "../../utils/constants";
 
 const CategoryPage: FunctionComponent<{
   category: Category;
 }> = ({ category }) => {
   return (
     <>
-      <Meta
-        canonicalUrl={`${regalWebsiteUrl}/product-category/${category.slug}`}
-        description={
-          occasionsPageMetaData[category.slug] &&
-          occasionsPageMetaData[category.slug].description
-        }
-        title={
-          occasionsPageMetaData[category.slug] &&
-          occasionsPageMetaData[category.slug].title
-        }
-      ></Meta>
-      <ProductsPage productCategory="occasion" categorySlug={category.slug} />
+      <ProductsPage
+        productCategory="occasion"
+        categorySlug={category.slug}
+        category={category}
+      />
     </>
   );
 };
