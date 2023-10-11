@@ -42,6 +42,8 @@ import SettingsContext from "../utils/context/SettingsContext";
 import Radio from "../components/radio/Radio";
 import Input from "../components/input/Input";
 import Meta from "../components/meta/Meta";
+import { Category } from "../utils/types/Category";
+import SchemaMarkup from "../components/schema-mark-up/SchemaMarkUp";
 
 const giftMap: Record<string, string> = {
   "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears":
@@ -77,12 +79,23 @@ type ProductCategory = "vip" | "occasion";
 
 type Sort = "name-asc" | "name-desc" | "price-asc" | "price-desc";
 
+const schemaProperties = {
+  "@context": "http://schema.org",
+  "@type": "ItemList"
+};
+
 const ProductsPage: FunctionComponent<{
   productCategory: ProductCategory;
   categorySlug: string;
   productClass?: ProductClass;
+  category?: Category;
 }> = props => {
-  const { productCategory = "occasion", categorySlug, productClass } = props;
+  const {
+    productCategory = "occasion",
+    categorySlug,
+    productClass,
+    category
+  } = props;
 
   const bridalCategories = [
     "cascading-bridal-bouquets",
@@ -376,6 +389,32 @@ const ProductsPage: FunctionComponent<{
           canonicalUrl={`${regalWebsiteUrl}/product-category/flowers-for-love-birthday-anniversary-etc`}
         ></Meta>
       )}
+      {category && (
+        <Meta
+          canonicalUrl={`${regalWebsiteUrl}/product-category/${category.slug}`}
+          description={category.shortDescription}
+          title={category.title}
+        >
+          <SchemaMarkup
+            properties={{
+              ...schemaProperties,
+              description: category.shortDescription,
+              url: `${regalWebsiteUrl}/product-category/${category.slug}`,
+              name: category.name,
+              itemListElement: products.slice(0, 10).map((product, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: {
+                  "@type": "Product",
+                  name: product.name,
+                  url: `${regalWebsiteUrl}/product/${product.slug}`,
+                  image: product.images[0].src
+                }
+              }))
+            }}
+          />
+        </Meta>
+      )}
       <section className={styles.filters} ref={rootRef}>
         {!hideHero && (
           <div
@@ -504,9 +543,9 @@ const ProductsPage: FunctionComponent<{
               {productCategory === "vip" && (
                 <div className={styles["vip-wrapper"]}>
                   <strong className={styles["wow"]}>Wow Them</strong>
-                  <h1 className="primary-color">
+                  <h2 className="primary-color">
                     Go All-Out With VIP Flower Arrangements
-                  </h1>
+                  </h2>
                   <p className={styles["info"]}>
                     All VIP Orders Come With a Complimentary Gift
                   </p>
@@ -916,9 +955,9 @@ const ProductsPage: FunctionComponent<{
             </>
           )}
           <div className={styles.stories}>
-            <h1 className={`text-center ${styles.title}`}>
+            <p className={`text-center ${styles.title}`}>
               Flower Delivery for all Occasions
-            </h1>
+            </p>
 
             <div className={[styles["about-section"]].join(" ")}>
               <div>
