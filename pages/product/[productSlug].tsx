@@ -1,4 +1,10 @@
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
 import { GetStaticProps } from "next";
 import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
 import Product, { DesignOptionName } from "../../utils/types/Product";
@@ -82,22 +88,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const shouldShowVipSizes = product.variants?.some(
     variant => variant.class === "vip"
   );
-
-  useEffect(() => {
-    const longDescription = document.getElementById("long-description");
-    const description = document.getElementById("description");
-    if (longDescription) {
-      longDescription.innerHTML = product.longDescription.replace(
-        "<p>&nbsp;</p>",
-        ""
-      );
-    }
-
-    if (description) {
-      description.innerHTML = product.description.replace("<p>&nbsp;</p>", "");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (!shouldShowRegularSizes) {
@@ -283,6 +273,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const cannotBuy =
     (product.type === "variable" && !selectedSize?.name) ||
     (selectedSize?.designOptions && !selectedDesign);
+
+  const productDescription = useMemo(() => {
+    return product.description?.replace("<p>&nbsp;</p>", "");
+  }, [product.description]);
+
+  const productLongDescription = useMemo(() => {
+    return product.longDescription?.replace("<p>&nbsp;</p>", "");
+  }, [product.longDescription]);
 
   return (
     <>
@@ -501,7 +499,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             {product.description && (
               <>
                 <h3 className="title small bold">Description</h3>
-                <p id="description" className={`normal-text description`}></p>
+                <p
+                  className={`normal-text description`}
+                  dangerouslySetInnerHTML={{ __html: productDescription }}
+                ></p>
               </>
             )}
             {product.type === "variable" && (
@@ -748,7 +749,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
             <button className={`title small bold`}>Product Description</button>
 
             {descriptionTab === "product description" && (
-              <p id="long-description" className="description normal-text"></p>
+              <p
+                className="description normal-text"
+                dangerouslySetInnerHTML={{ __html: productLongDescription }}
+              ></p>
             )}
           </>
         </div>
