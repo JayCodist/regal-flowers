@@ -48,9 +48,9 @@ const schemaProperties = {
   description:
     "Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria.",
   image: [
-    "/images/popular-bundled.jpg",
-    "/images/occasions-love-bday.png",
-    "/images/calligraphy.jpg"
+    "https://drive.google.com/file/d/1lpruL2mCGzcEA5hnMvEm0O4KyLC3Ut8e/view?usp=share_link",
+    "https://drive.google.com/file/d/1FYrevZxWOBa-XQqgYhoIjNVHuy3GmbZC/view?usp=drive_link",
+    "https://drive.google.com/file/d/1tJIV8cqEhDHz-HsaVExoIQBPSIMeE3UT/view?usp=drive_link"
   ],
   telephone: [
     "+234 701 000 6664",
@@ -156,7 +156,8 @@ const schemaProperties = {
       name: "Roses"
     }
   ],
-  logo: "/icons/logo.png"
+  logo:
+    "https://drive.google.com/file/d/17_jCOCdRWr99w-_HDTjnf_5vlDD8wKwu/view?usp=drive_link"
 };
 
 const LandingPage: FunctionComponent<{
@@ -180,7 +181,7 @@ const LandingPage: FunctionComponent<{
       <Meta
         title="Regal Flowers | Same Day Flower Delivery Shop in Lagos and Abuja, Nigeria"
         description="Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria."
-        image="/images/popular-bundled.jpg"
+        image="https://drive.google.com/file/d/1lpruL2mCGzcEA5hnMvEm0O4KyLC3Ut8e/view?usp=share_link"
         imageAlt="Regal Flowers"
         canonicalUrl={`${regalWebsiteUrl}`}
       >
@@ -979,7 +980,9 @@ const FlowerDeliveryInput: FunctionComponent = () => {
     description: "",
     altImage: "",
     shortDescription: "",
-    title: ""
+    title: "",
+    bottomHeading: "",
+    topHeading: ""
   });
   const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
   const [occassionOptions, setOccassionOptions] = useState<
@@ -1026,7 +1029,9 @@ const FlowerDeliveryInput: FunctionComponent = () => {
         description: "",
         altImage: "",
         shortDescription: "",
-        title: ""
+        title: "",
+        bottomHeading: "",
+        topHeading: ""
       } || null
     );
   };

@@ -7,6 +7,7 @@ import { Category } from "../../utils/types/Category";
 const CategoryPage: FunctionComponent<{
   category: Category;
 }> = ({ category }) => {
+  console.log("CategoryPage", category);
   return (
     <>
       <ProductsPage
