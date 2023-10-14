@@ -453,12 +453,6 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                   {product.subtitle || product.name.split("–")[1]}
                 </h1>
               </div>
-              <div className="bold primary-color center">
-                {product.variants.length ? <p>FROM</p> : null}
-                <p className="larger">
-                  {getPriceDisplay(product.price, currency)}
-                </p>
-              </div>
             </div>
             {product.temporaryNotes && (
               <div className={styles["temporary-notes"]}>
