@@ -144,7 +144,7 @@ const FlowerCard = forwardRef<HTMLAnchorElement, IFlowerCardProps>(
                 {price && (
                   <div>
                     {product?.variants.length ? (
-                      <p className="smaller text-secondary">From</p>
+                      <p className="smaller bold">From</p>
                     ) : (
                       ""
                     )}
