@@ -51,7 +51,12 @@
         "source": "/product/vip-classic-red-red-stemmed-roses-select-size",
         "destination": "/product/classic-red-box-arrangement-box-of-red-roses",
         "type": 301
-      },      
+      },             
+      {
+        "source": "/product/vip-classic-red-box-arrangement-box-of-classy-red-roses-select-size-copy",
+        "destination": "/product/vip-classic-red-box-arrangement-box-of-classy-red-roses",
+        "type": 301
+      },     
       {
         "source": "/product/vip-ferrero-rocher-roses-bouquet-bouquet-of-roses-and-ferrero-rocher-chocolatui",
         "destination": "/product/vip-ferrero-rocher-roses-bouquet-bouquet-of-roses-and-ferrero-rocher-chocolates",
