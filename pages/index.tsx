@@ -48,9 +48,7 @@ const schemaProperties = {
   description:
     "Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria.",
   image: [
-    "https://drive.google.com/file/d/1lpruL2mCGzcEA5hnMvEm0O4KyLC3Ut8e/view?usp=share_link",
-    "https://drive.google.com/file/d/1FYrevZxWOBa-XQqgYhoIjNVHuy3GmbZC/view?usp=drive_link",
-    "https://drive.google.com/file/d/1tJIV8cqEhDHz-HsaVExoIQBPSIMeE3UT/view?usp=drive_link"
+    "https://www.regalflower.com/wp-content/uploads/2022/04/instablog9ja-16442864092140.jpg"
   ],
   telephone: [
     "+234 701 000 6664",
@@ -181,7 +179,7 @@ const LandingPage: FunctionComponent<{
       <Meta
         title="Regal Flowers | Same Day Flower Delivery Shop in Lagos and Abuja, Nigeria"
         description="Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria."
-        image="https://drive.google.com/file/d/1lpruL2mCGzcEA5hnMvEm0O4KyLC3Ut8e/view?usp=share_link"
+        image="https://www.regalflower.com/wp-content/uploads/2022/04/instablog9ja-16442864092140.jpg"
         imageAlt="Regal Flowers"
         canonicalUrl={`${regalWebsiteUrl}`}
       >
