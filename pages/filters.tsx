@@ -409,6 +409,8 @@ const ProductsPage: FunctionComponent<{
           canonicalUrl={`${regalWebsiteUrl}/product-category/${category.slug}`}
           description={category.shortDescription}
           title={category.title}
+          image={category.image}
+          imageAlt={category.altImage}
         >
           <SchemaMarkup
             properties={{
@@ -972,9 +974,9 @@ const ProductsPage: FunctionComponent<{
             </>
           )}
           <div className={styles.stories}>
-            <p className={`text-center ${styles.title}`}>
+            <h1 className={`text-center ${styles.title}`}>
               {category?.bottomHeading || "Flower Delivery for all Occasions"}
-            </p>
+            </h1>
 
             <p
               id="category-description"
