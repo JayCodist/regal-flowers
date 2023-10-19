@@ -1,4 +1,5 @@
 import { ProductFilterLogic } from "../../../pages/filters";
+import { business } from "../../constants";
 import { FetchResourceParams } from "../../types/FetchResourceParams";
 import Product from "../../types/Product";
 import RequestResponse from "../../types/RequestResponse";
@@ -14,7 +15,7 @@ export const getProduct: (
 ) => {
   try {
     const response = await restAPIInstance.get(
-      `/v1/wordpress/product/single/${slug}?relatedProductsCount=${relatedProductsCount}`
+      `/v1/wordpress/product/single/${slug}?relatedProductsCount=${relatedProductsCount}&business=${business}`
     );
 
     return {
@@ -61,7 +62,7 @@ export const getProductsByCategory: (
     }
 
     const response = await restAPIInstance.get(
-      `/v1/wordpress/product/paginate?pageNumber=${params?.pageNumber}&sortField=${params?.sortLogic?.sortField}&sortType=${params?.sortLogic?.sortType}${query}`
+      `/v1/wordpress/product/paginate?business=${business}&pageNumber=${params?.pageNumber}&sortField=${params?.sortLogic?.sortField}&sortType=${params?.sortLogic?.sortType}${query}`
     );
     const data = filterInStockProducts(response.data.data);
     return {
@@ -82,7 +83,9 @@ export const getAllProducts: () => Promise<
   RequestResponse<Product[]>
 > = async () => {
   try {
-    const response = await restAPIInstance.get("/v1/wordpress/product/all");
+    const response = await restAPIInstance.get(
+      `/v1/wordpress/product/all?business=${business}`
+    );
     return {
       error: false,
       data: response.data.data as Product[]
@@ -102,7 +105,9 @@ export const getProductsBySlugs: (
 ) => Promise<RequestResponse<Product[]>> = async slugs => {
   try {
     const response = await restAPIInstance.get(
-      `/v1/wordpress/product/slug-multiple?slugs=${slugs.join(",")}`
+      `/v1/wordpress/product/slug-multiple?slugs=${slugs.join(
+        ","
+      )}&business=${business}`
     );
     return {
       error: false,

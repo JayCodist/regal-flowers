@@ -2,6 +2,7 @@ import RequestResponse from "../../types/RequestResponse";
 import User from "../../types/User";
 import { restAPIInstance } from "../rest-api-config";
 import AppStorage, { AppStorageConstants } from "../storage-helpers";
+import { business } from "../../constants";
 
 export const login: (
   email: string,
@@ -10,7 +11,8 @@ export const login: (
   try {
     const { data } = await restAPIInstance.post("/v1/regal/auth/login", {
       email,
-      password
+      password,
+      business
     });
     AppStorage.save(AppStorageConstants.USER_DATA, data);
     return {
@@ -34,7 +36,8 @@ export const signup: (
   try {
     const { data } = await restAPIInstance.post("/v1/regal/auth/signup", {
       email,
-      password
+      password,
+      business
     });
     AppStorage.save(AppStorageConstants.USER_DATA, data);
     return {
@@ -56,7 +59,8 @@ export const requestOtp: (
 ) => Promise<RequestResponse<User>> = async email => {
   try {
     await restAPIInstance.post("/v1/regal/auth/otp/request", {
-      email
+      email,
+      business
     });
     return {
       error: false,
@@ -79,7 +83,8 @@ export const validteOTP: (
   try {
     const { data } = await restAPIInstance.post("/v1/regal/auth/otp/validate", {
       email,
-      code
+      code,
+      business
     });
     AppStorage.save(AppStorageConstants.USER_DATA, data);
     return {
@@ -103,7 +108,8 @@ export const changePassword: (
     const { data } = await restAPIInstance.put(
       "/v1/regal/auth/change-password",
       {
-        password
+        password,
+        business
       }
     );
     AppStorage.save(AppStorageConstants.USER_DATA, data);

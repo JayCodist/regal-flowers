@@ -2522,3 +2522,5 @@ export const occasionsPageMetaData: Record<
     description: ""
   }
 };
+
+export const business = "regalFlowers";
