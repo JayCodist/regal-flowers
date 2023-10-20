@@ -32,14 +32,23 @@ const Meta = ({
         content={`${
           description
             ? description
-            : "Fresh flowers vendors. Delivery throughout Nigeria"
+            : "Order flowers and gifts online for same-day delivery or walk in 24/7. Send flowers to celebrate someone special from the top flower shop in Lagos & Abuja, Nigeria."
         }`}
       />
 
       {/* Open Graph Meta Tags */}
       {title && <meta property="og:title" content={title} />}
       {description && <meta property="og:description" content={description} />}
-      {image && <meta property="og:image" content={image} />}
+      {
+        <meta
+          property="og:image"
+          content={
+            image
+              ? image
+              : "https://www.regalflower.com/wp-content/uploads/2022/04/instablog9ja-16442864092140.jpg"
+          }
+        />
+      }
       {imageAlt && <meta property="og:image:alt" content={imageAlt}></meta>}
       <meta property="og:url" content={`${url ? url : regalWebsiteUrl}`} />
       <meta property="og:type" content="website" />
