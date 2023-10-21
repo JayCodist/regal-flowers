@@ -40,7 +40,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     console.error("Unable to fetch Category", message);
 
     return {
-      props: {}
+      props: {
+        category: {
+          name: "404",
+          slug: "404",
+          description: "Not found",
+          image: ""
+        }
+      }
     };
   }
   return {
