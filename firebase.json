@@ -68,6 +68,11 @@
         "type": 301
       },
       {
+        "source": "/product/fresh-flower-shop-flower-vase/",
+        "destination": "/filters?search=vase",
+        "type": 301
+      },  
+      {
         "source": "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/fresh-flower-vases/",
         "destination": "/filters?search=vase",
         "type": 301
@@ -133,7 +138,7 @@
         "type": 301
       },  
       {
-        "source": "/product-category/plants/",
+        "source": "/product-category/plants",
         "destination": "/product-category/indoor-plants-and-cactus",
         "type": 301
       },   
