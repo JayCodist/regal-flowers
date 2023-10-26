@@ -116,7 +116,7 @@ const ProductsPage: FunctionComponent<{
   const router = useRouter();
   const { query, isReady } = router;
   const { selectedOccasion, shopBy, search } = query;
-  const [selectedFilter, setSelectedFilter] = useState<string[]>(["regular"]);
+  const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [count, setCount] = useState(1);
   const [JustToSayText, setJustToSayText] = useState(JustToSayTexts[0]);
@@ -276,8 +276,11 @@ const ProductsPage: FunctionComponent<{
     setProductsLoading(true);
 
     const url = categorySlug
-      ? `/product-category/${categorySlug}?shopBy=${newFilters.join(",")}`
+      ? `${
+          categorySlug !== "vip" ? "/product-category" : ""
+        }/${categorySlug}?shopBy=${newFilters.join(",")}`
       : `/filters?shopBy=${newFilters.join(",")}`;
+
     router.push(url, undefined, { scroll: false });
   };
 
@@ -290,22 +293,14 @@ const ProductsPage: FunctionComponent<{
 
   useEffect(() => {
     if (isReady) {
-      if (shopBy === "vip" || productClass === "vip") {
-        setSelectedFilter(["vip"]);
-      } else {
-        if (categorySlug === "vip") {
-          setSelectedFilter(["vip"]);
-          return;
-        }
-        const filters = shopBy
-          ? String(shopBy || "")
-              .split(",")
-              .filter(Boolean)
-          : ["regular"];
+      const filters = shopBy
+        ? String(shopBy || "")
+            .split(",")
+            .filter(Boolean)
+        : ["regular"];
 
-        setSelectedFilter([...filters]);
-        shopBy && setShouldShowFilter(true);
-      }
+      setSelectedFilter([...filters]);
+      shopBy && setShouldShowFilter(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shopBy]);
