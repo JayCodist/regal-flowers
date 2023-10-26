@@ -206,12 +206,17 @@
         "source": "/product-category/bridal-bouquets/accessories-boutonnieres-bridesmaids-flowers-corsages",
         "destination": "/product-category/accessories-boutonnieres-bridesmaids-flowers-amp-corsages",
         "type": 301
-      },       
+      }, 
       {
         "source": "/product-category/event-and-centerpiece-flowers",
         "destination": "/product-category/event-amp-centerpiece",
         "type": 301
-      },
+      }, 
+      {
+        "source": "/product-category/vip?shopBy=regular",
+        "destination": "/filters?shopBy=fresh+flowers",
+        "type": 301
+      },  
       {
         "source": "/size/xxx-large/",
         "destination": "/product-category/flowers-for-love-birthday-anniversary-etc",
