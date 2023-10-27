@@ -742,55 +742,63 @@ const ProductsPage: FunctionComponent<{
                           ).map((child, index) => (
                             <div key={index} className="margin-bottom">
                               {filter.name === "Budget" ? (
-                                <>
-                                  <div className="margin-bottom">
+                                productClass !== "vip" ? (
+                                  <>
+                                    <div className="margin-bottom">
+                                      <Radio
+                                        label="Regular"
+                                        onChange={() => {
+                                          const newFilters = [
+                                            ...selectedFilter.filter(filter => {
+                                              return filter !== "vip";
+                                            }),
+                                            "regular"
+                                          ];
+                                          setSelectedFilter(newFilters);
+                                          const url = categorySlug
+                                            ? `${
+                                                categorySlug !== "vip"
+                                                  ? "/product-category"
+                                                  : ""
+                                              }/${categorySlug}?shopBy=${newFilters.join(
+                                                ","
+                                              )}`
+                                            : `/filters?shopBy=${newFilters.join(
+                                                ","
+                                              )}`;
+                                          router.push(url, undefined, {
+                                            scroll: false
+                                          });
+                                        }}
+                                        checked={selectedFilter.includes(
+                                          "regular"
+                                        )}
+                                      />
+                                    </div>
+
                                     <Radio
-                                      label="Regular"
+                                      label="VIP"
                                       onChange={() => {
                                         const newFilters = [
                                           ...selectedFilter.filter(filter => {
-                                            return filter !== "vip";
+                                            return filter !== "regular";
                                           }),
-                                          "regular"
+                                          "vip"
                                         ];
                                         setSelectedFilter(newFilters);
-                                        const url = categorySlug
-                                          ? `/product-category/${categorySlug}?shopBy=${newFilters.join(
-                                              ","
-                                            )}`
-                                          : `/filters?shopBy=${newFilters.join(
-                                              ","
-                                            )}`;
+                                        const url = `/filters?shopBy=${newFilters.join(
+                                          ","
+                                        )}`;
                                         router.push(url, undefined, {
                                           scroll: false
                                         });
                                       }}
-                                      checked={selectedFilter.includes(
-                                        "regular"
-                                      )}
+                                      checked={selectedFilter.includes("vip")}
                                     />
-                                  </div>
-
-                                  <Radio
-                                    label="VIP"
-                                    onChange={() => {
-                                      const newFilters = [
-                                        ...selectedFilter.filter(filter => {
-                                          return filter !== "regular";
-                                        }),
-                                        "vip"
-                                      ];
-                                      setSelectedFilter(newFilters);
-                                      const url = `/filters?shopBy=${newFilters.join(
-                                        ","
-                                      )}`;
-                                      router.push(url, undefined, {
-                                        scroll: false
-                                      });
-                                    }}
-                                    checked={selectedFilter.includes("vip")}
-                                  />
-                                </>
+                                  </>
+                                ) : (
+                                  ""
+                                )
                               ) : child.link ? (
                                 <Link href={child.link}>
                                   <a
