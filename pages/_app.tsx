@@ -92,9 +92,9 @@ const App: FunctionComponent<AppProps> = props => {
     const savedCartItems = AppStorage.get<CartItem[]>(
       AppStorageConstants.CART_ITEMS
     );
-    const savedDeliveryDate = AppStorage.get<Dayjs>(
-      AppStorageConstants.DELIVERY_DATE
-    );
+    const savedDeliveryDate = savedCartItems?.length
+      ? AppStorage.get<Dayjs>(AppStorageConstants.DELIVERY_DATE)
+      : null;
 
     const { defaultCurrencyName, fromStorage } = getDefaultCurrency();
     const defaultCurrency =
@@ -210,7 +210,9 @@ const App: FunctionComponent<AppProps> = props => {
     deliveryDate,
     setDeliveryDate: (date: Dayjs | null) => {
       if (!isNaN(date?.valueOf() as number)) {
-        AppStorage.save(AppStorageConstants.DELIVERY_DATE, date);
+        if (cartItems.length) {
+          AppStorage.save(AppStorageConstants.DELIVERY_DATE, date);
+        }
         setDeliveryDate(date);
       }
     },
