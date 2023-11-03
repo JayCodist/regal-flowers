@@ -233,7 +233,7 @@ const Checkout: FunctionComponent = () => {
   const refNumber = new Date().getTime().toString();
 
   const payStackConfig: PaystackProps = {
-    reference: `${order?.id}-${refNumber}` as string,
+    reference: `${order?.id}-${order?.fullOrderId}-${refNumber}` as string,
     email: formData.senderEmail || placeholderEmail,
     amount: Math.ceil((total || 0) / currency.conversionRate) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
@@ -3039,7 +3039,7 @@ const PaypalModal: FunctionComponent<ModalProps & {
               ).toFixed(2)
             )
           },
-          reference_id: order?.id
+          reference_id: `${order?.id}-${order?.fullOrderId}`
         }
       ]
     });
