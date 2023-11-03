@@ -13,6 +13,7 @@ import { DesignOption, regalWebsiteUrl } from "../../utils/constants";
 import Link from "next/dist/client/link";
 import Meta from "../../components/meta/Meta";
 import SchemaMarkup from "../../components/schema-mark-up/SchemaMarkUp";
+import { useRouter } from "next/router";
 
 interface Size {
   name: string;
@@ -54,6 +55,8 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
     breadcrumb
   } = useContext(SettingsContext);
   const deviceType = useDeviceType();
+
+  const router = useRouter();
 
   const shouldShowRegularSizes = product.variants?.some(
     variant => variant.class === "regular"
@@ -255,6 +258,9 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   }, [selectedSize]);
 
   useEffect(() => {
+    if (!product.slug) {
+      router.reload();
+    }
     setActiveSlide(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
@@ -757,7 +763,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   if (error || !data) {
     console.error(`Unable to fetch product "${productSlug}": ${message}`);
     return {
-      props: {}
+      props: { product: { slug: "404" } }
     };
   }
   return {

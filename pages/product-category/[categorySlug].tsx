@@ -1,12 +1,22 @@
 import { GetStaticPaths, GetStaticProps } from "next";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import { getCategories, getCategory } from "../../utils/helpers/data/category";
 import ProductsPage from "../filters";
 import { Category } from "../../utils/types/Category";
+import { useRouter } from "next/router";
 
 const CategoryPage: FunctionComponent<{
   category: Category;
 }> = ({ category }) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!category.slug) {
+      router.reload();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
+
   return (
     <>
       <ProductsPage
@@ -40,7 +50,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     console.error("Unable to fetch Category", message);
 
     return {
-      props: {}
+      props: {
+        category: {
+          name: "",
+          slug: "",
+          description: "Not found",
+          image: ""
+        }
+      }
     };
   }
   return {

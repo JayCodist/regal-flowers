@@ -16,5 +16,5 @@ export const getMobileImageUrl = (str: string) => {
     .pop()
     ?.split(".")
     .slice(0, -1);
-  return `${urlSegments.join("/")}/mobile-${path}.webp`;
+  return `${urlSegments.join("/")}/mobile-${path?.join(".")}.webp`;
 };
