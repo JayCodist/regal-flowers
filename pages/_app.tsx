@@ -209,12 +209,10 @@ const App: FunctionComponent<AppProps> = props => {
     setCurrentStage,
     deliveryDate,
     setDeliveryDate: (date: Dayjs | null) => {
-      if (!isNaN(date?.valueOf() as number)) {
-        if (cartItems.length) {
-          AppStorage.save(AppStorageConstants.DELIVERY_DATE, date);
-        }
-        setDeliveryDate(date);
+      if (cartItems.length) {
+        AppStorage.save(AppStorageConstants.DELIVERY_DATE, date);
       }
+      setDeliveryDate(date);
     },
     cartItems,
     setCartItems: (items: CartItem[]) => {
