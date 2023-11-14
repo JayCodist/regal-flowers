@@ -860,7 +860,7 @@ const ProductsPage: FunctionComponent<{
                   <Select
                     options={sortOptions}
                     value={sort}
-                    onSelect={value => setSort(value as Sort)}
+                    onSelect={value => setSort((value as Sort) || "name-asc")}
                     placeholder="Default"
                     className={styles["sort"]}
                   />
