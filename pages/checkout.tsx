@@ -107,7 +107,8 @@ const initialData: CheckoutFormData = {
   recipientCountryCodeAlt: "+234",
   zone: "",
   currency: "NGN",
-  deliveryInstruction: ""
+  deliveryInstruction: "",
+  deliveryZone: "WEB"
 };
 
 type DeliverStage =
@@ -258,7 +259,8 @@ const Checkout: FunctionComponent = () => {
         [key as string]: value,
         zone: value === "other-locations" ? value : "",
         pickUpLocation: "",
-        deliveryLocation: null
+        deliveryLocation: null,
+        deliveryZone: value === "lagos" ? "WBL" : "WBA"
       });
       return;
     }
@@ -292,6 +294,14 @@ const Checkout: FunctionComponent = () => {
         });
         return;
       }
+    }
+    if (key === "pickUpLocation") {
+      setFormData({
+        ...formData,
+        [key as string]: value,
+        deliveryZone: value === "Lagos" ? "LPI" : "APA"
+      });
+      return;
     }
     if (
       key === "senderPhoneNumber" ||
