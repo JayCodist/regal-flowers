@@ -25,6 +25,7 @@ const adaptCheckoutStateRecord = (
       deliveryMessage: record.message,
       despatchLocation: record.pickUpLocation,
       purpose: record.purpose,
+      deliveryZone: record.deliveryZone,
       recipient:
         record.deliveryMethod === "delivery"
           ? {
