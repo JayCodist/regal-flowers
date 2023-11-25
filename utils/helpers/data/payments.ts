@@ -1,3 +1,4 @@
+import { business } from "../../constants";
 import { AppCurrencyName } from "../../types/Core";
 import RequestResponse from "../../types/RequestResponse";
 import { restAPIInstance } from "../rest-api-config";
@@ -7,7 +8,7 @@ export const verifyPaystackPayment: (
 ) => Promise<RequestResponse<boolean>> = async paymentRef => {
   try {
     const response = await restAPIInstance.post(
-      `/v1/payments/paystack/verify?ref=${paymentRef}`
+      `/v1/payments/paystack/verify?ref=${paymentRef}&business=${business}`
     );
     return {
       error: !response.data,
@@ -29,7 +30,7 @@ export const verifyMonnifyPayment: (
 ) => Promise<RequestResponse<boolean>> = async paymentRef => {
   try {
     const response = await restAPIInstance.post(
-      `/v1/payments/monnify/verify?ref=${paymentRef}`
+      `/v1/payments/monnify/verify?ref=${paymentRef}&business=${business}`
     );
     return {
       error: !response.data,
@@ -51,7 +52,7 @@ export const verifyPaypalPayment: (
 ) => Promise<RequestResponse<boolean>> = async paymentRef => {
   try {
     const response = await restAPIInstance.post(
-      `/v1/payments/paypal/verify?ref=${paymentRef}`
+      `/v1/payments/paypal/verify?ref=${paymentRef}&business=${business}`
     );
     return {
       error: !response.data,
