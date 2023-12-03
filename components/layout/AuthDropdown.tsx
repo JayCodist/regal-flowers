@@ -112,7 +112,6 @@ const AuthDropdown: FunctionComponent = () => {
       } else if (formType === "validateOtp") {
         setPassword("");
         setPasswordConfirm("");
-        setUser(response?.data);
         setFormType("newPassword");
         notify("success", "OTP validated successfully");
       } else if (formType === "newPassword") {
