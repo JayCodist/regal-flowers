@@ -48,6 +48,7 @@ export interface Order {
   };
   orderStatus: OrderStatus;
   deliveryDetails: DeliveryDetails;
+  deliveryZone: DeliveryZone;
 }
 
 type PaymentStatus =
@@ -144,7 +145,9 @@ type DeliveryZone =
   | "ONG"
   | "LPL"
   | "LPM"
-  | "OST";
+  | "OST"
+  | "WBL"
+  | "WBA";
 
 type DespatchedFrom = "Unselected" | "Ikoyi" | "VI" | "Abuja";
 
@@ -284,6 +287,7 @@ export interface CheckoutFormData {
   zone: string;
   currency: AppCurrencyName;
   deliveryInstruction: string;
+  deliveryZone: DeliveryZone;
 }
 
 export type PaymentName =
@@ -304,3 +308,5 @@ export interface PaymentMethod {
   other?: { icon: ReactNode }[];
   supportedCurrencies: AppCurrencyName[];
 }
+
+export type State = "lagos" | "abuja" | "other-locations";

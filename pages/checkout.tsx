@@ -107,7 +107,8 @@ const initialData: CheckoutFormData = {
   recipientCountryCodeAlt: "+234",
   zone: "",
   currency: "NGN",
-  deliveryInstruction: ""
+  deliveryInstruction: "",
+  deliveryZone: "WEB"
 };
 
 type DeliverStage =
@@ -234,7 +235,7 @@ const Checkout: FunctionComponent = () => {
   const refNumber = new Date().getTime().toString();
 
   const payStackConfig: PaystackProps = {
-    reference: `${order?.id}-${order?.fullOrderId}-${refNumber}` as string,
+    reference: `${order?.fullOrderId}-${order?.id}-${refNumber}` as string,
     email: formData.senderEmail || placeholderEmail,
     amount: Math.ceil((total || 0) / currency.conversionRate) * 100,
     currency: currency.name === "GBP" ? undefined : currency.name, // Does not support GBP
@@ -258,7 +259,8 @@ const Checkout: FunctionComponent = () => {
         [key as string]: value,
         zone: value === "other-locations" ? value : "",
         pickUpLocation: "",
-        deliveryLocation: null
+        deliveryLocation: null,
+        deliveryZone: value === "lagos" ? "WBL" : "WBA"
       });
       return;
     }
@@ -292,6 +294,14 @@ const Checkout: FunctionComponent = () => {
         });
         return;
       }
+    }
+    if (key === "pickUpLocation") {
+      setFormData({
+        ...formData,
+        [key as string]: value,
+        deliveryZone: value === "Lagos" ? "LPI" : "APA"
+      });
+      return;
     }
     if (
       key === "senderPhoneNumber" ||
@@ -918,7 +928,9 @@ const Checkout: FunctionComponent = () => {
                                 className={[
                                   styles.method,
                                   formData.deliveryMethod === "delivery" &&
-                                    styles.active
+                                    styles.active,
+                                  (order?.amount as number) < 20000 &&
+                                    "disabled"
                                 ].join(" ")}
                                 onClick={() =>
                                   handleChange("deliveryMethod", "delivery")
@@ -949,6 +961,11 @@ const Checkout: FunctionComponent = () => {
                                       currency.name
                                     ].toLocaleString()}`
                                   : ""}
+                                {(order?.amount as number) < 20000 &&
+                                  `(Please note that orders below ${getPriceDisplay(
+                                    20000,
+                                    currency
+                                  )}  have to be picked up)`}
                               </em>
                             </div>
 
@@ -2002,23 +2019,28 @@ const Checkout: FunctionComponent = () => {
                       <div>
                         <p className={styles.title}>Delivery Method</p>
                         <div>
-                          <div className="margin-top">
+                          <div className="margin-top primary-color">
                             <em>
                               {["13-02", "14-02", "15-02"].includes(
                                 deliveryDate?.format("DD-MM") || ""
-                              )
-                                ? `Free Valentine (Feb 13th, 14th, 15th) Delivery in selected zone in Lagos and Abuja on orders above ${
+                              ) && formData.deliveryMethod === "delivery"
+                                ? `Free Valentine (Feb 13th, 14th, 15th) Delivery in selected zones across Lagos and Abuja on orders above ${
                                     currency.sign
                                   }${freeDeliveryThresholdVals[
                                     currency.name
                                   ].toLocaleString()}`
                                 : formData.deliveryMethod === "delivery"
-                                ? `Free Delivery in selected in Lagos and Abuja on orders above ${
+                                ? `Free Delivery in selected zones across Lagos and Abuja on orders above ${
                                     currency.sign
                                   }${freeDeliveryThreshold[
                                     currency.name
                                   ].toLocaleString()}`
                                 : ""}
+                              {(order?.amount as number) < 20000 &&
+                                `(Please note that orders below ${getPriceDisplay(
+                                  20000,
+                                  currency
+                                )}  have to be picked up)`}
                             </em>
                           </div>
                           <div className="vertical-margin spaced">
@@ -2062,6 +2084,7 @@ const Checkout: FunctionComponent = () => {
                                 handleChange("deliveryMethod", "delivery")
                               }
                               checked={formData.deliveryMethod === "delivery"}
+                              disabled={(order?.amount as number) < 20000}
                             />
                           </div>
                           {formData.deliveryMethod === "delivery" && (
@@ -3040,7 +3063,7 @@ const PaypalModal: FunctionComponent<ModalProps & {
               ).toFixed(2)
             )
           },
-          reference_id: `${order?.id}-${order?.fullOrderId}`
+          reference_id: `${order?.fullOrderId}-${order?.id}`
         }
       ]
     });
