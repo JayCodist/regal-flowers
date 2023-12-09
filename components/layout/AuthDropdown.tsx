@@ -84,6 +84,14 @@ const AuthDropdown: FunctionComponent = () => {
     const response = await handlerMap[formType]?.();
     setLoading(false);
     if (response?.error) {
+      if (response.message?.includes("Upgrade is required for legacy user")) {
+        setFormType("validateOtp");
+        notify(
+          "info",
+          "Your password has expired. Please enter the OTP sent to your inbox"
+        );
+        return;
+      }
       notify(
         "error",
         `Unable to ${titleMap[formType].toLowerCase()}: ${response.message}`
@@ -107,10 +115,6 @@ const AuthDropdown: FunctionComponent = () => {
         setFormType("newPassword");
         notify("success", "OTP validated successfully");
       } else if (formType === "newPassword") {
-        if (password !== passwordConfirm) {
-          notify("error", "Passwords do not match");
-          return;
-        }
         setPassword("");
         setPasswordConfirm("");
         setFormType("login");
