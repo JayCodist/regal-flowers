@@ -89,7 +89,8 @@ export const manualTransferPayment: (payload: {
         amount,
         accountName,
         referenceNumber,
-        currency
+        currency,
+        business
       }
     );
     return {
