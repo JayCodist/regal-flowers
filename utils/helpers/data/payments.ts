@@ -48,11 +48,12 @@ export const verifyMonnifyPayment: (
 };
 
 export const verifyPaypalPayment: (
-  paymentRef: string
-) => Promise<RequestResponse<boolean>> = async paymentRef => {
+  paymentRef: string,
+  orderId: string
+) => Promise<RequestResponse<boolean>> = async (paymentRef, orderId) => {
   try {
     const response = await restAPIInstance.post(
-      `/v1/payments/paypal/verify?ref=${paymentRef}&business=${business}`
+      `/v1/payments/paypal/verify?ref=${paymentRef}&business=${business}&orderId=${orderId}`
     );
     return {
       error: !response.data,
