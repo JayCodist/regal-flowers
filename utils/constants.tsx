@@ -2107,8 +2107,6 @@ export const allDeliveryLocationZones: Record<
         ),
         value: !valsDates.includes(deliveryDate?.format("DD-MM") || "")
           ? "highLagos-zone1"
-          : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
-          ? "freeLagosVals-zone1"
           : "highLagosVals-zone1"
       },
       {
@@ -2126,8 +2124,6 @@ export const allDeliveryLocationZones: Record<
         ),
         value: !valsDates.includes(deliveryDate?.format("DD-MM") || "")
           ? "highLagos-zone2"
-          : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
-          ? "freeLagosVals-zone2"
           : "highLagosVals-zone2"
       },
       {
