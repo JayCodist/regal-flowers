@@ -94,6 +94,14 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   }, []);
 
   const handleAddToCart = () => {
+    if (cannotBuy) {
+      notify("error", "Please select a size");
+      router.push(
+        "/product/[productSlug]/#sizes",
+        `/product/${product.slug}/#sizes`
+      );
+      return;
+    }
     const cartItem: CartItem = {
       key: product.key,
       name: product.name,
@@ -505,7 +513,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </>
             )}
             {product.type === "variable" && (
-              <div>
+              <div id="sizes">
                 <br />
                 {shouldShowRegularSizes && (
                   <>
@@ -705,9 +713,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 "vertical-margin"}`}
             >
               <Button
-                disabled={cannotBuy || outOfStock}
                 className={` spaced ${deviceType == "desktop" &&
-                  "vertical-margin"}`}
+                  "vertical-margin"} ${styles["add-to-cart"]} ${(cannotBuy ||
+                  outOfStock) &&
+                  styles.inactive}`}
                 responsive
                 onClick={() => handleAddToCart()}
                 tooltip={
