@@ -2284,7 +2284,7 @@ export const allDeliveryLocationOptions: Record<
           currency.sign
         }${freeDeliveryThreshold[
           currency.name
-        ].toLocaleString()} toWuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
+        ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
         name: "mediumAbuja",
         amount: 3500
       },
@@ -2303,23 +2303,22 @@ export const allDeliveryLocationOptions: Record<
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
-        ].toLocaleString()} toWuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
+        ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
         name: "mediumAbujaVals",
         amount: 7000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(15000, currency)} - Orders BELOW ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()} All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
+        label: `${getPriceDisplay(
+          15000,
+          currency
+        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
         name: "highAbujaVals",
         amount: 15000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(0, currency)} - Valentine Orders ABOVE ${
+        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
