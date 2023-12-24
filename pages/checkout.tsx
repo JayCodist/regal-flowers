@@ -28,7 +28,8 @@ import {
   paymentMethods,
   pickupLocations,
   placeholderEmail,
-  regalEmail
+  regalEmail,
+  valsDates
 } from "../utils/constants";
 import SettingsContext from "../utils/context/SettingsContext";
 import {
@@ -946,10 +947,10 @@ const Checkout: FunctionComponent = () => {
                             </div>
                             <div className="margin-top primary-color">
                               <em>
-                                {["13-02", "14-02", "15-02"].includes(
+                                {valsDates.includes(
                                   deliveryDate?.format("DD-MM") || ""
                                 ) && formData.deliveryMethod === "delivery"
-                                  ? `Free Valentine (Feb 13th, 14th, 15th) Delivery in selected zones across Lagos and Abuja on orders above ${
+                                  ? ` Free Xmas (25th,26th Dec) and New Year (Jan 1st) Delivery in selected zones across Lagos and Abuja on orders above  ${
                                       currency.sign
                                     }${freeDeliveryThresholdVals[
                                       currency.name
@@ -2021,10 +2022,10 @@ const Checkout: FunctionComponent = () => {
                         <div>
                           <div className="margin-top primary-color">
                             <em>
-                              {["13-02", "14-02", "15-02"].includes(
+                              {valsDates.includes(
                                 deliveryDate?.format("DD-MM") || ""
                               ) && formData.deliveryMethod === "delivery"
-                                ? `Free Valentine (Feb 13th, 14th, 15th) Delivery in selected zones across Lagos and Abuja on orders above ${
+                                ? ` Free Xmas (25th,26th Dec) and New Year (Jan 1st) Delivery in selected zones across Lagos and Abuja on orders above ${
                                     currency.sign
                                   }${freeDeliveryThresholdVals[
                                     currency.name

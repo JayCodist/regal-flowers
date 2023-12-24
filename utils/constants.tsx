@@ -2081,7 +2081,7 @@ export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
 export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
   USD: 255,
   GBP: 210,
-  NGN: 150000
+  NGN: 120000
 };
 
 export interface DeliveryLocationOption {
@@ -2090,7 +2090,7 @@ export interface DeliveryLocationOption {
   amount: number;
 }
 
-const valsDates = ["13-02", "14-02", "15-02", "25-12", "26-12", "01-01"];
+export const valsDates = ["13-02", "14-02", "15-02", "25-12", "26-12", "01-01"];
 
 export const allDeliveryLocationZones: Record<
   LocationName,
