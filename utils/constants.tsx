@@ -2168,8 +2168,6 @@ export const allDeliveryLocationZones: Record<
       ),
       value: !valsDates.includes(deliveryDate?.format("DD-MM") || "")
         ? "highAbuja-zone1"
-        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
-        ? "freeAbujaVals-zone1"
         : "highAbujaVals-zone1"
     },
     {
@@ -2183,8 +2181,6 @@ export const allDeliveryLocationZones: Record<
       ),
       value: !valsDates.includes(deliveryDate?.format("DD-MM") || "")
         ? "highAbuja-zone2"
-        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
-        ? "freeAbujaVals-zone2"
         : "highAbujaVals-zone2"
     },
     {
@@ -2262,11 +2258,10 @@ export const allDeliveryLocationOptions: Record<
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(15000, currency)} - Orders BELOW ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+        label: `${getPriceDisplay(
+          15000,
+          currency
+        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
         name: "highLagosVals",
         amount: 15000
       },
