@@ -811,6 +811,7 @@ const Checkout: FunctionComponent = () => {
                                 dimmed
                                 responsive
                                 required={formData.freeAccount}
+                                onBlurValidation={emailValidator}
                               />
                             </div>
                           </div>
