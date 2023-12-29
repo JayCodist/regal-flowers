@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { GetStaticProps } from "next";
 import { getAllProducts, getProduct } from "../../utils/helpers/data/products";
@@ -33,6 +34,12 @@ const schemaProperties = {
 
 const ProductPage: FunctionComponent<{ product: Product }> = props => {
   const { product } = props;
+
+  if (!product?.name && !product?.key) {
+    console.log("attempting reload product");
+    window.location.reload();
+    return null;
+  }
 
   const outOfStock = product && !product.sku && !product.variants.length;
   const [activeSlide, setActiveSlide] = useState<number>(0);
