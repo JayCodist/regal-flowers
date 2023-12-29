@@ -9,4 +9,5 @@ export interface Category {
   title: string;
   topHeading: string;
   bottomHeading: string;
+  info: string;
 }
