@@ -3,16 +3,13 @@ import { FunctionComponent, useEffect } from "react";
 import { getCategories, getCategory } from "../../utils/helpers/data/category";
 import ProductsPage from "../filters";
 import { Category } from "../../utils/types/Category";
-import { useRouter } from "next/router";
 
 const CategoryPage: FunctionComponent<{
   category: Category;
 }> = ({ category }) => {
-  const router = useRouter();
-
   useEffect(() => {
     if (!category.slug) {
-      router.reload();
+      location.href = location.href;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
