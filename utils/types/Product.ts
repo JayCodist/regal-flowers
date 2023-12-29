@@ -59,6 +59,8 @@ interface Product {
   design: string;
   inStock: boolean;
   pageDescription: string;
+  info1: string;
+  info2: string;
 }
 
 export interface Gift {

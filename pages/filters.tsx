@@ -43,6 +43,7 @@ import Input from "../components/input/Input";
 import Meta from "../components/meta/Meta";
 import { Category } from "../utils/types/Category";
 import SchemaMarkup from "../components/schema-mark-up/SchemaMarkUp";
+import { InfoIcon } from "../utils/resources";
 
 const giftMap: Record<string, string> = {
   "gift-items-perfumes-cakes-chocolate-wine-giftsets-and-teddy-bears":
@@ -704,6 +705,14 @@ const ProductsPage: FunctionComponent<{
             </div>
           )}
           <div className={styles["product-wrapper"]}>
+            {category?.info && deviceType === "mobile" && (
+              <div
+                className={`flex spaced center-align text-medium ${styles["info"]}`}
+              >
+                <InfoIcon fill="#9b0000" />
+                <span>{category.info}</span>
+              </div>
+            )}
             <div className="flex between block center-align">
               {!hideFilters && (
                 <div
@@ -851,8 +860,8 @@ const ProductsPage: FunctionComponent<{
                 </div>
               )}
               <div
-                className={`flex between center-align ${
-                  hideFilters ? "block" : ""
+                className={`flex between center-align spaced-xl ${
+                  hideFilters || deviceType === "desktop" ? "block" : ""
                 }`}
               >
                 <div className={`input-group ${styles.sort}`}>
@@ -865,6 +874,14 @@ const ProductsPage: FunctionComponent<{
                     className={styles["sort"]}
                   />
                 </div>
+                {category?.info && deviceType === "desktop" && (
+                  <div
+                    className={`flex spaced center-align text-medium ${styles["info"]}`}
+                  >
+                    <InfoIcon fill="#9b0000" />
+                    <span>{category.info}</span>
+                  </div>
+                )}
                 {search && (
                   <form
                     onSubmit={handleSearch}

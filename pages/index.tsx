@@ -31,7 +31,6 @@ import Select, { PaginatedOptionsWrapper } from "../components/select/Select";
 import DatePicker from "../components/date-picker/DatePicker";
 import { getCategories } from "../utils/helpers/data/category";
 import { FetchResourceParams } from "../utils/types/FetchResourceParams";
-import { Category } from "../utils/types/Category";
 import { getProductsBySlugs } from "../utils/helpers/data/products";
 import Product from "../utils/types/Product";
 import { LocationName } from "../utils/types/Regal";
@@ -970,17 +969,9 @@ const LandingPage: FunctionComponent<{
 // }));
 
 const FlowerDeliveryInput: FunctionComponent = () => {
-  const [occasion, setOccasion] = useState<Category>({
-    name: "",
-    id: "",
-    slug: "",
-    image: "",
-    description: "",
-    altImage: "",
-    shortDescription: "",
-    title: "",
-    bottomHeading: "",
-    topHeading: ""
+  const [occasion, setOccasion] = useState<{ value: number; slug: string }>({
+    value: 0,
+    slug: ""
   });
   const { deliveryDate, setDeliveryDate } = useContext(SettingsContext);
   const [occassionOptions, setOccassionOptions] = useState<
@@ -1014,24 +1005,14 @@ const FlowerDeliveryInput: FunctionComponent = () => {
   };
 
   const handleOnselect = (value: string) => {
-    const _selectedOccasion = allOccasionOptions.find(
+    const selectedOccasion = allOccasionOptions.find(
       _occasion => _occasion.value === value
-    )?.value as string;
-
-    setOccasion(
-      {
-        name: _selectedOccasion,
-        id: value,
-        slug: "",
-        image: "",
-        description: "",
-        altImage: "",
-        shortDescription: "",
-        title: "",
-        bottomHeading: "",
-        topHeading: ""
-      } || null
     );
+
+    setOccasion({
+      value: selectedOccasion?.value as number,
+      slug: selectedOccasion?.value as string
+    });
   };
 
   useEffect(() => {
@@ -1044,7 +1025,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
       <div className="block">
         <Select
           options={allOccasionOptions}
-          value={occasion.id}
+          value={occasion.value}
           onSelect={value => handleOnselect(value as string)}
           className={styles["occasion-select"]}
           placeholder={
@@ -1066,7 +1047,7 @@ const FlowerDeliveryInput: FunctionComponent = () => {
       </div>
       <Button
         padded
-        url={`/product-category/${occasion?.name ||
+        url={`/product-category/${occasion?.slug ||
           "flowers-for-love-birthday-anniversary-etc"}`}
         className={styles["occasion-submit"]}
       >

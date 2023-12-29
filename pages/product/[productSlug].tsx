@@ -15,6 +15,7 @@ import Link from "next/dist/client/link";
 import Meta from "../../components/meta/Meta";
 import SchemaMarkup from "../../components/schema-mark-up/SchemaMarkUp";
 import { useRouter } from "next/router";
+import { DeliveryIcon, InfoIcon } from "../../utils/resources";
 
 interface Size {
   name: string;
@@ -477,6 +478,29 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 </h1>
               </div>
             </div>
+            {product.info1 && (
+              <>
+                <div
+                  className={`flex spaced center-align text-medium ${styles["delivery-info"]}`}
+                >
+                  <InfoIcon fill="#9b0000" />
+                  <span>{product.info1}</span>
+                </div>
+                <div className="vertical-margin compact"></div>
+              </>
+            )}
+            <br />
+            {product.info2 && (
+              <>
+                <div
+                  className={`flex spaced center-align text-medium ${styles["delivery-info"]}`}
+                >
+                  <DeliveryIcon />
+                  <span>{product.info2}</span>
+                </div>
+                <br />
+              </>
+            )}
             {product.temporaryNotes && (
               <div className={styles["temporary-notes"]}>
                 {product.temporaryNotes &&
