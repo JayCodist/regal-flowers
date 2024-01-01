@@ -45,6 +45,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
   );
   const [productPrice, setProductPrice] = useState<number>(product.price);
   const [total, setTotal] = useState<number>(product.price);
+  const [showHighlight, setShowHighlight] = useState(false);
 
   const {
     setCartItems,
@@ -96,11 +97,15 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
 
   const handleAddToCart = () => {
     if (cannotBuy) {
+      setShowHighlight(true);
       notify("error", "Please select a size");
       router.push(
         "/product/[productSlug]/#sizes",
         `/product/${product.slug}/#sizes`
       );
+      setTimeout(() => {
+        setShowHighlight(false);
+      }, 2000);
       return;
     }
     const cartItem: CartItem = {
@@ -537,7 +542,10 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               </>
             )}
             {product.type === "variable" && (
-              <div id="sizes">
+              <div
+                id="sizes"
+                className={[showHighlight && styles.highlight].join(" ")}
+              >
                 <br />
                 {shouldShowRegularSizes && (
                   <>
@@ -548,7 +556,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                       {!shouldShowVipSizes ? "Sizes" : "Regular Sizes"}
                     </button>
 
-                    <div className={styles["size-wrapper"]}>
+                    <div className={[styles["size-wrapper"]].join(" ")}>
                       {product.variants
                         ?.filter(variant => variant.class === "regular")
                         .map((variant, index) => (
@@ -587,7 +595,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                       VIP Sizes
                     </button>
 
-                    <div className={styles["size-wrapper"]}>
+                    <div className={[styles["size-wrapper"]].join(" ")}>
                       {product.variants
                         ?.filter(variant => variant.class === "vip")
                         .map((variant, index) => {
