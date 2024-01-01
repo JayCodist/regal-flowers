@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { GetStaticPaths, GetStaticProps } from "next";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent } from "react";
 import { getCategories, getCategory } from "../../utils/helpers/data/category";
 import ProductsPage from "../filters";
 import { Category } from "../../utils/types/Category";
@@ -7,12 +8,11 @@ import { Category } from "../../utils/types/Category";
 const CategoryPage: FunctionComponent<{
   category: Category;
 }> = ({ category }) => {
-  useEffect(() => {
-    if (!category.slug) {
-      location.href = location.href;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+  if (!category?.slug) {
+    console.log("attempting reload category");
+    window.location.reload();
+    return null;
+  }
 
   return (
     <>
