@@ -2570,3 +2570,64 @@ export const occasionsPageMetaData: Record<
 };
 
 export const business = "regalFlowers";
+
+export const blogCategories = [
+  {
+    title: "Dear Lara, Relationship and Lifestyle Advice ",
+    url: "",
+    bulletColor: ""
+  },
+  {
+    title: "Everything Flowers and Gifts",
+    url: "",
+    bulletColor: "red"
+  },
+  {
+    title: "General Posts, Fun and Love Tips",
+    url: "",
+    bulletColor: "green"
+  }
+];
+
+interface BlogMinimal {
+  id: string;
+  title: string;
+  featuredImage: string;
+  excerpt: string;
+  category: string;
+  readMinutes: number;
+  slug: string;
+}
+
+export const blogMinimals: BlogMinimal[] = [
+  {
+    id: "1",
+    title: "5 Reasons Why Guys Give Girls Flowers",
+    featuredImage: "/images/blog-image.png",
+    excerpt:
+      "Chivalry isn’t dead, and men are typically known to give women flowers, while women are typically known to receive flowers. Or so the saying goes. But why exactly do men send women flowers? Chivalry isn’t dead, and men are typically known to give women flowers, while women are typically known to receive flowers. Or so the saying goes. But why exactly do men send women flowers Or so the saying goes. But why exactly do men send women flowers? ",
+    category: "Everything Flowers and Gifts",
+    readMinutes: 3,
+    slug: "how-to-make-your-flowers-last-longer"
+  },
+  {
+    id: "1",
+    title: "5 Reasons Why Guys Give Girls Flowers",
+    featuredImage: "/images/blog-image.png",
+    excerpt:
+      "Chivalry isn’t dead, and men are typically known to give women flowers, while women are typically known to receive flowers. Or so the saying goes. But why exactly do men send women flowers? ",
+    category: "Everything Flowers and Gifts",
+    readMinutes: 3,
+    slug: "how-to-make-your-flowers-last-longer"
+  },
+  {
+    id: "1",
+    title: "5 Reasons Why Guys Give Girls Flowers",
+    featuredImage: "/images/blog-image.png",
+    excerpt:
+      "Chivalry isn’t dead, and men are typically known to give women flowers, while women are typically known to receive flowers. Or so the saying goes. But why exactly do men send women flowers?",
+    category: "Everything Flowers and Gifts",
+    readMinutes: 3,
+    slug: "how-to-make-your-flowers-last-longer"
+  }
+];

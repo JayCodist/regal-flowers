@@ -641,8 +641,10 @@ button {
     z-index: 1;
     min-height: 375rem;
 
-    @media (max-width: 600px) {
-      margin-top: -7rem;
+    &.home-page {
+      @media (max-width: 600px) {
+        margin-top: -7rem;
+      }
     }
 
     &:before {

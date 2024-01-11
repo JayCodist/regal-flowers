@@ -199,7 +199,7 @@ const LandingPage: FunctionComponent<{
             <FlowerDeliveryInput />
           </div>
         </div>
-        <section className="featured-section-wrapper">
+        <section className="featured-section-wrapper home-page">
           <div className="featured-content">
             <div className="flex between">
               <h2 className="featured-title">{bestSellers[locationName]}</h2>
