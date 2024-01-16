@@ -7,7 +7,7 @@ interface BlogCardProps {
   date: string;
   readDuration: string;
   title: string;
-  excerpt: string;
+  excerpt?: string;
   url: string;
 }
 
