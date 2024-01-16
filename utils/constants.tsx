@@ -1476,6 +1476,27 @@ export const links: AppLink[] = [
         ]
       },
       {
+        title: "Valentine",
+        url: "",
+        children: [
+          {
+            title: "Flowers",
+            url: "/product-category/valentines-day-flowers-and-gifts",
+            children: []
+          },
+          {
+            title: "VIP Flowers",
+            url: "/vip",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/product-category/gifts",
+            children: []
+          }
+        ]
+      },
+      {
         title: "Just to say Hi, Sorry, Thank You",
         url: "",
         children: [
@@ -1561,7 +1582,12 @@ export const links: AppLink[] = [
         url: "",
         children: [
           {
-            title: "Valentine's Day",
+            title: "Plants",
+            url: "/product-category/indoor-plants-and-cactus",
+            children: []
+          },
+          {
+            title: "Valentine",
             url: "/product-category/valentines-day-flowers-and-gifts",
             children: []
           },
@@ -1742,9 +1768,14 @@ export const links: AppLink[] = [
       }
     ]
   },
+  // {
+  //   url: "/product-category/indoor-plants-and-cactus",
+  //   title: "Plants",
+  //   children: []
+  // },
   {
-    url: "/product-category/indoor-plants-and-cactus",
-    title: "Plants",
+    url: "/product-category/valentines-day-flowers-and-gifts",
+    title: "Valentine",
     children: []
   },
   {
@@ -1785,6 +1816,9 @@ export const bestSellers: RegalContent = {
   "other-locations": "Bestselling Flowers in Ibadan, Port Harcourt etc"
 };
 
+export const bestSellersValentine =
+  "Bestselling Valentine's Day Flowers in Lagos and Abuja, Nigeria";
+
 export const bestSellersRomance: RegalContent = {
   general: "Bestselling Romance or Just to Say Flowers in Lagos & Abuja",
   lagos: "Bestselling Flowers in Lagos",
@@ -1804,6 +1838,12 @@ export const featuredSlugs: Record<LocationName, string[]> = {
     "calligraphy-by-regal-red-roses-white-roses-lilies",
     "classic-roses-are-red-box-arrangement-red-roses-and-million-stars",
     "roses-and-mixed-chrysanthemums-roses-and-mixed-chrysanthemums"
+  ],
+  "featured-valentine": [
+    "classic-red-roses-luxurious-bouquet-of-red-roses",
+    "roses-are-red-red-roses-accentuated-with-sparkling-million-star-gypsophila",
+    "ferrero-rocher-roses-003-exquisite-combination",
+    "mon-coeur-my-heart-roses-in-heart-shape"
   ],
   lagos: [
     "cool-and-classic",
