@@ -85,6 +85,10 @@ export const defaultBreadcrumb: Breadcrumb = {
 
 export const allOccasionOptions: Option[] = [
   {
+    value: "valentines-day-flowers-and-gifts",
+    label: "Valentine's Day"
+  },
+  {
     value: "flowers-for-love-birthday-anniversary-etc",
     label: "Romance, Birthdays & Anniversary"
   },
@@ -94,11 +98,7 @@ export const allOccasionOptions: Option[] = [
   { value: "funeral-and-condolence", label: "Funeral & Condolence" },
   { value: "event-amp-centerpiece", label: "Events & Centerpiece" },
   { value: "fathers-day-flowers", label: "Father's Day" },
-  { value: "mothers-day-flowers", label: "Mother's Day" },
-  {
-    value: "valentines-day-flowers-and-gifts",
-    label: "Valentine's Day"
-  }
+  { value: "mothers-day-flowers", label: "Mother's Day" }
 ];
 
 export const defaultCurrency: AppCurrency = {
@@ -1450,6 +1450,27 @@ export const productSampleData = {
 
 export const links: AppLink[] = [
   {
+    title: "Valentine",
+    url: "",
+    children: [
+      {
+        title: "Flowers",
+        url: "/product-category/valentines-day-flowers-and-gifts",
+        children: []
+      },
+      {
+        title: "VIP Flowers",
+        url: "/vip",
+        children: []
+      },
+      {
+        title: "Gifts",
+        url: "/product-category/gifts",
+        children: []
+      }
+    ]
+  },
+  {
     url: "",
     title: "Occasions",
     subtitle: "Select Occasion",
@@ -1773,11 +1794,7 @@ export const links: AppLink[] = [
   //   title: "Plants",
   //   children: []
   // },
-  {
-    url: "/product-category/valentines-day-flowers-and-gifts",
-    title: "Valentine",
-    children: []
-  },
+
   {
     title: "FAQ",
     url: "/faq-how-to-buy-fresh-flowers-and-gifts-in-lagos-and-abuja",
