@@ -12,14 +12,14 @@ const LocationLandingPage: FunctionComponent<{
 }> = ({ locationName, featuredFlowers }) => {
   return (
     <LandingPage
-      locationName={locationName}
+      locationName={locationName || "general"}
       featuredFlowers={featuredFlowers}
     />
   );
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const locationName = params?.locationName as LocationName;
+  const locationName = (params?.locationName || "general") as LocationName;
   const { data, error, message } = await getProductsBySlugs(
     featuredSlugs[locationName]
   );
