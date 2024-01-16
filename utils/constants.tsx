@@ -2081,6 +2081,12 @@ export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
 export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
   USD: 255,
   GBP: 210,
+  NGN: 150000
+};
+
+export const freeDeliveryThresholdFestive: Record<AppCurrencyName, number> = {
+  USD: 255,
+  GBP: 210,
   NGN: 120000
 };
 
@@ -2090,7 +2096,13 @@ export interface DeliveryLocationOption {
   amount: number;
 }
 
-export const valsDates = ["13-02", "14-02", "15-02", "25-12", "26-12", "01-01"];
+export const valsDates = ["13-02", "14-02", "15-02"];
+
+export const festiveDates = ["25-12", "26-12", "01-01"];
+
+export const specialDates = [...valsDates, ...festiveDates];
+
+export type SpecialDate = "vals" | "festive";
 
 export const allDeliveryLocationZones: Record<
   LocationName,
@@ -2105,8 +2117,12 @@ export const allDeliveryLocationZones: Record<
             <br /> Not sure or need us to reach the recipient to confirm address
           </p>
         ),
-        value: !valsDates.includes(deliveryDate?.format("DD-MM") || "")
+        value: !specialDates.includes(deliveryDate?.format("DD-MM") || "")
           ? "highLagos-zone1"
+          : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+          ? "highLagosFestive-zone1"
+          : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+          ? "freeLagosVals-zone1"
           : "highLagosVals-zone1"
       },
       {
@@ -2122,8 +2138,12 @@ export const allDeliveryLocationZones: Record<
             Egba, and similar environs)
           </p>
         ),
-        value: !valsDates.includes(deliveryDate?.format("DD-MM") || "")
+        value: !specialDates.includes(deliveryDate?.format("DD-MM") || "")
           ? "highLagos-zone2"
+          : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+          ? "highLagosFestive-zone2"
+          : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+          ? "freeLagosVals-zone2"
           : "highLagosVals-zone2"
       },
       {
@@ -2144,15 +2164,21 @@ export const allDeliveryLocationZones: Record<
           (amount || 0) >=
           (valsDates.includes(deliveryDate?.format("DD-MM") || "")
             ? freeDeliveryThresholdVals
+            : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+            ? freeDeliveryThresholdFestive
             : freeDeliveryThreshold)[currency?.name || "NGN"]
             ? `freeLagos${
                 valsDates.includes(deliveryDate?.format("DD-MM") || "")
                   ? "Vals"
+                  : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+                  ? "Festive"
                   : ""
               }-zone3`
             : `mediumLagos${
                 valsDates.includes(deliveryDate?.format("DD-MM") || "")
                   ? "Vals"
+                  : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+                  ? "Festive"
                   : ""
               }-zone3`
       }
@@ -2166,8 +2192,12 @@ export const allDeliveryLocationZones: Record<
           <br /> Not sure or need us to reach the recipient to confirm address
         </p>
       ),
-      value: !valsDates.includes(deliveryDate?.format("DD-MM") || "")
+      value: !specialDates.includes(deliveryDate?.format("DD-MM") || "")
         ? "highAbuja-zone1"
+        : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+        ? "highAbujaFestive-zone1"
+        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+        ? "freeAbujaVals-zone1"
         : "highAbujaVals-zone1"
     },
     {
@@ -2179,8 +2209,12 @@ export const allDeliveryLocationZones: Record<
           Kagini, Dawaki and similar environs
         </p>
       ),
-      value: !valsDates.includes(deliveryDate?.format("DD-MM") || "")
+      value: !specialDates.includes(deliveryDate?.format("DD-MM") || "")
         ? "highAbuja-zone2"
+        : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+        ? "highAbujaFestive-zone2"
+        : (amount || 0) >= freeDeliveryThresholdVals[currency?.name || "NGN"]
+        ? "freeAbujaVals-zone2"
         : "highAbujaVals-zone2"
     },
     {
@@ -2196,19 +2230,26 @@ export const allDeliveryLocationZones: Record<
         (amount || 0) >=
         (valsDates.includes(deliveryDate?.format("DD-MM") || "")
           ? freeDeliveryThresholdVals
+          : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+          ? freeDeliveryThresholdFestive
           : freeDeliveryThreshold)[currency?.name || "NGN"]
           ? `freeAbuja${
               valsDates.includes(deliveryDate?.format("DD-MM") || "")
                 ? "Vals"
+                : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+                ? "Festive"
                 : ""
             }-zone3`
           : `mediumAbuja${
               valsDates.includes(deliveryDate?.format("DD-MM") || "")
                 ? "Vals"
+                : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+                ? "Festive"
                 : ""
             }-zone3`
     }
   ],
+  general: () => [],
   "other-locations": () => []
 };
 
@@ -2218,7 +2259,7 @@ export const allDeliveryLocationOptions: Record<
 > = {
   lagos: (currency, deliveryDate) =>
     [
-      !valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(4500, currency)} - Orders BELOW ${
           currency.sign
         }${freeDeliveryThreshold[
@@ -2228,7 +2269,7 @@ export const allDeliveryLocationOptions: Record<
         amount: 4500
       },
 
-      !valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
           currency.sign
         }${freeDeliveryThreshold[
@@ -2238,7 +2279,7 @@ export const allDeliveryLocationOptions: Record<
         amount: 0
       },
 
-      !valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
           10000,
           currency
@@ -2248,22 +2289,22 @@ export const allDeliveryLocationOptions: Record<
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(7000, currency)} - Orders BELOW ${
+        label: `${getPriceDisplay(20000, currency)} - Orders BELOW ${
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
         ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
         name: "mediumLagosVals",
-        amount: 7000
+        amount: 20000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
-          15000,
+          30000,
           currency
         )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
         name: "highLagosVals",
-        amount: 15000
+        amount: 30000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
@@ -2274,12 +2315,40 @@ export const allDeliveryLocationOptions: Record<
         ].toLocaleString()}  to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
         name: "freeLagosVals",
         amount: 0
+      },
+      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
+        label: `${getPriceDisplay(7000, currency)} - Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdFestive[
+          currency.name
+        ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
+        name: "mediumLagosFestive",
+        amount: 7000
+      },
+
+      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
+        label: `${getPriceDisplay(
+          15000,
+          currency
+        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+        name: "highLagosFestive",
+        amount: 15000
+      },
+
+      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
+        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
+          currency.sign
+        }${freeDeliveryThresholdFestive[
+          currency.name
+        ].toLocaleString()}  to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
+        name: "freeLagosFestive",
+        amount: 0
       }
     ].filter(BooleanFilter) as DeliveryLocationOption[],
 
   abuja: (currency, deliveryDate) =>
     [
-      !valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(3500, currency)} - Orders BELOW ${
           currency.sign
         }${freeDeliveryThreshold[
@@ -2288,7 +2357,7 @@ export const allDeliveryLocationOptions: Record<
         name: "mediumAbuja",
         amount: 3500
       },
-      !valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
           currency.sign
         }${freeDeliveryThreshold[
@@ -2298,6 +2367,14 @@ export const allDeliveryLocationOptions: Record<
         amount: 0
       },
 
+      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
+        label: `${getPriceDisplay(
+          6000,
+          currency
+        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
+        name: "highAbuja",
+        amount: 6000
+      },
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(7000, currency)} - Orders BELOW ${
           currency.sign
@@ -2326,13 +2403,34 @@ export const allDeliveryLocationOptions: Record<
         name: "freeAbujaVals",
         amount: 0
       },
-      !valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+
+      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
+        label: `${getPriceDisplay(7000, currency)} - Orders BELOW ${
+          currency.sign
+        }${freeDeliveryThresholdFestive[
+          currency.name
+        ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
+        name: "mediumAbujaFestive",
+        amount: 7000
+      },
+
+      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
-          6000,
+          15000,
           currency
-        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
-        name: "highAbuja",
-        amount: 6000
+        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+        name: "highAbujaFestive",
+        amount: 15000
+      },
+
+      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
+        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
+          currency.sign
+        }${freeDeliveryThresholdFestive[
+          currency.name
+        ].toLocaleString()}  to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
+        name: "freeAbujaFestive",
+        amount: 0
       }
     ].filter(BooleanFilter) as DeliveryLocationOption[],
   "other-locations": () => [],
