@@ -200,7 +200,7 @@ const LandingPage: FunctionComponent<{
         >
           <div className="hero-content flex column center center-align">
             <h1 className={styles.title}>
-              They Deserve Regal Flowers.
+              They Deserve Regal Flowers this Valentine.
               <br /> Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria
             </h1>
             <FlowerDeliveryInput />
