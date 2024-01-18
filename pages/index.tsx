@@ -235,7 +235,7 @@ const LandingPage: FunctionComponent<{
                     subTitle={flower.subtitle || flower.name.split("–")[1]}
                     price={flower.price}
                     url={`/product/${flower.slug}`}
-                    buttonText="Add to Cart"
+                    buttonText="Select Size"
                     cart={flower.variants?.length ? false : true}
                     product={flower}
                   />
@@ -278,7 +278,7 @@ const LandingPage: FunctionComponent<{
                   subTitle={flower.subtitle || flower.name.split("–")[1]}
                   price={flower.price}
                   url={`/product/${flower.slug}`}
-                  buttonText="Add to Cart"
+                  buttonText="Select Size"
                   cart={flower.variants?.length ? false : true}
                   product={flower}
                 />
@@ -322,7 +322,7 @@ const LandingPage: FunctionComponent<{
                   subTitle={flower.subtitle || flower.name.split("–")[1]}
                   price={flower.price}
                   url={`/product/${flower.slug}`}
-                  buttonText="Add to Cart"
+                  buttonText="Select Size"
                   cart={flower.variants?.length ? false : true}
                   product={flower}
                 />
@@ -400,7 +400,7 @@ const LandingPage: FunctionComponent<{
                   url={section.url}
                   mode="four-x-grid"
                   onlyTitle
-                  buttonText="Add to Cart"
+                  buttonText="Select Size"
                 />
               ))}
             </div>

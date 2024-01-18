@@ -768,7 +768,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
               >
                 {outOfStock
                   ? "Out Of Stock"
-                  : `Add to Cart ${getPriceDisplay(
+                  : `Select Size ${getPriceDisplay(
                       total || productPrice,
                       currency
                     )}`}
@@ -787,7 +787,7 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
                 price={item.price}
                 subTitle={item.subtitle || item.name.split("–")[1]}
                 url={`/product/${item.slug}`}
-                buttonText="Add to Cart"
+                buttonText="Select Size"
               />
             ))}
           </div>
