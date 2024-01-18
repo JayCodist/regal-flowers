@@ -926,7 +926,9 @@ const ProductsPage: FunctionComponent<{
                     name={product.name.split("–")[0]}
                     image={product.images[0].src}
                     price={product.price}
-                    buttonText="Select Size"
+                    buttonText={
+                      product.variants?.length ? "Select Size" : "Add to Cart"
+                    }
                     subTitle={product.subtitle || product.name.split("–")[1]}
                     url={`/product/${product.slug}`}
                     mode={`${
