@@ -21,7 +21,7 @@ function Custom404Page() {
               url={section.url}
               mode="four-x-grid"
               onlyTitle
-              buttonText="Add to cart"
+              buttonText="Select Size"
             />
           ))}
         </div>
