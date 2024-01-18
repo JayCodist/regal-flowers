@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "start": "next dev",
+    "start": "next dev -p 4000",
     "build": "next build",
     "nextstart": "next start",
     "lint": "eslint . --fix && tsc --noEmit",

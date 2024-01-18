@@ -2671,3 +2671,21 @@ export const blogMinimals: BlogMinimal[] = [
     slug: "how-to-make-your-flowers-last-longer"
   }
 ];
+
+export const trendingPosts = [
+  {
+    imageUrl: "/images/blog_thumbnail.png",
+    tag: "Everything Flowers and Gifts",
+    title: "5 awesome methods of receiving payment in your store. "
+  },
+  {
+    imageUrl: "/images/blog_thumbnail.png",
+    tag: "Everything Flowers and Gifts",
+    title: "5 awesome methods of receiving payment in your store. "
+  },
+  {
+    imageUrl: "/images/blog_thumbnail.png",
+    tag: "Everything Flowers and Gifts",
+    title: "5 awesome methods of receiving payment in your store. "
+  }
+]

@@ -1,0 +1,255 @@
+.blog-post {
+  padding-top: 5rem;
+  position: relative;
+  transition: 0.3s ease-out;
+  margin: 0 8rem;
+  font-weight: 400;
+
+  @media (max-width: 768px) {
+    margin: 0 2rem;
+  }
+
+  .hero-header {
+    .hero-img {
+      background-image: url('/images/blog_detail.png');
+      height: 35rem;
+      background-position: center center;
+      background-size: cover;
+      border-radius: 1rem;
+
+      @media (max-width: 768px) {
+        background-image: url("/images/blog-bg-mobile.png");
+        height: 24rem;
+      }
+    }
+
+    .title {
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      line-height: 3.6rem;
+
+      @media (max-width: 420px) {
+        font-size: 1.5rem;
+        margin-bottom: 0rem;
+        line-height: 1.8rem;
+      }
+    }
+
+    .header-details {
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .info {
+        margin: 2rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem 0;
+
+        .blog-date {
+          color: #97A0AF;
+        }
+
+        .last-updated {
+          color: #3B82F6;
+        }
+
+      }
+
+
+
+      @media (max-width: 560px) {
+        flex-direction: column;
+        align-items: normal;
+
+      }
+    }
+  }
+
+  .blog-body {
+    display: flex;
+    gap: 0 3rem;
+    margin-bottom: 3rem;
+
+    @media (max-width: 560px) {
+      flex-direction: column;
+    }
+
+    .content {
+      width: 70%;
+
+      & h1:first-of-type {
+        font-size: 1.8rem;
+        font-weight: 700;
+        line-height: 2.466rem;
+      }
+
+      @media (max-width: 768px) {
+        width: 50%;
+      }
+
+      @media (max-width: 560px) {
+        width: 100%;
+      }
+    }
+
+    .side {
+      width: 30%;
+
+      @media (max-width: 768px) {
+        width: 50%;
+      }
+
+      @media (max-width: 560px) {
+        width: 100%;
+      }
+
+      .trending {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        hr {
+          width: 30%;
+          color: #6B7280;
+        }
+
+        p {
+          font-size: 1.125rem;
+          font-weight: 600;
+          line-height: 1.5rem;
+        }
+      }
+
+      .category {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+        text-decoration: underline;
+
+        .list-bullet {
+          position: relative;
+          height: 2px;
+          width: 15px;
+          margin-right: 1rem;
+          background-color: #2563eb;
+
+          &.red {
+            background-color: #db2777;
+          }
+
+          &.green {
+            background-color: #16a34a;
+          }
+
+          &::before {
+            content: "";
+            display: block;
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: inherit;
+            border-radius: 50%;
+            margin: 0.5rem;
+            position: absolute;
+            top: -0.7rem;
+            right: -1rem;
+          }
+        }
+      }
+    }
+
+  }
+
+
+  .subscribe-section {
+    background-color: #F9FAFB;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.5rem;
+    padding: 2rem 4rem;
+    margin: 5rem 0 2rem;
+    font-size: 1rem;
+
+    &>div:first-child {
+      &>* {
+        margin: 1.8rem 0 0.5rem;
+      }
+    }
+
+    @media (max-width: 1300px) {
+      h2 {
+        width: 90%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      padding: 2rem;
+      h2 {
+        width: 100%;
+        font-size: 1.3rem;
+      }
+    }
+
+    .subscribe-form-wrapper {
+      &>* {
+        margin-bottom: 0.5rem;
+      }
+
+    }
+  }
+
+  .popular-sections {
+
+    @media (max-width: 768px) {
+      padding: 0 2rem;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 600;
+
+      @media (max-width: 600px) {
+        font-size: 1.5rem;
+        text-align: center;
+        margin: 0 auto;
+
+      }
+    }
+  }
+
+  .section {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0 6rem;
+
+    @media (max-width: 768px) {
+      margin: 1rem 0 2rem;
+    }
+
+    &.wrap {
+      @media (max-width: 768px) {
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+      }
+    }
+  }
+
+}
+
+.tag {
+  color: #16A34A;
+  padding: 0.1rem;
+  background-color: #F0FDF4;
+}
+
+.trend-img {
+  object-position: center;
+  object-fit: cover;
+  height: 7.5rem;
+  width: 7.5rem;
+}
