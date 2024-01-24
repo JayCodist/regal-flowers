@@ -452,7 +452,7 @@ const LandingPage: FunctionComponent<{
               </div>
               <br /> <br />
               <div className={styles.reviews}>
-                {reviews[locationName].map((review, i) => (
+                {reviews[locationName]?.map((review, i) => (
                   <div
                     key={i}
                     className={[
@@ -523,7 +523,7 @@ const LandingPage: FunctionComponent<{
                 />
               )}
               <div className="flex spaced-lg">
-                {reviews[locationName].map((_, index) => (
+                {reviews[locationName]?.map((_, index) => (
                   <span
                     key={index}
                     role="button"
