@@ -1,4 +1,5 @@
 .article {
+  color: #202020;
 
   &>* {
     box-sizing: border-box;
@@ -6,6 +7,12 @@
     border: 0;
     padding: 0%;
     margin: 0;
+    font-size: 1.3rem;
+
+  }
+
+  ul {
+    margin-left: 3rem;
   }
 
   img {
@@ -13,8 +20,9 @@
     object-position: center;
     width: 17.917rem;
     height: 16.625rem;
-    display: inline;
+    display: block;
     padding: 0 0.3rem;
+    margin: auto;
 
     @media (max-width: 768px) {
       width: 50%;
@@ -39,11 +47,20 @@
   }
 
   h1,
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 2.25rem;
+  h2,
+  h3 {
+    font-size: 1.875rem;
     margin: 2rem 0;
+
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #374151;
   }
 
   blockquote {

@@ -10,15 +10,13 @@
   }
 
   .hero-header {
-    .hero-img {
-      background-image: url('/images/blog_detail.png');
+    .hero-img>img {
       height: 35rem;
-      background-position: center center;
-      background-size: cover;
-      border-radius: 1rem;
+      object-position: center;
+      width: 100%;
+      object-fit: cover;
 
       @media (max-width: 768px) {
-        background-image: url("/images/blog-bg-mobile.png");
         height: 24rem;
       }
     }
@@ -188,6 +186,7 @@
 
     @media (max-width: 768px) {
       padding: 2rem;
+
       h2 {
         width: 100%;
         font-size: 1.3rem;
