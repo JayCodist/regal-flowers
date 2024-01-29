@@ -2138,7 +2138,7 @@ export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
 export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
   USD: 255,
   GBP: 210,
-  NGN: 150000
+  NGN: 165000
 };
 
 export const freeDeliveryThresholdFestive: Record<AppCurrencyName, number> = {
@@ -2231,10 +2231,10 @@ export const allDeliveryLocationZones: Record<
                   ? "Festive"
                   : ""
               }-zone3`
+            : valsDates.includes(deliveryDate?.format("DD-MM") || "")
+            ? "highLagosVals-zone1"
             : `mediumLagos${
-                valsDates.includes(deliveryDate?.format("DD-MM") || "")
-                  ? "Vals"
-                  : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+                festiveDates.includes(deliveryDate?.format("DD-MM") || "")
                   ? "Festive"
                   : ""
               }-zone3`
@@ -2345,15 +2345,15 @@ export const allDeliveryLocationOptions: Record<
         amount: 10000
       },
 
-      valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(20000, currency)} - Orders BELOW ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
-        name: "mediumLagosVals",
-        amount: 20000
-      },
+      // valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+      //   label: `${getPriceDisplay(20000, currency)} - Orders BELOW ${
+      //     currency.sign
+      //   }${freeDeliveryThresholdVals[
+      //     currency.name
+      //   ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
+      //   name: "mediumLagosVals",
+      //   amount: 20000
+      // },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
