@@ -2297,10 +2297,10 @@ export const allDeliveryLocationZones: Record<
                 ? "Festive"
                 : ""
             }-zone3`
+          : valsDates.includes(deliveryDate?.format("DD-MM") || "")
+          ? "highAbujaVals-zone1"
           : `mediumAbuja${
-              valsDates.includes(deliveryDate?.format("DD-MM") || "")
-                ? "Vals"
-                : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+              festiveDates.includes(deliveryDate?.format("DD-MM") || "")
                 ? "Festive"
                 : ""
             }-zone3`
@@ -2365,14 +2365,10 @@ export const allDeliveryLocationOptions: Record<
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()}  Valentine Orders above ${getPriceDisplay(
-          165000,
+        label: `${getPriceDisplay(
+          0,
           currency
-        )}`,
+        )} - Valentine Orders above ${getPriceDisplay(165000, currency)}`,
         name: "freeLagosVals",
         amount: 0
       },
@@ -2435,31 +2431,21 @@ export const allDeliveryLocationOptions: Record<
         name: "highAbuja",
         amount: 6000
       },
-      valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(7000, currency)} - Orders BELOW ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
-        name: "mediumAbujaVals",
-        amount: 7000
-      },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
           15000,
           currency
-        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
+        )} - Valentine Orders below ${getPriceDisplay(165000, currency)}`,
         name: "highAbujaVals",
         amount: 15000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()} (FREE* Delivery Abuja)`,
+        label: `${getPriceDisplay(
+          0,
+          currency
+        )} - Valentine Orders above ${getPriceDisplay(165000, currency)}`,
         name: "freeAbujaVals",
         amount: 0
       },
