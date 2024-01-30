@@ -2359,7 +2359,10 @@ export const allDeliveryLocationOptions: Record<
         label: `${getPriceDisplay(
           30000,
           currency
-        )} - Valentine Orders below ${getPriceDisplay(165000, currency)}`,
+        )} - Valentine (13th-15th Feb) Orders below ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
         name: "highLagosVals",
         amount: 30000
       },
@@ -2368,7 +2371,10 @@ export const allDeliveryLocationOptions: Record<
         label: `${getPriceDisplay(
           0,
           currency
-        )} - Valentine Orders above ${getPriceDisplay(165000, currency)}`,
+        )} - Valentine (13th-15th Feb) Orders above ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
         name: "freeLagosVals",
         amount: 0
       },
@@ -2434,18 +2440,24 @@ export const allDeliveryLocationOptions: Record<
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
-          15000,
+          30000,
           currency
-        )} - Valentine Orders below ${getPriceDisplay(165000, currency)}`,
+        )} - Valentine (13th-15th Feb) Orders below ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
         name: "highAbujaVals",
-        amount: 15000
+        amount: 30000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
           0,
           currency
-        )} - Valentine Orders above ${getPriceDisplay(165000, currency)}`,
+        )} - Valentine (13th-15th Feb) Orders above ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
         name: "freeAbujaVals",
         amount: 0
       },
