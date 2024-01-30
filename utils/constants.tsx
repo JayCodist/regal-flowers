@@ -2359,7 +2359,7 @@ export const allDeliveryLocationOptions: Record<
         label: `${getPriceDisplay(
           30000,
           currency
-        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+        )} - Valentine Orders below ${getPriceDisplay(165000, currency)}`,
         name: "highLagosVals",
         amount: 30000
       },
@@ -2369,7 +2369,10 @@ export const allDeliveryLocationOptions: Record<
           currency.sign
         }${freeDeliveryThresholdVals[
           currency.name
-        ].toLocaleString()}  to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
+        ].toLocaleString()}  Valentine Orders above ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
         name: "freeLagosVals",
         amount: 0
       },
