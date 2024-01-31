@@ -20,9 +20,11 @@ import Input, { TextArea } from "../components/input/Input";
 import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
+  PickUpLocation,
   allDeliveryLocationOptions,
   allDeliveryLocationZones,
   deliveryStates,
+  deliveryZoneMap,
   festiveDates,
   freeDeliveryThreshold,
   freeDeliveryThresholdFestive,
@@ -40,7 +42,12 @@ import {
   updatePaymentMethodDetails
 } from "../utils/helpers/data/order";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
-import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
+import {
+  Order,
+  CheckoutFormData,
+  PaymentName,
+  DeliveryZone
+} from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
@@ -302,7 +309,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         [key as string]: value,
-        deliveryZone: value === "Lagos" ? "LPI" : "APA"
+        deliveryZone: deliveryZoneMap[value as PickUpLocation]
       });
       return;
     }
@@ -1106,10 +1113,21 @@ const Checkout: FunctionComponent = () => {
                                   <Radio
                                     label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
                                     onChange={() =>
-                                      handleChange("pickUpLocation", "Lagos")
+                                      handleChange("pickUpLocation", "Ikoyi")
                                     }
                                     checked={
-                                      formData.pickUpLocation === "Lagos"
+                                      formData.pickUpLocation === "Ikoyi"
+                                    }
+                                  />
+                                </div>
+                                <div className="vertical-margin">
+                                  <Radio
+                                    label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
+                                    onChange={() =>
+                                      handleChange("pickUpLocation", "Lekki")
+                                    }
+                                    checked={
+                                      formData.pickUpLocation === "Lekki"
                                     }
                                   />
                                 </div>
@@ -2081,9 +2099,18 @@ const Checkout: FunctionComponent = () => {
                                 <Radio
                                   label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
                                   onChange={() =>
-                                    handleChange("pickUpLocation", "Lagos")
+                                    handleChange("pickUpLocation", "Ikoyi")
                                   }
-                                  checked={formData.pickUpLocation === "Lagos"}
+                                  checked={formData.pickUpLocation === "Ikoyi"}
+                                />
+                              </div>
+                              <div className="vertical-margin">
+                                <Radio
+                                  label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
+                                  onChange={() =>
+                                    handleChange("pickUpLocation", "Lekki")
+                                  }
+                                  checked={formData.pickUpLocation === "Lekki"}
                                 />
                               </div>
                               <div className="vertical-margin">
