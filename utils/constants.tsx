@@ -4,7 +4,7 @@ import { Option } from "../components/select/Select";
 import { getPriceDisplay } from "./helpers/type-conversions";
 import { BooleanFilter } from "./helpers/type-helpers";
 import { AppCurrency, AppCurrencyName, AppLink } from "./types/Core";
-import { PaymentMethod } from "./types/Order";
+import { DeliveryZone, PaymentMethod } from "./types/Order";
 import { DesignOptionName, Gift } from "./types/Product";
 import {
   Service,
@@ -2689,3 +2689,17 @@ export const blogMinimals: BlogMinimal[] = [
     slug: "how-to-make-your-flowers-last-longer"
   }
 ];
+
+export const toUse = [
+  "Click on a slide to view it’s website page",
+  "Add desired size to Cart",
+  "Checkout and pay Online, Bank Transfer, PayPal or Bitcoins"
+];
+
+export type PickUpLocation = "Ikoyi" | "Abuja" | "Lekki";
+
+export const deliveryZoneMap: Record<string, DeliveryZone> = {
+  Ikoyi: "LPI",
+  Abuja: "APA",
+  Lekki: "LPL"
+};

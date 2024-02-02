@@ -20,9 +20,11 @@ import Input, { TextArea } from "../components/input/Input";
 import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
+  PickUpLocation,
   allDeliveryLocationOptions,
   allDeliveryLocationZones,
   deliveryStates,
+  deliveryZoneMap,
   festiveDates,
   freeDeliveryThreshold,
   freeDeliveryThresholdFestive,
@@ -40,7 +42,12 @@ import {
   updatePaymentMethodDetails
 } from "../utils/helpers/data/order";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
-import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
+import {
+  Order,
+  CheckoutFormData,
+  PaymentName,
+  DeliveryZone
+} from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
@@ -193,6 +200,8 @@ const Checkout: FunctionComponent = () => {
 
   const deviceType = useDeviceType();
 
+  const isValsDate = valsDates.includes(deliveryDate?.format("DD-MM") || "");
+
   const isBankTransfer = /but not seen yet/i.test(order?.paymentStatus || "");
 
   const total = useMemo(() => {
@@ -257,15 +266,53 @@ const Checkout: FunctionComponent = () => {
 
   const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
     if (key === "state") {
-      setFormData({
-        ...formData,
-        [key as string]: value,
-        zone: value === "other-locations" ? value : "",
-        pickUpLocation: "",
-        deliveryLocation: null,
-        deliveryZone: value === "lagos" ? "WBL" : "WBA"
-      });
-      return;
+      if (subTotal >= freeDeliveryThresholdVals.NGN && isValsDate) {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          deliveryLocation: {
+            label: "₦0 - Valentine (13th-15th Feb) Orders above ₦165,000",
+            name:
+              value === "lagos"
+                ? "freeLagosVals"
+                : value === "abuja"
+                ? "freeAbujaVals"
+                : "",
+            amount: 0
+          },
+          zone:
+            value === "lagos" ? "freeLagosVals-zone1" : "freeAbujaVals-zone1"
+        });
+        return;
+      } else if (subTotal <= freeDeliveryThresholdVals.NGN && isValsDate) {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          deliveryLocation: {
+            label: "₦29,900 - Valentine (13th-15th Feb) Orders below ₦165,000",
+            name:
+              value === "lagos"
+                ? "highLagosVals"
+                : value === "abuja"
+                ? "highAbujaVals"
+                : "",
+            amount: 29900
+          },
+          zone:
+            value === "lagos" ? "highLagosVals-zone1" : "highAbujaVals-zone1"
+        });
+        return;
+      } else {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          zone: value === "other-locations" ? value : "",
+          pickUpLocation: "",
+          deliveryLocation: null,
+          deliveryZone: value === "abuja" ? "WBL" : "WBA"
+        });
+        return;
+      }
     }
     if (key === "zone") {
       setFormData({
@@ -302,7 +349,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         [key as string]: value,
-        deliveryZone: value === "Lagos" ? "LPI" : "APA"
+        deliveryZone: deliveryZoneMap[value as PickUpLocation]
       });
       return;
     }
@@ -998,7 +1045,8 @@ const Checkout: FunctionComponent = () => {
                                     dimmed
                                   />
                                 </div>
-                                {formData.state &&
+                                {!isValsDate &&
+                                  formData.state &&
                                   formData.state !== "other-locations" && (
                                     <div className="input-group">
                                       <span className="question">
@@ -1022,7 +1070,8 @@ const Checkout: FunctionComponent = () => {
                             )}
 
                             {formData.deliveryMethod === "delivery" &&
-                              formData.zone && (
+                              formData.state &&
+                              (formData.zone || isValsDate) && (
                                 <div className={styles["pickup-locations"]}>
                                   {deliveryLocationOptions.length > 0 && (
                                     <p className="primary-color align-icon normal-text bold margin-bottom">
@@ -1033,32 +1082,33 @@ const Checkout: FunctionComponent = () => {
                                     </p>
                                   )}
 
-                                  {deliveryLocationOptions.length === 0 && (
-                                    <div className="flex center-align primary-color normal-text margin-bottom spaced">
-                                      <InfoRedIcon className="generic-icon xl" />
-                                      <span>
-                                        At the moment, we only deliver VIP
-                                        Orders to other states on request, by
-                                        either chartering a vehicle or by
-                                        flight. Kindly contact us on
-                                        Phone/WhatsApp:
-                                        <br />
-                                        <a
-                                          href="tel:+2347011992888"
-                                          className="clickable neutral underline"
-                                        >
-                                          +234 7011992888
-                                        </a>
-                                        ,{" "}
-                                        <a
-                                          href="tel:+2347010006665"
-                                          className="clickable neutral underline"
-                                        >
-                                          +234 7010006665
-                                        </a>
-                                      </span>
-                                    </div>
-                                  )}
+                                  {deliveryLocationOptions.length === 0 &&
+                                    formData.state === "other-locations" && (
+                                      <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                        <InfoRedIcon className="generic-icon xl" />
+                                        <span>
+                                          At the moment, we only deliver VIP
+                                          Orders to other states on request, by
+                                          either chartering a vehicle or by
+                                          flight. Kindly contact us on
+                                          Phone/WhatsApp:
+                                          <br />
+                                          <a
+                                            href="tel:+2347011992888"
+                                            className="clickable neutral underline"
+                                          >
+                                            +234 7011992888
+                                          </a>
+                                          ,{" "}
+                                          <a
+                                            href="tel:+2347010006665"
+                                            className="clickable neutral underline"
+                                          >
+                                            +234 7010006665
+                                          </a>
+                                        </span>
+                                      </div>
+                                    )}
 
                                   {deliveryLocationOptions.map(
                                     locationOption => {
@@ -1106,10 +1156,21 @@ const Checkout: FunctionComponent = () => {
                                   <Radio
                                     label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
                                     onChange={() =>
-                                      handleChange("pickUpLocation", "Lagos")
+                                      handleChange("pickUpLocation", "Ikoyi")
                                     }
                                     checked={
-                                      formData.pickUpLocation === "Lagos"
+                                      formData.pickUpLocation === "Ikoyi"
+                                    }
+                                  />
+                                </div>
+                                <div className="vertical-margin">
+                                  <Radio
+                                    label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
+                                    onChange={() =>
+                                      handleChange("pickUpLocation", "Lekki")
+                                    }
+                                    checked={
+                                      formData.pickUpLocation === "Lekki"
                                     }
                                   />
                                 </div>
@@ -2081,9 +2142,18 @@ const Checkout: FunctionComponent = () => {
                                 <Radio
                                   label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
                                   onChange={() =>
-                                    handleChange("pickUpLocation", "Lagos")
+                                    handleChange("pickUpLocation", "Ikoyi")
                                   }
-                                  checked={formData.pickUpLocation === "Lagos"}
+                                  checked={formData.pickUpLocation === "Ikoyi"}
+                                />
+                              </div>
+                              <div className="vertical-margin">
+                                <Radio
+                                  label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
+                                  onChange={() =>
+                                    handleChange("pickUpLocation", "Lekki")
+                                  }
+                                  checked={formData.pickUpLocation === "Lekki"}
                                 />
                               </div>
                               <div className="vertical-margin">
@@ -2123,7 +2193,8 @@ const Checkout: FunctionComponent = () => {
                                 />
                               </div>
 
-                              {formData.state &&
+                              {!isValsDate &&
+                                formData.state &&
                                 formData.state !== "other-locations" && (
                                   <div className="input-group">
                                     <span className="question">
@@ -2147,7 +2218,7 @@ const Checkout: FunctionComponent = () => {
                           )}
 
                           {formData.deliveryMethod === "delivery" &&
-                            formData.zone && (
+                            (formData.zone || isValsDate) && (
                               <div className={styles["pickup-locations"]}>
                                 {deliveryLocationOptions.length > 0 && (
                                   <p className="primary-color align-icon normal-text bold margin-bottom">
@@ -2158,31 +2229,33 @@ const Checkout: FunctionComponent = () => {
                                   </p>
                                 )}
 
-                                {deliveryLocationOptions.length === 0 && (
-                                  <div className="flex center-align primary-color normal-text margin-bottom spaced">
-                                    <InfoRedIcon className="generic-icon xl" />
-                                    <span>
-                                      At the moment, we only deliver VIP Orders
-                                      to other states on request, by either
-                                      chartering a vehicle or by flight. Kindly
-                                      contact us on Phone/WhatsApp:
-                                      <br />
-                                      <a
-                                        href="tel:+2347011992888"
-                                        className="clickable neutral underline"
-                                      >
-                                        +234 7011992888
-                                      </a>
-                                      ,{" "}
-                                      <a
-                                        href="tel:+2347010006665"
-                                        className="clickable neutral underline"
-                                      >
-                                        +234 7010006665
-                                      </a>
-                                    </span>
-                                  </div>
-                                )}
+                                {deliveryLocationOptions.length === 0 &&
+                                  formData.state === "other-locations" && (
+                                    <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                      <InfoRedIcon className="generic-icon xl" />
+                                      <span>
+                                        At the moment, we only deliver VIP
+                                        Orders to other states on request, by
+                                        either chartering a vehicle or by
+                                        flight. Kindly contact us on
+                                        Phone/WhatsApp:
+                                        <br />
+                                        <a
+                                          href="tel:+2347011992888"
+                                          className="clickable neutral underline"
+                                        >
+                                          +234 7011992888
+                                        </a>
+                                        ,{" "}
+                                        <a
+                                          href="tel:+2347010006665"
+                                          className="clickable neutral underline"
+                                        >
+                                          +234 7010006665
+                                        </a>
+                                      </span>
+                                    </div>
+                                  )}
 
                                 {deliveryLocationOptions.map(locationOption => {
                                   return (
