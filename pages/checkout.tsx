@@ -42,12 +42,7 @@ import {
   updatePaymentMethodDetails
 } from "../utils/helpers/data/order";
 import { InfoIcon, InfoRedIcon } from "../utils/resources";
-import {
-  Order,
-  CheckoutFormData,
-  PaymentName,
-  DeliveryZone
-} from "../utils/types/Order";
+import { Order, CheckoutFormData, PaymentName } from "../utils/types/Order";
 import styles from "./checkout.module.scss";
 import useDeviceType from "../utils/hooks/useDeviceType";
 import { getPurposes } from "../utils/helpers/data/purposes";
@@ -265,6 +260,7 @@ const Checkout: FunctionComponent = () => {
   } = router;
 
   const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
+    const deliveryZone = value === "abuja" ? "WBA" : "WBL";
     if (key === "state") {
       if (subTotal >= freeDeliveryThresholdVals.NGN && isValsDate) {
         setFormData({
@@ -281,7 +277,8 @@ const Checkout: FunctionComponent = () => {
             amount: 0
           },
           zone:
-            value === "lagos" ? "freeLagosVals-zone1" : "freeAbujaVals-zone1"
+            value === "lagos" ? "freeLagosVals-zone1" : "freeAbujaVals-zone1",
+          deliveryZone
         });
         return;
       } else if (subTotal <= freeDeliveryThresholdVals.NGN && isValsDate) {
@@ -299,7 +296,8 @@ const Checkout: FunctionComponent = () => {
             amount: 29900
           },
           zone:
-            value === "lagos" ? "highLagosVals-zone1" : "highAbujaVals-zone1"
+            value === "lagos" ? "highLagosVals-zone1" : "highAbujaVals-zone1",
+          deliveryZone
         });
         return;
       } else {
@@ -309,7 +307,7 @@ const Checkout: FunctionComponent = () => {
           zone: value === "other-locations" ? value : "",
           pickUpLocation: "",
           deliveryLocation: null,
-          deliveryZone: value === "abuja" ? "WBL" : "WBA"
+          deliveryZone
         });
         return;
       }
@@ -691,12 +689,17 @@ const Checkout: FunctionComponent = () => {
 
   const pastRecipients = useMemo(
     () =>
-      user?.recipients.map(recipient => ({
-        label: `${recipient.name} | ${recipient.phone} | ${recipient.phoneAlt} | ${recipient.address}`,
-        value: recipient._id
-      })) || [],
+      user?.recipients
+        .map(
+          recipient =>
+            recipient.name && {
+              label: `${recipient.name} | ${recipient.phone} | ${recipient.phoneAlt} | ${recipient.address}`,
+              value: recipient._id
+            }
+        )
+        .filter(Boolean) || [],
     [user]
-  );
+  ) as Option[];
 
   const deliveryLocationOptions = useMemo(() => {
     return (
