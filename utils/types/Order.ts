@@ -288,6 +288,7 @@ export interface CheckoutFormData {
   currency: AppCurrencyName;
   deliveryInstruction: string;
   deliveryZone: DeliveryZone;
+  pickupState: string;
 }
 
 export type PaymentName =
