@@ -31,6 +31,7 @@ import {
   freeDeliveryThresholdVals,
   paymentMethods,
   pickupLocations,
+  pickupStates,
   placeholderEmail,
   regalEmail,
   valsDates
@@ -113,7 +114,8 @@ const initialData: CheckoutFormData = {
   zone: "",
   currency: "NGN",
   deliveryInstruction: "",
-  deliveryZone: "WEB"
+  deliveryZone: "WEB",
+  pickupState: ""
 };
 
 type DeliverStage =
@@ -362,6 +364,25 @@ const Checkout: FunctionComponent = () => {
         [key as string]: phoneNumber
       });
       return;
+    }
+    if (key === "pickupState") {
+      if (value === "abuja") {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          pickUpLocation: "Abuja",
+          deliveryLocation: null,
+          deliveryZone: "APA"
+        });
+        return;
+      } else {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          pickUpLocation: ""
+        });
+        return;
+      }
     }
 
     setFormData({
@@ -1155,38 +1176,85 @@ const Checkout: FunctionComponent = () => {
                                     Pick Up Locations
                                   </span>
                                 </p>
-                                <div>
-                                  <Radio
-                                    label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
-                                    onChange={() =>
-                                      handleChange("pickUpLocation", "Ikoyi")
-                                    }
-                                    checked={
-                                      formData.pickUpLocation === "Ikoyi"
-                                    }
+                                <div className="input-group">
+                                  <span className="question">
+                                    Pick Up State
+                                  </span>
+                                  <Select
+                                    onSelect={value => {
+                                      handleChange("pickupState", value);
+                                    }}
+                                    value={formData.pickupState}
+                                    options={pickupStates}
+                                    placeholder="Select a state"
+                                    responsive
+                                    dimmed
                                   />
                                 </div>
-                                <div className="vertical-margin">
-                                  <Radio
-                                    label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
-                                    onChange={() =>
-                                      handleChange("pickUpLocation", "Lekki")
-                                    }
-                                    checked={
-                                      formData.pickUpLocation === "Lekki"
-                                    }
-                                  />
-                                </div>
-                                <div className="vertical-margin">
-                                  <Radio
-                                    label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
-                                    onChange={() =>
-                                      handleChange("pickUpLocation", "Abuja")
-                                    }
-                                    checked={
-                                      formData.pickUpLocation === "Abuja"
-                                    }
-                                  />
+                                <div className="margin-top spaced">
+                                  {formData.pickupState === "lagos" && (
+                                    <>
+                                      <div>
+                                        <Radio
+                                          label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+                                          onChange={() =>
+                                            handleChange(
+                                              "pickUpLocation",
+                                              "Ikoyi"
+                                            )
+                                          }
+                                          checked={
+                                            formData.pickUpLocation === "Ikoyi"
+                                          }
+                                        />
+                                      </div>
+                                      <div className="vertical-margin">
+                                        <Radio
+                                          label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
+                                          onChange={() =>
+                                            handleChange(
+                                              "pickUpLocation",
+                                              "Lekki"
+                                            )
+                                          }
+                                          checked={
+                                            formData.pickUpLocation === "Lekki"
+                                          }
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+                                  {formData.pickUpLocation === "Abuja" &&
+                                    formData.pickupState === "abuja" && (
+                                      <div className="vertical-margin">
+                                        <Radio
+                                          label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+                                          onChange={() => {}}
+                                          checked={
+                                            formData.pickUpLocation === "Abuja"
+                                          }
+                                        />
+                                      </div>
+                                    )}
+
+                                  {formData.pickupState ===
+                                    "other-locations" && (
+                                    <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                      <InfoRedIcon className="generic-icon xl" />
+                                      <span>
+                                        At the moment, You can only pick up at
+                                        our Abuja or Lagos stores. Kindly
+                                        contact us on Phone/WhatsApp:
+                                        <br />
+                                        <a
+                                          href="tel:+2349077777994"
+                                          className="clickable neutral underline"
+                                        >
+                                          +234 9077 777994
+                                        </a>
+                                      </span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             )}
@@ -2141,32 +2209,82 @@ const Checkout: FunctionComponent = () => {
                               <p className="align-icon normal-text bold margin-bottom">
                                 Pick Up Locations
                               </p>
-                              <div>
-                                <Radio
-                                  label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
-                                  onChange={() =>
-                                    handleChange("pickUpLocation", "Ikoyi")
-                                  }
-                                  checked={formData.pickUpLocation === "Ikoyi"}
+                              <div className="input-group">
+                                <span className="question">Pick Up State</span>
+                                <Select
+                                  onSelect={value => {
+                                    handleChange("pickupState", value);
+                                  }}
+                                  value={formData.pickupState}
+                                  options={pickupStates}
+                                  placeholder="Select a state"
+                                  responsive
+                                  dimmed
                                 />
                               </div>
-                              <div className="vertical-margin">
-                                <Radio
-                                  label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
-                                  onChange={() =>
-                                    handleChange("pickUpLocation", "Lekki")
-                                  }
-                                  checked={formData.pickUpLocation === "Lekki"}
-                                />
-                              </div>
-                              <div className="vertical-margin">
-                                <Radio
-                                  label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
-                                  onChange={() =>
-                                    handleChange("pickUpLocation", "Abuja")
-                                  }
-                                  checked={formData.pickUpLocation === "Abuja"}
-                                />
+                              <div className="margin-top spaced">
+                                {formData.pickupState === "lagos" && (
+                                  <>
+                                    <div>
+                                      <Radio
+                                        label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+                                        onChange={() =>
+                                          handleChange(
+                                            "pickUpLocation",
+                                            "Ikoyi"
+                                          )
+                                        }
+                                        checked={
+                                          formData.pickUpLocation === "Ikoyi"
+                                        }
+                                      />
+                                    </div>
+                                    <div className="vertical-margin">
+                                      <Radio
+                                        label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
+                                        onChange={() =>
+                                          handleChange(
+                                            "pickUpLocation",
+                                            "Lekki"
+                                          )
+                                        }
+                                        checked={
+                                          formData.pickUpLocation === "Lekki"
+                                        }
+                                      />
+                                    </div>
+                                  </>
+                                )}
+                                {formData.pickUpLocation === "Abuja" &&
+                                  formData.pickupState === "abuja" && (
+                                    <div className="vertical-margin">
+                                      <Radio
+                                        label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+                                        onChange={() => {}}
+                                        checked={
+                                          formData.pickUpLocation === "Abuja"
+                                        }
+                                      />
+                                    </div>
+                                  )}
+
+                                {formData.pickupState === "other-locations" && (
+                                  <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                    <InfoRedIcon className="generic-icon xl" />
+                                    <span>
+                                      At the moment, You can only pick up at our
+                                      Abuja or Lagos stores. Kindly contact us
+                                      on Phone/WhatsApp:
+                                      <br />
+                                      <a
+                                        href="tel:+2349077777994"
+                                        className="clickable neutral underline"
+                                      >
+                                        +234 9077 777994
+                                      </a>
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}

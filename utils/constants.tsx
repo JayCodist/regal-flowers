@@ -2703,3 +2703,14 @@ export const deliveryZoneMap: Record<string, DeliveryZone> = {
   Abuja: "APA",
   Lekki: "LPL"
 };
+
+export const pickupStates: Option[] = [
+  {
+    label: "Lagos",
+    value: "lagos"
+  },
+  {
+    label: "Abuja",
+    value: "abuja"
+  }
+];
