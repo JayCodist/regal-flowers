@@ -2714,3 +2714,170 @@ export const pickupStates: Option[] = [
     value: "abuja"
   }
 ];
+
+export const brochureSlides = [
+  {
+    sectionName: "FLOWER SECTION (10 SLIDES)",
+    flowers: [
+      {
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/VIP-Admiral-768x1087.jpg",
+        name: "VIP ADMIRAL: LAVISH SWIRL OF ROSES",
+        url:
+          "/product/vip-admiral-lavish-swirl-of-roses-forming-a-globe-select-option/"
+      },
+      {
+        name: "ROSES AND MIXED CHRYSANTHEMUMS BOUQUET",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Roses-and-Mixed-Chrys-1-768x1069.jpg",
+        url:
+          "/product/roses-and-mixed-chrysanthemums-roses-and-mixed-chrysanthemums/"
+      },
+      {
+        name: "BELLEZA: ANY 2 OR 3 COLOURS OF MIXED ROSES AND MILLION STARS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Belleza-736x1024.jpg",
+        url: "/product/belleza-box-arrangements-mixed-roses-million-stars/"
+      },
+      {
+        name: "VIP IMPERIAL: LUXURY TIERED ARRANGEMENT OF ROSES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/VIP-Imperial-736x1024.jpg",
+        url:
+          "/product/vip-imperial-vip-arrangement-of-tiered-roses-and-million-stars-select-option/"
+      },
+      {
+        name: "ROSES AND MILLION STARS BOUQUET",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Roses-and-Million-Stars-736x1024.jpg",
+        url:
+          "/product/roses-are-red-red-roses-accentuated-with-sparkling-million-star-gypsophila/"
+      },
+      {
+        name: "FERRERO ROCHER AND ROSES 003: ROSES, MILLION STARS & CHOCOLATES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Ferroro-Rocher-and-Roses-736x1024.jpg",
+        url:
+          "/product/roses-ferrero-rocher-box-arrangements-box-of-roses-and-ferrero-rocher-chocolate/"
+      },
+      {
+        name:
+          "COOL AND CLASSIC: MIXTURE OF TWO OR MORE COLOURS OF CHRYSANTHEMUMS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Cool-and-Classic_-736x1024.jpg",
+        url: "/product/cool-and-classic/"
+      },
+      {
+        name: "CLASSIC ROSES: RED, WHITE OR PINK ROSES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Classic-Roses-736x1024.jpg",
+        url: "/product/classic-red-box-arrangement-box-of-red-roses/"
+      },
+      {
+        name: "CALLIGRAPHY: MIXED ROSES, LILIES AND MILLION STARS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Mix-Roses-Lilies-and-Million-Stars-736x1024.jpg",
+        url: "/product/calligraphy-by-regal-red-roses-white-roses-lilies/"
+      },
+      {
+        name: "MON COUER: HEART SHAPED ARRANGEMENT OF ROSES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Mon-Coeur-736x1024.jpg",
+        url: "/product/mon-coeur-my-heart-roses-in-heart-shape/"
+      },
+      {
+        name: "CLASSIC ROSES AND MILLION STARS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Roses-and-Million-Stars-1-736x1024.jpg",
+        url:
+          "/product/classic-roses-are-red-box-arrangement-red-roses-and-million-stars/"
+      },
+      {
+        name:
+          "FERRERO ROCHER AND ROSES BOUQUET: ROSES, MILLION STARS & CHOCOLATES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Ferrero-and-Roses-737x1024.jpg",
+        url: "/product/ferrero-rocher-roses-003-exquisite-combination/"
+      }
+    ]
+  },
+  {
+    sectionName: "FOREVER ROSES SECTION",
+    description:
+      "These Next 2 Products are a special kind of real roses called Forever Roses or Preserved Roses and last over a year.",
+    flowers: [
+      {
+        name: "FOREVER RED ROSES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Forever-Roses-722x1024.jpg",
+        url: "/product/forever-red-roses-box-of-luxury-forever-red-roses/"
+      },
+      {
+        name: "FOREVER YOU",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Forever-You-736x1024.jpg",
+        url:
+          "/product/forever-you-a-luxuriant-box-of-contrasting-forever-roses-more/"
+      }
+    ]
+  },
+  {
+    sectionName: "GIFTS SECTION",
+    description: "",
+    flowers: [
+      {
+        name: "CHOCOLATES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Chocolates-713x1024.jpg",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/chocolate-and-biscuits/"
+      },
+      {
+        name: "CAKES & CUPCAKES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Cakes-719x1024.jpg",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/cakes-and-cupcakes/"
+      },
+      {
+        name: "BALLOONS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Balloons-720x1024.jpg",
+        url: "/product/balloons/"
+      },
+      {
+        name: "TEDDY BEARS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Teddy-bears-713x1024.jpg",
+        url: "/product/teddy-bears-002/"
+      },
+      {
+        name: "PERFUME",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Perfumes-719x1024.jpg",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/perfumes-parfum-eau-de-parfum-eau-de-toilette-and-eau-de-colognes/"
+      },
+      {
+        name: "BATH SET",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Caravaggio-713x1024.jpg",
+        url: "/product/caravaggio-assorted-italian-unisex-gift-set-more/"
+      },
+      {
+        name: "SCENTED CANDLES",
+        image:
+          "https://regalflowers.com.ng/product-category/scented-candles?_gl=1*ni4l06*_ga*MTkyMDUwNjI4Ni4xNjk1Mzc5NTg3*_ga_WT6WJESW5L*MTcwNzEzNTg2NS4xOC4xLjE3MDcxMzU4NjUuNjAuMC4w&_ga=2.222247512.1330000181.1707128121-1920506286.1695379587",
+        url:
+          "https://regalflowers.com.ng/product-category/scented-candles?_gl=1*mzhhew*_ga*MTkyMDUwNjI4Ni4xNjk1Mzc5NTg3*_ga_WT6WJESW5L*MTcwNzEzODc1Mi4xOS4wLjE3MDcxMzg3NTIuNjAuMC4w&_ga=2.228080477.1330000181.1707128121-1920506286.1695379587"
+      },
+      {
+        name: "CHAMPAGNE",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Wine-1-713x1024.jpg",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/wine-and-champagne/"
+      }
+    ]
+  }
+];
