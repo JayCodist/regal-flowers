@@ -136,6 +136,12 @@ export const footerContent: FooterContent = {
       location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
     },
     {
+      name: "Lekki Branch",
+      url: "https://goo.gl/maps/5wQFMW5pR33n9k6G7",
+      workingTimes: "6am-7pm (Everyday)",
+      location: "2c, Seed Educational Center Road, Ikate, Lekki"
+    },
+    {
       name: "VI Branch",
       url: "https://goo.gl/maps/AsSEYaBUVV3NCRaa7",
       workingTimes: "8am-7pm (Everyday)",
@@ -2715,29 +2721,47 @@ export const pickupStates: Option[] = [
   }
 ];
 
-export const brochureSlides = [
+interface BrochureSlide {
+  image: string;
+  name: string;
+  url: string;
+  info?: string;
+}
+
+export const brochureSlides: {
+  sectionName: string;
+  slides: BrochureSlide[];
+  description?: string;
+  id?: string;
+}[] = [
   {
     sectionName: "FLOWER SECTION (10 SLIDES)",
-    flowers: [
+    slides: [
       {
         image:
           "https://www.regalflower.com/wp-content/uploads/2024/01/VIP-Admiral-768x1087.jpg",
         name: "VIP ADMIRAL: LAVISH SWIRL OF ROSES",
         url:
-          "/product/vip-admiral-lavish-swirl-of-roses-forming-a-globe-select-option/"
+          "/product/vip-admiral-lavish-swirl-of-roses-forming-a-globe-select-option/",
+        info:
+          "FAQ: Not paying Naira? Click the product and change site currency. Online payment, Bank Transfer, PayPal, Bitcoins etc"
       },
       {
         name: "ROSES AND MIXED CHRYSANTHEMUMS BOUQUET",
         image:
           "https://www.regalflower.com/wp-content/uploads/2024/01/Roses-and-Mixed-Chrys-1-768x1069.jpg",
         url:
-          "/product/roses-and-mixed-chrysanthemums-roses-and-mixed-chrysanthemums/"
+          "/product/roses-and-mixed-chrysanthemums-roses-and-mixed-chrysanthemums/",
+        info:
+          "FAQ: You can click any of the slides to order online, or contact us to manually order (pls there might be delays in response due to the season)"
       },
       {
         name: "BELLEZA: ANY 2 OR 3 COLOURS OF MIXED ROSES AND MILLION STARS",
         image:
           "https://www.regalflower.com/wp-content/uploads/2024/01/Belleza-736x1024.jpg",
-        url: "/product/belleza-box-arrangements-mixed-roses-million-stars/"
+        url: "/product/belleza-box-arrangements-mixed-roses-million-stars/",
+        info:
+          "FAQ: Most arrangements comes in different sizes (e.g. Small, Medium etc) , hence the list of prices below it."
       },
       {
         name: "VIP IMPERIAL: LUXURY TIERED ARRANGEMENT OF ROSES",
@@ -2805,7 +2829,7 @@ export const brochureSlides = [
     sectionName: "FOREVER ROSES SECTION",
     description:
       "These Next 2 Products are a special kind of real roses called Forever Roses or Preserved Roses and last over a year.",
-    flowers: [
+    slides: [
       {
         name: "FOREVER RED ROSES",
         image:
@@ -2824,7 +2848,7 @@ export const brochureSlides = [
   {
     sectionName: "GIFTS SECTION",
     description: "",
-    flowers: [
+    slides: [
       {
         name: "CHOCOLATES",
         image:
@@ -2878,6 +2902,7 @@ export const brochureSlides = [
         url:
           "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/wine-and-champagne/"
       }
-    ]
+    ],
+    id: "gifts-section"
   }
 ];
