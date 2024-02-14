@@ -4,7 +4,7 @@ import { Option } from "../components/select/Select";
 import { getPriceDisplay } from "./helpers/type-conversions";
 import { BooleanFilter } from "./helpers/type-helpers";
 import { AppCurrency, AppCurrencyName, AppLink } from "./types/Core";
-import { PaymentMethod } from "./types/Order";
+import { DeliveryZone, PaymentMethod } from "./types/Order";
 import { DesignOptionName, Gift } from "./types/Product";
 import {
   Service,
@@ -134,6 +134,12 @@ export const footerContent: FooterContent = {
       url: "https://goo.gl/maps/cNB9Jx9sidQhJgtD6",
       workingTimes: "24/7",
       location: "81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+    },
+    {
+      name: "Lekki Branch",
+      url: "https://goo.gl/maps/5wQFMW5pR33n9k6G7",
+      workingTimes: "6am-7pm (Everyday)",
+      location: "2c, Seed Educational Center Road, Ikate, Lekki"
     },
     {
       name: "VI Branch",
@@ -2138,7 +2144,7 @@ export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
 export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
   USD: 255,
   GBP: 210,
-  NGN: 150000
+  NGN: 165000
 };
 
 export const freeDeliveryThresholdFestive: Record<AppCurrencyName, number> = {
@@ -2231,10 +2237,10 @@ export const allDeliveryLocationZones: Record<
                   ? "Festive"
                   : ""
               }-zone3`
+            : valsDates.includes(deliveryDate?.format("DD-MM") || "")
+            ? "highLagosVals-zone1"
             : `mediumLagos${
-                valsDates.includes(deliveryDate?.format("DD-MM") || "")
-                  ? "Vals"
-                  : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+                festiveDates.includes(deliveryDate?.format("DD-MM") || "")
                   ? "Festive"
                   : ""
               }-zone3`
@@ -2297,10 +2303,10 @@ export const allDeliveryLocationZones: Record<
                 ? "Festive"
                 : ""
             }-zone3`
+          : valsDates.includes(deliveryDate?.format("DD-MM") || "")
+          ? "highAbujaVals-zone1"
           : `mediumAbuja${
-              valsDates.includes(deliveryDate?.format("DD-MM") || "")
-                ? "Vals"
-                : festiveDates.includes(deliveryDate?.format("DD-MM") || "")
+              festiveDates.includes(deliveryDate?.format("DD-MM") || "")
                 ? "Festive"
                 : ""
             }-zone3`
@@ -2345,31 +2351,36 @@ export const allDeliveryLocationOptions: Record<
         amount: 10000
       },
 
-      valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(20000, currency)} - Orders BELOW ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
-        name: "mediumLagosVals",
-        amount: 20000
-      },
+      // valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+      //   label: `${getPriceDisplay(20000, currency)} - Orders BELOW ${
+      //     currency.sign
+      //   }${freeDeliveryThresholdVals[
+      //     currency.name
+      //   ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
+      //   name: "mediumLagosVals",
+      //   amount: 20000
+      // },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
           30000,
           currency
-        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+        )} - Valentine (13th-15th Feb) Orders below ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
         name: "highLagosVals",
         amount: 30000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()}  to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
+        label: `${getPriceDisplay(
+          0,
+          currency
+        )} - Valentine (13th-15th Feb) Orders above ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
         name: "freeLagosVals",
         amount: 0
       },
@@ -2432,31 +2443,27 @@ export const allDeliveryLocationOptions: Record<
         name: "highAbuja",
         amount: 6000
       },
+
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(7000, currency)} - Orders BELOW ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
-        name: "mediumAbujaVals",
-        amount: 7000
+        label: `${getPriceDisplay(
+          30000,
+          currency
+        )} - Valentine (13th-15th Feb) Orders below ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
+        name: "highAbujaVals",
+        amount: 30000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
-          15000,
+          0,
           currency
-        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
-        name: "highAbujaVals",
-        amount: 15000
-      },
-
-      valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
-          currency.sign
-        }${freeDeliveryThresholdVals[
-          currency.name
-        ].toLocaleString()} (FREE* Delivery Abuja)`,
+        )} - Valentine (13th-15th Feb) Orders above ${getPriceDisplay(
+          165000,
+          currency
+        )}`,
         name: "freeAbujaVals",
         amount: 0
       },
@@ -2686,5 +2693,216 @@ export const blogMinimals: BlogMinimal[] = [
     category: "Everything Flowers and Gifts",
     readMinutes: 3,
     slug: "how-to-make-your-flowers-last-longer"
+  }
+];
+
+export const toUse = [
+  "Click on a slide to view it’s website page",
+  "Add desired size to Cart",
+  "Checkout and pay Online, Bank Transfer, PayPal or Bitcoins"
+];
+
+export type PickUpLocation = "Ikoyi" | "Abuja" | "Lekki";
+
+export const deliveryZoneMap: Record<string, DeliveryZone> = {
+  Ikoyi: "LPI",
+  Abuja: "APA",
+  Lekki: "LPL"
+};
+
+export const pickupStates: Option[] = [
+  {
+    label: "Lagos",
+    value: "lagos"
+  },
+  {
+    label: "Abuja",
+    value: "abuja"
+  }
+];
+
+interface BrochureSlide {
+  image: string;
+  name: string;
+  url: string;
+  info?: string;
+}
+
+export const brochureSlides: {
+  sectionName: string;
+  slides: BrochureSlide[];
+  description?: string;
+  id?: string;
+}[] = [
+  {
+    sectionName: "FLOWER SECTION (10 SLIDES)",
+    slides: [
+      {
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/VIP-Admiral-768x1087.jpg",
+        name: "VIP ADMIRAL: LAVISH SWIRL OF ROSES",
+        url:
+          "/product/vip-admiral-lavish-swirl-of-roses-forming-a-globe-select-option/",
+        info:
+          "FAQ: Not paying Naira? Click the product and change site currency. Online payment, Bank Transfer, PayPal, Bitcoins etc"
+      },
+      {
+        name: "ROSES AND MIXED CHRYSANTHEMUMS BOUQUET",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Roses-and-Mixed-Chrys-1-768x1069.jpg",
+        url:
+          "/product/roses-and-mixed-chrysanthemums-roses-and-mixed-chrysanthemums/",
+        info:
+          "FAQ: You can click any of the slides to order online, or contact us to manually order (pls there might be delays in response due to the season)"
+      },
+      {
+        name: "BELLEZA: ANY 2 OR 3 COLOURS OF MIXED ROSES AND MILLION STARS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Belleza-736x1024.jpg",
+        url: "/product/belleza-box-arrangements-mixed-roses-million-stars/",
+        info:
+          "FAQ: Most arrangements comes in different sizes (e.g. Small, Medium etc) , hence the list of prices below it."
+      },
+      {
+        name: "VIP IMPERIAL: LUXURY TIERED ARRANGEMENT OF ROSES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/VIP-Imperial-736x1024.jpg",
+        url:
+          "/product/vip-imperial-vip-arrangement-of-tiered-roses-and-million-stars-select-option/"
+      },
+      {
+        name: "ROSES AND MILLION STARS BOUQUET",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Roses-and-Million-Stars-736x1024.jpg",
+        url:
+          "/product/roses-are-red-red-roses-accentuated-with-sparkling-million-star-gypsophila/"
+      },
+      {
+        name: "FERRERO ROCHER AND ROSES 003: ROSES, MILLION STARS & CHOCOLATES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Ferroro-Rocher-and-Roses-736x1024.jpg",
+        url:
+          "/product/roses-ferrero-rocher-box-arrangements-box-of-roses-and-ferrero-rocher-chocolate/"
+      },
+      {
+        name:
+          "COOL AND CLASSIC: MIXTURE OF TWO OR MORE COLOURS OF CHRYSANTHEMUMS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Cool-and-Classic_-736x1024.jpg",
+        url: "/product/cool-and-classic/"
+      },
+      {
+        name: "CLASSIC ROSES: RED, WHITE OR PINK ROSES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Classic-Roses-736x1024.jpg",
+        url: "/product/classic-red-box-arrangement-box-of-red-roses/"
+      },
+      {
+        name: "CALLIGRAPHY: MIXED ROSES, LILIES AND MILLION STARS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Mix-Roses-Lilies-and-Million-Stars-736x1024.jpg",
+        url: "/product/calligraphy-by-regal-red-roses-white-roses-lilies/"
+      },
+      {
+        name: "MON COUER: HEART SHAPED ARRANGEMENT OF ROSES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Mon-Coeur-736x1024.jpg",
+        url: "/product/mon-coeur-my-heart-roses-in-heart-shape/"
+      },
+      {
+        name: "CLASSIC ROSES AND MILLION STARS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Roses-and-Million-Stars-1-736x1024.jpg",
+        url:
+          "/product/classic-roses-are-red-box-arrangement-red-roses-and-million-stars/"
+      },
+      {
+        name:
+          "FERRERO ROCHER AND ROSES BOUQUET: ROSES, MILLION STARS & CHOCOLATES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Ferrero-and-Roses-737x1024.jpg",
+        url: "/product/ferrero-rocher-roses-003-exquisite-combination/"
+      }
+    ]
+  },
+  {
+    sectionName: "FOREVER ROSES SECTION",
+    description:
+      "These Next 2 Products are a special kind of real roses called Forever Roses or Preserved Roses and last over a year.",
+    slides: [
+      {
+        name: "FOREVER RED ROSES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Forever-Roses-722x1024.jpg",
+        url: "/product/forever-red-roses-box-of-luxury-forever-red-roses/"
+      },
+      {
+        name: "FOREVER YOU",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Forever-You-736x1024.jpg",
+        url:
+          "/product/forever-you-a-luxuriant-box-of-contrasting-forever-roses-more/"
+      }
+    ]
+  },
+  {
+    sectionName: "GIFTS SECTION",
+    description: "",
+    slides: [
+      {
+        name: "CHOCOLATES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Chocolates-713x1024.jpg",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/chocolate-and-biscuits/"
+      },
+      {
+        name: "CAKES & CUPCAKES",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Cakes-719x1024.jpg",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/cakes-and-cupcakes/"
+      },
+      {
+        name: "BALLOONS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Balloons-720x1024.jpg",
+        url: "/product/balloons/"
+      },
+      {
+        name: "TEDDY BEARS",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Teddy-bears-713x1024.jpg",
+        url: "/product/teddy-bears-002/"
+      },
+      {
+        name: "PERFUME",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Perfumes-719x1024.jpg",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/perfumes-parfum-eau-de-parfum-eau-de-toilette-and-eau-de-colognes/"
+      },
+      {
+        name: "BATH SET",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Caravaggio-713x1024.jpg",
+        url: "/product/caravaggio-assorted-italian-unisex-gift-set-more/"
+      },
+      {
+        name: "SCENTED CANDLES",
+        image:
+          "https://regalflowers.com.ng/product-category/scented-candles?_gl=1*ni4l06*_ga*MTkyMDUwNjI4Ni4xNjk1Mzc5NTg3*_ga_WT6WJESW5L*MTcwNzEzNTg2NS4xOC4xLjE3MDcxMzU4NjUuNjAuMC4w&_ga=2.222247512.1330000181.1707128121-1920506286.1695379587",
+        url:
+          "https://regalflowers.com.ng/product-category/scented-candles?_gl=1*mzhhew*_ga*MTkyMDUwNjI4Ni4xNjk1Mzc5NTg3*_ga_WT6WJESW5L*MTcwNzEzODc1Mi4xOS4wLjE3MDcxMzg3NTIuNjAuMC4w&_ga=2.228080477.1330000181.1707128121-1920506286.1695379587"
+      },
+      {
+        name: "CHAMPAGNE",
+        image:
+          "https://www.regalflower.com/wp-content/uploads/2024/01/Wine-1-713x1024.jpg",
+        url:
+          "/product-category/gift-items-perfumes-cakes-chocolate-wine-and-teddy-bears/wine-and-champagne/"
+      }
+    ],
+    id: "gifts-section"
   }
 ];

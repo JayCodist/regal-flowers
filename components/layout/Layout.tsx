@@ -71,28 +71,45 @@ const Footer: FunctionComponent = () => {
       <div className={styles["footer-wrapper"]}>
         <div className={styles.top}>
           <div>
-            <Link href="/">
-              <a>
-                <img
-                  alt="regal flowers logo"
-                  src="/icons/logo.png"
-                  className={styles.logo}
+            <div>
+              <Link href="/">
+                <a>
+                  <img
+                    alt="regal flowers logo"
+                    src="/icons/logo.png"
+                    className={styles.logo}
+                  />
+                </a>
+              </Link>
+              <p>{footerContent.aboutUs}</p>
+              <div className="flex spaced-xl">
+                {footerContent.socialIcons.map(icon => (
+                  <Link key={icon.name} href={icon.url}>
+                    <a target="_blank">
+                      <img
+                        alt={icon.name}
+                        src={icon.src}
+                        className="generic-icon medium"
+                      />
+                    </a>
+                  </Link>
+                ))}
+              </div>
+            </div>
+            <div id={styles.newsletter}>
+              <strong>Subscribe to Newsletter</strong>
+              <div className="flex spaced">
+                <Input
+                  value=""
+                  onChange={() => {}}
+                  placeholder="Enter your email"
+                  className={styles.input}
                 />
-              </a>
-            </Link>
-            <p>{footerContent.aboutUs}</p>
-            <div className="flex spaced-xl">
-              {footerContent.socialIcons.map(icon => (
-                <Link key={icon.name} href={icon.url}>
-                  <a target="_blank">
-                    <img
-                      alt={icon.name}
-                      src={icon.src}
-                      className="generic-icon medium"
-                    />
-                  </a>
-                </Link>
-              ))}
+                <Button className={styles["subsribe-btn"]}>Subscribe</Button>
+              </div>
+              <p className={`margin-top ${styles.grayed}`}>
+                We care about your data
+              </p>
             </div>
           </div>
           <div
@@ -106,7 +123,7 @@ const Footer: FunctionComponent = () => {
               }`}
               style={deviceType === "mobile" ? { width: "30%" } : {}}
             >
-              <strong>Quick Links</strong>
+              <strong className="primary-color">Quick Links</strong>
               {footerContent.quickLinks.map(link => (
                 <Link
                   key={link.title}
@@ -122,7 +139,7 @@ const Footer: FunctionComponent = () => {
               }`}
               style={deviceType === "mobile" ? { width: "65%" } : {}}
             >
-              <strong>Get In Touch</strong>
+              <strong className="primary-color">Get In Touch</strong>
               <div className="flex spaced-xl">
                 <Link href="tel:+2347011992888">
                   <a>
@@ -166,16 +183,16 @@ const Footer: FunctionComponent = () => {
             </div>
           </div>
           <div>
-            <strong>Payment Information</strong>
+            <strong className="primary-color">Payment Information</strong>
             <strong>Bank Transfers</strong>
             <div className="flex spaced">
-              <span>Bank:</span> <strong>GTBank</strong>
+              <span>Bank:</span> <span>GTBank</span>
             </div>
             <div className="flex spaced">
-              <span>Account Number: </span> <strong>0252862666</strong>
+              <span>Account Number: </span> <span>0252862666</span>
             </div>
             <div className="flex spaced">
-              <span>Account Name: </span> <strong>Regal Flowers Ltd</strong>
+              <span>Account Name: </span> <span>Regal Flowers Ltd</span>
             </div>
             <strong>Paypal</strong>
             <div
@@ -183,12 +200,12 @@ const Footer: FunctionComponent = () => {
                 deviceType === "mobile" ? "column" : ""
               }`}
             >
-              <span>Email:</span> <strong>{paypalEmail}</strong>
+              <span>Email:</span> <span>{paypalEmail}</span>
             </div>
             <strong>Bitcoin</strong>
             <div className="">
               <span>Address: </span>{" "}
-              <strong>12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1</strong>
+              <span>12W9vKCcCbKFmYr9bYfbd9SqVvhyK5j4E1</span>
             </div>
           </div>
         </div>
@@ -196,7 +213,9 @@ const Footer: FunctionComponent = () => {
         <div>
           <div className={styles.middle}>
             <div>
-              <strong className="normal-text">Lagos Locations</strong>
+              <strong className="normal-text primary-color">
+                Lagos Locations
+              </strong>
               <div className={styles.branches}>
                 {footerContent.lagosBranch.map((branch, index) => (
                   <div key={index} className={styles.branch}>
@@ -210,7 +229,9 @@ const Footer: FunctionComponent = () => {
               </div>
             </div>
             <div>
-              <strong className="normal-text">Abuja Location</strong>
+              <strong className="normal-text primary-color">
+                Abuja Location
+              </strong>
               <div
                 className={deviceType === "mobile" ? "margin-left spaced" : ""}
               >
@@ -222,22 +243,6 @@ const Footer: FunctionComponent = () => {
                   {footerContent.abujaBranch.workingTimes}
                 </p>
               </div>
-            </div>
-
-            <div id={styles.newsletter}>
-              <strong>Subscribe to Newsletter</strong>
-              <div className="flex spaced">
-                <Input
-                  value=""
-                  onChange={() => {}}
-                  placeholder="Enter your email"
-                  className={styles.input}
-                />
-                <Button className={styles["subsribe-btn"]}>Subscribe</Button>
-              </div>
-              <p className={`margin-top ${styles.grayed}`}>
-                We care about your data
-              </p>
             </div>
           </div>
         </div>

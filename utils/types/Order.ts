@@ -118,7 +118,7 @@ type DeliveryStatus =
   | "Despatched (drivers update)"
   | "Delivered (drivers update)";
 
-type DeliveryZone =
+export type DeliveryZone =
   | "LND"
   | "LIK"
   | "LVI"
@@ -288,6 +288,7 @@ export interface CheckoutFormData {
   currency: AppCurrencyName;
   deliveryInstruction: string;
   deliveryZone: DeliveryZone;
+  pickupState: string;
 }
 
 export type PaymentName =
