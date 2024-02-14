@@ -1517,7 +1517,7 @@ const Checkout: FunctionComponent = () => {
                           {getPriceDisplay(total, currency)}
                         </span>
                       </div>
-                      {currentStage === 1 && (
+                      {currentStage === 1 && isSenderInfoCompleted && (
                         <Button
                           responsive
                           buttonType="submit"
