@@ -199,6 +199,8 @@ const Checkout: FunctionComponent = () => {
 
   const isValsDate = valsDates.includes(deliveryDate?.format("DD-MM") || "");
 
+  const isValsDay = deliveryDate?.format("DD-MM") === "14-02";
+
   const isBankTransfer = /but not seen yet/i.test(order?.paymentStatus || "");
 
   const total = useMemo(() => {
@@ -264,6 +266,13 @@ const Checkout: FunctionComponent = () => {
   const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
     const deliveryZone = value === "abuja" ? "WBA" : "WBL";
     if (key === "state") {
+      if (isValsDay && value === "abuja") {
+        setFormData({
+          ...formData,
+          [key as string]: value
+        });
+        return;
+      }
       if (subTotal >= freeDeliveryThresholdVals.NGN && isValsDate) {
         setFormData({
           ...formData,
@@ -367,6 +376,12 @@ const Checkout: FunctionComponent = () => {
     }
     if (key === "pickupState") {
       if (value === "abuja") {
+        if (isValsDay) {
+          setFormData({
+            ...formData,
+            [key as string]: value
+          });
+        }
         setFormData({
           ...formData,
           [key as string]: value,
@@ -591,6 +606,14 @@ const Checkout: FunctionComponent = () => {
     e.preventDefault();
     const isDeliveryMethodComplete = validateDeliveryMethod();
     const isReceiverInfoComplete = validateReceiverInfo();
+
+    if (
+      isValsDay &&
+      (formData.state === "abuja" || formData.pickupState === "abuja")
+    ) {
+      notify("error", "Pls no more orders in Abuja for Feb 14th");
+      return;
+    }
 
     if (!deliveryDate) {
       notify("error", "Please select a delivery date");
@@ -1106,6 +1129,15 @@ const Checkout: FunctionComponent = () => {
                                     </p>
                                   )}
 
+                                  {formData.state === "abuja" && isValsDay && (
+                                    <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                      <InfoRedIcon className="generic-icon xl" />
+                                      <span>
+                                        Pls no more orders in Abuja for Feb 14th
+                                      </span>
+                                    </div>
+                                  )}
+
                                   {deliveryLocationOptions.length === 0 &&
                                     formData.state === "other-locations" && (
                                       <div className="flex center-align primary-color normal-text margin-bottom spaced">
@@ -1225,6 +1257,17 @@ const Checkout: FunctionComponent = () => {
                                     </>
                                   )}
                                   {formData.pickUpLocation === "Abuja" &&
+                                    isValsDay && (
+                                      <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                        <InfoRedIcon className="generic-icon xl" />
+                                        <span>
+                                          Pls no more orders in Abuja for Feb
+                                          14th
+                                        </span>
+                                      </div>
+                                    )}
+                                  {formData.pickUpLocation === "Abuja" &&
+                                    !isValsDay &&
                                     formData.pickupState === "abuja" && (
                                       <div className="vertical-margin">
                                         <Radio
@@ -2256,7 +2299,16 @@ const Checkout: FunctionComponent = () => {
                                   </>
                                 )}
                                 {formData.pickUpLocation === "Abuja" &&
-                                  formData.pickupState === "abuja" && (
+                                  isValsDay && (
+                                    <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                      <InfoRedIcon className="generic-icon xl" />
+                                      <span>
+                                        Pls no more orders in Abuja for Feb 14th
+                                      </span>
+                                    </div>
+                                  )}
+                                {formData.pickupState === "abuja" &&
+                                  !isValsDay && (
                                     <div className="vertical-margin">
                                       <Radio
                                         label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
@@ -2316,7 +2368,7 @@ const Checkout: FunctionComponent = () => {
 
                               {!isValsDate &&
                                 formData.state &&
-                                formData.state !== "other-locations" && (
+                                formData.state === "lagos" && (
                                   <div className="input-group">
                                     <span className="question">
                                       Delivery Zones
@@ -2348,6 +2400,15 @@ const Checkout: FunctionComponent = () => {
                                       Delivery Locations
                                     </span>
                                   </p>
+                                )}
+
+                                {formData.state === "abuja" && isValsDay && (
+                                  <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                    <InfoRedIcon className="generic-icon xl" />
+                                    <span>
+                                      Pls no more orders in Abuja for Feb 14th
+                                    </span>
+                                  </div>
                                 )}
 
                                 {deliveryLocationOptions.length === 0 &&
@@ -2415,6 +2476,17 @@ const Checkout: FunctionComponent = () => {
                       <Button
                         onClick={() => {
                           const isDeliveryMethodComplete = validateDeliveryMethod();
+                          if (
+                            isValsDay &&
+                            formData.deliveryMethod === "delivery" &&
+                            formData.deliveryLocation?.name === "Abuja"
+                          ) {
+                            notify(
+                              "info",
+                              "Pls no more orders in Abuja for Feb 14th"
+                            );
+                            return;
+                          }
                           if (!isDeliveryMethodComplete) {
                             return;
                           }

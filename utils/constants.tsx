@@ -2415,88 +2415,90 @@ export const allDeliveryLocationOptions: Record<
     ].filter(BooleanFilter) as DeliveryLocationOption[],
 
   abuja: (currency, deliveryDate) =>
-    [
-      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(3500, currency)} - Orders BELOW ${
-          currency.sign
-        }${freeDeliveryThreshold[
-          currency.name
-        ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
-        name: "mediumAbuja",
-        amount: 3500
-      },
-      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
-          currency.sign
-        }${freeDeliveryThreshold[
-          currency.name
-        ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs`,
-        name: "freeAbuja",
-        amount: 0
-      },
+    deliveryDate.format("DD-MM") === "14-02"
+      ? []
+      : ([
+          !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
+            label: `${getPriceDisplay(3500, currency)} - Orders BELOW ${
+              currency.sign
+            }${freeDeliveryThreshold[
+              currency.name
+            ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs (or please pickup instead)`,
+            name: "mediumAbuja",
+            amount: 3500
+          },
+          !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
+            label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
+              currency.sign
+            }${freeDeliveryThreshold[
+              currency.name
+            ].toLocaleString()} to Wuse, Maitama, Jabi, Asokoro, Garki, Dutse, Gwarimpa, Lokogoma, Kubwa, Durumi and similar environs`,
+            name: "freeAbuja",
+            amount: 0
+          },
 
-      !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(
-          6000,
-          currency
-        )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
-        name: "highAbuja",
-        amount: 6000
-      },
+          !specialDates.includes(deliveryDate?.format("DD-MM") || "") && {
+            label: `${getPriceDisplay(
+              6000,
+              currency
+            )} - All Orders to Mandala, Bwari, Suleja, Airport, Jikwoyi, Gwagwalada, Kuje, Lugbe, Kagini and similar environs (or please pickup instead)`,
+            name: "highAbuja",
+            amount: 6000
+          },
 
-      valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(
-          50000,
-          currency
-        )} - Valentine (13th-15th Feb) Orders below ${getPriceDisplay(
-          165000,
-          currency
-        )}`,
-        name: "highAbujaVals",
-        amount: 50000
-      },
+          valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+            label: `${getPriceDisplay(
+              50000,
+              currency
+            )} - Valentine (13th-15th Feb) Orders below ${getPriceDisplay(
+              165000,
+              currency
+            )}`,
+            name: "highAbujaVals",
+            amount: 50000
+          },
 
-      valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(
-          0,
-          currency
-        )} - Valentine (13th-15th Feb) Orders above ${getPriceDisplay(
-          165000,
-          currency
-        )}`,
-        name: "freeAbujaVals",
-        amount: 0
-      },
+          valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
+            label: `${getPriceDisplay(
+              0,
+              currency
+            )} - Valentine (13th-15th Feb) Orders above ${getPriceDisplay(
+              165000,
+              currency
+            )}`,
+            name: "freeAbujaVals",
+            amount: 0
+          },
 
-      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(7000, currency)} - Orders BELOW ${
-          currency.sign
-        }${freeDeliveryThresholdFestive[
-          currency.name
-        ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
-        name: "mediumAbujaFestive",
-        amount: 7000
-      },
+          festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
+            label: `${getPriceDisplay(7000, currency)} - Orders BELOW ${
+              currency.sign
+            }${freeDeliveryThresholdFestive[
+              currency.name
+            ].toLocaleString()} to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs (or please pickup instead)`,
+            name: "mediumAbujaFestive",
+            amount: 7000
+          },
 
-      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(
-          15000,
-          currency
-        )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
-        name: "highAbujaFestive",
-        amount: 15000
-      },
+          festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
+            label: `${getPriceDisplay(
+              15000,
+              currency
+            )} - All Orders to Ibeju Lekki, Ikorodu, Ikotun, Epe, Iyana-Ipaja, Egbeda, Badore, Apapa, Badagry, Abule Egba and similar environs (or please pickup instead)`,
+            name: "highAbujaFestive",
+            amount: 15000
+          },
 
-      festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
-        label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
-          currency.sign
-        }${freeDeliveryThresholdFestive[
-          currency.name
-        ].toLocaleString()}  to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
-        name: "freeAbujaFestive",
-        amount: 0
-      }
-    ].filter(BooleanFilter) as DeliveryLocationOption[],
+          festiveDates.includes(deliveryDate?.format("DD-MM") || "") && {
+            label: `${getPriceDisplay(0, currency)} - Orders ABOVE ${
+              currency.sign
+            }${freeDeliveryThresholdFestive[
+              currency.name
+            ].toLocaleString()}  to Lekki, VI, Ikoyi, Ikeja, Gbagada, Yaba and similar environs`,
+            name: "freeAbujaFestive",
+            amount: 0
+          }
+        ].filter(BooleanFilter) as DeliveryLocationOption[]),
   "other-locations": () => [],
   general: () => []
 };
