@@ -297,14 +297,14 @@ const Checkout: FunctionComponent = () => {
           ...formData,
           [key as string]: value,
           deliveryLocation: {
-            label: "₦29,900 - Valentine (13th-15th Feb) Orders below ₦165,000",
+            label: "₦49,900 - Valentine (13th-15th Feb) Orders below ₦165,000",
             name:
               value === "lagos"
                 ? "highLagosVals"
                 : value === "abuja"
                 ? "highAbujaVals"
                 : "",
-            amount: 29900
+            amount: 49900
           },
           zone:
             value === "lagos" ? "highLagosVals-zone1" : "highAbujaVals-zone1",
@@ -1692,7 +1692,7 @@ const Checkout: FunctionComponent = () => {
                           {getPriceDisplay(total, currency)}
                         </span>
                       </div>
-                      {currentStage === 1 && (
+                      {currentStage === 1 && isSenderInfoCompleted && (
                         <Button
                           responsive
                           buttonType="submit"

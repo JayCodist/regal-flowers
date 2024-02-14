@@ -2363,14 +2363,14 @@ export const allDeliveryLocationOptions: Record<
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
         label: `${getPriceDisplay(
-          30000,
+          50000,
           currency
         )} - Valentine (13th-15th Feb) Orders below ${getPriceDisplay(
           165000,
           currency
         )}`,
         name: "highLagosVals",
-        amount: 30000
+        amount: 50000
       },
 
       valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
@@ -2448,14 +2448,14 @@ export const allDeliveryLocationOptions: Record<
 
           valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
             label: `${getPriceDisplay(
-              30000,
+              50000,
               currency
             )} - Valentine (13th-15th Feb) Orders below ${getPriceDisplay(
               165000,
               currency
             )}`,
             name: "highAbujaVals",
-            amount: 30000
+            amount: 50000
           },
 
           valsDates.includes(deliveryDate?.format("DD-MM") || "") && {
