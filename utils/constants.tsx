@@ -137,8 +137,8 @@ export const footerContent: FooterContent = {
     },
     {
       name: "Lekki Branch",
-      url: "https://goo.gl/maps/5wQFMW5pR33n9k6G7",
-      workingTimes: "6am-7pm (Everyday)",
+      url: "https://maps.app.goo.gl/M2hATrXPiiXpSLCv7",
+      workingTimes: "24/7",
       location: "2c, Seed Educational Center Road, Ikate, Lekki"
     },
     {
@@ -1456,27 +1456,6 @@ export const productSampleData = {
 
 export const links: AppLink[] = [
   {
-    title: "Valentine",
-    url: "",
-    children: [
-      {
-        title: "Flowers",
-        url: "/product-category/valentines-day-flowers-and-gifts",
-        children: []
-      },
-      {
-        title: "VIP Flowers",
-        url: "/vip",
-        children: []
-      },
-      {
-        title: "Gifts",
-        url: "/product-category/gifts",
-        children: []
-      }
-    ]
-  },
-  {
     url: "",
     title: "Occasions",
     subtitle: "Select Occasion",
@@ -1502,27 +1481,7 @@ export const links: AppLink[] = [
           }
         ]
       },
-      {
-        title: "Valentine",
-        url: "",
-        children: [
-          {
-            title: "Flowers",
-            url: "/product-category/valentines-day-flowers-and-gifts",
-            children: []
-          },
-          {
-            title: "VIP Flowers",
-            url: "/vip",
-            children: []
-          },
-          {
-            title: "Gifts",
-            url: "/product-category/gifts",
-            children: []
-          }
-        ]
-      },
+
       {
         title: "Just to say Hi, Sorry, Thank You",
         url: "",
@@ -1631,6 +1590,27 @@ export const links: AppLink[] = [
           {
             title: "Mother's Day",
             url: "/product-category/mothers-day-flowers",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Valentine",
+        url: "",
+        children: [
+          {
+            title: "Flowers",
+            url: "/product-category/valentines-day-flowers-and-gifts",
+            children: []
+          },
+          {
+            title: "VIP Flowers",
+            url: "/vip",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/product-category/gifts",
             children: []
           }
         ]
@@ -1795,11 +1775,11 @@ export const links: AppLink[] = [
       }
     ]
   },
-  // {
-  //   url: "/product-category/indoor-plants-and-cactus",
-  //   title: "Plants",
-  //   children: []
-  // },
+  {
+    url: "/product-category/indoor-plants-and-cactus",
+    title: "Plants",
+    children: []
+  },
 
   {
     title: "FAQ",

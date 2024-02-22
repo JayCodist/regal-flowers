@@ -163,13 +163,7 @@ const LandingPage: FunctionComponent<{
   featuredBirthday?: Product[];
   featuredRomance?: Product[];
   featuredFlowers?: Product[];
-  featuredValentine?: Product[];
-}> = ({
-  featuredBirthday,
-  locationName,
-  featuredRomance,
-  featuredValentine
-}) => {
+}> = ({ featuredBirthday, locationName, featuredRomance }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const { setBreadcrumb } = useContext(SettingsContext);
 
@@ -208,52 +202,6 @@ const LandingPage: FunctionComponent<{
         </div>
         <section className="featured-section-wrapper home-page">
           <div className="featured-content">
-            <>
-              <div className="flex between">
-                <h2 className="featured-title">{bestSellersValentine}</h2>
-                {deviceType === "desktop" && (
-                  <Button
-                    url="/product-category/valentines-day-flowers-and-gifts"
-                    className="flex spaced center-align"
-                    type="transparent"
-                  >
-                    <h3 className="red margin-right">See All</h3>
-                    <img
-                      alt="arrow"
-                      className="generic-icon xsmall"
-                      src="/icons/arrow-right.svg"
-                    />
-                  </Button>
-                )}
-              </div>
-              <div className={[styles.section, styles.wrap].join(" ")}>
-                {featuredValentine?.map(flower => (
-                  <FlowerCard
-                    key={flower.key}
-                    image={flower.images[0]?.src || ""}
-                    name={flower.name.split("–")[0]}
-                    subTitle={flower.subtitle || flower.name.split("–")[1]}
-                    price={flower.price}
-                    url={`/product/${flower.slug}`}
-                    buttonText={
-                      flower.variants?.length ? "Select Size" : "Add to Cart"
-                    }
-                    cart={flower.variants?.length ? false : true}
-                    product={flower}
-                  />
-                ))}
-              </div>
-              {deviceType === "mobile" && (
-                <Button
-                  // url="/product-category/valentines-day-flowers-and-gifts"
-                  type="accent"
-                  minWidth
-                  className={styles["see-all"]}
-                >
-                  <h3 className="red margin-right">See All</h3>
-                </Button>
-              )}
-            </>
             <div className="flex between">
               <h2 className="featured-title">{bestSellers[locationName]}</h2>
               {deviceType === "desktop" && (
@@ -337,6 +285,46 @@ const LandingPage: FunctionComponent<{
             {deviceType === "mobile" && (
               <Button
                 url="/product-category/flowers-for-love-birthday-anniversary-etc"
+                type="accent"
+                minWidth
+                className={styles["see-all"]}
+              >
+                <h3 className="red margin-right">See All</h3>
+              </Button>
+            )}
+            <div className="flex between">
+              <h2 className="featured-title">Gifts to Include with Flowers</h2>
+              {deviceType === "desktop" && (
+                <Button
+                  url="/product-category/gifts"
+                  className="flex spaced center center-align"
+                  type="transparent"
+                >
+                  <h3 className="red margin-right">See All</h3>
+                  <img
+                    alt="arrow"
+                    className="generic-icon xsmall"
+                    src="/icons/arrow-right.svg"
+                  />
+                </Button>
+              )}
+            </div>
+            <div className={[styles.section, styles.wrap].join(" ")}>
+              {giftItems.map(gift => (
+                <FlowerCard
+                  key={gift.name}
+                  image={gift.image}
+                  name={gift.name}
+                  subTitle={gift.description}
+                  url={gift.slug}
+                  buttonText="See More"
+                />
+              ))}
+            </div>
+
+            {deviceType === "mobile" && (
+              <Button
+                url="/product-category/gifts"
                 type="accent"
                 minWidth
                 className={styles["see-all"]}
@@ -560,47 +548,6 @@ const LandingPage: FunctionComponent<{
                 />
               ))}
             </div>
-
-            <div className="flex between">
-              <h2 className="featured-title">Gifts to Include with Flowers</h2>
-              {deviceType === "desktop" && (
-                <Button
-                  url="/product-category/gifts"
-                  className="flex spaced center center-align"
-                  type="transparent"
-                >
-                  <h3 className="red margin-right">See All</h3>
-                  <img
-                    alt="arrow"
-                    className="generic-icon xsmall"
-                    src="/icons/arrow-right.svg"
-                  />
-                </Button>
-              )}
-            </div>
-            <div className={[styles.section, styles.wrap].join(" ")}>
-              {giftItems.map(gift => (
-                <FlowerCard
-                  key={gift.name}
-                  image={gift.image}
-                  name={gift.name}
-                  subTitle={gift.description}
-                  url={gift.slug}
-                  buttonText="See More"
-                />
-              ))}
-            </div>
-
-            {deviceType === "mobile" && (
-              <Button
-                url="/product-category/gifts"
-                type="accent"
-                minWidth
-                className={styles["see-all"]}
-              >
-                <h3 className="red margin-right">See All</h3>
-              </Button>
-            )}
 
             {deviceType === "desktop" && (
               <>
@@ -1119,9 +1066,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const featuredRomance = await getProductsBySlugs(
     featuredSlugs["featured-romance"]
   );
-  const featuredValentine = await getProductsBySlugs(
-    featuredSlugs["featured-valentine"]
-  );
+
   const { data, error, message } = await getProductsBySlugs(
     featuredSlugs[locationName]
   );
@@ -1134,8 +1079,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       locationName: "general",
       featuredBirthday: data || [],
-      featuredRomance: featuredRomance.data || [],
-      featuredValentine: featuredValentine.data || []
+      featuredRomance: featuredRomance.data || []
     }
   };
 };
