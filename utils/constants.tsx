@@ -85,10 +85,6 @@ export const defaultBreadcrumb: Breadcrumb = {
 
 export const allOccasionOptions: Option[] = [
   {
-    value: "valentines-day-flowers-and-gifts",
-    label: "Valentine's Day"
-  },
-  {
     value: "flowers-for-love-birthday-anniversary-etc",
     label: "Romance, Birthdays & Anniversary"
   },
@@ -98,7 +94,11 @@ export const allOccasionOptions: Option[] = [
   { value: "funeral-and-condolence", label: "Funeral & Condolence" },
   { value: "event-amp-centerpiece", label: "Events & Centerpiece" },
   { value: "fathers-day-flowers", label: "Father's Day" },
-  { value: "mothers-day-flowers", label: "Mother's Day" }
+  { value: "mothers-day-flowers", label: "Mother's Day" },
+  {
+    value: "valentines-day-flowers-and-gifts",
+    label: "Valentine's Day"
+  }
 ];
 
 export const defaultCurrency: AppCurrency = {
