@@ -45,6 +45,7 @@ export interface Order {
     lastName: string;
     phone: string;
     name: string;
+    phoneCountryCode: string;
   };
   orderStatus: OrderStatus;
   deliveryDetails: DeliveryDetails;
