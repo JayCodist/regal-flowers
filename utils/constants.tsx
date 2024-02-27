@@ -2118,7 +2118,7 @@ export const sortOptions: Option[] = [
 export const freeDeliveryThreshold: Record<AppCurrencyName, number> = {
   USD: 185,
   GBP: 150,
-  NGN: 100000
+  NGN: 165000
 };
 
 export const freeDeliveryThresholdVals: Record<AppCurrencyName, number> = {
