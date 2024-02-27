@@ -13,7 +13,8 @@ export const verifyPaystackPayment: (
     return {
       error: !response.data,
       message: response.message,
-      data: response.data
+      data: response.data,
+      status: response.status
     };
   } catch (err) {
     console.error("Unable to verify paystack payment: ", err);
@@ -35,7 +36,8 @@ export const verifyMonnifyPayment: (
     return {
       error: !response.data,
       message: response.message,
-      data: response.data
+      data: response.data,
+      status: response.status
     };
   } catch (err) {
     console.error("Unable to verify monnify payment: ", err);
@@ -58,7 +60,8 @@ export const verifyPaypalPayment: (
     return {
       error: !response.data,
       message: response.message,
-      data: response.data
+      data: response.data,
+      status: response.status
     };
   } catch (err) {
     console.error("Unable to verify paypal payment: ", err);
@@ -97,7 +100,8 @@ export const manualTransferPayment: (payload: {
     return {
       error: !response.data,
       message: response.message,
-      data: response.data
+      data: response.data,
+      status: response.status
     };
   } catch (err) {
     console.error("Unable to send Transfer Details ", err);
