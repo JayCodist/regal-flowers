@@ -541,7 +541,8 @@ const Checkout: FunctionComponent = () => {
         senderName: order?.client.name,
         senderPhoneNumber: order?.client.phone,
         deliveryDate: dayjs(order.deliveryDate),
-        senderEmail: order.client.email
+        senderEmail: order.client.email,
+        senderCountryCode: order.client.phoneCountryCode || "+234"
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
       setIsSenderInfoCompleted(true);
