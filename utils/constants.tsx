@@ -1456,7 +1456,7 @@ export const productSampleData = {
 
 export const links: AppLink[] = [
   {
-    title: "Valentine",
+    title: "Mother's Day",
     url: "",
     children: [
       {
@@ -1637,7 +1637,7 @@ export const links: AppLink[] = [
         ]
       },
       {
-        title: "Valentine",
+        title: "Mother's Day",
         url: "",
         children: [
           {

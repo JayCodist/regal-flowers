@@ -200,59 +200,15 @@ const LandingPage: FunctionComponent<{
         >
           <div className="hero-content flex column center center-align">
             <h1 className={styles.title}>
-              They Deserve Regal Flowers.
+              They Deserve Regal Flowers
+              <br /> This Mother's Day.
               <br /> Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria
-              <br /> This Mother's Day
             </h1>
             <FlowerDeliveryInput />
           </div>
         </div>
         <section className="featured-section-wrapper home-page">
           <div className="featured-content">
-            <div className="flex between">
-              <h2 className="featured-title">{bestSellers[locationName]}</h2>
-              {deviceType === "desktop" && (
-                <Button
-                  url="/product-category/flowers-for-love-birthday-anniversary-etc"
-                  className="flex spaced center-align"
-                  type="transparent"
-                >
-                  <h3 className="red margin-right">See All</h3>
-                  <img
-                    alt="arrow"
-                    className="generic-icon xsmall"
-                    src="/icons/arrow-right.svg"
-                  />
-                </Button>
-              )}
-            </div>
-            <div className={[styles.section, styles.wrap].join(" ")}>
-              {featuredBirthday?.map(flower => (
-                <FlowerCard
-                  key={flower.key}
-                  image={flower.images[0]?.src || ""}
-                  name={flower.name.split("–")[0]}
-                  subTitle={flower.subtitle || flower.name.split("–")[1]}
-                  price={flower.price}
-                  url={`/product/${flower.slug}`}
-                  buttonText={
-                    flower.variants?.length ? "Select Size" : "Add to Cart"
-                  }
-                  cart={flower.variants?.length ? false : true}
-                  product={flower}
-                />
-              ))}
-            </div>
-            {deviceType === "mobile" && (
-              <Button
-                url="/product-category/flowers-for-love-birthday-anniversary-etc"
-                type="accent"
-                minWidth
-                className={styles["see-all"]}
-              >
-                <h3 className="red margin-right">See All</h3>
-              </Button>
-            )}
             <>
               <div className="flex between">
                 <h2 className="featured-title">{bestSellersOccasionTitle}</h2>
@@ -299,6 +255,50 @@ const LandingPage: FunctionComponent<{
                 </Button>
               )}
             </>
+            <div className="flex between">
+              <h2 className="featured-title">{bestSellers[locationName]}</h2>
+              {deviceType === "desktop" && (
+                <Button
+                  url="/product-category/flowers-for-love-birthday-anniversary-etc"
+                  className="flex spaced center-align"
+                  type="transparent"
+                >
+                  <h3 className="red margin-right">See All</h3>
+                  <img
+                    alt="arrow"
+                    className="generic-icon xsmall"
+                    src="/icons/arrow-right.svg"
+                  />
+                </Button>
+              )}
+            </div>
+            <div className={[styles.section, styles.wrap].join(" ")}>
+              {featuredBirthday?.map(flower => (
+                <FlowerCard
+                  key={flower.key}
+                  image={flower.images[0]?.src || ""}
+                  name={flower.name.split("–")[0]}
+                  subTitle={flower.subtitle || flower.name.split("–")[1]}
+                  price={flower.price}
+                  url={`/product/${flower.slug}`}
+                  buttonText={
+                    flower.variants?.length ? "Select Size" : "Add to Cart"
+                  }
+                  cart={flower.variants?.length ? false : true}
+                  product={flower}
+                />
+              ))}
+            </div>
+            {deviceType === "mobile" && (
+              <Button
+                url="/product-category/flowers-for-love-birthday-anniversary-etc"
+                type="accent"
+                minWidth
+                className={styles["see-all"]}
+              >
+                <h3 className="red margin-right">See All</h3>
+              </Button>
+            )}
             <div className="flex between">
               <h2 className="featured-title">
                 {bestSellersRomance[locationName]}
