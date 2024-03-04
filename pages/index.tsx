@@ -22,7 +22,7 @@ import {
   bestSellersRomance,
   defaultBreadcrumb,
   regalWebsiteUrl,
-  bestSellersValentine
+  bestSellersOccasionTitle
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -163,7 +163,13 @@ const LandingPage: FunctionComponent<{
   featuredBirthday?: Product[];
   featuredRomance?: Product[];
   featuredFlowers?: Product[];
-}> = ({ featuredBirthday, locationName, featuredRomance }) => {
+  featuredOccasion?: Product[];
+}> = ({
+  featuredBirthday,
+  locationName,
+  featuredRomance,
+  featuredOccasion
+}) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const { setBreadcrumb } = useContext(SettingsContext);
 
@@ -196,6 +202,7 @@ const LandingPage: FunctionComponent<{
             <h1 className={styles.title}>
               They Deserve Regal Flowers.
               <br /> Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria
+              <br /> This Mother's Day
             </h1>
             <FlowerDeliveryInput />
           </div>
@@ -246,6 +253,52 @@ const LandingPage: FunctionComponent<{
                 <h3 className="red margin-right">See All</h3>
               </Button>
             )}
+            <>
+              <div className="flex between">
+                <h2 className="featured-title">{bestSellersOccasionTitle}</h2>
+                {deviceType === "desktop" && (
+                  <Button
+                    url="/product-category/valentines-day-flowers-and-gifts"
+                    className="flex spaced center-align"
+                    type="transparent"
+                  >
+                    <h3 className="red margin-right">See All</h3>
+                    <img
+                      alt="arrow"
+                      className="generic-icon xsmall"
+                      src="/icons/arrow-right.svg"
+                    />
+                  </Button>
+                )}
+              </div>
+              <div className={[styles.section, styles.wrap].join(" ")}>
+                {featuredOccasion?.map(flower => (
+                  <FlowerCard
+                    key={flower.key}
+                    image={flower.images[0]?.src || ""}
+                    name={flower.name.split("–")[0]}
+                    subTitle={flower.subtitle || flower.name.split("–")[1]}
+                    price={flower.price}
+                    url={`/product/${flower.slug}`}
+                    buttonText={
+                      flower.variants?.length ? "Select Size" : "Add to Cart"
+                    }
+                    cart={flower.variants?.length ? false : true}
+                    product={flower}
+                  />
+                ))}
+              </div>
+              {deviceType === "mobile" && (
+                <Button
+                  // url="/product-category/valentines-day-flowers-and-gifts"
+                  type="accent"
+                  minWidth
+                  className={styles["see-all"]}
+                >
+                  <h3 className="red margin-right">See All</h3>
+                </Button>
+              )}
+            </>
             <div className="flex between">
               <h2 className="featured-title">
                 {bestSellersRomance[locationName]}
@@ -1071,6 +1124,10 @@ export const getStaticProps: GetStaticProps = async () => {
     featuredSlugs[locationName]
   );
 
+  const featuredOccasion = await getProductsBySlugs(
+    featuredSlugs["featured-occasion"]
+  );
+
   if (error) {
     console.error("Unable to fetch products by slugs: ", message);
   }
@@ -1079,7 +1136,8 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       locationName: "general",
       featuredBirthday: data || [],
-      featuredRomance: featuredRomance.data || []
+      featuredRomance: featuredRomance.data || [],
+      featuredOccasion: featuredOccasion.data || []
     }
   };
 };
