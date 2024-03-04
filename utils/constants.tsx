@@ -1503,7 +1503,7 @@ export const links: AppLink[] = [
         ]
       },
       {
-        title: "Valentine",
+        title: "Mother's Day",
         url: "",
         children: [
           {
