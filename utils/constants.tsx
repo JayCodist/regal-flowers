@@ -84,6 +84,7 @@ export const defaultBreadcrumb: Breadcrumb = {
 };
 
 export const allOccasionOptions: Option[] = [
+  { value: "mothers-day-flowers", label: "Mother's Day" },
   {
     value: "flowers-for-love-birthday-anniversary-etc",
     label: "Romance, Birthdays & Anniversary"
@@ -94,7 +95,6 @@ export const allOccasionOptions: Option[] = [
   { value: "funeral-and-condolence", label: "Funeral & Condolence" },
   { value: "event-amp-centerpiece", label: "Events & Centerpiece" },
   { value: "fathers-day-flowers", label: "Father's Day" },
-  { value: "mothers-day-flowers", label: "Mother's Day" },
   {
     value: "valentines-day-flowers-and-gifts",
     label: "Valentine's Day"
@@ -1456,6 +1456,27 @@ export const productSampleData = {
 
 export const links: AppLink[] = [
   {
+    title: "Valentine",
+    url: "",
+    children: [
+      {
+        title: "Flowers",
+        url: "/product-category/mothers-day-flowers",
+        children: []
+      },
+      {
+        title: "VIP Flowers",
+        url: "/vip",
+        children: []
+      },
+      {
+        title: "Gifts",
+        url: "/product-category/gifts",
+        children: []
+      }
+    ]
+  },
+  {
     url: "",
     title: "Occasions",
     subtitle: "Select Occasion",
@@ -1467,6 +1488,27 @@ export const links: AppLink[] = [
           {
             title: "Flowers",
             url: "/product-category/flowers-for-love-birthday-anniversary-etc",
+            children: []
+          },
+          {
+            title: "VIP Flowers",
+            url: "/vip",
+            children: []
+          },
+          {
+            title: "Gifts",
+            url: "/product-category/gifts",
+            children: []
+          }
+        ]
+      },
+      {
+        title: "Valentine",
+        url: "",
+        children: [
+          {
+            title: "Flowers",
+            url: "/product-category/mothers-day-flowers",
             children: []
           },
           {
@@ -1775,11 +1817,11 @@ export const links: AppLink[] = [
       }
     ]
   },
-  {
-    url: "/product-category/indoor-plants-and-cactus",
-    title: "Plants",
-    children: []
-  },
+  // {
+  //   url: "/product-category/indoor-plants-and-cactus",
+  //   title: "Plants",
+  //   children: []
+  // },
 
   {
     title: "FAQ",
@@ -1822,6 +1864,8 @@ export const bestSellers: RegalContent = {
 export const bestSellersValentine =
   "Bestselling Valentine's Day Flowers in Lagos and Abuja, Nigeria";
 
+export const bestSellersOccasionTitle = "Bestselling Mother's Day Flowers";
+
 export const bestSellersRomance: RegalContent = {
   general: "Bestselling Romance or Just to Say Flowers in Lagos & Abuja",
   lagos: "Bestselling Flowers in Lagos",
@@ -1842,7 +1886,7 @@ export const featuredSlugs: Record<LocationName, string[]> = {
     "classic-roses-are-red-box-arrangement-red-roses-and-million-stars",
     "roses-and-mixed-chrysanthemums-roses-and-mixed-chrysanthemums"
   ],
-  "featured-valentine": [
+  "featured-occasion": [
     "classic-red-roses-luxurious-bouquet-of-red-roses",
     "roses-are-red-red-roses-accentuated-with-sparkling-million-star-gypsophila",
     "ferrero-rocher-roses-003-exquisite-combination",
