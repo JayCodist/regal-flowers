@@ -146,12 +146,17 @@
         "source": "/product-category/just-because-flowers",
         "destination": "/product-category/just-to-say-bouquets",
         "type": 301
-      },      
+      },     
       {
         "source": "/product-category/vip-luxury-bouquet-sizes/page/1/",
         "destination": "/vip",
         "type": 301
-      },          
+      },           
+      {
+        "source": "/product-category/vip-section-go-all-out-from-n330000-romance-birthday-anniversary-just-to-say-flowers-etc",
+        "destination": "/vip",
+        "type": 301
+      },                
       {
         "source": "/product-category/vip-luxury-bouquet-sizes/page/2/",
         "destination": "/vip",

@@ -588,7 +588,9 @@ const Index: FunctionComponent<{ featuredFlowers: Product[] }> = ({
                 subTitle={flower.details}
                 price={flower.price}
                 url={`/product/${flower.slug}`}
-                buttonText="Add to Cart"
+                buttonText={
+                  flower.variants?.length ? "Select Size" : "Add to Cart"
+                }
                 cart={flower.variants?.length ? false : true}
               />
             ))}

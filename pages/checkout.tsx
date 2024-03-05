@@ -20,15 +20,18 @@ import Input, { TextArea } from "../components/input/Input";
 import Radio from "../components/radio/Radio";
 import Select, { Option } from "../components/select/Select";
 import {
+  PickUpLocation,
   allDeliveryLocationOptions,
   allDeliveryLocationZones,
   deliveryStates,
+  deliveryZoneMap,
   festiveDates,
   freeDeliveryThreshold,
   freeDeliveryThresholdFestive,
   freeDeliveryThresholdVals,
   paymentMethods,
   pickupLocations,
+  pickupStates,
   placeholderEmail,
   regalEmail,
   valsDates
@@ -111,7 +114,8 @@ const initialData: CheckoutFormData = {
   zone: "",
   currency: "NGN",
   deliveryInstruction: "",
-  deliveryZone: "WEB"
+  deliveryZone: "WEB",
+  pickupState: ""
 };
 
 type DeliverStage =
@@ -193,6 +197,10 @@ const Checkout: FunctionComponent = () => {
 
   const deviceType = useDeviceType();
 
+  const isValsDate = valsDates.includes(deliveryDate?.format("DD-MM") || "");
+
+  const isValsDay = deliveryDate?.format("DD-MM") === "14-02";
+
   const isBankTransfer = /but not seen yet/i.test(order?.paymentStatus || "");
 
   const total = useMemo(() => {
@@ -256,16 +264,64 @@ const Checkout: FunctionComponent = () => {
   } = router;
 
   const handleChange = (key: keyof CheckoutFormData, value: unknown) => {
+    const deliveryZone = value === "abuja" ? "WBA" : "WBL";
     if (key === "state") {
-      setFormData({
-        ...formData,
-        [key as string]: value,
-        zone: value === "other-locations" ? value : "",
-        pickUpLocation: "",
-        deliveryLocation: null,
-        deliveryZone: value === "lagos" ? "WBL" : "WBA"
-      });
-      return;
+      if (isValsDay && value === "abuja") {
+        setFormData({
+          ...formData,
+          [key as string]: value
+        });
+        return;
+      }
+      if (subTotal >= freeDeliveryThresholdVals.NGN && isValsDate) {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          deliveryLocation: {
+            label: "₦0 - Valentine (13th-15th Feb) Orders above ₦165,000",
+            name:
+              value === "lagos"
+                ? "freeLagosVals"
+                : value === "abuja"
+                ? "freeAbujaVals"
+                : "",
+            amount: 0
+          },
+          zone:
+            value === "lagos" ? "freeLagosVals-zone1" : "freeAbujaVals-zone1",
+          deliveryZone
+        });
+        return;
+      } else if (subTotal <= freeDeliveryThresholdVals.NGN && isValsDate) {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          deliveryLocation: {
+            label: "₦29,900 - Valentine (13th-15th Feb) Orders below ₦165,000",
+            name:
+              value === "lagos"
+                ? "highLagosVals"
+                : value === "abuja"
+                ? "highAbujaVals"
+                : "",
+            amount: 29900
+          },
+          zone:
+            value === "lagos" ? "highLagosVals-zone1" : "highAbujaVals-zone1",
+          deliveryZone
+        });
+        return;
+      } else {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          zone: value === "other-locations" ? value : "",
+          pickUpLocation: "",
+          deliveryLocation: null,
+          deliveryZone
+        });
+        return;
+      }
     }
     if (key === "zone") {
       setFormData({
@@ -302,7 +358,7 @@ const Checkout: FunctionComponent = () => {
       setFormData({
         ...formData,
         [key as string]: value,
-        deliveryZone: value === "Lagos" ? "LPI" : "APA"
+        deliveryZone: deliveryZoneMap[value as PickUpLocation]
       });
       return;
     }
@@ -317,6 +373,31 @@ const Checkout: FunctionComponent = () => {
         [key as string]: phoneNumber
       });
       return;
+    }
+    if (key === "pickupState") {
+      if (value === "abuja") {
+        if (isValsDay) {
+          setFormData({
+            ...formData,
+            [key as string]: value
+          });
+        }
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          pickUpLocation: "Abuja",
+          deliveryLocation: null,
+          deliveryZone: "APA"
+        });
+        return;
+      } else {
+        setFormData({
+          ...formData,
+          [key as string]: value,
+          pickUpLocation: ""
+        });
+        return;
+      }
     }
 
     setFormData({
@@ -460,7 +541,8 @@ const Checkout: FunctionComponent = () => {
         senderName: order?.client.name,
         senderPhoneNumber: order?.client.phone,
         deliveryDate: dayjs(order.deliveryDate),
-        senderEmail: order.client.email
+        senderEmail: order.client.email,
+        senderCountryCode: order.client.phoneCountryCode || "+234"
       });
       setDeliveryDate(dayjs(order?.deliveryDate));
       setIsSenderInfoCompleted(true);
@@ -525,6 +607,14 @@ const Checkout: FunctionComponent = () => {
     e.preventDefault();
     const isDeliveryMethodComplete = validateDeliveryMethod();
     const isReceiverInfoComplete = validateReceiverInfo();
+
+    if (
+      isValsDay &&
+      (formData.state === "abuja" || formData.pickupState === "abuja")
+    ) {
+      notify("error", "Pls no more orders in Abuja for Feb 14th");
+      return;
+    }
 
     if (!deliveryDate) {
       notify("error", "Please select a delivery date");
@@ -644,12 +734,17 @@ const Checkout: FunctionComponent = () => {
 
   const pastRecipients = useMemo(
     () =>
-      user?.recipients.map(recipient => ({
-        label: `${recipient.name} | ${recipient.phone} | ${recipient.phoneAlt} | ${recipient.address}`,
-        value: recipient._id
-      })) || [],
+      user?.recipients
+        .map(
+          recipient =>
+            recipient.name && {
+              label: `${recipient.name} | ${recipient.phone} | ${recipient.phoneAlt} | ${recipient.address}`,
+              value: recipient._id
+            }
+        )
+        .filter(Boolean) || [],
     [user]
-  );
+  ) as Option[];
 
   const deliveryLocationOptions = useMemo(() => {
     return (
@@ -697,12 +792,15 @@ const Checkout: FunctionComponent = () => {
         response?: PaystackSuccessResponse
       ) => Promise<void> = async response => {
         setPageLoading(true);
-        const { error, message } = await verifyPaystackPayment(
+        const { error, message, status } = await verifyPaystackPayment(
           response?.reference as string
         );
         setPageLoading(false);
         if (error) {
           notify("error", `Unable to make payment: ${message}`);
+        } else if (status === 214 && message) {
+          notify("info", `Order is successful, but not that: ${message}`);
+          markAsPaid();
         } else {
           notify("success", `Order paid successfully`);
           markAsPaid();
@@ -729,12 +827,15 @@ const Checkout: FunctionComponent = () => {
           paymentDescription: "Regal Flowers Order",
           onComplete: async response => {
             setPageLoading(true);
-            const { error, message } = await verifyMonnifyPayment(
+            const { error, message, status } = await verifyMonnifyPayment(
               response.paymentReference as string
             );
             setPageLoading(false);
             if (error) {
               notify("error", `Unable to make payment: ${message}`);
+            } else if (status === 214 && message) {
+              notify("info", `Order is successful, but not that: ${message}`);
+              markAsPaid();
             } else {
               notify("success", `Order paid successfully`);
               markAsPaid();
@@ -998,7 +1099,8 @@ const Checkout: FunctionComponent = () => {
                                     dimmed
                                   />
                                 </div>
-                                {formData.state &&
+                                {!isValsDate &&
+                                  formData.state &&
                                   formData.state !== "other-locations" && (
                                     <div className="input-group">
                                       <span className="question">
@@ -1022,7 +1124,8 @@ const Checkout: FunctionComponent = () => {
                             )}
 
                             {formData.deliveryMethod === "delivery" &&
-                              formData.zone && (
+                              formData.state &&
+                              (formData.zone || isValsDate) && (
                                 <div className={styles["pickup-locations"]}>
                                   {deliveryLocationOptions.length > 0 && (
                                     <p className="primary-color align-icon normal-text bold margin-bottom">
@@ -1033,32 +1136,42 @@ const Checkout: FunctionComponent = () => {
                                     </p>
                                   )}
 
-                                  {deliveryLocationOptions.length === 0 && (
+                                  {formData.state === "abuja" && isValsDay && (
                                     <div className="flex center-align primary-color normal-text margin-bottom spaced">
                                       <InfoRedIcon className="generic-icon xl" />
                                       <span>
-                                        At the moment, we only deliver VIP
-                                        Orders to other states on request, by
-                                        either chartering a vehicle or by
-                                        flight. Kindly contact us on
-                                        Phone/WhatsApp:
-                                        <br />
-                                        <a
-                                          href="tel:+2347011992888"
-                                          className="clickable neutral underline"
-                                        >
-                                          +234 7011992888
-                                        </a>
-                                        ,{" "}
-                                        <a
-                                          href="tel:+2347010006665"
-                                          className="clickable neutral underline"
-                                        >
-                                          +234 7010006665
-                                        </a>
+                                        Pls no more orders in Abuja for Feb 14th
                                       </span>
                                     </div>
                                   )}
+
+                                  {deliveryLocationOptions.length === 0 &&
+                                    formData.state === "other-locations" && (
+                                      <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                        <InfoRedIcon className="generic-icon xl" />
+                                        <span>
+                                          At the moment, we only deliver VIP
+                                          Orders to other states on request, by
+                                          either chartering a vehicle or by
+                                          flight. Kindly contact us on
+                                          Phone/WhatsApp:
+                                          <br />
+                                          <a
+                                            href="tel:+2347011992888"
+                                            className="clickable neutral underline"
+                                          >
+                                            +234 7011992888
+                                          </a>
+                                          ,{" "}
+                                          <a
+                                            href="tel:+2347010006665"
+                                            className="clickable neutral underline"
+                                          >
+                                            +234 7010006665
+                                          </a>
+                                        </span>
+                                      </div>
+                                    )}
 
                                   {deliveryLocationOptions.map(
                                     locationOption => {
@@ -1102,27 +1215,96 @@ const Checkout: FunctionComponent = () => {
                                     Pick Up Locations
                                   </span>
                                 </p>
-                                <div>
-                                  <Radio
-                                    label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
-                                    onChange={() =>
-                                      handleChange("pickUpLocation", "Lagos")
-                                    }
-                                    checked={
-                                      formData.pickUpLocation === "Lagos"
-                                    }
+                                <div className="input-group">
+                                  <span className="question">
+                                    Pick Up State
+                                  </span>
+                                  <Select
+                                    onSelect={value => {
+                                      handleChange("pickupState", value);
+                                    }}
+                                    value={formData.pickupState}
+                                    options={pickupStates}
+                                    placeholder="Select a state"
+                                    responsive
+                                    dimmed
                                   />
                                 </div>
-                                <div className="vertical-margin">
-                                  <Radio
-                                    label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
-                                    onChange={() =>
-                                      handleChange("pickUpLocation", "Abuja")
-                                    }
-                                    checked={
-                                      formData.pickUpLocation === "Abuja"
-                                    }
-                                  />
+                                <div className="margin-top spaced">
+                                  {formData.pickupState === "lagos" && (
+                                    <>
+                                      <div>
+                                        <Radio
+                                          label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+                                          onChange={() =>
+                                            handleChange(
+                                              "pickUpLocation",
+                                              "Ikoyi"
+                                            )
+                                          }
+                                          checked={
+                                            formData.pickUpLocation === "Ikoyi"
+                                          }
+                                        />
+                                      </div>
+                                      <div className="vertical-margin">
+                                        <Radio
+                                          label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
+                                          onChange={() =>
+                                            handleChange(
+                                              "pickUpLocation",
+                                              "Lekki"
+                                            )
+                                          }
+                                          checked={
+                                            formData.pickUpLocation === "Lekki"
+                                          }
+                                        />
+                                      </div>
+                                    </>
+                                  )}
+                                  {formData.pickUpLocation === "Abuja" &&
+                                    isValsDay && (
+                                      <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                        <InfoRedIcon className="generic-icon xl" />
+                                        <span>
+                                          Pls no more orders in Abuja for Feb
+                                          14th
+                                        </span>
+                                      </div>
+                                    )}
+                                  {formData.pickUpLocation === "Abuja" &&
+                                    !isValsDay &&
+                                    formData.pickupState === "abuja" && (
+                                      <div className="vertical-margin">
+                                        <Radio
+                                          label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+                                          onChange={() => {}}
+                                          checked={
+                                            formData.pickUpLocation === "Abuja"
+                                          }
+                                        />
+                                      </div>
+                                    )}
+
+                                  {formData.pickupState ===
+                                    "other-locations" && (
+                                    <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                      <InfoRedIcon className="generic-icon xl" />
+                                      <span>
+                                        At the moment, You can only pick up at
+                                        our Abuja or Lagos stores. Kindly
+                                        contact us on Phone/WhatsApp:
+                                        <br />
+                                        <a
+                                          href="tel:+2349077777994"
+                                          className="clickable neutral underline"
+                                        >
+                                          +234 9077 777994
+                                        </a>
+                                      </span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             )}
@@ -1517,7 +1699,7 @@ const Checkout: FunctionComponent = () => {
                           {getPriceDisplay(total, currency)}
                         </span>
                       </div>
-                      {currentStage === 1 && (
+                      {currentStage === 1 && isSenderInfoCompleted && (
                         <Button
                           responsive
                           buttonType="submit"
@@ -2077,23 +2259,91 @@ const Checkout: FunctionComponent = () => {
                               <p className="align-icon normal-text bold margin-bottom">
                                 Pick Up Locations
                               </p>
-                              <div>
-                                <Radio
-                                  label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
-                                  onChange={() =>
-                                    handleChange("pickUpLocation", "Lagos")
-                                  }
-                                  checked={formData.pickUpLocation === "Lagos"}
+                              <div className="input-group">
+                                <span className="question">Pick Up State</span>
+                                <Select
+                                  onSelect={value => {
+                                    handleChange("pickupState", value);
+                                  }}
+                                  value={formData.pickupState}
+                                  options={pickupStates}
+                                  placeholder="Select a state"
+                                  responsive
+                                  dimmed
                                 />
                               </div>
-                              <div className="vertical-margin">
-                                <Radio
-                                  label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
-                                  onChange={() =>
-                                    handleChange("pickUpLocation", "Abuja")
-                                  }
-                                  checked={formData.pickUpLocation === "Abuja"}
-                                />
+                              <div className="margin-top spaced">
+                                {formData.pickupState === "lagos" && (
+                                  <>
+                                    <div>
+                                      <Radio
+                                        label="Lagos Pickup - 81b, Lafiaji Way, Dolphin Estate, Ikoyi, Lagos"
+                                        onChange={() =>
+                                          handleChange(
+                                            "pickUpLocation",
+                                            "Ikoyi"
+                                          )
+                                        }
+                                        checked={
+                                          formData.pickUpLocation === "Ikoyi"
+                                        }
+                                      />
+                                    </div>
+                                    <div className="vertical-margin">
+                                      <Radio
+                                        label="Lekki - 2C, Seed Education Center Road, off Kusenla Road, Ikate, Lekki"
+                                        onChange={() =>
+                                          handleChange(
+                                            "pickUpLocation",
+                                            "Lekki"
+                                          )
+                                        }
+                                        checked={
+                                          formData.pickUpLocation === "Lekki"
+                                        }
+                                      />
+                                    </div>
+                                  </>
+                                )}
+                                {formData.pickUpLocation === "Abuja" &&
+                                  isValsDay && (
+                                    <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                      <InfoRedIcon className="generic-icon xl" />
+                                      <span>
+                                        Pls no more orders in Abuja for Feb 14th
+                                      </span>
+                                    </div>
+                                  )}
+                                {formData.pickupState === "abuja" &&
+                                  !isValsDay && (
+                                    <div className="vertical-margin">
+                                      <Radio
+                                        label="Abuja Pickup - 5, Nairobi Street, off Aminu Kano Crescent, Wuse 2, Abuja"
+                                        onChange={() => {}}
+                                        checked={
+                                          formData.pickUpLocation === "Abuja"
+                                        }
+                                      />
+                                    </div>
+                                  )}
+
+                                {formData.pickupState === "other-locations" && (
+                                  <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                    <InfoRedIcon className="generic-icon xl" />
+                                    <span>
+                                      At the moment, You can only pick up at our
+                                      Abuja or Lagos stores. Kindly contact us
+                                      on Phone/WhatsApp:
+                                      <br />
+                                      <a
+                                        href="tel:+2349077777994"
+                                        className="clickable neutral underline"
+                                      >
+                                        +234 9077 777994
+                                      </a>
+                                    </span>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}
@@ -2123,8 +2373,9 @@ const Checkout: FunctionComponent = () => {
                                 />
                               </div>
 
-                              {formData.state &&
-                                formData.state !== "other-locations" && (
+                              {!isValsDate &&
+                                formData.state &&
+                                formData.state === "lagos" && (
                                   <div className="input-group">
                                     <span className="question">
                                       Delivery Zones
@@ -2147,7 +2398,7 @@ const Checkout: FunctionComponent = () => {
                           )}
 
                           {formData.deliveryMethod === "delivery" &&
-                            formData.zone && (
+                            (formData.zone || isValsDate) && (
                               <div className={styles["pickup-locations"]}>
                                 {deliveryLocationOptions.length > 0 && (
                                   <p className="primary-color align-icon normal-text bold margin-bottom">
@@ -2158,31 +2409,42 @@ const Checkout: FunctionComponent = () => {
                                   </p>
                                 )}
 
-                                {deliveryLocationOptions.length === 0 && (
+                                {formData.state === "abuja" && isValsDay && (
                                   <div className="flex center-align primary-color normal-text margin-bottom spaced">
                                     <InfoRedIcon className="generic-icon xl" />
                                     <span>
-                                      At the moment, we only deliver VIP Orders
-                                      to other states on request, by either
-                                      chartering a vehicle or by flight. Kindly
-                                      contact us on Phone/WhatsApp:
-                                      <br />
-                                      <a
-                                        href="tel:+2347011992888"
-                                        className="clickable neutral underline"
-                                      >
-                                        +234 7011992888
-                                      </a>
-                                      ,{" "}
-                                      <a
-                                        href="tel:+2347010006665"
-                                        className="clickable neutral underline"
-                                      >
-                                        +234 7010006665
-                                      </a>
+                                      Pls no more orders in Abuja for Feb 14th
                                     </span>
                                   </div>
                                 )}
+
+                                {deliveryLocationOptions.length === 0 &&
+                                  formData.state === "other-locations" && (
+                                    <div className="flex center-align primary-color normal-text margin-bottom spaced">
+                                      <InfoRedIcon className="generic-icon xl" />
+                                      <span>
+                                        At the moment, we only deliver VIP
+                                        Orders to other states on request, by
+                                        either chartering a vehicle or by
+                                        flight. Kindly contact us on
+                                        Phone/WhatsApp:
+                                        <br />
+                                        <a
+                                          href="tel:+2347011992888"
+                                          className="clickable neutral underline"
+                                        >
+                                          +234 7011992888
+                                        </a>
+                                        ,{" "}
+                                        <a
+                                          href="tel:+2347010006665"
+                                          className="clickable neutral underline"
+                                        >
+                                          +234 7010006665
+                                        </a>
+                                      </span>
+                                    </div>
+                                  )}
 
                                 {deliveryLocationOptions.map(locationOption => {
                                   return (
@@ -2221,6 +2483,17 @@ const Checkout: FunctionComponent = () => {
                       <Button
                         onClick={() => {
                           const isDeliveryMethodComplete = validateDeliveryMethod();
+                          if (
+                            isValsDay &&
+                            formData.deliveryMethod === "delivery" &&
+                            formData.deliveryLocation?.name === "Abuja"
+                          ) {
+                            notify(
+                              "info",
+                              "Pls no more orders in Abuja for Feb 14th"
+                            );
+                            return;
+                          }
                           if (!isDeliveryMethodComplete) {
                             return;
                           }
@@ -3099,12 +3372,16 @@ const PaypalModal: FunctionComponent<ModalProps & {
     }
 
     if (response?.status === "COMPLETED") {
-      const { error, message } = await verifyPaypalPayment(
+      const { error, message, status } = await verifyPaypalPayment(
         data.orderID,
         orderId
       );
       if (error) {
         notify("error", `Unable to verify paypal payment: ${message}`);
+      } else if (status === 214 && message) {
+        notify("info", `Order is successful, but not that: ${message}`);
+        onComplete();
+        cancel?.();
       } else {
         notify("success", "Successfully paid for order");
         onComplete();
@@ -3403,7 +3680,7 @@ const PaymentDetailsModal: FunctionComponent<ModalProps & {
       return notify("error", `Amount Sent is required`);
     }
     setLoading(true);
-    const { error, message } = await manualTransferPayment({
+    const { error, message, status } = await manualTransferPayment({
       ...formData,
       currency: currency.name,
       orderId: _orderId as string,
@@ -3412,6 +3689,10 @@ const PaymentDetailsModal: FunctionComponent<ModalProps & {
     setLoading(false);
     if (error) {
       notify("error", `Unable to send Transfer Details: ${message}`);
+    } else if (status === 214 && message) {
+      notify("info", `Order is successful, but not that: ${message}`);
+      onCompleted();
+      cancel();
     } else {
       notify("success", `Transfer Details sent successfully`);
       onCompleted();

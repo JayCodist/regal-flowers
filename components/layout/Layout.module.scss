@@ -833,7 +833,7 @@
       max-width: 30%;
 
       & > * {
-        margin-bottom: 0.8rem;
+        margin-bottom: 0.3rem;
 
         &:last-child {
           margin-bottom: 0;
@@ -919,7 +919,8 @@
   }
 
   #newsletter {
-    width: 30%;
+    width: 100%;
+    margin-top: 2rem;
 
     .subsribe-btn {
       min-width: 5rem;

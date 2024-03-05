@@ -22,7 +22,7 @@ import {
   bestSellersRomance,
   defaultBreadcrumb,
   regalWebsiteUrl,
-  bestSellersValentine
+  bestSellersOccasionTitle
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -163,12 +163,12 @@ const LandingPage: FunctionComponent<{
   featuredBirthday?: Product[];
   featuredRomance?: Product[];
   featuredFlowers?: Product[];
-  featuredValentine?: Product[];
+  featuredOccasion?: Product[];
 }> = ({
   featuredBirthday,
   locationName,
   featuredRomance,
-  featuredValentine
+  featuredOccasion
 }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const { setBreadcrumb } = useContext(SettingsContext);
@@ -200,7 +200,8 @@ const LandingPage: FunctionComponent<{
         >
           <div className="hero-content flex column center center-align">
             <h1 className={styles.title}>
-              They Deserve Regal Flowers.
+              They Deserve Regal Flowers
+              <br /> This Mother's Day.
               <br /> Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria
             </h1>
             <FlowerDeliveryInput />
@@ -210,7 +211,7 @@ const LandingPage: FunctionComponent<{
           <div className="featured-content">
             <>
               <div className="flex between">
-                <h2 className="featured-title">{bestSellersValentine}</h2>
+                <h2 className="featured-title">{bestSellersOccasionTitle}</h2>
                 {deviceType === "desktop" && (
                   <Button
                     url="/product-category/valentines-day-flowers-and-gifts"
@@ -227,7 +228,7 @@ const LandingPage: FunctionComponent<{
                 )}
               </div>
               <div className={[styles.section, styles.wrap].join(" ")}>
-                {featuredValentine?.map(flower => (
+                {featuredOccasion?.map(flower => (
                   <FlowerCard
                     key={flower.key}
                     image={flower.images[0]?.src || ""}
@@ -235,7 +236,9 @@ const LandingPage: FunctionComponent<{
                     subTitle={flower.subtitle || flower.name.split("–")[1]}
                     price={flower.price}
                     url={`/product/${flower.slug}`}
-                    buttonText="Add to Cart"
+                    buttonText={
+                      flower.variants?.length ? "Select Size" : "Add to Cart"
+                    }
                     cart={flower.variants?.length ? false : true}
                     product={flower}
                   />
@@ -278,7 +281,9 @@ const LandingPage: FunctionComponent<{
                   subTitle={flower.subtitle || flower.name.split("–")[1]}
                   price={flower.price}
                   url={`/product/${flower.slug}`}
-                  buttonText="Add to Cart"
+                  buttonText={
+                    flower.variants?.length ? "Select Size" : "Add to Cart"
+                  }
                   cart={flower.variants?.length ? false : true}
                   product={flower}
                 />
@@ -322,7 +327,9 @@ const LandingPage: FunctionComponent<{
                   subTitle={flower.subtitle || flower.name.split("–")[1]}
                   price={flower.price}
                   url={`/product/${flower.slug}`}
-                  buttonText="Add to Cart"
+                  buttonText={
+                    flower.variants?.length ? "Select Size" : "Add to Cart"
+                  }
                   cart={flower.variants?.length ? false : true}
                   product={flower}
                 />
@@ -331,6 +338,46 @@ const LandingPage: FunctionComponent<{
             {deviceType === "mobile" && (
               <Button
                 url="/product-category/flowers-for-love-birthday-anniversary-etc"
+                type="accent"
+                minWidth
+                className={styles["see-all"]}
+              >
+                <h3 className="red margin-right">See All</h3>
+              </Button>
+            )}
+            <div className="flex between">
+              <h2 className="featured-title">Gifts to Include with Flowers</h2>
+              {deviceType === "desktop" && (
+                <Button
+                  url="/product-category/gifts"
+                  className="flex spaced center center-align"
+                  type="transparent"
+                >
+                  <h3 className="red margin-right">See All</h3>
+                  <img
+                    alt="arrow"
+                    className="generic-icon xsmall"
+                    src="/icons/arrow-right.svg"
+                  />
+                </Button>
+              )}
+            </div>
+            <div className={[styles.section, styles.wrap].join(" ")}>
+              {giftItems.map(gift => (
+                <FlowerCard
+                  key={gift.name}
+                  image={gift.image}
+                  name={gift.name}
+                  subTitle={gift.description}
+                  url={gift.slug}
+                  buttonText="See More"
+                />
+              ))}
+            </div>
+
+            {deviceType === "mobile" && (
+              <Button
+                url="/product-category/gifts"
                 type="accent"
                 minWidth
                 className={styles["see-all"]}
@@ -446,7 +493,7 @@ const LandingPage: FunctionComponent<{
               </div>
               <br /> <br />
               <div className={styles.reviews}>
-                {reviews[locationName].map((review, i) => (
+                {reviews[locationName]?.map((review, i) => (
                   <div
                     key={i}
                     className={[
@@ -517,7 +564,7 @@ const LandingPage: FunctionComponent<{
                 />
               )}
               <div className="flex spaced-lg">
-                {reviews[locationName].map((_, index) => (
+                {reviews[locationName]?.map((_, index) => (
                   <span
                     key={index}
                     role="button"
@@ -554,47 +601,6 @@ const LandingPage: FunctionComponent<{
                 />
               ))}
             </div>
-
-            <div className="flex between">
-              <h2 className="featured-title">Gifts to Include with Flowers</h2>
-              {deviceType === "desktop" && (
-                <Button
-                  url="/product-category/gifts"
-                  className="flex spaced center center-align"
-                  type="transparent"
-                >
-                  <h3 className="red margin-right">See All</h3>
-                  <img
-                    alt="arrow"
-                    className="generic-icon xsmall"
-                    src="/icons/arrow-right.svg"
-                  />
-                </Button>
-              )}
-            </div>
-            <div className={[styles.section, styles.wrap].join(" ")}>
-              {giftItems.map(gift => (
-                <FlowerCard
-                  key={gift.name}
-                  image={gift.image}
-                  name={gift.name}
-                  subTitle={gift.description}
-                  url={gift.slug}
-                  buttonText="See More"
-                />
-              ))}
-            </div>
-
-            {deviceType === "mobile" && (
-              <Button
-                url="/product-category/gifts"
-                type="accent"
-                minWidth
-                className={styles["see-all"]}
-              >
-                <h3 className="red margin-right">See All</h3>
-              </Button>
-            )}
 
             {deviceType === "desktop" && (
               <>
@@ -1113,11 +1119,13 @@ export const getStaticProps: GetStaticProps = async () => {
   const featuredRomance = await getProductsBySlugs(
     featuredSlugs["featured-romance"]
   );
-  const featuredValentine = await getProductsBySlugs(
-    featuredSlugs["featured-valentine"]
-  );
+
   const { data, error, message } = await getProductsBySlugs(
     featuredSlugs[locationName]
+  );
+
+  const featuredOccasion = await getProductsBySlugs(
+    featuredSlugs["featured-occasion"]
   );
 
   if (error) {
@@ -1129,7 +1137,7 @@ export const getStaticProps: GetStaticProps = async () => {
       locationName: "general",
       featuredBirthday: data || [],
       featuredRomance: featuredRomance.data || [],
-      featuredValentine: featuredValentine.data || []
+      featuredOccasion: featuredOccasion.data || []
     }
   };
 };

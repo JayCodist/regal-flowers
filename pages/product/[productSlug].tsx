@@ -10,7 +10,11 @@ import SettingsContext from "../../utils/context/SettingsContext";
 import { CartItem } from "../../utils/types/Core";
 import { getPriceDisplay } from "../../utils/helpers/type-conversions";
 import useDeviceType from "../../utils/hooks/useDeviceType";
-import { DesignOption, regalWebsiteUrl } from "../../utils/constants";
+import {
+  DesignOption,
+  regalWebsiteUrl,
+  giftItems
+} from "../../utils/constants";
 import Link from "next/dist/client/link";
 import Meta from "../../components/meta/Meta";
 import SchemaMarkup from "../../components/schema-mark-up/SchemaMarkUp";
@@ -777,6 +781,50 @@ const ProductPage: FunctionComponent<{ product: Product }> = props => {
           </div>
         </div>
         <div className={styles.padding}>
+          <div className="">
+            <div className="flex between margin-bottom spaced">
+              <span className="title bold margin-top spaced">
+                Gifts to Include with Flowers
+              </span>
+              {deviceType === "desktop" && (
+                <Button
+                  url="/product-category/gifts"
+                  className="flex spaced center center-align"
+                  type="transparent"
+                >
+                  <h3 className="red margin-right">See All</h3>
+                  <img
+                    alt="arrow"
+                    className="generic-icon xsmall"
+                    src="/icons/arrow-right.svg"
+                  />
+                </Button>
+              )}
+            </div>
+            <div className="flex between vertical-margin spaced wrap">
+              {giftItems.map((gift, index) => (
+                <FlowerCard
+                  key={index}
+                  name={gift.name}
+                  image={gift.image}
+                  subTitle={gift.description}
+                  buttonText="See More"
+                  url={gift.slug}
+                />
+              ))}
+            </div>
+            {deviceType === "mobile" && (
+              <Button
+                url="/product-category/gifts"
+                type="accent"
+                minWidth
+                className={styles["see-all"]}
+              >
+                <h3 className="red margin-right">See All</h3>
+              </Button>
+            )}{" "}
+          </div>
+          <br />
           <p className="title bold margin-top spaced">Related Products</p>
           <div className="flex between vertical-margin spaced wrap">
             {product.relatedProducts?.map((item, index) => (
