@@ -1,23 +1,31 @@
-import React, { useState, useContext, FormEvent, FunctionComponent } from 'react'
-import styles from './blog.module.scss'
-import articleStyles from './article.module.scss'
+import React, {
+  useState,
+  useContext,
+  FormEvent,
+  FunctionComponent
+} from "react";
+import styles from "./blog.module.scss";
+import articleStyles from "./article.module.scss";
 import { GetStaticProps } from "next";
-import Button from '../../components/button/Button'
-import Input from '../../components/input/Input'
-import { subscribeToNewsletter } from '../../utils/helpers/data/core'
-import SettingsContext from '../../utils/context/SettingsContext'
-import { blogCategories, blogMinimals } from '../../utils/constants'
-import { trendingPosts } from '../../utils/constants'
-import BlogThumbnail from './_blogThumbnail'
-import { getProductsBySlugs } from '../../utils/helpers/data/products';
-import { featuredSlugs } from '../../utils/constants';
-import Product from '../../utils/types/Product';
-import FlowerCard from '../../components/flower-card/FlowerCard';
-import useDeviceType from '../../utils/hooks/useDeviceType';
-import { getBlog, getAllBlogs } from '../../utils/helpers/data/blog';
+import Button from "../../components/button/Button";
+import Input from "../../components/input/Input";
+import { subscribeToNewsletter } from "../../utils/helpers/data/core";
+import SettingsContext from "../../utils/context/SettingsContext";
+import { blogCategories, blogMinimals } from "../../utils/constants";
+import { trendingPosts } from "../../utils/constants";
+import BlogThumbnail from "./_blogThumbnail";
+import { getProductsBySlugs } from "../../utils/helpers/data/products";
+import { featuredSlugs } from "../../utils/constants";
+import Product from "../../utils/types/Product";
+import Blog from "../../utils/types/Blog";
+import FlowerCard from "../../components/flower-card/FlowerCard";
+import useDeviceType from "../../utils/hooks/useDeviceType";
+import { getBlog, getAllBlogs } from "../../utils/helpers/data/blog";
 
-
-const BlogPost: FunctionComponent<{ featuredFlowers: Product[], blog: Blog }> = ({ featuredFlowers, blog }) => {
+const BlogPost: FunctionComponent<{
+  featuredFlowers: Product[];
+  blog: Blog;
+}> = ({ featuredFlowers, blog }) => {
   const [subscriptionEmail, setSubscriptionEmail] = useState("");
   const [isSubscribing, setIsSubscribing] = useState(false);
 
@@ -38,25 +46,38 @@ const BlogPost: FunctionComponent<{ featuredFlowers: Product[], blog: Blog }> = 
   const markup = { __html: blog.body };
   return (
     <section className={styles["blog-post"]}>
-
-
       <div className={styles["blog-body"]}>
         <div className={styles["content"]}>
           <div className={styles["hero-header"]}>
             <p className={styles["title"]}>{blog.title}</p>
             <div className={styles["header-details"]}>
-
               <div className={`${styles["info"]} text-medium`}>
-                <p><span className={styles["blog-date"]}>7 Dec, 2021 / </span> <span className={styles["last-updated"]}> Updated 4 hours ago</span></p>
-                <p><span className={styles["read-duration"]}>{blog.readMinutes} minutes read </span> <span className={styles["tag"]}> Everything Flowers & Gift</span></p>
+                <p>
+                  <span className={styles["blog-date"]}>7 Dec, 2021 / </span>{" "}
+                  <span className={styles["last-updated"]}>
+                    {" "}
+                    Updated 4 hours ago
+                  </span>
+                </p>
+                <p>
+                  <span className={styles["read-duration"]}>
+                    {blog.readMinutes} minutes read{" "}
+                  </span>{" "}
+                  <span className={styles["tag"]}>
+                    {" "}
+                    Everything Flowers & Gift
+                  </span>
+                </p>
               </div>
             </div>
             <div className={styles["hero-img"]}>
               <img src={blog.featuredImage} alt="featured-image" />
             </div>
           </div>
-          <article className={`text-small ${articleStyles["article"]}`} dangerouslySetInnerHTML={markup}>
-          </article>
+          <article
+            className={`text-small ${articleStyles["article"]}`}
+            dangerouslySetInnerHTML={markup}
+          ></article>
 
           <div className={styles["subscribe-section"]}>
             <div className="flex column between">
@@ -85,10 +106,10 @@ const BlogPost: FunctionComponent<{ featuredFlowers: Product[], blog: Blog }> = 
                   <Button buttonType="submit" loading={isSubscribing}>
                     SUBSCRIBE
                   </Button>
-
                 </form>
-                <span className="grayed semibold">We care about your data in our privacy policy</span>
-
+                <span className="grayed semibold">
+                  We care about your data in our privacy policy
+                </span>
               </div>
             </div>
           </div>
@@ -105,7 +126,6 @@ const BlogPost: FunctionComponent<{ featuredFlowers: Product[], blog: Blog }> = 
               tag={tag.tag}
               title={tag.title}
               key={index}
-
             />
           ))}
           <div className={styles["trending"]}>
@@ -135,17 +155,14 @@ const BlogPost: FunctionComponent<{ featuredFlowers: Product[], blog: Blog }> = 
               tag={tag.tag}
               title={tag.title}
               key={index}
-
             />
           ))}
 
-
-          {
-            device === 'mobile' && (
+          {device === "mobile" && (
             <>
               <div className={styles["trending"]}>
                 <hr />
-                <p>Featured Flowers</p>
+                <p>{featuredFlowers.length === 0 ? "" : "FEATURED FLOWERS"}</p>
                 <hr />
               </div>
 
@@ -162,24 +179,20 @@ const BlogPost: FunctionComponent<{ featuredFlowers: Product[], blog: Blog }> = 
                       buttonText="Add to Cart"
                       cart={flower.variants?.length ? false : true}
                       product={flower}
-                      mode='two-x-grid'
+                      mode="two-x-grid"
                     />
                   ))}
                 </div>
-
               </div>
             </>
-            )
-          }
-
+          )}
         </div>
-
       </div>
 
-      {device === 'desktop' && (
+      {device === "desktop" && (
         <div className={styles["popular-sections"]}>
           <h2 className={`${styles.title} vertical-margin spaced normal`}>
-            FEATURED FLOWERS
+            {featuredFlowers.length === 0 ? "" : "FEATURED FLOWERS"}
           </h2>
           <div className={[styles.section, styles.wrap].join(" ")}>
             {featuredFlowers?.map(flower => (
@@ -196,19 +209,17 @@ const BlogPost: FunctionComponent<{ featuredFlowers: Product[], blog: Blog }> = 
               />
             ))}
           </div>
-
         </div>
       )}
-
     </section>
-  )
-}
+  );
+};
 
-export default BlogPost
+export default BlogPost;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { blogSlug } = params || {}
-  const { data: featuredFlowers, } = await getProductsBySlugs(
+  const { blogSlug } = params || {};
+  const { data: featuredFlowers } = await getProductsBySlugs(
     featuredSlugs["featured-birthday"]
   );
   const { data, error, message } = await getBlog(String(blogSlug));
@@ -216,8 +227,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     console.error(`Unable to fetch product "${blogSlug}": ${message}`);
     return {
       props: {
-        blog: {
-        }
+        blog: {}
       },
       revalidate: 1800
     };
@@ -249,5 +259,4 @@ export const getStaticPaths = async () => {
       fallback: false // true or 'blocking'
     };
   }
-
 };
