@@ -24,8 +24,16 @@ import FlowerCard from "../../components/flower-card/FlowerCard";
 import BlogCard from "../../components/blog-card/BlogCard";
 import Input from "../../components/input/Input";
 import SettingsContext from "../../utils/context/SettingsContext";
+import { GetStaticProps } from "next";
+import { getBlogs } from "../../utils/helpers/data/blog";
+import { BlogMinimal } from "../../utils/types/Blog";
 
-const BlogPage: FunctionComponent = () => {
+interface BlogPageProps {
+  blogs: BlogMinimal[];
+}
+
+const BlogPage: FunctionComponent<BlogPageProps> = props => {
+  const { blogs } = props;
   const deviceType = useDeviceType();
 
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -104,7 +112,7 @@ const BlogPage: FunctionComponent = () => {
 
         <p className={styles.title}>Trending Blog Posts</p>
         <div className={styles.blogs}>
-          {blogMinimals.map((blog, index) => (
+          {blogs.map((blog, index) => (
             <Link href={blog.slug} key={index}>
               <a className={styles.blog}>
                 <img
@@ -384,3 +392,18 @@ const BlogPage: FunctionComponent = () => {
 };
 
 export default BlogPage;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { data, error, message } = await getBlogs({
+    pageNumber: 1,
+    pageSize: 3
+  });
+  if (error) {
+    console.error("Unable to fetch blogs: ", message);
+  }
+  return {
+    props: {
+      blogs: data || []
+    }
+  };
+};
