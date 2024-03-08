@@ -24,3 +24,25 @@ export const performHandshake: () => Promise<
     };
   }
 };
+
+export const subscribeToNewsletter: (
+  email: string
+) => Promise<RequestResponse<null>> = async email => {
+  try {
+    await restAPIInstance.post(
+      `/v1/regal/subscribe?business=${business}&email=${email}`,
+      {}
+    );
+    return {
+      error: false,
+      data: null
+    };
+  } catch (err) {
+    console.error("Unable to subscribe email: ", err);
+    return {
+      error: true,
+      message: (err as Error).message,
+      data: null
+    };
+  }
+};
