@@ -17,7 +17,7 @@ import BlogThumbnail from "./_blogThumbnail";
 import { getProductsBySlugs } from "../../utils/helpers/data/products";
 import { featuredSlugs } from "../../utils/constants";
 import Product from "../../utils/types/Product";
-import Blog from "../../utils/types/Blog";
+import { Blog } from "../../utils/types/Blog";
 import FlowerCard from "../../components/flower-card/FlowerCard";
 import useDeviceType from "../../utils/hooks/useDeviceType";
 import { getBlog, getAllBlogs } from "../../utils/helpers/data/blog";
