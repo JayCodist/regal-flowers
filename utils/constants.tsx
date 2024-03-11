@@ -84,7 +84,6 @@ export const defaultBreadcrumb: Breadcrumb = {
 };
 
 export const allOccasionOptions: Option[] = [
-  { value: "mothers-day-flowers", label: "Mother's Day" },
   {
     value: "flowers-for-love-birthday-anniversary-etc",
     label: "Romance, Birthdays & Anniversary"
@@ -95,6 +94,7 @@ export const allOccasionOptions: Option[] = [
   { value: "funeral-and-condolence", label: "Funeral & Condolence" },
   { value: "event-amp-centerpiece", label: "Events & Centerpiece" },
   { value: "fathers-day-flowers", label: "Father's Day" },
+  { value: "mothers-day-flowers", label: "Mother's Day" },
   {
     value: "valentines-day-flowers-and-gifts",
     label: "Valentine's Day"
@@ -1455,27 +1455,27 @@ export const productSampleData = {
 };
 
 export const links: AppLink[] = [
-  {
-    title: "Mother's Day",
-    url: "",
-    children: [
-      {
-        title: "Flowers",
-        url: "/product-category/mothers-day-flowers",
-        children: []
-      },
-      {
-        title: "VIP Flowers",
-        url: "/vip",
-        children: []
-      },
-      {
-        title: "Gifts",
-        url: "/product-category/gifts",
-        children: []
-      }
-    ]
-  },
+  // {
+  //   title: "Mother's Day",
+  //   url: "",
+  //   children: [
+  //     {
+  //       title: "Flowers",
+  //       url: "/product-category/mothers-day-flowers",
+  //       children: []
+  //     },
+  //     {
+  //       title: "VIP Flowers",
+  //       url: "/vip",
+  //       children: []
+  //     },
+  //     {
+  //       title: "Gifts",
+  //       url: "/product-category/gifts",
+  //       children: []
+  //     }
+  //   ]
+  // },
   {
     url: "",
     title: "Occasions",
@@ -1488,27 +1488,6 @@ export const links: AppLink[] = [
           {
             title: "Flowers",
             url: "/product-category/flowers-for-love-birthday-anniversary-etc",
-            children: []
-          },
-          {
-            title: "VIP Flowers",
-            url: "/vip",
-            children: []
-          },
-          {
-            title: "Gifts",
-            url: "/product-category/gifts",
-            children: []
-          }
-        ]
-      },
-      {
-        title: "Mother's Day",
-        url: "",
-        children: [
-          {
-            title: "Flowers",
-            url: "/product-category/mothers-day-flowers",
             children: []
           },
           {
@@ -1635,28 +1614,28 @@ export const links: AppLink[] = [
             children: []
           }
         ]
-      },
-      {
-        title: "Mother's Day",
-        url: "",
-        children: [
-          {
-            title: "Flowers",
-            url: "/product-category/valentines-day-flowers-and-gifts",
-            children: []
-          },
-          {
-            title: "VIP Flowers",
-            url: "/vip",
-            children: []
-          },
-          {
-            title: "Gifts",
-            url: "/product-category/gifts",
-            children: []
-          }
-        ]
       }
+      // {
+      //   title: "Mother's Day",
+      //   url: "",
+      //   children: [
+      //     {
+      //       title: "Flowers",
+      //       url: "/product-category/valentines-day-flowers-and-gifts",
+      //       children: []
+      //     },
+      //     {
+      //       title: "VIP Flowers",
+      //       url: "/vip",
+      //       children: []
+      //     },
+      //     {
+      //       title: "Gifts",
+      //       url: "/product-category/gifts",
+      //       children: []
+      //     }
+      //   ]
+      // }
     ]
   },
   {
@@ -1817,11 +1796,11 @@ export const links: AppLink[] = [
       }
     ]
   },
-  // {
-  //   url: "/product-category/indoor-plants-and-cactus",
-  //   title: "Plants",
-  //   children: []
-  // },
+  {
+    url: "/product-category/indoor-plants-and-cactus",
+    title: "Plants",
+    children: []
+  },
 
   {
     title: "FAQ",
