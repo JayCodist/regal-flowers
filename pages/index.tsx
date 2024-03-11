@@ -21,8 +21,7 @@ import {
   giftItems,
   bestSellersRomance,
   defaultBreadcrumb,
-  regalWebsiteUrl,
-  bestSellersOccasionTitle
+  regalWebsiteUrl
 } from "../utils/constants";
 import ServiceCard from "../components/service-card/ServiceCard";
 import OccasionCard from "../components/occasion-card/OccasionCard";
@@ -164,12 +163,7 @@ const LandingPage: FunctionComponent<{
   featuredRomance?: Product[];
   featuredFlowers?: Product[];
   featuredOccasion?: Product[];
-}> = ({
-  featuredBirthday,
-  locationName,
-  featuredRomance,
-  featuredOccasion
-}) => {
+}> = ({ featuredBirthday, locationName, featuredRomance }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const { setBreadcrumb } = useContext(SettingsContext);
 
@@ -201,7 +195,6 @@ const LandingPage: FunctionComponent<{
           <div className="hero-content flex column center center-align">
             <h1 className={styles.title}>
               They Deserve Regal Flowers
-              <br /> This Mother's Day.
               <br /> Premium Same Day Flower Delivery in Lagos & Abuja, Nigeria
             </h1>
             <FlowerDeliveryInput />
@@ -209,7 +202,7 @@ const LandingPage: FunctionComponent<{
         </div>
         <section className="featured-section-wrapper home-page">
           <div className="featured-content">
-            <>
+            {/* <>
               <div className="flex between">
                 <h2 className="featured-title">{bestSellersOccasionTitle}</h2>
                 {deviceType === "desktop" && (
@@ -254,7 +247,7 @@ const LandingPage: FunctionComponent<{
                   <h3 className="red margin-right">See All</h3>
                 </Button>
               )}
-            </>
+            </> */}
             <div className="flex between">
               <h2 className="featured-title">{bestSellers[locationName]}</h2>
               {deviceType === "desktop" && (
