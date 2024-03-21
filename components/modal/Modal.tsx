@@ -8,9 +8,17 @@ export interface ModalProps {
   cancel?: (payload?: Option) => void;
   isConfirm?: boolean;
   className?: string;
+  allowClickOutside?: boolean;
 }
 const Modal = (props: ModalProps) => {
-  const { children, visible, cancel = () => {}, isConfirm, className } = props;
+  const {
+    children,
+    visible,
+    cancel = () => {},
+    isConfirm,
+    className,
+    allowClickOutside
+  } = props;
   const modalRef = useRef<Element | null>(null);
   const visibleRef = useRef(visible);
 
@@ -30,7 +38,7 @@ const Modal = (props: ModalProps) => {
   };
 
   useEffect(() => {
-    if (!isConfirm) {
+    if (!isConfirm && allowClickOutside) {
       window.addEventListener("mousedown", handleClose);
       window.addEventListener("keydown", handleEscape);
       return () => {

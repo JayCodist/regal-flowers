@@ -3544,6 +3544,7 @@ const BankDetailsModal: FunctionComponent<ModalProps & {
       visible={visible}
       cancel={cancel}
       className={["scrollable", styles["details-wrapper"]].join(" ")}
+      allowClickOutside={false}
     >
       <h1 className="title margin-bottom spaced">Transfer Details</h1>
       <p className="margin-bottom spaced normal-text">
@@ -3705,6 +3706,7 @@ const PaymentDetailsModal: FunctionComponent<ModalProps & {
       visible={visible}
       cancel={cancel}
       className={["scrollable", styles["details-wrapper"]].join(" ")}
+      allowClickOutside={false}
     >
       <h1 className="title margin-bottom spaced">
         Details used to make payment
