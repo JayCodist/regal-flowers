@@ -17,7 +17,7 @@ const Modal = (props: ModalProps) => {
     cancel = () => {},
     isConfirm,
     className,
-    allowClickOutside
+    allowClickOutside = true
   } = props;
   const modalRef = useRef<Element | null>(null);
   const visibleRef = useRef(visible);
