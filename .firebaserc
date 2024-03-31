@@ -1,5 +1,18 @@
 {
-  "projects": {
-    "default": "regal-operations-defy"
+  "targets": {
+    "regal-operations-defy": {
+      "hosting": {
+        "regalflowers": [
+          "regalflowers"
+        ]
+      }
+    },
+    "regal-operations-staging": {
+      "hosting": {
+        "regalflowersStaging": [
+          "regalflowers-staging"
+        ]
+      }
+    }
   }
 }
